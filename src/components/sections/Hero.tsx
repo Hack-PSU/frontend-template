@@ -10,10 +10,10 @@ const Hero = () => {
 			<h2 className="font-bold text-2xl text-center">
 				Pennsylvania State University • April 1-2, 2023
 			</h2>
-			<Countdown
+			{/* <Countdown
 				date={new Date("2023-05-01T00:00:00")}
 				className="font-bold text-black text-6xl"
-			/>
+			/> */}
 		</section>
 	);
 };
