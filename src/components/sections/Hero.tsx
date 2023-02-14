@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Logo from "../../../assets/HackPSUBWLogo1.png";
+import Logo from "../../../assets/logos/HackPSUBWLogo1.png";
 import Countdown from "react-countdown";
 
 const Hero = () => {
