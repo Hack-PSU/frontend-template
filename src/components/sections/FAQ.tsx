@@ -6,7 +6,9 @@ import faq from "./FAQ.json";
 
 // Helper function to assist in parsing JSON data to render components as CCollapsibles
 const renderInfoAsCCollapsible = (obj: any) => {
-	function nextIsNotBreak(lst: Array<any>, currentIndex: number) {
+
+	// Helper function to check if the next word is a word (not a newline or link)
+	function nextIsWord(lst: Array<any>, currentIndex: number) {
 		return lst.length > currentIndex +1 && lst[currentIndex + 1] !== '\n' && !(lst[currentIndex + 1].length >= 5 && lst[currentIndex + 1].substring(0,5) == '\\link');
 	}
 	
@@ -28,7 +30,7 @@ const renderInfoAsCCollapsible = (obj: any) => {
 		// if not newline or link - insert a div with the text
 		else { 
 			let element: string = content[i];
-			while (nextIsNotBreak(content, i)) {
+			while (nextIsWord(content, i)) {
 				element += ' ' + content[i+1];
 				i++;
 			}
@@ -36,6 +38,8 @@ const renderInfoAsCCollapsible = (obj: any) => {
 		}
 	
 	}
+
+	// Return a CCollapsible with the title and content, where the content is a list of divs fitted together under a single div.
 	return <CCollapsible
 			title = {obj.title}
 			content = {<div>{formattedContent}</div>}
