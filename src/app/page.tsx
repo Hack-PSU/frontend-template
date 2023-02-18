@@ -1,6 +1,6 @@
 "use client";
 
-import FAQ from "@/components/sections/FAQ";
+import FAQ from "@/components/sections/FAQ.tsx";
 import Hero from "@/components/sections/Hero";
 import Schedule from "@/components/sections/Schedule";
 import Rules from "@/components/sections/Rules";
