@@ -48,7 +48,6 @@ const renderInfoAsCCollapsible = (obj: any) => {
 
 
 const FAQ = () => {
-
 	return (
 		<section className="flex flex-col items-center w-full gap-8">		
 			<div className="w-4/12 flex flex-col items-center">
@@ -56,10 +55,26 @@ const FAQ = () => {
 				<Divider />
 			</div>
 
-			<div className ="grid grid-cols-2 rows-2 w-1/2 gap-4"> 
-				{faq.map((obj: any) => renderInfoAsCCollapsible(obj))} 
+		<div class="max-w-7xl mx-auto">
+			<div class="flex flex-wrap">
+				
+				<div class="w-1/2 md:px-4 md:py-8">
+					{faq.filter((obj, index) => index % 2 === 0).map((obj, index) => (
+					<div class={`mb-4 ${index !== 0 ? 'md:mt-4' : ''}`}>
+						{renderInfoAsCCollapsible(obj)}
+					</div> ))}
+				</div>
+			
+				<div class="w-1/2 md:px-4 md:py-8">
+					{faq.filter((obj, index) => index % 2 === 1).map((obj, index) => (
+					<div class={`mb-4 ${index !== 0 ? 'md:mt-4' : ''}`}>
+						{renderInfoAsCCollapsible(obj)}
+					</div> ))}
+			
+				</div>
 			</div>
-		
+		</div>
+
 		</section>
 	);
 };

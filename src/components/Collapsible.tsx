@@ -19,7 +19,7 @@ const CCollapsible = (props: any) => {
 				<p>{props.title}</p>
 				{isCollapsed ? <FaPlus size={20} /> : <FaMinus size={20} />}
 			</Collapsible.Trigger>
-			<Collapsible.Content>
+			<Collapsible.Content className="w-80">
 				<div className="text-white pt-4">{props.content}</div>
 			</Collapsible.Content>
 		</Collapsible.Root>
