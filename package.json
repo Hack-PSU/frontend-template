@@ -20,6 +20,7 @@
 		"autoprefixer": "^10.4.13",
 		"eslint": "8.32.0",
 		"eslint-config-next": "13.1.4",
+		"focus-trap-react": "^10.1.0",
 		"framer-motion": "^8.5.3",
 		"lucide-react": "^0.107.0",
 		"ms": "^2.1.3",
