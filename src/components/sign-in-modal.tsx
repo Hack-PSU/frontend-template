@@ -33,7 +33,7 @@ const SignInModal = ({
 					<h3 className="font-display text-2xl font-bold">Sign In</h3>
 				</div>
 
-				<div className="flex flex-col space-y-4 bg-gray-50 px-4 py-8 md:px-16">
+				<div className="flex flex-col items-center space-y-4 bg-gray-50 px-4 py-8 md:px-16">
 					<button
 						disabled={signInClicked}
 						className={`${
@@ -47,6 +47,12 @@ const SignInModal = ({
 					>
 						<p>Sign In with your Burger King Account</p>
 					</button>
+					<p>Alternatively, sign in with</p>
+					<div className="flex flex-row gap-4">
+						<p>Google</p>
+						<p>GitHub</p>
+						<p>Apple</p>
+					</div>
 				</div>
 			</div>
 		</Modal>
