@@ -2,6 +2,7 @@ import Image from "next/image";
 import Logo from "../../assets/HackPSUBWLogo1.png";
 import { motion } from "framer-motion";
 import useScroll from "@/lib/hooks/use-scroll";
+import SignInButton from "./SignInButton";
 
 const Navbar = () => {
 	const scrolled = useScroll(50);
@@ -16,11 +17,7 @@ const Navbar = () => {
 				} z-30 transition-all`}
 			>
 				<Image src={Logo} width={50} height={50} alt="logo" />
-				<motion.button
-					className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
-				>
-					Sign In
-				</motion.button>
+				<SignInButton />
 			</div>
 		</>
 	);
