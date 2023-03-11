@@ -2,15 +2,12 @@ import Image from "next/image";
 import Logo from "../../assets/HackPSUBWLogo1.png";
 import { motion } from "framer-motion";
 import useScroll from "@/lib/hooks/use-scroll";
-import { useSignInModal } from "./sign-in-modal";
 
 const Navbar = () => {
 	const scrolled = useScroll(50);
-	const { SignInModal, setShowSignInModal } = useSignInModal();
 
 	return (
 		<>
-			<SignInModal />
 			<div
 				className={`fixed top-0 w-full flex flex-row items-center p-2 px-16 justify-between ${
 					scrolled
@@ -21,7 +18,6 @@ const Navbar = () => {
 				<Image src={Logo} width={50} height={50} alt="logo" />
 				<motion.button
 					className="rounded-full border border-black bg-black p-1.5 px-4 text-sm text-white transition-all hover:bg-white hover:text-black"
-					onClick={() => setShowSignInModal(true)}
 				>
 					Sign In
 				</motion.button>
