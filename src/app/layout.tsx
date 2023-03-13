@@ -4,12 +4,14 @@ import React from "react";
 import Navbar from "@/components/Navbar";
 import FirebaseProvider from "@/lib/providers/FirebaseProvider";
 import { auth } from "@/lib/config";
+import { usePathname } from "next/navigation";
 
 export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const path = usePathname();
 	return (
 		<html lang="en">
 			{/*
@@ -18,10 +20,10 @@ export default function RootLayout({
       */}
 			<head />
 			<body>
-				<FirebaseProvider auth={auth}>
-					<Navbar />
-					{children}
-				</FirebaseProvider>
+				{/* <FirebaseProvider auth={auth}> */}
+				{path === "/signup" ? <></> : <Navbar />}
+				{children}
+				{/* </FirebaseProvider> */}
 			</body>
 		</html>
 	);
