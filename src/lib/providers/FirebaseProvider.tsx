@@ -12,6 +12,7 @@ import {
 	User,
 	createUserWithEmailAndPassword, onIdTokenChanged,
 } from "firebase/auth";
+import { initApi, resetApi } from "@/lib/api";
 
 export enum FirebaseAuthError {
 	NONE,
@@ -142,8 +143,13 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	useEffect(() => {
 		return onIdTokenChanged(auth, async (user) => {
 			// initialize api if user exists
+			if (user) {
+				await initApi(user);
+			} else {
+				resetApi();
+			}
 		});
-	}, [auth])
+	}, [auth]);
 
 	const value = useMemo(() => ({
 		isAuthenticated,
