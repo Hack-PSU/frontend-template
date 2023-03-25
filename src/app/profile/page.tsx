@@ -1,6 +1,6 @@
 "use client";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "@/lib/config";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 const Profile = () => {
 	const [user, loading, error] = useAuthState(auth);
