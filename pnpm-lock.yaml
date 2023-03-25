@@ -30,6 +30,7 @@ specifiers:
   react: 18.2.0
   react-countdown: ^2.3.5
   react-dom: 18.2.0
+  react-firebase-hooks: ^5.1.1
   react-icons: ^4.7.1
   react-markdown: ^8.0.5
   react-wrap-balancer: ^0.4.0
@@ -66,6 +67,7 @@ dependencies:
   react: 18.2.0
   react-countdown: 2.3.5_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
+  react-firebase-hooks: 5.1.1_mrgkafhinc3vwyt7uaqqvxj4zy
   react-icons: 4.7.1_react@18.2.0
   react-markdown: 8.0.5_3stiutgnnbnfnf3uowm5cip22i
   react-wrap-balancer: 0.4.0_react@18.2.0
@@ -3586,6 +3588,16 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-firebase-hooks/5.1.1_mrgkafhinc3vwyt7uaqqvxj4zy:
+    resolution: {integrity: sha512-y2UpWs82xs+39q5Rc/wq316ca52QsC0n8m801V+yM4IC4hbfOL4yQPVSh7w+ydstdvjN9F+lvs1WrO2VYxpmdA==}
+    peerDependencies:
+      firebase: '>= 9.0.0'
+      react: '>= 16.8.0'
+    dependencies:
+      firebase: 9.17.2
+      react: 18.2.0
     dev: false
 
   /react-icons/4.7.1_react@18.2.0:
