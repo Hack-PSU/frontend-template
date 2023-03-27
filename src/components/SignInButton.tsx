@@ -1,18 +1,36 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { Cross2Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { useEffect } from "react";
+import {
+	useAuthState,
+	useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
+import { auth } from "@/lib/config";
+import { useRouter } from "next/navigation";
 
 const SignInButton = () => {
 	const [modalVisible, setModalVisibility] = useState(false);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [signInWithEmailAndPassword, user, loading, error] =
+		useSignInWithEmailAndPassword(auth);
+	const router = useRouter();
 
 	const openModal = () => {
 		setModalVisibility(true);
-		console.log("Modal is open");
 	};
 
 	const toggleVisibility = () => {
 		setModalVisibility(!modalVisible);
 	};
+
+	useEffect(() => {
+		if (user) {
+			router.push("/profile");
+		}
+	}, [user]);
 
 	return (
 		<Dialog.Root open={modalVisible} onOpenChange={toggleVisibility}>
@@ -29,7 +47,11 @@ const SignInButton = () => {
 						Sign In
 					</Dialog.Title>
 					<Dialog.Description className="mb-8">
-						Sign in to your existing HackPSU account here, or create one.
+						Sign in to your existing HackPSU account here, or{" "}
+						<Link href={"/signup"} className="text-blue-600">
+							create one
+						</Link>
+						.
 					</Dialog.Description>
 					<fieldset className="mb-4">
 						<label
@@ -41,7 +63,8 @@ const SignInButton = () => {
 						<input
 							className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							id="name"
-							defaultValue="John Durrell"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
 						/>
 					</fieldset>
 					<fieldset className="mb-8">
@@ -54,15 +77,19 @@ const SignInButton = () => {
 						<input
 							className="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
 							id="username"
-							defaultValue="jdisverycool45"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
 						/>
 					</fieldset>
-					<div className="flex justify-end">
-						<Dialog.Close asChild>
-							<button className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">
-								Save changes
-							</button>
-						</Dialog.Close>
+					<div className="flex justify-center">
+						<button
+							className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded"
+							onClick={() => {
+								signInWithEmailAndPassword(email, password);
+							}}
+						>
+							Sign In
+						</button>
 					</div>
 					<Dialog.Close asChild>
 						<button className="absolute top-0 right-0 m-3">
