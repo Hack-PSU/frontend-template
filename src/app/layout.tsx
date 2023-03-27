@@ -1,11 +1,19 @@
+"use client";
 import "./globals.css";
+import React from "react";
 import Navbar from "@/components/Navbar";
+import FirebaseProvider from "@/lib/providers/FirebaseProvider";
+import { auth } from "@/lib/config";
+import { usePathname } from "next/navigation";
 
 export default function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const path = usePathname();
+	const routesWithoutNavbar = ["register", "profile"];
+
 	return (
 		<html lang="en">
 			{/*
@@ -14,8 +22,14 @@ export default function RootLayout({
       */}
 			<head />
 			<body>
-				<Navbar />
+				{/* <FirebaseProvider auth={auth}> */}
+				{routesWithoutNavbar.includes(path?.slice(1) ?? "") ? (
+					<></>
+				) : (
+					<Navbar />
+				)}
 				{children}
+				{/* </FirebaseProvider> */}
 			</body>
 		</html>
 	);
