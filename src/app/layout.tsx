@@ -12,7 +12,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	const path = usePathname();
-	const routesWithoutNavbar = ["signup", "profile"];
+	const routesWithoutNavbar = ["register", "profile"];
 
 	return (
 		<html lang="en">
@@ -22,14 +22,14 @@ export default function RootLayout({
       */}
 			<head />
 			<body>
-				<FirebaseProvider auth={auth}>
-					{routesWithoutNavbar.includes(path?.slice(1) ?? "") ? (
-						<></>
-					) : (
-						<Navbar />
-					)}
-					{children}
-				</FirebaseProvider>
+				{/* <FirebaseProvider auth={auth}> */}
+				{routesWithoutNavbar.includes(path?.slice(1) ?? "") ? (
+					<></>
+				) : (
+					<Navbar />
+				)}
+				{children}
+				{/* </FirebaseProvider> */}
 			</body>
 		</html>
 	);
