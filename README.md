@@ -1,34 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# HackPSU Frontend
 
-## Getting Started
+## High Level Project Architecture
 
-First, run the development server:
+The tools selected for this project were picked because they are both:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+1. Easy to learn
+2. Easy to read
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+New tools brought in to this project should also follow these principles.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This project uses [NextJS 13](https://nextjs.org/blog/next-13) which is very similar to previous versions of [NextJS](https://nextjs.org) but is more versatile to custom layouts and static site generation.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The project is very much in development and additional tools may be added/stripped and this README should be updated accordingly.
 
-## Learn More
+This project uses [Tailwind](https://tailwindcss.com), an inline css styling tool. We use it to embed styling directly into our tsx. The primary reason we are using it is to reduce the amount of dead code/styling that was present in the previous frontend repository.
 
-To learn more about Next.js, take a look at the following resources:
+This project also uses [Radix](https://www.radix-ui.com) for creating custom components. It is a library of unstyled react components which can be modified with Tailwind to match any theme we desire.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project also uses [Framer Motion](https://www.framer.com/motion/) for animations. It is an intuitive animation library with strong documentation.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Running Locally
 
-## Deploy on Vercel
+This project uses [pnpm](https://pnpm.io) as its package manager. `pnpm` has several advantages over `npm` and `yarn.` I have installed `pnpm` through [asdf](https://asdf-vm.com) which is a software version manager for a large variety of tools. Any way you choose to download `pnpm` is fine so long as it is a somewhat recent version.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+After cloning the repository running the application is incredibly simple:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. `pnpm i` to install all required modules
+2. `pnpm dev` to run the application on a locally hosted port (default is 3000)
