@@ -9,7 +9,7 @@ The tools selected for this project were picked because they are both:
 
 New tools brought in to this project should also follow these principles.
 
-This project uses [NextJS 13](https://nextjs.org/blog/next-13) which is very similar to previous versions of [NextJS](https://nextjs.org) but is more versatile to custom layouts and static site generation.
+This project uses [NextJS 13](https://nextjs.org/blog/next-13) which is very similar to previous versions of [NextJS](https://nextjs.org) but is more versatile in its ability to create SEO and dynamic layouts and static site generation.
 
 The project is very much in development and additional tools may be added/stripped and this README should be updated accordingly.
 
@@ -27,3 +27,15 @@ After cloning the repository running the application is incredibly simple:
 
 1. `pnpm i` to install all required modules
 2. `pnpm dev` to run the application on a locally hosted port (default is 3000)
+
+## User Authentication
+
+Authentication is done through Firebase. Currently all of the logic beyond that is hand generated but this will probably be migrated to use [NextAuth](https://next-auth.js.org) in the near future. Honestly a big advantage of this is just not needing to build our own UI for sign in. Similarly we could use Firebase's drop in sign in solution.
+
+## Data fetching
+
+Fortunately most of the data that we show on our pages doesn't change frequently (think workshops and hackathon events). This means that most of our data should be fetched from server components and cached where possible. [NextJS 13 Data Fetching](https://nextjs.org/docs/app/building-your-application/data-fetching)
+
+## Customization
+
+The goal of this template is to be easily stylable. One way we will accomplish this is will custom theme colors defined in `tailwind.config.ts`. [Custom Tailwind Colors](https://tailwindcss.com/docs/customizing-colors)
