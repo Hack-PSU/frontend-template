@@ -1,6 +1,6 @@
 import Divider from "../common/Divider";
 
-const Workshops = () => {
+export default function Workshops() {
 	return (
 		<section className="flex flex-col items-center w-full gap-8">
 			<div className="w-4/12 flex flex-col items-center">
@@ -9,6 +9,4 @@ const Workshops = () => {
 			</div>
 		</section>
 	);
-};
-
-export default Workshops;
+}
