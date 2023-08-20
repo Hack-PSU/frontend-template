@@ -7,11 +7,11 @@ const FAQ = () => {
 			<div className="w-4/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl">FAQ</h1>
 				<Divider />
+				<CustomCollapsible
+					question="This is a question?"
+					answer="This is an answer"
+				/>
 			</div>
-			<CustomCollapsible
-				title="Where can I go to get help?"
-				content="We have an info booth in-person!"
-			/>
 		</section>
 	);
 };

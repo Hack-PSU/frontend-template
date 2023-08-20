@@ -4,7 +4,7 @@ import Logo from "../../../public/HackPSUBWLogo1.png";
 import useScroll from "@/lib/hooks/use-scroll";
 // import SignInButton from "./SignInButton";
 
-const Navbar = () => {
+export default function Navbar() {
 	const scrolled = useScroll(50);
 
 	return (
@@ -21,6 +21,4 @@ const Navbar = () => {
 			</div>
 		</>
 	);
-};
-
-export default Navbar;
+}

@@ -1,48 +1,34 @@
 "use client";
-import * as Collapsible from "@radix-ui/react-collapsible";
-import { FaPlus } from "react-icons/fa";
-import { FaMinus } from "react-icons/fa";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { Disclosure } from "@headlessui/react";
+import { ChevronUpIcon } from "@heroicons/react/20/solid";
 
-const CustomCollapsible = (props: any) => {
-	const [isCollapsed, setIsCollapsed] = useState(true);
+interface Props {
+	question: string;
+	answer: string;
+}
 
-	const toggleCollapsed = () => {
-		setIsCollapsed(!isCollapsed);
-	};
-
-	const contentVariants = {
-		open: { opacity: 1, height: "auto" },
-		closed: { opacity: 0, height: 0 },
-	};
-
+export default function CustomCollapsible({ question, answer }: Props) {
 	return (
-		<Collapsible.Root className="bg-black p-4 rounded-sm">
-			<Collapsible.Trigger
-				className="flex flex-row gap-8 text-white font-bold"
-				onClick={toggleCollapsed}
-			>
-				<p>{props.title}</p>
-				{isCollapsed ? <FaPlus size={20} /> : <FaMinus size={20} />}
-			</Collapsible.Trigger>
-			<AnimatePresence>
-				{!isCollapsed && (
-					<motion.div
-						initial="closed"
-						animate="open"
-						exit="closed"
-						variants={contentVariants}
-						transition={{ duration: 0.3 }}
-					>
-						<Collapsible.Content>
-							<p className="text-white pt-4">{props.content}</p>
-						</Collapsible.Content>
-					</motion.div>
-				)}
-			</AnimatePresence>
-		</Collapsible.Root>
+		<div className="w-full px-4 pt-16">
+			<div className="mx-auto w-full max-w-md rounded-2xl bg-black p-2">
+				<Disclosure>
+					{({ open }) => (
+						<>
+							<Disclosure.Button className="flex w-full justify-between rounded-lg bg-white px-4 py-2 text-left text-sm font-medium text-black hover:bg-purple-200 focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+								<span>{question}</span>
+								<ChevronUpIcon
+									className={`${
+										open ? "rotate-180 transform" : ""
+									} h-5 w-5 text-purple-500`}
+								/>
+							</Disclosure.Button>
+							<Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-white">
+								{answer}
+							</Disclosure.Panel>
+						</>
+					)}
+				</Disclosure>
+			</div>
+		</div>
 	);
-};
-
-export default CustomCollapsible;
+}
