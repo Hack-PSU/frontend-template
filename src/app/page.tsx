@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Hero from "@/components/Hero";
 import Schedule from "@/components/Schedule";
 import Rules from "@/components/Rules";

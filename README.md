@@ -9,15 +9,9 @@ The tools selected for this project were picked because they are both:
 
 New tools brought in to this project should also follow these principles.
 
-This project uses [NextJS 13](https://nextjs.org/blog/next-13) which is very similar to previous versions of [NextJS](https://nextjs.org) but is more versatile in its ability to create SEO and dynamic layouts and static site generation.
-
-The project is very much in development and additional tools may be added/stripped and this README should be updated accordingly.
+This project uses [NextJS 13](https://nextjs.org/blog/next-13) which is very similar to previous versions of [NextJS](https://nextjs.org) but is more versatile in its ability to create nested layouts and render html on the server.
 
 This project uses [Tailwind](https://tailwindcss.com), an inline css styling tool. We use it to embed styling directly into our tsx. The primary reason we are using it is to reduce the amount of dead code/styling that was present in the previous frontend repository.
-
-This project also uses [Radix](https://www.radix-ui.com) for creating custom components. It is a library of unstyled react components which can be modified with Tailwind to match any theme we desire.
-
-This project also uses [Framer Motion](https://www.framer.com/motion/) for animations. It is an intuitive animation library with strong documentation.
 
 ## Running Locally
 
