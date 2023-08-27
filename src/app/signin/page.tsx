@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
 	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
@@ -19,12 +19,7 @@ export default function SignIn() {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			// const { return_to } = router.query;
-			// if (return_to) {
-			// 	void router.push(String(return_to));
-			// } else {
 			void router.push("/");
-			// }
 		}
 	}, [router, isAuthenticated]);
 	return (
