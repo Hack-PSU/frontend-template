@@ -1,6 +1,32 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+
 export default function SignIn() {
+	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
+	const router = useRouter();
+
+	const handleSubmit = (event: any) => {
+		event.preventDefault();
+		const formData = new FormData(event.target);
+		const userEmail = String(formData.get("email"));
+		const userPassword = String(formData.get("password"));
+		return loginWithEmailAndPassword(userEmail, userPassword);
+	};
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			// const { return_to } = router.query;
+			// if (return_to) {
+			// 	void router.push(String(return_to));
+			// } else {
+			void router.push("/");
+			// }
+		}
+	}, [router, isAuthenticated]);
 	return (
 		<>
 			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -19,7 +45,7 @@ export default function SignIn() {
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 					<div className="bg-slate-100 px-6 py-12 shadow sm:rounded-lg sm:px-12">
-						<form className="space-y-6" action="#" method="POST">
+						<form className="space-y-6" onSubmit={handleSubmit}>
 							<div>
 								<label
 									htmlFor="email"
