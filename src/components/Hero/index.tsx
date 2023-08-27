@@ -4,15 +4,13 @@ import { FadeIn } from "../common/Fadein";
 
 const Hero = () => {
 	return (
-		<FadeIn>
-			<section className="flex flex-col items-center justify-center w-full h-[35rem]">
-				<Image src={Logo} width={250} height={250} alt="logo" />
-				<h1 className="font-bold text-6xl">HackPSU</h1>
-				<h2 className="font-bold text-2xl text-center">
-					Pennsylvania State University • April 1-2, 2023
-				</h2>
-			</section>
-		</FadeIn>
+		<section className="flex flex-col items-center justify-center w-full h-[35rem]">
+			<Image src={Logo} width={250} height={250} alt="logo" />
+			<h1 className="font-bold text-6xl">HackPSU</h1>
+			<h2 className="font-bold text-2xl text-center">
+				Pennsylvania State University • April 1-2, 2023
+			</h2>
+		</section>
 	);
 };
 

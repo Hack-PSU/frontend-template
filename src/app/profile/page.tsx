@@ -1,8 +1,19 @@
 "use client";
 
 import QRCode from "react-qr-code";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Example() {
+	const { isAuthenticated } = useFirebase();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!isAuthenticated) {
+			router.push("/signin");
+		}
+	}, [isAuthenticated]);
 	return (
 		<>
 			<div className="mx-auto max-w-7xl pt-16 lg:flex lg:gap-x-16 lg:px-8">
