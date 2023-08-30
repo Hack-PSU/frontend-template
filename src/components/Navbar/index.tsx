@@ -4,6 +4,7 @@ import Logo from "../../../public/HackPSUBWLogo1.png";
 import useScroll from "@/lib/hooks/use-scroll";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import { Button } from "@/components/common/Button";
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
@@ -20,18 +21,10 @@ export default function Navbar() {
 		>
 			<Image src={Logo} width={50} height={50} alt="logo" />
 			{isAuthenticated ? (
-				<button
-					className="rounded-xl text-white bg-black py-1 px-4"
-					onClick={() => logout()}
-				>
-					Sign Out
-				</button>
+				<Button onClick={() => logout()}>Sign Out</Button>
 			) : (
-				<Link
-					href="/signin"
-					className="rounded-xl text-white bg-black py-1 px-4"
-				>
-					Sign In
+				<Link href="/signin">
+					<Button>Sign In</Button>
 				</Link>
 			)}
 		</nav>
