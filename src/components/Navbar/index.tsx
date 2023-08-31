@@ -5,6 +5,7 @@ import useScroll from "@/lib/hooks/use-scroll";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { Button } from "@/components/common/Button";
+import { UserCircleIcon } from "@heroicons/react/20/solid";
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
@@ -19,9 +20,16 @@ export default function Navbar() {
 					: "bg-white/0"
 			} z-30 transition-all`}
 		>
-			<Image src={Logo} width={50} height={50} alt="logo" />
+			<Link href="/">
+				<Image src={Logo} width={50} height={50} alt="logo" />
+			</Link>
 			{isAuthenticated ? (
-				<Button onClick={() => logout()}>Sign Out</Button>
+				<div className="flex flex-row h-full items-center gap-8">
+					<Link href="/profile">
+						<UserCircleIcon className="h-12 w-12 mt-1" />
+					</Link>
+					<Button onClick={() => logout()}>Sign Out</Button>
+				</div>
 			) : (
 				<Link href="/signin">
 					<Button>Sign In</Button>

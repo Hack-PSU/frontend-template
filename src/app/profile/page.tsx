@@ -6,9 +6,10 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Example() {
-	const { isAuthenticated } = useFirebase();
+	const { isAuthenticated, user } = useFirebase();
 	const router = useRouter();
 
+	// TODO: FIX GLITCH WITH REDIRECTING ON REFRESH OF PROFILE PAGE
 	useEffect(() => {
 		if (!isAuthenticated) {
 			router.push("/signin");
@@ -30,10 +31,10 @@ export default function Example() {
 							<dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
 								<div className="pt-6 sm:flex">
 									<dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
-										Full name
+										Name
 									</dt>
 									<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-										<div className="text-gray-900">Tom Cook</div>
+										<div className="text-gray-900">{user?.displayName}</div>
 										<button
 											type="button"
 											className="font-semibold text-indigo-600 hover:text-indigo-500"
@@ -47,7 +48,7 @@ export default function Example() {
 										Email
 									</dt>
 									<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto">
-										<div className="text-gray-900">tom.cook@example.com</div>
+										<div className="text-gray-900">{user?.email}</div>
 										<button
 											type="button"
 											className="font-semibold text-indigo-600 hover:text-indigo-500"
