@@ -14,6 +14,9 @@ dependencies:
   '@tailwindcss/forms':
     specifier: ^0.5.5
     version: 0.5.5(tailwindcss@3.3.2)
+  '@types/luxon':
+    specifier: ^3.3.2
+    version: 3.3.2
   '@types/node':
     specifier: 20.1.4
     version: 20.1.4
@@ -896,6 +899,10 @@ packages:
 
   /@types/long@4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}
+    dev: false
+
+  /@types/luxon@3.3.2:
+    resolution: {integrity: sha512-l5cpE57br4BIjK+9BSkFBOsWtwv6J9bJpC7gdXIzZyI0vuKvNTk0wZZrkQxMGsUAuGW9+WMNWF2IJMD7br2yeQ==}
     dev: false
 
   /@types/node@20.1.4:
