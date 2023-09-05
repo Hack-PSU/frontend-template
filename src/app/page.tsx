@@ -10,19 +10,13 @@ import Workshops from "@/components/Workshops";
 import Sponsors from "@/components/Sponsers";
 import Footer from "@/components/Footer";
 
-import Api from "@/utils/apiPipe";
-import { api } from "@/lib/api/axios";
+import { readFromDatabase } from "@/utils/database";
 
 export default function Home() {
 	// Example GET request
 	const fetchData = async () => {
-		Api.get("/hackathons")
-			.then((res) => {
-				console.log(res);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		const res: any = await readFromDatabase("users");
+		console.log(res);
 	};
 
 	return (
