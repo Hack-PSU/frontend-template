@@ -9,7 +9,6 @@ import { UserCircleIcon } from "@heroicons/react/20/solid";
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
-
 	const { logout, isAuthenticated } = useFirebase();
 
 	return (
