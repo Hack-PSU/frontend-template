@@ -35,15 +35,15 @@ export interface User {
 	lastName: string;
 	gender: string;
 	shirtSize: string;
-	dietaryRestriction: string;
-	allergies: string;
+	dietaryRestriction?: string;
+	allergies?: string;
 	university: string;
 	email: string;
 	major: string;
 	phone: string;
 	country: string;
-	race: string;
-	resume: string;
+	race?: string;
+	resume?: string;
 }
 
 export interface HackathonUser extends User {

@@ -10,12 +10,40 @@ import Workshops from "@/components/Workshops";
 import Sponsors from "@/components/Sponsers";
 import Footer from "@/components/Footer";
 
-import { readFromDatabase } from "@/utils/database";
+import {
+	readFromDatabase,
+	writeToDatabase,
+	deleteFromDatabase,
+} from "@/utils/database";
+import { User } from "@/interfaces/Schema";
 
 export default function Home() {
 	// Example GET request
 	const fetchData = async () => {
 		const res: any = await readFromDatabase("users");
+		console.log(res);
+	};
+
+	const writeData = async () => {
+		const user: User = {
+			id: "123456789",
+			firstName: "John",
+			lastName: "Doe",
+			gender: "male",
+			shirtSize: "L",
+			university: "Test State College",
+			email: "jdoe@gmail.com",
+			major: "Computer Science",
+			phone: "(123) 456 7890",
+			country: "USA",
+		};
+
+		const res: any = await writeToDatabase("users", user);
+		console.log(res);
+	};
+
+	const deleteData = async () => {
+		const res: any = await deleteFromDatabase("users", "123456789");
 		console.log(res);
 	};
 
@@ -30,6 +58,20 @@ export default function Home() {
 					onClick={fetchData}
 				>
 					Fetch Data
+				</button>
+
+				<button
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+					onClick={writeData}
+				>
+					Write Data
+				</button>
+
+				<button
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+					onClick={deleteData}
+				>
+					Delete Data
 				</button>
 			</div>
 
