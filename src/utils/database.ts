@@ -101,3 +101,38 @@ export async function deleteFromDatabase(table: string, id: string | number) {
 			);
 	}
 }
+
+export async function updateInDatabase(table: string, data: any) {
+	if (!data.id) throw new Error("No ID specified in data object.");
+	console.log("Received data:", data);
+	console.log(`Trying to patch on route: /users/${data.id}`);
+
+	switch (table.toLowerCase()) {
+		case "hackathons":
+			const hackathon: Hackathon = await ApiService.patch<Hackathon>(
+				`/hackathons/${data.id}`,
+				data
+			);
+			return hackathon;
+			break;
+		case "users":
+			const user: User = await ApiService.patch<User>(
+				`/users/${data.id}`,
+				data
+			);
+			return user;
+			break;
+		case "sponsors":
+			const sponsor: Sponsor = await ApiService.patch<Sponsor>(
+				`/sponsors/${data.id}`,
+				data
+			);
+			return sponsor;
+			break;
+
+		default:
+			throw new Error(
+				`Table '${table}' is not implemented for update operations.`
+			);
+	}
+}

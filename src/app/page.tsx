@@ -14,6 +14,7 @@ import {
 	readFromDatabase,
 	writeToDatabase,
 	deleteFromDatabase,
+	updateInDatabase,
 } from "@/utils/database";
 import { User } from "@/interfaces/Schema";
 
@@ -47,6 +48,14 @@ export default function Home() {
 		console.log(res);
 	};
 
+	const patchData = async () => {
+		const res: any = await updateInDatabase("users", {
+			id: "123456789",
+			firstName: "Jane",
+		});
+		console.log(res);
+	};
+
 	return (
 		<main className="flex min-h-screen flex-col items-center w-full gap-6">
 			<Hero />
@@ -72,6 +81,13 @@ export default function Home() {
 					onClick={deleteData}
 				>
 					Delete Data
+				</button>
+
+				<button
+					className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+					onClick={patchData}
+				>
+					Patch Data
 				</button>
 			</div>
 
