@@ -1,6 +1,8 @@
 import Divider from "../common/Divider";
 import CustomCollapsible from "../common/CustomCollapsible";
 // TODO: Add resource links
+
+//FAQ text
 const faqs = [
 	{
 		question: "Where can I go to get help?",
