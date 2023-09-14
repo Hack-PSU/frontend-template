@@ -6,12 +6,17 @@ const VALID_DELETE_RESPONSE_STATUS = [204];
 const VALID_PUT_RESPONSE_STATUS = [200];
 const VALID_PATCH_RESPONSE_STATUS = [200];
 
+// Custom error class for when the API is not initialized with a Firebase user token. Can be bypassed by setting useAuth to False when making specific request.
 export class UninitializedError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "UninitializedError";
 	}
 }
+
+/* This class is a wrapper for the axios API client.
+ * It provides a simple interface for making requests to the API as well as checking whether the API is initialized with a Firebase user token.
+ */
 
 export default class ApiService {
 	static get isInitialized(): boolean {
@@ -40,8 +45,6 @@ export default class ApiService {
 
 		try {
 			const response = await api.post<T>(url, data);
-			console.log(response);
-
 			if (VALID_POST_RESPONSE_STATUS.includes(response.status)) {
 				// 201 - Created
 				return response.data;

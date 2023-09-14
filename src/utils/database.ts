@@ -5,7 +5,9 @@ import { Hackathon, User, Sponsor } from "../interfaces/Schema";
  * Reads data from a database table based on the specified table name and optional ID.
  *
  * @param {string} table - The name of the table to read data from.
- * @param {args} id - (Optional) An object that specifies the ID of the record to read and whether to verify the user's authentication.
+ * @param {args} - (Optional) An object containing optional arguments, which are listed below.
+ * @param {string | number} args.id - (Optional) The ID of the record to read. If not specified, all records will be returned.
+ * @param {boolean} args.noAuth - (Optional) If true, the API Service will not check that the user token is initialized.
  * @returns An array of records if no ID is specified, or a single record if an ID is specified. Undefined if no record is found with the specified ID.
  * @throws {Error} If table is invalid.
  */
@@ -16,35 +18,45 @@ export async function readFromDatabase(
 	const useAuth: boolean = !args?.noAuth;
 	switch (table.toLowerCase()) {
 		case "hackathons":
-			const hackathons: Hackathon[] = await ApiService.get<Hackathon[]>(
-				`/hackathons`,
-				useAuth
-			);
-			if (args?.id) {
-				return hackathons.find(
-					(hackathon: Hackathon) => hackathon.id === args.id
+			if (args?.id === undefined) {
+				const hackathons: Hackathon[] = await ApiService.get<Hackathon[]>(
+					`/hackathons`,
+					useAuth
 				);
-			} else {
 				return hackathons;
+			} else {
+				const hackathon: Hackathon = await ApiService.get<Hackathon>(
+					`/hackathons/${args.id}`,
+					useAuth
+				);
+				return hackathon;
 			}
 			break;
 		case "users":
-			const users: User[] = await ApiService.get<User[]>(`/users`, useAuth);
-			if (args?.id) {
-				return users.find((user: User) => user.id === args.id);
-			} else {
+			if (args?.id === undefined) {
+				const users: User[] = await ApiService.get<User[]>(`/users`, useAuth);
 				return users;
+			} else {
+				const user: User = await ApiService.get<User>(
+					`/users/${args.id}`,
+					useAuth
+				);
+				return user;
 			}
 			break;
 		case "sponsors":
-			const sponsors: Sponsor[] = await ApiService.get<Sponsor[]>(
-				`/sponsors`,
-				useAuth
-			);
-			if (args?.id) {
-				return sponsors.find((sponsor: Sponsor) => sponsor.id === args.id);
-			} else {
+			if (args?.id === undefined) {
+				const sponsors: Sponsor[] = await ApiService.get<Sponsor[]>(
+					`/sponsors`,
+					useAuth
+				);
 				return sponsors;
+			} else {
+				const sponsor: Sponsor = await ApiService.get<Sponsor>(
+					`/sponsors/${args.id}`,
+					useAuth
+				);
+				return sponsor;
 			}
 			break;
 
@@ -55,6 +67,14 @@ export async function readFromDatabase(
 	}
 }
 
+/**
+ * Writes data to a database table based on the specified table name.
+ *
+ * @param {string} table - The name of the table to write data to.
+ * @param {any} data - The data to write to the table.
+ * @returns The data that was written to the table.
+ * @throws {Error} If table is invalid.
+ */
 export async function writeToDatabase(table: string, data: any) {
 	switch (table.toLowerCase()) {
 		case "hackathons":
@@ -83,6 +103,12 @@ export async function writeToDatabase(table: string, data: any) {
 	}
 }
 
+/**
+ * Deletes data from a database table based on the specified table name and ID.
+ * @param {string} table - The name of the table to delete data from.
+ * @param {string | number} id - The ID of the record to delete.
+ * @throws {Error} If table is invalid.
+ */
 export async function deleteFromDatabase(table: string, id: string | number) {
 	switch (table.toLowerCase()) {
 		case "hackathons":
@@ -102,11 +128,16 @@ export async function deleteFromDatabase(table: string, id: string | number) {
 	}
 }
 
+/**
+ * Updates data in a database table based on the specified table name and data object.
+ * @param {string} table - The name of the table to update data in.
+ * @param {any} data - The data to update in the table.
+ * @returns The data that was updated in the table.
+ * @throws {Error} If table is invalid.
+ * @throws {Error} If no ID is specified in the data object.
+ */
 export async function updateInDatabase(table: string, data: any) {
 	if (!data.id) throw new Error("No ID specified in data object.");
-	console.log("Received data:", data);
-	console.log(`Trying to patch on route: /users/${data.id}`);
-
 	switch (table.toLowerCase()) {
 		case "hackathons":
 			const hackathon: Hackathon = await ApiService.patch<Hackathon>(

@@ -20,6 +20,8 @@ import { User } from "@/interfaces/Schema";
 
 export default function Home() {
 	// Example GET request
+	const TEST_ID = "ENTER A FIREBASE USER ID HERE";
+
 	const fetchData = async () => {
 		const res: any = await readFromDatabase("users");
 		console.log(res);
@@ -27,13 +29,13 @@ export default function Home() {
 
 	const writeData = async () => {
 		const user: User = {
-			id: "123456789",
-			firstName: "John",
-			lastName: "Doe",
+			id: TEST_ID,
+			firstName: "Aaron",
+			lastName: "Test",
 			gender: "male",
 			shirtSize: "L",
 			university: "Test State College",
-			email: "jdoe@gmail.com",
+			email: "aarontest@hack.com",
 			major: "Computer Science",
 			phone: "(123) 456 7890",
 			country: "USA",
@@ -44,14 +46,14 @@ export default function Home() {
 	};
 
 	const deleteData = async () => {
-		const res: any = await deleteFromDatabase("users", "123456789");
+		const res: any = await deleteFromDatabase("users", TEST_ID);
 		console.log(res);
 	};
 
 	const patchData = async () => {
 		const res: any = await updateInDatabase("users", {
-			id: "123456789",
-			firstName: "Jane",
+			id: TEST_ID,
+			firstName: "Jake",
 		});
 		console.log(res);
 	};
