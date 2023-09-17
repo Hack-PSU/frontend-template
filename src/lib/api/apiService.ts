@@ -79,7 +79,22 @@ export default class ApiService {
 			throw new UninitializedError("(401) API not initialized with user token");
 
 		try {
-			const response = await api.put<T>(url, data);
+			// PUT uses form data, so we take JSON as input and convert it here
+			const formData = new FormData();
+			for (const key in data) {
+				if (key !== "id") {
+					formData.append(key, data[key]);
+				}
+			}
+
+			// Specify form data in headers
+			const config = {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			};
+
+			const response = await api.put<T>(url, formData, config);
 			if (VALID_PUT_RESPONSE_STATUS.includes(response.status)) {
 				return response.data;
 			} else {
