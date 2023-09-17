@@ -47,6 +47,21 @@ export async function readFromDatabase<T>(
 				return hackathon as unknown as T;
 			}
 			break;
+		case "registrations":
+			if (args?.id === undefined) {
+				const registrations: Registration[] | undefined = await ApiService.get<
+					Registration[]
+				>(`/registrations`, useAuth);
+				return registrations as unknown as T;
+			} else {
+				const registration: Registration | undefined =
+					await ApiService.get<Registration>(
+						`/registrations/${args.id}`,
+						useAuth
+					);
+				return registration as unknown as T;
+			}
+			break;
 		case "sponsors":
 			if (args?.id === undefined) {
 				const sponsors: Sponsor[] | undefined = await ApiService.get<Sponsor[]>(
