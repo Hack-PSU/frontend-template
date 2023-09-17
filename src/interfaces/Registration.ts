@@ -1,6 +1,6 @@
 export interface Registration {
-	id: number;
-	userId: string;
+	id?: number;
+	userId?: string;
 	travelReimbursement: boolean;
 	driving: boolean;
 	firstHackathon: boolean;
@@ -17,6 +17,6 @@ export interface Registration {
 	shareAddressSponsors: boolean;
 	shareEmailMlh: boolean;
 	veteran: string;
-	hackathonId: string;
+	hackathonId?: string;
 	time: number;
 }

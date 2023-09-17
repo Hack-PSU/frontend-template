@@ -125,8 +125,15 @@ export async function writeToDatabase<T>(table: string, data: any): Promise<T> {
 			return user as unknown as T;
 			break;
 		case "registrations":
+			if (data.userId === undefined) {
+				throw new Error("User ID was not specified in registration.");
+			}
+			const { userId, ...registrationData } = data;
 			const registration: Registration | undefined =
-				await ApiService.post<Registration>(`/registration`, data);
+				await ApiService.post<Registration>(
+					`/users/${userId}/register`,
+					registrationData
+				);
 			return registration as unknown as T;
 			break;
 
