@@ -15,15 +15,19 @@ import {
 	writeToDatabase,
 	deleteFromDatabase,
 	updateInDatabase,
-} from "@/utils/database";
-import { User } from "@/interfaces/Schema";
+} from "@/lib/database";
+import { User, Sponsor } from "@/interfaces";
 
 export default function Home() {
 	// Example GET request
-	const TEST_ID = "ENTER A FIREBASE USER ID HERE";
+	const TEST_ID = "SOME_ID";
 
+	// Look into generic types
 	const fetchData = async () => {
-		const res: any = await readFromDatabase("users");
+		const res: User = await readFromDatabase<User>("users", {
+			id: TEST_ID,
+			noAuth: true,
+		});
 		console.log(res);
 	};
 
@@ -41,19 +45,20 @@ export default function Home() {
 			country: "USA",
 		};
 
-		const res: any = await writeToDatabase("users", user);
+		const res: User = await writeToDatabase("users", user);
 		console.log(res);
 	};
 
 	const deleteData = async () => {
-		const res: any = await deleteFromDatabase("users", TEST_ID);
+		const res: void = await deleteFromDatabase("users", TEST_ID);
 		console.log(res);
 	};
 
 	const patchData = async () => {
-		const res: any = await updateInDatabase("users", {
+		const res: User = await updateInDatabase<User>("users", {
 			id: TEST_ID,
-			firstName: "Jake",
+			firstName: "Jackson",
+			lastName: "Krishnan",
 		});
 		console.log(res);
 	};

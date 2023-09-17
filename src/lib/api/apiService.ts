@@ -1,8 +1,9 @@
-import { api } from "@/lib/api/axios";
+import FormData from "form-data";
+import { api } from "@/lib/api";
 
 const VALID_GET_RESPONSE_STATUS = [200];
 const VALID_POST_RESPONSE_STATUS = [201];
-const VALID_DELETE_RESPONSE_STATUS = [204];
+const VALID_DELETE_RESPONSE_STATUS = [200, 204];
 const VALID_PUT_RESPONSE_STATUS = [200];
 const VALID_PATCH_RESPONSE_STATUS = [200];
 
@@ -17,7 +18,6 @@ export class UninitializedError extends Error {
 /* This class is a wrapper for the axios API client.
  * It provides a simple interface for making requests to the API as well as checking whether the API is initialized with a Firebase user token.
  */
-
 export default class ApiService {
 	static get isInitialized(): boolean {
 		return api.defaults.headers.common["Authorization"] !== undefined;
@@ -35,7 +35,7 @@ export default class ApiService {
 				throw new Error("Failed to fetch data from the API");
 			}
 		} catch (error: any) {
-			throw new Error(`Error: ${error.message}`);
+			this.handleError(error);
 		}
 	}
 
@@ -52,7 +52,7 @@ export default class ApiService {
 				throw new Error("Failed to create resource");
 			}
 		} catch (error: any) {
-			throw new Error(`Error: ${error.message}`);
+			this.handleError(error);
 		}
 	}
 
@@ -70,7 +70,7 @@ export default class ApiService {
 				throw new Error("Failed to delete resource");
 			}
 		} catch (error: any) {
-			throw new Error(`Error: ${error.message}`);
+			this.handleError(error);
 		}
 	}
 
@@ -86,7 +86,7 @@ export default class ApiService {
 				throw new Error("Failed to update resource");
 			}
 		} catch (error: any) {
-			throw new Error(`Error: ${error.message}`);
+			this.handleError(error);
 		}
 	}
 
@@ -95,14 +95,39 @@ export default class ApiService {
 			throw new UninitializedError("(401) API not initialized with user token");
 
 		try {
-			const response = await api.patch<T>(url, data);
+			// PATCH uses form data, so we take JSON as input and convert it here
+			const formData = new FormData();
+			for (const key in data) {
+				if (key !== "id") {
+					formData.append(key, data[key]);
+				}
+			}
+
+			// Specify form data in headers
+			const config = {
+				headers: {
+					"Content-Type": "multipart/form-data",
+				},
+			};
+
+			const response = await api.patch<T>(url, formData, config);
 			if (VALID_PATCH_RESPONSE_STATUS.includes(response.status)) {
 				return response.data;
 			} else {
 				throw new Error("Failed to update resource");
 			}
 		} catch (error: any) {
-			throw new Error(`Error: ${error.message}`);
+			this.handleError(error);
 		}
+	}
+
+	private static handleError(error: any) {
+		if (error.response.data.message) {
+			if (Array.isArray(error.response.data.message)) {
+				throw new Error(error.response.data.message.join(", "));
+			} else {
+				throw new Error(error.response.data.message);
+			}
+		} else throw new Error(`Error: ${error.message}`);
 	}
 }
