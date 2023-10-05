@@ -12,7 +12,7 @@ const Rules = () => {
 					<ul className="text-white list-disc text-xl">
 						<li>
 							All participants must be 18 or older, and must bring a valid form
-							of identification.
+			 				of identification.
 						</li>
 						<li>Teams may be comprised of up to five members.</li>
 						<li>

@@ -1,0 +1,108 @@
+/* Add this CSS to your stylesheet or component style block */
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  animation: rotateChallenges 9s infinite; /* Adjust the animation duration as needed */
+}
+
+.slide {
+  flex: 0 0 100%;
+  text-align: center;
+  font-size: 24px; /* Adjust the font size as needed */
+  padding: 20px;
+}
+
+.black-box {
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes rotateChallenges {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(0);
+  }
+  33.33% {
+    transform: translateX(-100%);
+  }
+  58.33% {
+    transform: translateX(-100%);
+  }
+  66.66% {
+    transform: translateX(-200%);
+  }
+  91.66% {
+    transform: translateX(-200%);
+  }
+}
+
+
+/* PrizesChallenges.css */
+
+.info-box {
+  width: 300px; /* Adjust the width as needed */
+  height: 200px; /* Adjust the height as needed */
+  overflow: hidden;
+  position: relative;
+}
+
+.info-content {
+  display: flex;
+  width: 300%; /* 100% for each slide */
+  animation: slide 15s linear infinite; /* Adjust the total duration as needed */
+}
+
+.info-slide {
+  flex: 1;
+  padding: 20px;
+  text-align: center;
+  background-color: #f0f0f0; /* Adjust the background color */
+  opacity: 0; /* Start with all slides hidden */
+  display: flex;
+  flex-direction: column; /* Add space between title and rest of the content */
+  justify-content: space-around; /* Add space between title and rest of the content */
+}
+
+.info-slide h2 {
+  font-size: 24px; /* Adjust the font size for the challenge name */
+}
+
+.info-slide:nth-child(1) {
+  animation: fadeIn 5s ease-in-out infinite; /* Adjust the duration as needed */
+}
+
+.info-slide:nth-child(2) {
+  animation: fadeIn 5s ease-in-out 5s infinite; /* Adjust the duration and delay as needed */
+}
+
+.info-slide:nth-child(3) {
+  animation: fadeIn 5s ease-in-out 9.999s infinite; /* A very short delay of 9.999 seconds */
+}
+
+@keyframes slide {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  33.33%, 66.66% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes fadeIn {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+}
