@@ -36,3 +36,21 @@
 		font-feature-settings: "rlig" 1, "calt" 1;
 	}
 }
+
+@layer components {
+	.sponsor-container {
+		background-image: url('../../public/background_retro.jpg');
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		border: 5px;
+		padding:18%;
+		margin: auto;
+	  }
+	
+	.sponsor-card {
+		background-color: white;
+		max-width: 80%;
+		margin: auto;
+	}
+}
