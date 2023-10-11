@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Logo from "../../../public/HackPSUBWLogo1.png";
+import Logo from "../../../public/images/HackPSUBWLogo1.png";
 import useScroll from "@/lib/hooks/use-scroll";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
