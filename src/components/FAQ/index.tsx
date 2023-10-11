@@ -52,7 +52,7 @@ const FAQ = () => {
 				<Divider />
 				<dl className="mt-10 space-y-6 divide-y divide-gray-900/10 w-full">
 					{faqs.map((faq) => (
-						<CustomCollapsible question={faq.question} answer={faq.answer} />
+						<CustomCollapsible key={faq.question} question={faq.question} answer={faq.answer} />
 					))}
 				</dl>
 			</div>
