@@ -1,36 +1,55 @@
 import { useEffect, useState } from "react";
-import settings from "@/lib/config/settings.json";
 import { motion, useAnimation } from "framer-motion";
+import { getActiveHackathon } from "@/lib/common";
 
 const CountdownTimer = () => {
-	// Initialize fields
-	let initialDate = new Date(settings.hackathonDate);
-	let initialState = 0;
-	if (initialDate.getTime() - new Date().getTime() <= 0) {
-		initialDate = new Date(settings.hackathonEndDate);
-		initialState = 1;
-		if (initialDate.getTime() - new Date().getTime() <= 0) {
-			initialState = 2;
-		}
-	}
-
-	let initialMessage = "until HackPSU!";
-	if (initialState === 1) {
-		initialMessage = "until the end of the Hackathon!";
-	} else if (initialState === 2) {
-		initialMessage = "The Hackathon is over. See you next semester!";
-	}
+	// Get Hackathon data
+	const [hackathon, setHackathon] = useState<any>(null);
+	useEffect(() => {
+		getActiveHackathon()
+			.then((data) => {
+				setHackathon(data);
+				initializeFields(data);
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	}, []);
 
 	const [days, setDays] = useState(Infinity);
 	const [hours, setHours] = useState(Infinity);
 	const [minutes, setMinutes] = useState(Infinity);
 	const [seconds, setSeconds] = useState(Infinity);
-	const [bannerMessage, setBannerMessage] = useState(initialMessage);
-	const [targetDate, setTargetDate] = useState<Date>(initialDate);
-	const [state, setState] = useState(initialState); // 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
+	const [bannerMessage, setBannerMessage] = useState("");
+	const [targetDate, setTargetDate] = useState<Date>(new Date());
+	const [state, setState] = useState(-1); // 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
+
+	const initializeFields = (data: any) => {
+		// Initialize fields
+		let initialDate = new Date(data.startTime);
+		let initialState = 0;
+		if (initialDate.getTime() - new Date().getTime() <= 0) {
+			initialDate = new Date(data.endTime);
+			initialState = 1;
+			if (initialDate.getTime() - new Date().getTime() <= 0) {
+				initialState = 2;
+			}
+		}
+
+		let initialMessage = "until HackPSU!";
+		if (initialState === 1) {
+			initialMessage = "until the end of the Hackathon!";
+		} else if (initialState === 2) {
+			initialMessage = "The Hackathon is over. See you next semester!";
+		}
+
+		setBannerMessage(initialMessage);
+		setTargetDate(initialDate);
+		setState(initialState);
+	};
 
 	const secondsControls = useAnimation();
-	const endDate = new Date(settings.hackathonEndDate);
+	const endDate = new Date(hackathon?.endTime || new Date());
 
 	const updateCountdown = () => {
 		const now = new Date();
@@ -81,6 +100,9 @@ const CountdownTimer = () => {
 
 		return () => clearInterval(interval);
 	}, [state]);
+
+	// Ensure everything loaded before rendering
+	if (hackathon === null || state === -1) return null;
 
 	if (
 		days === Infinity ||
