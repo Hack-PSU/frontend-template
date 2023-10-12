@@ -22,7 +22,7 @@ const CountdownTimer = () => {
 	const [seconds, setSeconds] = useState(Infinity);
 	const [bannerMessage, setBannerMessage] = useState("");
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
-	const [state, setState] = useState(-1); // 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
+	const [state, setState] = useState(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 
 	const initializeFields = (data: any) => {
 		// Initialize fields

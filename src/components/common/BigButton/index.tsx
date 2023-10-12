@@ -18,7 +18,11 @@ const BigButton = ({ children, background, onClick }: BigButtonProps) => {
 			}}
 			whileTap={{ scale: 0.9 }}
 		>
-			<img src={background.src} className="w-full h-full" />
+			{background ? (
+				<img src={background.src} className="w-full h-full" />
+			) : (
+				<></>
+			)}
 			{children}
 		</motion.button>
 	);
