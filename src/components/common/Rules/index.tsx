@@ -1,4 +1,4 @@
-import Divider from "../common/Divider";
+import Divider from "../Divider";
 
 const Rules = () => {
 	return (

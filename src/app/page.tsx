@@ -1,7 +1,6 @@
 import Hero from "@/components/Hero";
 import Schedule from "@/components/Schedule";
-import Rules from "@/components/Rules";
-import FAQ from "@/components/FAQ";
+import FAQRules from "@/components/FAQRules";
 import MobileApp from "@/components/MobileApp";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Workshops from "@/components/Workshops";
@@ -13,8 +12,7 @@ export default function Home() {
 		<main className="flex min-h-screen flex-col items-center w-full gap-6">
 			<Hero />
 			<Schedule />
-			<Rules />
-			<FAQ />
+			<FAQRules />
 			<MobileApp />
 			<PrizesChallenges />
 			<Workshops />
