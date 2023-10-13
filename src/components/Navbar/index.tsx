@@ -38,12 +38,12 @@ export default function Navbar() {
 						<Image src={scheduleButton} width={size} height={50} alt="schedule" />
 					</button>
 				</a>
-				
-				{/* <a href="#info">
+
+				<a href="#faq">
 					<button>
 						<Image src={infoButton} width={size} height={50} alt="info" />
 					</button>
-				</a> */}
+				</a>
 
 				<a href="#prizes">
 					<button>
