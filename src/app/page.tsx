@@ -6,7 +6,6 @@ import PrizesChallenges from "@/components/PrizesChallenges";
 import Workshops from "@/components/Workshops";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
-import Navbar from "@/components/Navbar";
 
 export default function Home() {
 	return (
