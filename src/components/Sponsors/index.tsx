@@ -60,7 +60,7 @@ export default function Sponsors() {
         <h1 className="font-bold text-6xl">Sponsors</h1>
         <Divider />
       </div>
-      <div className="bg-white">
+      <div className="bg-transparent">
           <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-5 items-center">
             {sponsorElements}
           </div>
