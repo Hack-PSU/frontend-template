@@ -25,16 +25,43 @@
 		--ring: 240 5.9% 10%;
 		--radius: 0.5rem;
 	}
-}
 
-@layer base {
 	* {
 		@apply border-border;
 	}
 	body {
 		@apply bg-background text-foreground;
 		font-feature-settings: "rlig" 1, "calt" 1;
+		background-image: url("../../public/images/FRAME_PATTERN.png");
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: 100% auto;
+		background-repeat: no-repeat;
+		background-attachment: fixed;
 	}
+}
+
+@layer components {
+	.frame {
+		background-image: url("../../public/images/SCREEN.png");
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-size: 100% auto;
+		background-repeat: no-repeat;
+		background-position: center center;
+	}
+
+	.cyberspace-front-font {
+		font-family: "cyperspace-front";
+		font-size: 36px;
+	}
+}
+
+@font-face {
+	font-family: "cyperspace-front";
+	src: url("../../public/fonts/CyberspaceRacewayFront.otf");
 }
 
 @layer components {
