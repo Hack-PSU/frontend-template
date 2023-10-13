@@ -3,7 +3,7 @@ import FAQ from "@/components/common/FAQ"; // Import the FAQ component
 
 function FAQPage() {
 	return (
-		<div className="flex">
+		<div id="faq" className="flex">
 			<div className="flex-1">
 				<Rules />
 			</div>

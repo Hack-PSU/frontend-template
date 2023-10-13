@@ -1,11 +1,11 @@
 "use client";
 import Image from "next/image";
-import Logo from "../../../public/images/HackPSUBWLogo1.png";
+import Logo from "../../../public/images/LOGO_FA23_NoBG.png";
 import useScroll from "@/lib/hooks/use-scroll";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { Button } from "@/components/common/Button";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import buttonImage from "../../../public/images/yellow_background_button.png"
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
@@ -13,7 +13,7 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`fixed top-0 w-full flex flex-row items-center p-2 px-16 justify-between ${
+			className={`sticky top-0 w-full flex flex-row items-center p-2 px-16 justify-between ${
 				scrolled
 					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
 					: "bg-white/0"
@@ -22,17 +22,57 @@ export default function Navbar() {
 			<Link href="/">
 				<Image src={Logo} width={50} height={50} alt="logo" />
 			</Link>
+
+			<div className="flex flex-row gap-8">
+				<a href="#schedule">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="schedule" />
+					</button>
+				</a>
+
+				<a href="#info">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="info" />
+					</button>
+				</a>
+				<a href="#prizes">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="prizes" />
+					</button>
+				</a>
+				<a href="#workshops">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="workshops" />
+					</button>
+				</a>
+				<a href="#sponsors">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="sponsors" />
+					</button>
+				</a>
+				<a href="#register">
+					<button>
+						<Image src={buttonImage} width={100} height={50} alt="register" />
+					</button>
+				</a>
+
+			</div>
+
 			{isAuthenticated ? (
 				<div className="flex flex-row h-full items-center gap-8">
 					<Link href="/profile">
 						<UserCircleIcon className="h-12 w-12 mt-1" />
 					</Link>
-					<Button onClick={() => logout()}>Sign Out</Button>
+					<button onClick={() => logout()}>
+					<	Image src={buttonImage} width={100} height={50} alt="signOut" />
+					</button>
 				</div>
 			) : (
-				<Link href="/signin">
-					<Button>Sign In</Button>
-				</Link>
+				<a href="/signin">
+				<button>
+					<Image src={buttonImage} width={100} height={50} alt="signIn" />
+				</button>
+				</a>
 			)}
 		</nav>
 	);
