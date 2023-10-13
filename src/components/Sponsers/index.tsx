@@ -1,72 +1,70 @@
+'use client';
+import React, { useEffect } from 'react';
 import Divider from "../common/Divider";
+import { Sponsor } from "../../interfaces/Sponsor";
+import styles from './sponsors.module.css';
+
 
 export default function Sponsors() {
-	return (
-		<section className="flex flex-col items-center w-full gap-8">
-			<div className="w-4/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl">Sponsors</h1>
-				<Divider />
-			</div>
-			<div className="bg-white">
-				<div className="mx-auto max-w-7xl px-6 lg:px-8">
-					<div className="-mx-6 grid grid-cols-2 gap-0.5 overflow-hidden sm:mx-0 sm:rounded-2xl md:grid-cols-3">
-						<div className="bg-gray-400/5 p-8 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/transistor-logo-gray-900.svg"
-								alt="Transistor"
-								width={158}
-								height={48}
-							/>
-						</div>
-						<div className="bg-gray-400/5 p-6 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/reform-logo-gray-900.svg"
-								alt="Reform"
-								width={158}
-								height={48}
-							/>
-						</div>
-						<div className="bg-gray-400/5 p-6 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/tuple-logo-gray-900.svg"
-								alt="Tuple"
-								width={158}
-								height={48}
-							/>
-						</div>
-						<div className="bg-gray-400/5 p-6 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/laravel-logo-gray-900.svg"
-								alt="Laravel"
-								width={158}
-								height={48}
-							/>
-						</div>
-						<div className="bg-gray-400/5 p-6 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/savvycal-logo-gray-900.svg"
-								alt="SavvyCal"
-								width={158}
-								height={48}
-							/>
-						</div>
-						<div className="bg-gray-400/5 p-6 sm:p-10">
-							<img
-								className="max-h-12 w-full object-contain"
-								src="https://tailwindui.com/img/logos/158x48/statamic-logo-gray-900.svg"
-								alt="Statamic"
-								width={158}
-								height={48}
-							/>
-						</div>
-					</div>
+  const [sponsors, setSponsors] = React.useState<Sponsor[]>([]);
+
+  useEffect(() => {
+
+    const apiEndpoint = 'https://api-v3-production-oz3dekgbpa-uk.a.run.app/sponsors';
+
+    fetch(apiEndpoint)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Update the sponsors state with the fetched data
+        setSponsors(data); // If we have an array of sponsors
+      })
+      .catch(error => {
+        console.error('Error fetching sponsors:', error);
+      });
+  }, []);
+
+  console.log(sponsors)
+
+  // Display sponsors dynamically
+  const sponsorElements = sponsors.sort((a,b) => a.order - b.order).map((sponsor, index) => (
+		<a
+		key={index}
+		href={sponsor.link}
+		target="_blank"
+		rel="noopener noreferrer"
+		className="cursor-pointer"
+		>
+			<div className = "sponsor-container">
+				<div className = "sponsor-card">
+					<img
+						className="max-h-16.1 object-contain"
+						src={sponsor.darkLogo}
+						alt={sponsor.name}
+						width={458}
+						height={48}
+					/>
 				</div>
 			</div>
-		</section>
-	);
+		</a>
+	
+  ));
+
+  return (
+    <section className="flex flex-col items-center w-full gap-8">
+      <div className="w-4/12 flex flex-col items-center">
+        <h1 className="font-bold text-6xl">Sponsors</h1>
+        <Divider />
+      </div>
+      <div className="bg-white">
+          <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-5 items-center">
+            {sponsorElements}
+          </div>
+      </div>
+    </section>
+  );
 }
