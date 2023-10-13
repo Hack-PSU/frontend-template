@@ -5,11 +5,20 @@ import useScroll from "@/lib/hooks/use-scroll";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
-import buttonImage from "../../../public/images/yellow_background_button.png"
+import infoButton from "../../../public/images/buttons/BUTTON_INFO.png";
+import scheduleButton from "../../../public/images/buttons/BUTTON_SCHEDULE.png";
+import prizesButton from "../../../public/images/buttons/BUTTON_PRIZES.png";
+import registerButton from "../../../public/images/buttons/BUTTON_REGISTER.png";
+import sponsorsButton from "../../../public/images/buttons/BUTTON_SPONSORS.png";
+import workshopsButton from "../../../public/images/buttons/BUTTON_WORKSHOPS.png";
+import loginButton from "../../../public/images/buttons/BUTTON_LOGIN.png";
+import blankButton from "../../../public/images/buttons/BUTTON_BLANK.png";
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
 	const { logout, isAuthenticated } = useFirebase();
+
+	const size = 150;
 
 	return (
 		<nav
@@ -20,39 +29,40 @@ export default function Navbar() {
 			} z-30 transition-all`}
 		>
 			<Link href="/">
-				<Image src={Logo} width={50} height={50} alt="logo" />
+				<Image src={Logo} width={100} height={100} alt="logo" />
 			</Link>
 
 			<div className="flex flex-row gap-8">
 				<a href="#schedule">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="schedule" />
+						<Image src={scheduleButton} width={size} height={50} alt="schedule" />
 					</button>
 				</a>
-
-				<a href="#info">
+				
+				{/* <a href="#info">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="info" />
+						<Image src={infoButton} width={size} height={50} alt="info" />
 					</button>
-				</a>
+				</a> */}
+
 				<a href="#prizes">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="prizes" />
+						<Image src={prizesButton} width={size} height={50} alt="prizes" />
 					</button>
 				</a>
 				<a href="#workshops">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="workshops" />
+						<Image src={workshopsButton} width={size} height={50} alt="workshops" />
 					</button>
 				</a>
 				<a href="#sponsors">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="sponsors" />
+						<Image src={sponsorsButton} width={size} height={50} alt="sponsors" />
 					</button>
 				</a>
-				<a href="#register">
+				<a href="/register">
 					<button>
-						<Image src={buttonImage} width={100} height={50} alt="register" />
+						<Image src={registerButton} width={size} height={50} alt="register" />
 					</button>
 				</a>
 
@@ -64,13 +74,13 @@ export default function Navbar() {
 						<UserCircleIcon className="h-12 w-12 mt-1" />
 					</Link>
 					<button onClick={() => logout()}>
-					<	Image src={buttonImage} width={100} height={50} alt="signOut" />
+					<	Image src={blankButton} width={size} height={50} alt="signOut" />
 					</button>
 				</div>
 			) : (
 				<a href="/signin">
 				<button>
-					<Image src={buttonImage} width={100} height={50} alt="signIn" />
+					<Image src={loginButton} width={size} height={50} alt="signIn" />
 				</button>
 				</a>
 			)}
