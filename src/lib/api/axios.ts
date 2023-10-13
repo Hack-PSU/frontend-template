@@ -24,14 +24,14 @@ export const api = axios.create({
 const shouldRefreshToken = (config: ApiAxiosRequestConfig) => {
 	const token = config.headers.token;
 	const expiration = config.headers.exp;
-	let isExpired = true
+	let isExpired = true;
 
 	if (expiration) {
-		isExpired = DateTime.fromISO(expiration) < DateTime.now()
+		isExpired = DateTime.fromISO(expiration) < DateTime.now();
 	}
 
 	return isExpired || !token || !expiration;
-}
+};
 
 const refreshToken = async (config: ApiAxiosRequestConfig) => {
 	if (!auth.currentUser) return;
@@ -44,7 +44,7 @@ const refreshToken = async (config: ApiAxiosRequestConfig) => {
 		api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 		api.defaults.headers.common["exp"] = expirationTime;
 	}
-}
+};
 
 api.interceptors.response.use(
 	(response) => response,
@@ -62,7 +62,7 @@ api.interceptors.response.use(
 		}
 		return Promise.reject(error);
 	}
-)
+);
 
 export const initApi = async (user: User | null) => {
 	if (user) {
