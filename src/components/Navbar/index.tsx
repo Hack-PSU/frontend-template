@@ -33,29 +33,29 @@ export default function Navbar() {
 			</Link>
 
 			<div className="flex flex-row gap-8">
-				<a href="#schedule">
+				<a href="/#schedule">
 					<button>
 						<Image src={scheduleButton} width={size} height={50} alt="schedule" className="navbar-button"/>
 					</button>
 				</a>
 
-				<a href="#faq">
+				<a href="/#faq">
 					<button>
 						<Image src={infoButton} width={size} height={50} alt="info" className="navbar-button"/>
 					</button>
 				</a>
 
-				<a href="#prizes">
+				<a href="/#prizes">
 					<button>
 						<Image src={prizesButton} width={size} height={50} alt="prizes" className="navbar-button"/>
 					</button>
 				</a>
-				<a href="#workshops">
+				<a href="/#workshops">
 					<button>
 						<Image src={workshopsButton} width={size} height={50} alt="workshops" className="navbar-button"/>
 					</button>
 				</a>
-				<a href="#sponsors">
+				<a href="/#sponsors">
 					<button>
 						<Image src={sponsorsButton} width={size} height={50} alt="sponsors" className="navbar-button"/>
 					</button>
