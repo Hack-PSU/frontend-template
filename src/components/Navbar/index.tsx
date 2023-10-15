@@ -35,37 +35,76 @@ export default function Navbar() {
 			<div className="flex flex-row gap-8">
 				<a href="/#schedule">
 					<button>
-						<Image src={scheduleButton} width={size} height={50} alt="schedule" className="navbar-button"/>
+						<Image
+							src={scheduleButton}
+							width={size}
+							height={50}
+							alt="schedule"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
 
 				<a href="/#faq">
 					<button>
-						<Image src={infoButton} width={size} height={50} alt="info" className="navbar-button"/>
+						<Image
+							src={infoButton}
+							width={size}
+							height={50}
+							alt="info"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
 
 				<a href="/#prizes">
 					<button>
-						<Image src={prizesButton} width={size} height={50} alt="prizes" className="navbar-button"/>
+						<Image
+							src={prizesButton}
+							width={size}
+							height={50}
+							alt="prizes"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
 				<a href="/#workshops">
 					<button>
-						<Image src={workshopsButton} width={size} height={50} alt="workshops" className="navbar-button"/>
+						<Image
+							src={workshopsButton}
+							width={size}
+							height={50}
+							alt="workshops"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
 				<a href="/#sponsors">
 					<button>
-						<Image src={sponsorsButton} width={size} height={50} alt="sponsors" className="navbar-button"/>
+						<Image
+							src={sponsorsButton}
+							width={size}
+							height={50}
+							alt="sponsors"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
-				<a href="/register">
+				<a
+					href="https://hackpsu.org/register"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
 					<button>
-						<Image src={registerButton} width={size} height={50} alt="register" className="navbar-button"/>
+						<Image
+							src={registerButton}
+							width={size}
+							height={50}
+							alt="register"
+							className="navbar-button"
+						/>
 					</button>
 				</a>
-
 			</div>
 
 			{isAuthenticated ? (
@@ -74,14 +113,26 @@ export default function Navbar() {
 						<UserCircleIcon className="h-12 w-12 mt-1" />
 					</Link>
 					<button onClick={() => logout()}>
-						<Image src={blankButton} width={size} height={50} alt="signOut" className="navbar-button"/>
+						<Image
+							src={blankButton}
+							width={size}
+							height={50}
+							alt="signOut"
+							className="navbar-button"
+						/>
 					</button>
 				</div>
 			) : (
 				<a href="/signin">
-				<button>
-					<Image src={loginButton} width={size} height={50} alt="signIn" className="navbar-button"/>
-				</button>
+					<button>
+						<Image
+							src={loginButton}
+							width={size}
+							height={50}
+							alt="signIn"
+							className="navbar-button"
+						/>
+					</button>
 				</a>
 			)}
 		</nav>
