@@ -49,10 +49,12 @@
 		}
 		@media (max-width: 768px) {
 			font-feature-settings: "rlig" 1, "calt" 1;
-			background: linear-gradient(to bottom, #0f5b8e, #000000);
+			background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
+				url("../../public/images/FRAME_PATTERN.png");
 			font-family: Lato, Georgia, sans-serif;
 			background-attachment: fixed;
 			background-size: cover;
+			background-position: center center;
 		}
 	}
 
@@ -74,6 +76,7 @@
 		border: 2px solid black;
 		@media (max-width: 960px) {
 			border: none;
+			background: none;
 		}
 	}
 
