@@ -5,12 +5,18 @@ type BigButtonProps = {
 	children?: React.ReactNode;
 	background?: any;
 	onClick?: () => void;
+	className?: string;
 };
 
-const BigButton = ({ children, background, onClick }: BigButtonProps) => {
+const BigButton = ({
+	children,
+	background,
+	onClick,
+	className,
+}: BigButtonProps) => {
 	return (
 		<motion.button
-			className="w-full h-full"
+			className={`w-full h-full ${className || ""}`}
 			onClick={onClick}
 			whileHover={{
 				scale: 1.1,
@@ -19,7 +25,10 @@ const BigButton = ({ children, background, onClick }: BigButtonProps) => {
 			whileTap={{ scale: 0.9 }}
 		>
 			{background ? (
-				<img src={background.src} className="w-full h-full" />
+				<img
+					src={background.src}
+					className={`w-full h-full ${className || ""}`}
+				/>
 			) : (
 				<></>
 			)}
