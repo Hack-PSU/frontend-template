@@ -36,14 +36,30 @@
 	}
 	body {
 		@apply bg-background text-foreground;
-		font-feature-settings: "rlig" 1, "calt" 1;
-		background-image: url("../../public/images/FRAME_PATTERN.png");
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-size: 100% auto;
-		background-repeat: no-repeat;
-		background-attachment: fixed;
+		@media (min-width: 768px) {
+			font-feature-settings: "rlig" 1, "calt" 1;
+			background-image: url("../../public/images/FRAME_PATTERN.png");
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: 100% auto;
+			background-repeat: no-repeat;
+			background-attachment: fixed;
+			font-family: Lato, Georgia, sans-serif;
+		}
+		@media (max-width: 768px) {
+			font-feature-settings: "rlig" 1, "calt" 1;
+			background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
+				url("../../public/images/FRAME_PATTERN.png");
+			font-family: Lato, Georgia, sans-serif;
+			background-attachment: fixed;
+			background-size: cover;
+			background-position: center center;
+		}
+	}
+
+	body::before {
+		@apply stickers;
 	}
 }
 
@@ -56,11 +72,51 @@
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;
+		border-radius: 0.375rem;
+		border: 2px solid black;
+		@media (max-width: 960px) {
+			background: none;
+		}
+		@media (max-width: 1080px) {
+			border: none;
+		}
 	}
 
 	.cyberspace-front-font {
 		font-family: "cyperspace-front";
-		font-size: 36px;
+		font-size: 20px;
+		@media (min-width: 768px) {
+			font-size: 36px;
+		}
+	}
+
+	.cornerstone-font {
+		font-family: "cornerstone";
+		font-size: 18px;
+		@media (min-width: 768px) {
+			font-size: 24px;
+		}
+	}
+
+	.stickers {
+		content: "";
+		position: fixed;
+		top: -200px;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-image: url("../../public/images/STICKERS.png");
+		background-size: cover;
+		background-repeat: no-repeat;
+		background-position: center center;
+		z-index: 1;
+		pointer-events: none;
+	}
+
+	@media (max-width: 960px) {
+		.stickers {
+			display: none;
+		}
 	}
 }
 
@@ -69,33 +125,40 @@
 	src: url("../../public/fonts/CyberspaceRacewayFront.otf");
 }
 
-@layer components {
-	.navbar-button {
-		transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-		transition-duration: 150ms;
-		
-		animation-duration: 150ms;
-	}
-
-	.navbar-button:hover{
-		--tw-scale-x: 1.25;
-		--tw-scale-y: 1.25;
-		transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-	}
+@font-face {
+	font-family: "cornerstone";
+	src: url("../../public/fonts/Cornerstone.ttf");
 }
 
 @layer components {
+	.navbar-button {
+		transition-property: color, background-color, border-color,
+			text-decoration-color, fill, stroke, opacity, box-shadow, transform,
+			filter, backdrop-filter;
+		transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+		transition-duration: 150ms;
+
+		animation-duration: 150ms;
+	}
+
+	.navbar-button:hover {
+		--tw-scale-x: 1.25;
+		--tw-scale-y: 1.25;
+		transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+			rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
+			scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+	}
+
 	.sponsor-container {
-		background-image: url('../../public/background_retro.jpg');
+		background-image: url("../../public/background_retro.jpg");
 		background-repeat: no-repeat;
 		background-position: center;
 		background-size: contain;
 		border: 5px;
-		padding:18%;
+		padding: 18%;
 		margin: auto;
-	  }
-	
+	}
+
 	.sponsor-card {
 		background-color: transparent;
 		max-width: 80%;
