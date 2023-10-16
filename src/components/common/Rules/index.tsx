@@ -9,7 +9,7 @@ const Rules = () => {
 			</div>
 			<div className="w-10/12">
 				<div className="w-full bg-black rounded-lg p-10 shadow-lg">
-					<ul className="text-white list-disc text-xl">
+					<ul className="text-white list-disc text-sm md:text-xl">
 						<li>
 							All participants must be 18 or older, and must bring a valid form
 							of identification.

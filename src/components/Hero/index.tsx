@@ -13,10 +13,16 @@ const Hero = () => {
 	const { isAuthenticated } = useFirebase();
 
 	return (
-		<section className="flex flex-col items-center justify-center w-4/5 h-[35rem]">
+		<section className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-8 mb-8">
 			<div className="frame flex p-8">
 				<div>
-					<Image src={Logo} width={500} height={500} alt="logo" />
+					<Image
+						src={Logo}
+						width={500}
+						height={500}
+						alt="logo"
+						className="hidden md:block"
+					/>
 				</div>
 				<div className="flex flex-col gap-4">
 					<CountdownTimer />
@@ -31,13 +37,13 @@ const Hero = () => {
 					<div>
 						{!isAuthenticated ? (
 							<div className="flex flex-col items-center justify-center">
-								<div className="w-3/5 p-4 flex flex-wrap justify-center">
+								<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
 									<BigButton
 										background={Register}
 										onClick={() => {
 											window.open("https://hackpsu.org/register", "_blank");
 										}}
-										className="mb-4"
+										className="mb-4 w-full"
 									></BigButton>
 
 									<BigButton
@@ -45,7 +51,7 @@ const Hero = () => {
 										onClick={() => {
 											window.open("http://discord.hackpsu.org", "_blank");
 										}}
-										className="mb-4"
+										className="mb-4 w-full"
 									></BigButton>
 								</div>
 							</div>

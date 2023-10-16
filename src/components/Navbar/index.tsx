@@ -22,17 +22,17 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`sticky top-0 w-full flex flex-row items-center p-2 px-16 justify-between ${
+			className={`sticky top-0 w-full flex flex-row items-center p-2 justify-evenly md:h-24 ${
 				scrolled
 					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
 					: "bg-white/0"
 			} z-30 transition-all`}
 		>
-			<Link href="/">
-				<Image src={Logo} width={100} height={100} alt="logo" />
-			</Link>
+			<div className="flex flex-row justify-evenly">
+				<Link href="/">
+					<Image src={Logo} width={100} height={100} alt="logo" />
+				</Link>
 
-			<div className="flex flex-row gap-8">
 				<a href="/#schedule">
 					<button>
 						<Image
@@ -105,36 +105,36 @@ export default function Navbar() {
 						/>
 					</button>
 				</a>
-			</div>
 
-			{isAuthenticated ? (
-				<div className="flex flex-row h-full items-center gap-8">
-					<Link href="/profile">
-						<UserCircleIcon className="h-12 w-12 mt-1" />
-					</Link>
-					<button onClick={() => logout()}>
-						<Image
-							src={blankButton}
-							width={size}
-							height={50}
-							alt="signOut"
-							className="navbar-button"
-						/>
-					</button>
-				</div>
-			) : (
-				<a href="/signin">
-					<button>
-						<Image
-							src={loginButton}
-							width={size}
-							height={50}
-							alt="signIn"
-							className="navbar-button"
-						/>
-					</button>
-				</a>
-			)}
+				{isAuthenticated ? (
+					<div className="flex flex-row h-full items-center gap-8">
+						<Link href="/profile">
+							<UserCircleIcon className="h-12 w-12 mt-1" />
+						</Link>
+						<button onClick={() => logout()}>
+							<Image
+								src={blankButton}
+								width={size}
+								height={50}
+								alt="signOut"
+								className="navbar-button"
+							/>
+						</button>
+					</div>
+				) : (
+					<a href="/signin">
+						<button>
+							<Image
+								src={loginButton}
+								width={size}
+								height={50}
+								alt="signIn"
+								className="navbar-button"
+							/>
+						</button>
+					</a>
+				)}
+			</div>
 		</nav>
 	);
 }

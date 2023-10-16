@@ -16,7 +16,7 @@ const Footer = () => {
 				<FaSnapchat size={social_size} />
 				<FaEnvelope size={social_size} />
 			</div>
-			<p className="font-bold mb-32">Made with ❤️ in Happy Valley.</p>
+			<p className="font-bold md:mb-32">Made with ❤️ in Happy Valley.</p>
 		</section>
 	);
 };

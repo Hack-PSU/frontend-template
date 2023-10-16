@@ -75,8 +75,10 @@
 		border-radius: 0.375rem;
 		border: 2px solid black;
 		@media (max-width: 960px) {
-			border: none;
 			background: none;
+		}
+		@media (max-width: 1080px) {
+			border: none;
 		}
 	}
 

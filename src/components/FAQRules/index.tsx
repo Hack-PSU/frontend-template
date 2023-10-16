@@ -3,8 +3,8 @@ import FAQ from "@/components/common/FAQ"; // Import the FAQ component
 
 function FAQPage() {
 	return (
-		<div id="faq" className="flex">
-			<div className="flex-1">
+		<div id="faq" className="flex flex-col md:flex-row">
+			<div className="flex-1 mb-4 md:mb-0">
 				<Rules />
 			</div>
 			<div className="flex-1">
