@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700');
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -34,6 +36,12 @@
 	body {
 		@apply bg-background text-foreground;
 		font-feature-settings: "rlig" 1, "calt" 1;
+	}
+}
+
+@layer components {
+	.font-lato {
+		font-family: 'Lato', sans-serif;
 	}
 }
 
