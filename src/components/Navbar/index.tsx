@@ -22,7 +22,7 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`sticky top-0 w-full flex flex-row items-center p-2 justify-evenly md:h-24 ${
+			className={`sticky top-0 w-full flex flex-row items-center p-2 justify-evenly md:h-24 hidden md:block  ${
 				scrolled
 					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
 					: "bg-white/0"
