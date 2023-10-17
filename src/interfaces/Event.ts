@@ -1,4 +1,6 @@
-export interface Event {
+import { LocationModel } from "./Location";
+
+export interface EventModel {
 	id: string;
 	name: string;
 	type: string;
@@ -12,5 +14,5 @@ export interface Event {
 	wsSkillLevel?: string;
 	hackathonId: string;
 	wsUrls?: string[];
-	location: Location;
+	location: LocationModel;
 }

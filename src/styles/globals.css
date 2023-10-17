@@ -165,3 +165,118 @@
 		margin: auto;
 	}
 }
+
+@layer component {
+	.workshop-card {
+		
+		border-radius: 10px;
+		padding: 20px;
+		/* transition: box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); */
+		background: repeating-linear-gradient(
+			-55deg,
+			#1C204E,
+			#1C204E 75px,
+			#303787 75px,
+			#303787 150px
+		  );
+		/* background-image: linear-gradient(160deg, #cf9c2d 0%, #b88311 100%); */
+		text-align: left;
+		color:white;
+		/* font-family: 'Arial Rounded MT Bold', sans-serif; */
+	  }
+	  
+	  .workshop-card:hover {
+		box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+	  }
+	  
+	  .workshop-card-image {
+		display: inline-block;
+		width: 70px;
+		height: 70px;
+		border-radius: 70px;
+		margin: 20px 5px 0 5px;
+		background-size: cover !important;
+		background-position: center !important;
+	  }
+	  
+	  .worksop-card-title {
+		font-size: 1.5em;
+		font-family: 'Cornerstone', 'Lato', sans-serif;
+		color: #ffffff;
+	  }
+	  
+	  .collapse:not(.show) {
+		display: block;
+		height: 4.6rem;
+		overflow: hidden;
+	  }
+	  
+	  .collapsing {
+		height: 4.6rem;
+	  }
+	  
+	  /* Properly scale our text and icons on smaller screens,
+	  and make images go away. */
+	  @media screen and (max-width: 568px) {
+		.workshop-card {
+		  margin-top: 7vh;
+		}
+	  
+		.worksop-card:nth-of-type(1) {
+		  margin-top: 4vh;
+		}
+	  
+		.worksop-card-title {
+		  font-size: 2.15em;
+		}
+	  
+		.worksop-card-reveal .card-title {
+		  font-size: 1.75em;
+		  line-height: 1.25em;
+		}
+	  
+		.material-icons {
+		  font-size: 36px;
+		  line-height: 60px;
+		}
+	  
+		.worksop-card-image img {
+		  height: 0px;
+		}
+	  }
+	  
+	  #module {
+		line-height: 1.5;
+	  }
+	  
+	  #module a.collapsed::after {
+		content: 'Show More';
+		color: white;
+	  }
+	  
+	  #module a:not(.collapsed)::after {
+		content: 'Show Less';
+		color: white !important;
+	  }
+	  
+	  .linkToWorkshop {
+		margin-top: 25px;
+		float: right;
+		color: white;
+	  }
+	  
+	  .center {
+		text-align: center;
+	  }
+	  
+	  .dateTime {
+		text-align: right;
+		display: inline;
+		float: right;
+	  }
+	  
+	  .inline {
+		display: inline;
+	  }
+	  
+}
