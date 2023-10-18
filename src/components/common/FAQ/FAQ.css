@@ -1,6 +1,7 @@
-@import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
-/* faq.css */
-
+@font-face {
+	font-family: "cornerstone";
+	src: url("/Cornerstone.ttf");
+}
 /* Style for the FAQ section container */
 .faq-section {
 	display: flex;
@@ -22,7 +23,8 @@
 .faq-title {
 	font-weight: 700;
 	font-size: 3.75rem /* 60px */;
-	line-height: 1; /* 3rem font size */
+	line-height: 1;
+	font-family: "cornerstone", sans-serif; /* 3rem font size */
 }
 .faq-list {
 	margin-top: 2.5rem;

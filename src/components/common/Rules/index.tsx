@@ -1,10 +1,10 @@
 import Divider from "../Divider";
-
+import "./Rules.css";
 const Rules = () => {
 	return (
 		<section className="flex flex-col items-center w-full gap-8">
 			<div className="w-4/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl">Rules</h1>
+				<h1 className="custom-font">Rules</h1>
 				<Divider />
 			</div>
 			<div className="w-10/12">
@@ -13,7 +13,8 @@ const Rules = () => {
 					style={{
 						backgroundImage: 'url("/SCREEN.png")', // Adjust the path to your image
 						backgroundSize: "cover", // Adjust the background size as needed
-						backgroundPosition: "center", // Adjust the background position as needed
+						backgroundPosition: "center",
+						// Adjust the background position as needed
 					}}
 				>
 					<ul className="text-white list-disc text-sm md:text-xl">
