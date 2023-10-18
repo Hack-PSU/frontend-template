@@ -1,5 +1,5 @@
 import ApiService from "./api/apiService";
-import { Hackathon, User, Sponsor, Event, Registration } from "@/interfaces";
+import { Hackathon, User, Sponsor, EventModel, Registration } from "@/interfaces";
 
 /**
  * Reads data from a database table based on the specified table name and optional ID.
@@ -22,13 +22,13 @@ export async function readFromDatabase<T>(
 	switch (table.toLowerCase()) {
 		case "events":
 			if (args?.id === undefined) {
-				const events: Event[] | undefined = await ApiService.get<Event[]>(
+				const events: EventModel[] | undefined = await ApiService.get<EventModel[]>(
 					`/events`,
 					useAuth
 				);
 				return events as unknown as T;
 			} else {
-				const event: Event | undefined = await ApiService.get<Event>(
+				const event: EventModel | undefined = await ApiService.get<EventModel>(
 					`/events/${args.id}`,
 					useAuth
 				);
@@ -111,7 +111,7 @@ export async function readFromDatabase<T>(
 export async function writeToDatabase<T>(table: string, data: any): Promise<T> {
 	switch (table.toLowerCase()) {
 		case "events":
-			const event: Event | undefined = await ApiService.post<Event>(
+			const event: EventModel | undefined = await ApiService.post<EventModel>(
 				`/event`,
 				data
 			);
@@ -157,7 +157,7 @@ export async function deleteFromDatabase(
 	if (!id) throw new Error("No ID specified in data object.");
 	switch (table.toLowerCase()) {
 		case "events":
-			await ApiService.delete<Event>(`/events/${id}`);
+			await ApiService.delete<EventModel>(`/events/${id}`);
 			break;
 		case "users":
 			await ApiService.delete<User>(`/users/${id}`);
@@ -188,7 +188,7 @@ export async function updateInDatabase<T>(
 	if (!data.id) throw new Error("No ID specified in data object.");
 	switch (table.toLowerCase()) {
 		case "events":
-			const event: Event | undefined = await ApiService.patch<Event>(
+			const event: EventModel | undefined = await ApiService.patch<EventModel>(
 				`/events/${data.id}`,
 				data
 			);

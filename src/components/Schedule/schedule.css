@@ -1,0 +1,101 @@
+/* EVENT SCHEDULE TABS */
+/* Applied when the button is in the default (not selected) state. */
+.schedule-tab {
+  background-color: transparent;
+  color: black;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+@media screen and (max-width: 568px) {
+  .schedule-tab {
+    font-size: 0.75rem;
+  }
+}
+
+/* Applied when the button is in the selected state. This will be overridden by Material UI if it's not explicitly defined. */
+.schedule-tab.Mui-selected {
+  color: black;
+}
+
+.schedule-tab:hover {
+  background-color:rgba(0, 0, 0, 0.22)
+}
+
+
+/* OVERVIEW AND ENTERTAINMENT */
+.generic-schedule-container {
+  width: 100%;
+  max-width: 600px;
+  border-radius: 1em;
+  background-color: black;
+  color: white;
+}
+
+
+/* WORKSHOPS */
+.workshop-card {
+  border-radius: 10px;
+  padding: 20px;
+  background: repeating-linear-gradient(
+    -55deg,
+    #1C204E,
+    #1C204E 75px,
+    #303787 75px,
+    #303787 150px
+  );
+  text-align: left;
+  color:white;
+  max-width: 600px;
+}
+
+.workshop-card:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.workshop-card-title {
+  font-size: 2.0em;
+  font-family: 'Cornerstone', 'Lato', sans-serif;
+  color: #ffffff;
+}
+
+/* Uncomment this for workshop image support. */
+/* .workshop-card-image {
+  display: inline-block;
+  width: 70px;
+  height: 70px;
+  border-radius: 70px;
+  margin: 20px 5px 0 5px;
+  background-size: cover !important;
+  background-position: center !important;
+} */
+
+/* Properly scale our text and icons on smaller screens and make images go away. */
+@media screen and (max-width: 568px) {
+  .workshop-card {
+    margin-top: 7vh;
+  }
+
+  .workshop-card:nth-of-type(1) {
+    margin-top: 4vh;
+  }
+
+  .workshop-card-title {
+    font-size: 2.15em;
+  }
+
+  /* Uncomment this for workshop image support. */
+  /* .workshop-card-image img {
+    height: 0px;
+  } */
+}
+
+.center {
+  text-align: center;
+}
+
+.dateTime {
+  text-align: right;
+  display: inline;
+  float: right;
+}
