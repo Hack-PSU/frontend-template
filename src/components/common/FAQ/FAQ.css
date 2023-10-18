@@ -7,7 +7,7 @@
 	flex-direction: column;
 	align-items: center;
 	width: 100%; /* Full width */
-	gap: 2rem; /* Adjust the gap as needed */
+	gap: 2rem;
 }
 
 /* Style for the FAQ header, including the title and divider */
@@ -27,6 +27,7 @@
 .faq-list {
 	margin-top: 2.5rem;
 	width: 100%;
+
 	/* 2rem top margin */
 }
 /* Style for the FAQ list (questions and answers) */
@@ -35,8 +36,12 @@
 	margin-top: calc(1.5rem /* 24px */ * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1.5rem /* 24px */ * var(--tw-space-y-reverse));
 	--tw-divide-y-reverse: 0;
-	border-top-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
-	border-bottom-width: calc(1px * var(--tw-divide-y-reverse));
-	border-color: rgb(17 24 39 / 0.1);
 }
-/* Add more styles for other elements as needed */
+
+.faq-button-container {
+	background-color: rgb(227, 227, 102);
+	margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+	margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+	border-radius: 15px;
+	border: 4px solid black;
+}

@@ -54,11 +54,14 @@ const FAQ = () => {
 				<Divider />
 				<dl className="faq-list">
 					{faqs.map((faq, index) => (
-						<CustomCollapsible
-							key={index}
-							question={faq.question}
-							answer={faq.answer}
-						/>
+						<>
+							<div className="faq-button-container" key={index}>
+								<CustomCollapsible
+									question={faq.question}
+									answer={faq.answer}
+								/>
+							</div>
+						</>
 					))}
 				</dl>
 			</div>
