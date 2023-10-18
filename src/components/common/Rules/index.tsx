@@ -8,7 +8,14 @@ const Rules = () => {
 				<Divider />
 			</div>
 			<div className="w-10/12">
-				<div className="w-full bg-black rounded-lg p-10 shadow-lg">
+				<div
+					className="w-full rounded-lg p-10 shadow-lg"
+					style={{
+						backgroundImage: 'url("/SCREEN.png")', // Adjust the path to your image
+						backgroundSize: "cover", // Adjust the background size as needed
+						backgroundPosition: "center", // Adjust the background position as needed
+					}}
+				>
 					<ul className="text-white list-disc text-sm md:text-xl">
 						<li>
 							All participants must be 18 or older, and must bring a valid form
