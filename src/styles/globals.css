@@ -148,20 +148,4 @@
 			rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y))
 			scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 	}
-
-	.sponsor-container {
-		background-image: url("../../public/background_retro.jpg");
-		background-repeat: no-repeat;
-		background-position: center;
-		background-size: contain;
-		border: 5px;
-		padding: 18%;
-		margin: auto;
-	}
-
-	.sponsor-card {
-		background-color: transparent;
-		max-width: 80%;
-		margin: auto;
-	}
 }
