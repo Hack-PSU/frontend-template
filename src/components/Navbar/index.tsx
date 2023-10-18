@@ -1,10 +1,11 @@
 "use client";
-import Image from "next/image";
-import Logo from "../../../public/images/LOGO_FA23_NoBG.png";
-import useScroll from "@/lib/hooks/use-scroll";
-import Link from "next/link";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { UserCircleIcon } from "@heroicons/react/20/solid";
+import Image from "next/image";
+import Link from "next/link";
+
+import useScroll from "@/lib/hooks/use-scroll";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import Logo from "../../../public/images/LOGO_FA23_NoBG.png";
 import infoButton from "../../../public/images/buttons/BUTTON_INFO.png";
 import scheduleButton from "../../../public/images/buttons/BUTTON_SCHEDULE.png";
 import prizesButton from "../../../public/images/buttons/BUTTON_PRIZES.png";
@@ -13,6 +14,7 @@ import sponsorsButton from "../../../public/images/buttons/BUTTON_SPONSORS.png";
 import workshopsButton from "../../../public/images/buttons/BUTTON_WORKSHOPS.png";
 import loginButton from "../../../public/images/buttons/BUTTON_LOGIN.png";
 import blankButton from "../../../public/images/buttons/BUTTON_BLANK.png";
+import "./navbar.css";
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
@@ -22,10 +24,8 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`sticky top-0 w-full flex flex-row items-center p-2 justify-evenly md:h-24 hidden md:block  ${
-				scrolled
-					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
-					: "bg-white/0"
+			className={`sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block  ${
+				scrolled ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl" : "bg-white/0"
 			} z-30 transition-all`}
 		>
 			<div className="flex flex-row justify-evenly">
