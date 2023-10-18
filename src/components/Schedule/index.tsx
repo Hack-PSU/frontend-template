@@ -1,12 +1,44 @@
 "use client";
-import Divider from "../common/Divider";
-import React, { useEffect } from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import { EventModel } from "@/interfaces";
-import parse from "html-react-parser";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import parse from "html-react-parser";
+import React, { useEffect } from 'react';
+
+import { EventModel } from "@/interfaces";
+import Divider from "../common/Divider";
+import { GenericScheduleEntity, createGenericScheduleEntity } from './generic-schedule-entity';
+import "./schedule.css";
+
+// TOOD: Pull these as a distinguishable catgeory from the API so that we don't have to hardcode them.
+const genericScheduleEventsSaturday = [
+  createGenericScheduleEntity("Check-In", "11AM"),
+  createGenericScheduleEntity("Opening Ceremonies", "12PM - 1PM"),
+  createGenericScheduleEntity("Team Building", "1PM - 2PM"),
+  createGenericScheduleEntity("Workshops", "1PM - 7PM"),
+  createGenericScheduleEntity("Lunch", "1PM - 4PM"),
+  createGenericScheduleEntity("Hacking Begins", "2PM"),
+  createGenericScheduleEntity("Dinner", "7PM - 9PM"),
+];
+
+const genericScheduleEventsSunday = [
+  createGenericScheduleEntity("Midnight Snack", "12AM - 1AM"),
+  createGenericScheduleEntity("Elliott's Early Morning Yoga", "3AM - 3:30AM"),
+  createGenericScheduleEntity("Brunch", "10AM - 12PM"),
+  createGenericScheduleEntity("Hacking Ends", "1:45PM"),
+  createGenericScheduleEntity("Judging Expo", "2PM - 3:30PM"),
+  createGenericScheduleEntity("Closing Ceremonies", "4:30PM - 5:30PM"),
+];
+
+const entertainmentEvents = [
+  createGenericScheduleEntity("Football: PSU vs. OSU", "12PM - 3:30PM"),
+  createGenericScheduleEntity("Fun Mini-events", "4PM - 6PM"),
+  createGenericScheduleEntity("Stand-up Comedy", "7:30PM"),
+  createGenericScheduleEntity("Bob Ross MSPaint", "9:00PM"),
+  createGenericScheduleEntity("Trivia", "10:00PM"),
+  createGenericScheduleEntity("Geoguesser", "10:30PM"),
+];
 
 // TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
 const scheduleTabsTheme = createTheme({
@@ -22,12 +54,11 @@ const scheduleTabsTheme = createTheme({
 });
 
 const Schedule = () => {
-	const [Workshops, setWorkshops] = React.useState<EventModel[]>([]);
+	const [events, setEvents] = React.useState<EventModel[]>([]);
 
-	useEffect(() => { //gives us set of workshops
-		const apiEndpoint =
-			"https://api-v3-production-oz3dekgbpa-uk.a.run.app/events";
-
+	useEffect(() => {
+		// Fetch the set of events from the API.
+    const apiEndpoint = "https://api-v3-production-oz3dekgbpa-uk.a.run.app/events";
 		fetch(apiEndpoint)
 			.then((response) => {
 				if (!response.ok) {
@@ -36,10 +67,10 @@ const Schedule = () => {
 				return response.json();
 			})
 			.then((data) => {
-				setWorkshops(data); 
+				setEvents(data); 
 			})
 			.catch((error) => {
-				console.error("Error fetching workshops:", error);
+				console.error("Error fetching events:", error);
 			});
 	}, []);
 
@@ -49,11 +80,9 @@ const Schedule = () => {
 				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
 				<Divider />	
 			</div>
-      <span className="h-px"></span>
 			<BasicTabs />
 		</section>
 	);
-
 
 	interface TabPanelProps {
     children?: React.ReactNode;
@@ -109,48 +138,17 @@ const Schedule = () => {
         <CustomTabPanel value={value} index={0}>
           <div id="schedule" className="w-10/12 mx-auto">
             <div className="container-fluid generic-schedule-container p-10 mx-auto">
+              <div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg">SATURDAY</div>
               <div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
-                <div className="w-3/4">Opening Ceremonies</div>
-                <div className="text-right">12:00PM</div>
-
-                <div className="w-3/4">Lunch</div>
-                <div className="text-right">1:30 - 4:00PM</div>
-                
-                <div className="w-3/4">Hacking Starts</div>
-                <div className="text-right">2:00PM</div>
-                
-                <div className="w-3/4">Workshops</div>
-                <div className="text-right">2:00 - 7:00PM</div>
-                
-                <div className="w-3/4">Internship Panel</div>
-                <div className="text-right">5:00 - 6:00PM</div>
-                
-                <div className="w-3/4">Dinner</div>
-                <div className="text-right">7:00 - 9:00PM</div>
-                
-                <div className="w-3/4">Entertainment Events</div>
-                <div className="text-right">All Day</div>
-                
-                <div className="w-3/4">Midnight Snack</div>
-                <div className="text-right">12:00 - 1:00AM</div>
-                
-                <div className="w-3/4">Entertainment Events</div>
-                <div className="text-right">6:00AM - 2:00PM</div>
-                
-                <div className="w-3/4">Workshops</div>
-                <div className="text-right">9:00AM - 2:00PM</div>
-                
-                <div className="w-3/4">Brunch</div>
-                <div className="text-right">10:00AM - 12:00PM</div>
-                
-                <div className="w-3/4">Judging Expo</div>
-                <div className="text-right">2:00PM</div>
-                
-                <div className="w-3/4">Post-judging Snack</div>
-                <div className="text-right">3:00PM</div>
-                
-                <div className="w-3/4">Closing Ceremonies</div>
-                <div className="text-right">4:00PM</div>
+                {genericScheduleEventsSaturday.map((event, index) => (
+                  <GenericScheduleComponent {...event} key={index} />
+                ))}
+              </div>
+              <div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg mt-10">SUNDAY</div>
+              <div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
+                {genericScheduleEventsSunday.map((event, index) => (
+                  <GenericScheduleComponent {...event} key={index} />
+                ))}
               </div>
             </div>
           </div>
@@ -159,60 +157,38 @@ const Schedule = () => {
           <div id="workshop-container" className="container-fluid nopadding">
             <div className="col-xl-1"></div>
             <div className="container-fluid">
-			  {Workshops.filter((workshop) => workshop.type === "workshop").sort((workshopA, workshopB) => workshopA.startTime - workshopB.startTime).map((workshop) => <WorkshopComponent{...workshop}/>)}
+      			  {events
+                .filter((event) => event.type === "workshop")
+                .sort((eventA, eventB) => eventA.startTime - eventB.startTime)
+                .map((workshop, index) => (
+                  <WorkshopComponent{...workshop} key={index}/>
+                ))
+              }
             </div>
           </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
           <div id="schedule" className="w-10/12 mx-auto">
-            <div className="container-fluid w-full bg-black rounded-lg p-10 shadow-lg text-white text-3xl">
-              <div className="-mx-6 grid grid-cols-2 gap-y-0.5">
-                <div>Opening Ceremony</div>
-                <div className="text-right">12:00PM</div>
-
-                <div>Lunch</div>
-                <div className="text-right">1:30 - 4:00 PM</div>
-                
-                <div>Hacking Starts</div>
-                <div className="text-right">2:00PM</div>
-                
-                <div>Workshops</div>
-                <div className="text-right">2:00 - 7:00PM</div>
-                
-                <div>Internship Panel</div>
-                <div className="text-right">5:00 - 6:00PM</div>
-                
-                <div>Dinner</div>
-                <div className="text-right">7:00 - 9:00PM</div>
-                
-                <div>Entertainment Events</div>
-                <div className="text-right">All Day</div>
-                
-                <div>Midnight Snack</div>
-                <div className="text-right">12:00 - 1:00AM</div>
-                
-                <div>Entertainment Events</div>
-                <div className="text-right">6:00AM - 2:00PM</div>
-                
-                <div>Workshops</div>
-                <div className="text-right">9:00AM - 2:00PM</div>
-                
-                <div>Brunch</div>
-                <div className="text-right">10:00AM - 12:00PM</div>
-                
-                <div>Hacking Ends / Judging Expo</div>
-                <div className="text-right">2:00PM</div>
-                
-                <div>Post-judging Snack</div>
-                <div className="text-right">3:00PM</div>
-                
-                <div>Closing Ceremony</div>
-                <div className="text-right">4:00PM</div>
+            <div className="container-fluid generic-schedule-container p-10 mx-auto">
+              <div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg">SATURDAY</div>
+              <div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
+                {entertainmentEvents.map((event, index) => (
+                  <GenericScheduleComponent {...event} key={index} />
+                ))}
               </div>
             </div>
           </div>
         </CustomTabPanel>
       </Box>
+    );
+  }
+
+  function GenericScheduleComponent(event: GenericScheduleEntity) {
+    return (
+      <>
+        <div className="w-3/4">{event.title}</div>
+        <div className="text-right">{event.timing}</div>
+      </>
     );
   }
 
@@ -227,19 +203,17 @@ const Schedule = () => {
             {`${new Date(workshop.startTime).getHours() - 12}:00PM`} - {`${new Date(workshop.endTime).getHours() - 12}:00PM`}
           </p>
         </div>
-
-        <div id="module">
-          <p><b>Location:</b> {workshop.location.name}</p>
-		  <br/>
-          {parse(workshop.description ?? "")}
-          <br/>
-          <div><p><b>Skills/Software:</b> {workshop.wsRelevantSkills}</p></div>
-          <div className="mt-10"><b>Presenters:</b></div>
-          <div>
-            <div className="row">{workshop.wsPresenterNames}</div>
-			{/* Uncomment below line for workshop image support */}
-            {/* <div className="workshop-card-image tooltipped" data-position="bottom" id="presenter1"></div> */}
-          </div>
+        <p><b>Location:</b> {workshop.location.name}</p>
+        <br/>
+        {parse(workshop.description ?? "")}
+        <br/>
+        {/* Uncomment the below line for workshop relevant skills/tags support. */}
+        {/* <div><p><b>Skills/Software:</b> {workshop.wsRelevantSkills}</p></div> */}
+        <div className="mt-10"><b>Presenters:</b></div>
+        <div>
+          <div className="row">{workshop.wsPresenterNames}</div>
+          {/* Uncomment below line for workshop image support */}
+          {/* <div className="workshop-card-image tooltipped" data-position="bottom" id="presenter1"></div> */}
         </div>
       </div>
     );
