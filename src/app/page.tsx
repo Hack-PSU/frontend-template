@@ -3,7 +3,6 @@ import Schedule from "@/components/Schedule";
 import FAQRules from "@/components/FAQRules";
 import MobileApp from "@/components/MobileApp";
 import PrizesChallenges from "@/components/PrizesChallenges";
-import Workshops from "@/components/Workshops";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
 
@@ -15,7 +14,6 @@ export default function Home() {
 			<FAQRules />
 			<MobileApp />
 			<PrizesChallenges />
-			<Workshops />
 			<Sponsors />
 			<Footer />
 		</main>
