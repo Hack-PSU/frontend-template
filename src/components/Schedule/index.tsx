@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { EventModel } from "@/interfaces";
 import parse from "html-react-parser";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const testWorkshop: EventModel = {
 	id: "asdfasdf",
@@ -24,13 +25,27 @@ const testWorkshop: EventModel = {
 	hackathonId: ""
 };
 
+// TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
+const scheduleTabsTheme = createTheme({
+  components: {
+    MuiTabs: {
+      styleOverrides: {
+        indicator: {
+          backgroundColor: "white"
+        },
+      }
+    },
+  }
+});
+
 const Schedule = () => {
 	return (
 		<section id="schedule" className="flex flex-col items-center w-full">
 			<div className="w-4/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl">Schedule</h1>
+				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
 				<Divider />	
 			</div>
+      <span className="h-px"></span>
 			<BasicTabs />
 		</section>
 	);
@@ -55,7 +70,7 @@ const Schedule = () => {
       >
       {value === index && (
         <Box sx={{ p: 3 }}>
-        <Typography>{children}</Typography>
+          {children}
         </Box>
       )}
       </div>
@@ -67,7 +82,7 @@ const Schedule = () => {
       id: `simple-tab-${index}`,
       'aria-controls': `simple-tabpanel-${index}`,
     };
-	}
+  }
 
 	function BasicTabs() {
 	  const [value, setValue] = React.useState(0);
@@ -78,57 +93,59 @@ const Schedule = () => {
 
     return (
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="Schedule" centered>
-            <Tab label="Overview" {...a11yProps(0)} />
-            <Tab label="Workshops" {...a11yProps(1)} />
-            <Tab label="Entertainment" {...a11yProps(2)} />
-          </Tabs>
-        </Box>
+        <ThemeProvider theme={scheduleTabsTheme}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
+            <Tabs value={value} onChange={handleChange} aria-label="Schedule" centered>
+              <Tab label="Overview" {...a11yProps(0)} className="schedule-tab" />
+              <Tab label="Workshops" {...a11yProps(1)} className="schedule-tab" />
+              <Tab label="Entertainment" {...a11yProps(2)} className="schedule-tab" />
+            </Tabs>
+          </Box>          
+        </ThemeProvider>
         <CustomTabPanel value={value} index={0}>
           <div id="schedule" className="w-10/12 mx-auto">
-            <div className="container-fluid w-full bg-black rounded-lg p-10 shadow-lg text-white text-3xl">
-              <div className="-mx-6 grid grid-cols-2 gap-y-0.5">
-                <div>Opening Ceremony</div>
+            <div className="container-fluid generic-schedule-container p-10 mx-auto">
+              <div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
+                <div className="w-3/4">Opening Ceremonies</div>
                 <div className="text-right">12:00PM</div>
 
-                <div>Lunch</div>
-                <div className="text-right">1:30 - 4:00 PM</div>
+                <div className="w-3/4">Lunch</div>
+                <div className="text-right">1:30 - 4:00PM</div>
                 
-                <div>Hacking Starts</div>
+                <div className="w-3/4">Hacking Starts</div>
                 <div className="text-right">2:00PM</div>
                 
-                <div>Workshops</div>
+                <div className="w-3/4">Workshops</div>
                 <div className="text-right">2:00 - 7:00PM</div>
                 
-                <div>Internship Panel</div>
+                <div className="w-3/4">Internship Panel</div>
                 <div className="text-right">5:00 - 6:00PM</div>
                 
-                <div>Dinner</div>
+                <div className="w-3/4">Dinner</div>
                 <div className="text-right">7:00 - 9:00PM</div>
                 
-                <div>Entertainment Events</div>
+                <div className="w-3/4">Entertainment Events</div>
                 <div className="text-right">All Day</div>
                 
-                <div>Midnight Snack</div>
+                <div className="w-3/4">Midnight Snack</div>
                 <div className="text-right">12:00 - 1:00AM</div>
                 
-                <div>Entertainment Events</div>
+                <div className="w-3/4">Entertainment Events</div>
                 <div className="text-right">6:00AM - 2:00PM</div>
                 
-                <div>Workshops</div>
+                <div className="w-3/4">Workshops</div>
                 <div className="text-right">9:00AM - 2:00PM</div>
                 
-                <div>Brunch</div>
+                <div className="w-3/4">Brunch</div>
                 <div className="text-right">10:00AM - 12:00PM</div>
                 
-                <div>Hacking Ends / Judging Expo</div>
+                <div className="w-3/4">Judging Expo</div>
                 <div className="text-right">2:00PM</div>
                 
-                <div>Post-judging Snack</div>
+                <div className="w-3/4">Post-judging Snack</div>
                 <div className="text-right">3:00PM</div>
                 
-                <div>Closing Ceremony</div>
+                <div className="w-3/4">Closing Ceremonies</div>
                 <div className="text-right">4:00PM</div>
               </div>
             </div>
@@ -136,15 +153,11 @@ const Schedule = () => {
         </CustomTabPanel> 
         <CustomTabPanel value={value} index={1}>
           <div id="workshop-container" className="container-fluid nopadding">
-            <div className="row no padding">
             <div className="col-xl-1"></div>
             <div className="container-fluid">
-              <div className="col-12">
-                <WorkshopComponent {...testWorkshop}/>
-              </div> 
-              </div>
+              <WorkshopComponent {...testWorkshop}/>
             </div>
-          </div>			
+          </div>
         </CustomTabPanel>
         <CustomTabPanel value={value} index={2}>
           <div id="schedule" className="w-10/12 mx-auto">
@@ -201,7 +214,7 @@ const Schedule = () => {
 
   function WorkshopComponent(workshop: EventModel) {
     return (
-      <div className="workshop-card">
+      <div className="workshop-card mx-auto">
         <div className="inline">
           <p className="workshop-card-title inline">{workshop.name}</p>
           <p className="dateTime">

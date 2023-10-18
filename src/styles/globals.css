@@ -166,7 +166,7 @@
 	}
 }
 
-@layer component {
+@layer components {
 	.workshop-card {
 
 		border-radius: 10px;
@@ -181,6 +181,7 @@
 		);
 		text-align: left;
 		color:white;
+    max-width: 600px;
 	}
 
 	.workshop-card:hover {
@@ -219,15 +220,15 @@
 		  margin-top: 7vh;
 		}
 
-		.worksop-card:nth-of-type(1) {
+		.workshop-card:nth-of-type(1) {
 		  margin-top: 4vh;
 		}
 
-		.worksop-card-title {
+		.workshop-card-title {
 		  font-size: 2.15em;
 		}
 
-		.worksop-card-reveal .card-title {
+		.workshop-card-reveal .card-title {
 		  font-size: 1.75em;
 		  line-height: 1.25em;
 		}
@@ -237,7 +238,7 @@
 		  line-height: 60px;
 		}
 
-		.worksop-card-image img {
+		.workshop-card-image img {
 		  height: 0px;
 		}
 	}
@@ -275,4 +276,42 @@
 	.inline {
 		display: inline;
 	}
+}
+
+/* Event schedule tabs */
+@layer components {
+  
+  /* Applied when the button is in the default (not selected) state. */
+  .schedule-tab {
+    background-color: transparent;
+    color: black;
+    font-weight: bold;
+    font-size: 1.5rem;
+  }
+
+  @media screen and (max-width: 568px) {
+    .schedule-tab {
+      font-size: 0.75rem;
+    }
+  }
+  
+  /* Applied when the button is in the selected state. This will be overridden by Material UI if it's not explicitly defined. */
+  .schedule-tab.Mui-selected {
+    color: black;
+  }
+
+  .schedule-tab:hover {
+    background-color:rgba(0, 0, 0, 0.22)
+  }
+}
+
+/* Styling for general and entertainment schedules */
+@layer components {
+  .generic-schedule-container {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 1em;
+    background-color: black;
+    color: white;
+  }
 }
