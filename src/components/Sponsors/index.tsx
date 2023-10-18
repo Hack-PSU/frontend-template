@@ -1,16 +1,16 @@
 "use client";
+import Image from "next/image";
 import React, { useEffect } from "react";
-import Divider from "../common/Divider";
+
 import { Sponsor } from "../../interfaces/Sponsor";
-import styles from "./sponsors.module.css";
+import Divider from "../common/Divider";
+import "./sponsors.css";
 
 export default function Sponsors() {
 	const [sponsors, setSponsors] = React.useState<Sponsor[]>([]);
 
 	useEffect(() => {
-		const apiEndpoint =
-			"https://api-v3-production-oz3dekgbpa-uk.a.run.app/sponsors";
-
+		const apiEndpoint = "https://api-v3-production-oz3dekgbpa-uk.a.run.app/sponsors";
 		fetch(apiEndpoint)
 			.then((response) => {
 				if (!response.ok) {
@@ -29,18 +29,17 @@ export default function Sponsors() {
 
 	// Display sponsors dynamically
 	const sponsorElements = sponsors
-		.sort((a, b) => a.order - b.order)
+		.sort((a, b) => (a.order - b.order))
 		.map((sponsor, index) => (
-			<a
-				key={index}
-				href={sponsor.link}
-				target="_blank"
-				rel="noopener noreferrer"
-				className="cursor-pointer"
-			>
-				<div className="sponsor-container">
+      <div key={index} className="sponsor-container">
+        <a
+          href={sponsor.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cursor-pointer"
+        >
 					<div className="sponsor-card">
-						<img
+						<Image
 							className="max-h-16.1 object-contain"
 							src={sponsor.darkLogo}
 							alt={sponsor.name}
@@ -48,8 +47,8 @@ export default function Sponsors() {
 							height={48}
 						/>
 					</div>
-				</div>
-			</a>
+			  </a>
+      </div>
 		));
 
 	return (
