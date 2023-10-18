@@ -1,7 +1,7 @@
 import Divider from "../Divider";
 import CustomCollapsible from "../CustomCollapsible";
 // TODO: Add resource links
-
+import "./FAQ.css";
 //FAQ text
 const faqs = [
 	{
@@ -48,11 +48,11 @@ const faqs = [
 
 const FAQ = () => {
 	return (
-		<section className="flex flex-col items-center w-full gap-8">
-			<div className="w-11/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl">FAQ</h1>
+		<section className="faq-section">
+			<div className="faq-header">
+				<h1 className="faq-title">FAQ</h1>
 				<Divider />
-				<dl className="mt-10 space-y-6 divide-y divide-gray-900/10 w-full">
+				<dl className="faq-list">
 					{faqs.map((faq, index) => (
 						<CustomCollapsible
 							key={index}
