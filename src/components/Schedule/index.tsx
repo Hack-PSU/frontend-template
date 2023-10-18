@@ -1,29 +1,12 @@
 "use client";
 import Divider from "../common/Divider";
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { EventModel } from "@/interfaces";
 import parse from "html-react-parser";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const testWorkshop: EventModel = {
-	id: "asdfasdf",
-	name: "Test Workshop Title",
-	type: "workshop",
-	startTime: 1697925600000,
-	endTime: 1697929200000,
-	description: "<p>This is a test event.</p>",
-	locationId: 1,
-	location: { id: 1, name: "Business Building 104" },
-	wsPresenterNames: "Person 1, Person 2",
-	wsSkillLevel: "beginner",
-	wsRelevantSkills: "",
-	wsUrls: [""],
-	hackathonId: ""
-};
 
 // TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
 const scheduleTabsTheme = createTheme({
@@ -31,7 +14,7 @@ const scheduleTabsTheme = createTheme({
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: "white"
+          backgroundColor: "black"
         },
       }
     },
@@ -39,6 +22,27 @@ const scheduleTabsTheme = createTheme({
 });
 
 const Schedule = () => {
+	const [Workshops, setWorkshops] = React.useState<EventModel[]>([]);
+
+	useEffect(() => { //gives us set of workshops
+		const apiEndpoint =
+			"https://api-v3-production-oz3dekgbpa-uk.a.run.app/events";
+
+		fetch(apiEndpoint)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`Network response was not ok: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then((data) => {
+				setWorkshops(data); 
+			})
+			.catch((error) => {
+				console.error("Error fetching workshops:", error);
+			});
+	}, []);
+
 	return (
 		<section id="schedule" className="flex flex-col items-center w-full">
 			<div className="w-4/12 flex flex-col items-center">
@@ -155,7 +159,7 @@ const Schedule = () => {
           <div id="workshop-container" className="container-fluid nopadding">
             <div className="col-xl-1"></div>
             <div className="container-fluid">
-              <WorkshopComponent {...testWorkshop}/>
+			  {Workshops.filter((workshop) => workshop.type === "workshop").sort((workshopA, workshopB) => workshopA.startTime - workshopB.startTime).map((workshop) => <WorkshopComponent{...workshop}/>)}
             </div>
           </div>
         </CustomTabPanel>
@@ -214,7 +218,7 @@ const Schedule = () => {
 
   function WorkshopComponent(workshop: EventModel) {
     return (
-      <div className="workshop-card mx-auto">
+      <div className="workshop-card mx-auto my-3">
         <div className="inline">
           <p className="workshop-card-title inline">{workshop.name}</p>
           <p className="dateTime">
@@ -226,13 +230,15 @@ const Schedule = () => {
 
         <div id="module">
           <p><b>Location:</b> {workshop.location.name}</p>
+		  <br/>
           {parse(workshop.description ?? "")}
           <br/>
           <div><p><b>Skills/Software:</b> {workshop.wsRelevantSkills}</p></div>
           <div className="mt-10"><b>Presenters:</b></div>
           <div>
             <div className="row">{workshop.wsPresenterNames}</div>
-            <div className="workshop-card-image tooltipped" data-position="bottom" id="presenter1"></div>
+			{/* Uncomment below line for workshop image support */}
+            {/* <div className="workshop-card-image tooltipped" data-position="bottom" id="presenter1"></div> */}
           </div>
         </div>
       </div>
