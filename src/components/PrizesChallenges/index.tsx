@@ -3,7 +3,7 @@ import "./PrizesChallenges.css";
 
 const PrizesChallenges = () => {
   return (
-    <section id="prizes" className="flex flex-col items-center w-full">
+    <section id="prizes" className="flex flex-col items-center w-full mt-20">
       <div className="w-full md:w-5/12 flex flex-col items-center">
         <h1 className="cornerstone-font font-bold text-6xl text-center">Prizes & Challenges</h1>
         <Divider />
