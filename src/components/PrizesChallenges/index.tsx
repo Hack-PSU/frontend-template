@@ -38,7 +38,7 @@ const ChallengesCarousel = () => {
 
   return (
     <div className="carousel-container">
-      <div className="carousel" style={{ animation: `rotateChallenges 60s infinite` }}>
+      <div className="carousel" style={{ animation: `rotateChallenges 36s infinite` }}>
         {/* Challenge Slide 1 */}
         <div className="slide" style={{ height: '400px' }}>
           <div className="black-box text-left" style={divStyle}>

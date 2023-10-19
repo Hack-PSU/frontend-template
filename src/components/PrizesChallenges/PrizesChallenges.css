@@ -7,8 +7,8 @@
 
 .carousel {
   display: flex;
-  width: 6500px; /* Adjust to accommodate all 15 slides */
-  animation: rotateChallenges 9s infinite;
+  width: 2500px; /* Adjust to accommodate all 16 slides */
+  animation: rotateChallenges 12s infinite;
 }
 
 .slide {
@@ -33,47 +33,33 @@
   justify-content: center; /* Add this line */
 }
 
+
 @keyframes rotateChallenges {
   0% {
     transform: translateX(0);
   }
-  7.69% {
+  16.66% {
     transform: translateX(0);
   }
-  15.38% {
+  25% {
     transform: translateX(-500px);
   }
-  23.07% {
+  41.66% {
     transform: translateX(-500px);
   }
-  30.76% {
+  50% {
     transform: translateX(-1000px);
   }
-  38.45% {
+  66.66% {
     transform: translateX(-1000px);
   }
-  46.14% {
+  75% {
     transform: translateX(-1500px);
   }
-  53.83% {
+  91.66% {
     transform: translateX(-1500px);
-  }
-  61.52% {
-    transform: translateX(-2000px);
-  }
-  69.21% {
-    transform: translateX(-2000px);
-  }
-  76.90% {
-    transform: translateX(-2500px);
-  }
-  84.59% {
-    transform: translateX(-2500px);
-  }
-  92.28% {
-    transform: translateX(-3000px);
   }
   100% {
-    transform: translateX(-3000px);
+    transform: translateX(0);
   }
 }
