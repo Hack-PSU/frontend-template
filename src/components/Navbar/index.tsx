@@ -68,7 +68,8 @@ export default function Navbar() {
 						/>
 					</button>
 				</a>
-				<a href="/#workshops">
+
+				<a href="/#schedule">
 					<button>
 						<Image
 							src={workshopsButton}
@@ -76,6 +77,7 @@ export default function Navbar() {
 							height={50}
 							alt="workshops"
 							className="navbar-button"
+							onClick={() => console.log("clicked")}
 						/>
 					</button>
 				</a>
@@ -122,7 +124,7 @@ export default function Navbar() {
 						</button>
 					</div>
 				) : (
-					<a href="/signin">
+					<a href="https://hackpsu.org/login">
 						<button>
 							<Image
 								src={loginButton}
