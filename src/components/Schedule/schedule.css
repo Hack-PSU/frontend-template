@@ -26,9 +26,15 @@
 /* OVERVIEW AND ENTERTAINMENT */
 .generic-schedule-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 700px;
   border-radius: 1em;
-  background-color: black;
+  background: repeating-linear-gradient(
+    -45deg,
+    #1C204E,
+    #1C204E 75px,
+    #303787 75px,
+    #303787 150px
+  );
   color: white;
 }
 
@@ -46,7 +52,7 @@
   );
   text-align: left;
   color:white;
-  max-width: 600px;
+  max-width: 700px;
 }
 
 .workshop-card:hover {
