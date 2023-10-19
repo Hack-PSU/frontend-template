@@ -11,10 +11,9 @@ const Rules = () => {
 				<div
 					className="w-full rounded-lg p-10 shadow-lg"
 					style={{
-						backgroundImage: 'url("/SCREEN.png")', // Adjust the path to your image
-						backgroundSize: "cover", // Adjust the background size as needed
+						backgroundImage: 'url("/SCREEN.png")',
+						backgroundSize: "cover",
 						backgroundPosition: "center",
-						// Adjust the background position as needed
 					}}
 				>
 					<ul className="text-white list-disc text-sm md:text-xl">
