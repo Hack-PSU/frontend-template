@@ -4,7 +4,7 @@ const Footer = () => {
 	const social_size = 30;
 
 	return (
-		<section className="flex flex-col items-center w-full gap-4">
+		<section className="flex flex-col items-center w-full gap-4 my-20">
 			<div className="flex flex-row gap-2">
 				<a
 					href="https://www.instagram.com/hack_psu/"
