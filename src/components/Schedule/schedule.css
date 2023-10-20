@@ -14,9 +14,9 @@
 } */
 
 /* Applied when the button is in the selected state. This will be overridden by Material UI if it's not explicitly defined. */
-.schedule-tab.Mui-selected {
+/* .schedule-tab.Mui-selected {
   color: black;
-}
+} */
 
 .schedule-tab:hover {
   background-color:rgba(0, 0, 0, 0.22)
