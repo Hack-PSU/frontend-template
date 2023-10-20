@@ -10,6 +10,7 @@ import { EventModel } from "@/interfaces";
 import Divider from "../common/Divider";
 import { GenericScheduleEntity, createGenericScheduleEntity } from './generic-schedule-entity';
 import "./schedule.css";
+import { useMediaQuery } from '@mui/material';
 
 // TOOD: Pull these as a distinguishable catgeory from the API so that we don't have to hardcode them.
 const genericScheduleEventsSaturday = [
@@ -126,7 +127,10 @@ const Schedule = () => {
   }
 
 	function BasicTabs() {
-	  const [value, setValue] = React.useState(0);
+	  // Display smaller font size and less padding on mobile.
+    const isMobile = useMediaQuery("(max-width: 568px)");
+
+    const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
@@ -137,9 +141,24 @@ const Schedule = () => {
         <ThemeProvider theme={scheduleTabsTheme}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
             <Tabs value={value} onChange={handleChange} aria-label="Schedule" centered>
-              <Tab label="Overview" {...a11yProps(0)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
-              <Tab label="Workshops" {...a11yProps(1)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
-              <Tab label="Entertainment" {...a11yProps(2)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
+              <Tab 
+                label="Overview"
+                {...a11yProps(0)} 
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
+              <Tab
+                label="Workshops"
+                {...a11yProps(1)}
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
+              <Tab
+                label="Entertainment"
+                {...a11yProps(2)}
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
             </Tabs>
           </Box>          
         </ThemeProvider>
