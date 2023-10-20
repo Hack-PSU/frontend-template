@@ -92,7 +92,7 @@ export default function Navbar() {
 					</button>
 				</a>
 				<a
-					href="https://hackpsu.org/register"
+					href="https://register.hackpsu.org/register"
 					target="_blank"
 					rel="noopener noreferrer"
 				>

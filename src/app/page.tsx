@@ -17,7 +17,7 @@ export default function Home() {
   
   useEffect(() => {
     if (isMobile) {
-      window.location.replace("https://hackpsu.org");
+      window.location.replace("https://register.hackpsu.org");
     }
   }, [isMobile])
   

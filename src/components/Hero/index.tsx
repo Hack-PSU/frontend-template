@@ -41,7 +41,7 @@ const Hero = () => {
 									<BigButton
 										background={Register}
 										onClick={() => {
-											window.open("https://hackpsu.org/register", "_blank");
+											window.open("https://register.hackpsu.org/register", "_blank");
 										}}
 										className="mb-4 w-full"
 									></BigButton>
