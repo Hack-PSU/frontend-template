@@ -125,12 +125,15 @@
 		z-index: 1;
 		pointer-events: none;
 	}
-
 	@media (max-width: 960px) {
 		.stickers {
 			display: none;
 		}
 	}
+
+  .shadowtext-on-grid {
+    background: radial-gradient(rgba(0, 0, 0, 40), rgba(0, 0, 0, 0))
+  }
 }
 
 @font-face {

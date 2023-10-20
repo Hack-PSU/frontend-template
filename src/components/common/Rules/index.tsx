@@ -17,7 +17,7 @@ const Rules = () => {
 						backgroundPosition: "center",
 					}}
 				>
-					<ul className="text-white list-disc text-lg md:text-lg font-lato list-inside">
+					<ul className="list-inside list-disc text-white font-lato text-lg md:text-lg shadowtext-on-grid">
 						<li key={0}>
               All participants must be at least 18 years old and a student of some university
               (or a recent PSU graduate within less than one year).
