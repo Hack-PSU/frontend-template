@@ -8,11 +8,11 @@ import "./PrizesChallenges.css";
 const PrizesChallenges = () => {
   return (
     <section id="prizes" className="flex flex-col items-center w-full mt-20">
-      <div className="w-full md:w-5/12 flex flex-col items-center">
+      <div className="w-11/12 md:w-5/12 flex flex-col items-center">
         <h1 className="cornerstone-font font-bold text-6xl text-center">Prizes & Challenges</h1>
         <Divider />
       </div>
-      <div className="w-10/12 mt-6">
+      <div className="w-10/12 mt-4 md:mt-0">
         <ChallengesCarousel />
       </div>
       <div className="w-11/12 md:w-5/12 p-3 bg-black rounded-lg text-center mt-20">
@@ -21,7 +21,7 @@ const PrizesChallenges = () => {
             SUBMISSIONS:
           </span>
           {" "}To submit, please visit our Devpost page at{" "}
-          <a href="http://devpost.hackpsu.org" target="_blank" rel="noopener noreferrer" className="underline">
+          <a href="http://devpost.hackpsu.org" target="_blank" rel="noopener noreferrer" className="link-light-blue">
             http://devpost.hackpsu.org
           </a>.
           Make sure to submit your project (even if not completed) on Devpost by 12 PM Sunday!
@@ -72,7 +72,7 @@ const ChallengesCarousel = () => {
 
           <div className="carousel__track">
             {/* Challenge Slide 1 */}
-            <li className="carousel__slide">
+            <li className="carousel__slide" key={0}>
               <div className="slide">
                 <div className="black-box">
                   <h2 className="text-4xl font-bold text-center mb-2">HackPSU Grand Prize</h2>
@@ -102,7 +102,7 @@ const ChallengesCarousel = () => {
             </li>
 
             {/* Challenge Slide 2 */}
-            <li className="carousel__slide">
+            <li className="carousel__slide" key={1}>
               <div className="slide">
                 <div className="black-box text-left">
                   <h2 className="text-4xl font-bold text-center mb-2">
@@ -118,7 +118,7 @@ const ChallengesCarousel = () => {
             </li>
 
             {/* Challenge Slide 3 */}
-            <li className="carousel__slide">
+            <li className="carousel__slide" key={2}>
               <div className="slide">
                 <div className="black-box text-left">
                   <h2 className="text-4xl font-bold text-center mb-2">
@@ -134,7 +134,7 @@ const ChallengesCarousel = () => {
             </li>
 
             {/* Challenge Slide 4 */}
-            <li className="carousel__slide">
+            <li className="carousel__slide" key={3}>
               <div className="slide">
                 <div className="black-box text-left">
                   <h2 className="text-4xl font-bold text-center mb-2">
@@ -147,13 +147,7 @@ const ChallengesCarousel = () => {
                 </div>
               </div>
             </li>
-
-
-            {/* <li className="carousel__slide"></li>
-            <li className="carousel__slide"></li>
-            <li className="carousel__slide"></li>
-            <li className="carousel__slide"></li>
-            <li className="carousel__slide"></li> */}
+            
           </div>
         </div>
       </div>

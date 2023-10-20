@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700');
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -97,6 +99,17 @@
 			font-size: 24px;
 		}
 	}
+
+  .font-lato {
+    font-family: Lato, sans-serif;
+  }
+
+  .link-light-blue {
+    color: rgb(0, 220, 220);
+  }
+  .link-light-blue:hover {
+    text-decoration: underline;
+  }
 
 	.stickers {
 		content: "";

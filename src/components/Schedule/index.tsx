@@ -76,7 +76,7 @@ const Schedule = () => {
 
 	return (
 		<section id="schedule" className="flex flex-col items-center w-full mt-20">
-			<div className="w-4/12 flex flex-col items-center">
+			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
 				<Divider />	
 			</div>

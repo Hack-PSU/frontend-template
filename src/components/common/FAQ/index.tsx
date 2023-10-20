@@ -1,7 +1,10 @@
-import Divider from "../Divider";
+import React from "react";
+
 import CustomCollapsible from "../CustomCollapsible";
+import Divider from "../Divider";
 // TODO: Add resource links
 import "./FAQ.css";
+
 //FAQ text
 const faqs = [
 	{
@@ -54,14 +57,14 @@ const FAQ = () => {
 				<Divider />
 				<dl className="faq-list">
 					{faqs.map((faq, index) => (
-						<>
-							<div className="faq-button-container" key={index}>
+						<React.Fragment key={index}>
+							<div className="faq-button-container font-lato">
 								<CustomCollapsible
 									question={faq.question}
 									answer={faq.answer}
 								/>
 							</div>
-						</>
+						</React.Fragment>
 					))}
 				</dl>
 			</div>
