@@ -68,7 +68,8 @@ export default function Navbar() {
 						/>
 					</button>
 				</a>
-				<a href="/#workshops">
+
+				<a href="/#schedule">
 					<button>
 						<Image
 							src={workshopsButton}
@@ -122,7 +123,7 @@ export default function Navbar() {
 						</button>
 					</div>
 				) : (
-					<a href="/signin">
+					<a href="https://hackpsu.org/login">
 						<button>
 							<Image
 								src={loginButton}
