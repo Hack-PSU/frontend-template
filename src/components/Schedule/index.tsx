@@ -42,6 +42,14 @@ const entertainmentEvents = [
 
 // TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
 const scheduleTabsTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#000000',
+      light: '#000000',
+      dark: '#000000',
+      contrastText: '#000000',
+    }
+  },
   components: {
     MuiTabs: {
       styleOverrides: {
