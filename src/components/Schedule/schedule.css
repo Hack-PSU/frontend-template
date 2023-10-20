@@ -1,23 +1,7 @@
-/* EVENT SCHEDULE TABS */
-/* Applied when the button is in the default (not selected) state. */
-/* .schedule-tab {
-  background-color: transparent;
-  color: black;
-  font-weight: bold;
-  font-size: 1.5rem;
-}
-
-@media screen and (max-width: 568px) {
-  .schedule-tab {
-    font-size: 0.75rem;
-  }
-} */
-
-/* Applied when the button is in the selected state. This will be overridden by Material UI if it's not explicitly defined. */
-/* .schedule-tab.Mui-selected {
-  color: black;
-} */
-
+/* Schedule tab button hover state. 
+TODO: Figure out how to do the rest of the tab styling here without
+      it getting overwritten by Material UI in the browser.
+*/
 .schedule-tab:hover {
   background-color:rgba(0, 0, 0, 0.22)
 }
