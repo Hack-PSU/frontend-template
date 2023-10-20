@@ -77,7 +77,6 @@ export default function Navbar() {
 							height={50}
 							alt="workshops"
 							className="navbar-button"
-							onClick={() => console.log("clicked")}
 						/>
 					</button>
 				</a>
