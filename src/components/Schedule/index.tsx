@@ -129,9 +129,9 @@ const Schedule = () => {
         <ThemeProvider theme={scheduleTabsTheme}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
             <Tabs value={value} onChange={handleChange} aria-label="Schedule" centered>
-              <Tab label="Overview" {...a11yProps(0)} className="schedule-tab" />
-              <Tab label="Workshops" {...a11yProps(1)} className="schedule-tab" />
-              <Tab label="Entertainment" {...a11yProps(2)} className="schedule-tab" />
+              <Tab label="Overview" {...a11yProps(0)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
+              <Tab label="Workshops" {...a11yProps(1)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
+              <Tab label="Entertainment" {...a11yProps(2)} sx={{ fontWeight: "bold", fontSize: 24 }} className="schedule-tab"/>
             </Tabs>
           </Box>          
         </ThemeProvider>

@@ -1,6 +1,6 @@
 /* EVENT SCHEDULE TABS */
 /* Applied when the button is in the default (not selected) state. */
-.schedule-tab {
+/* .schedule-tab {
   background-color: transparent;
   color: black;
   font-weight: bold;
@@ -11,7 +11,7 @@
   .schedule-tab {
     font-size: 0.75rem;
   }
-}
+} */
 
 /* Applied when the button is in the selected state. This will be overridden by Material UI if it's not explicitly defined. */
 .schedule-tab.Mui-selected {
