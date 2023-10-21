@@ -4,8 +4,8 @@ import Divider from "../common/Divider";
 
 const MobileApp = () => {
 	return (
-		<section className="flex flex-col items-center w-full gap-4">
-			<div className="w-4/12 flex flex-col items-center">
+		<section className="flex flex-col items-center w-full gap-4 mt-20">
+			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl cornerstone-font">Mobile App</h1>
 				<Divider />
 			</div>

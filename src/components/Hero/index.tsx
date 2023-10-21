@@ -29,7 +29,7 @@ const Hero = () => {
 
 					<div className="bg-sky-500 opacity-90 rounded-md p-2">
 						<h2 className="font-bold text-2xl text-center cornerstone-font">
-							Pennsylvania State University • {settings.hackathonDateRepr}
+							Penn State University • Business Building • {settings.hackathonDateRepr}
 						</h2>
 						{settings.isLive ? <h2>12 Hours Left</h2> : <></>}
 					</div>
@@ -41,7 +41,7 @@ const Hero = () => {
 									<BigButton
 										background={Register}
 										onClick={() => {
-											window.open("https://hackpsu.org/register", "_blank");
+											window.open("https://register.hackpsu.org/register", "_blank");
 										}}
 										className="mb-4 w-full"
 									></BigButton>

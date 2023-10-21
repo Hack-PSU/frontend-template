@@ -28,7 +28,7 @@ export default function Navbar() {
 				scrolled ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl" : "bg-white/0"
 			} z-30 transition-all`}
 		>
-			<div className="flex flex-row justify-evenly">
+			<div className="flex flex-row justify-evenly mr-10">
 				<Link href="/">
 					<Image src={Logo} width={100} height={100} alt="logo" />
 				</Link>
@@ -68,7 +68,8 @@ export default function Navbar() {
 						/>
 					</button>
 				</a>
-				<a href="/#workshops">
+
+				<a href="/#schedule">
 					<button>
 						<Image
 							src={workshopsButton}
@@ -91,7 +92,7 @@ export default function Navbar() {
 					</button>
 				</a>
 				<a
-					href="https://hackpsu.org/register"
+					href="https://register.hackpsu.org/register"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
@@ -106,7 +107,7 @@ export default function Navbar() {
 					</button>
 				</a>
 
-				{isAuthenticated ? (
+        {isAuthenticated ? (
 					<div className="flex flex-row h-full items-center gap-8">
 						<Link href="/profile">
 							<UserCircleIcon className="h-12 w-12 mt-1" />
@@ -117,19 +118,19 @@ export default function Navbar() {
 								width={size}
 								height={50}
 								alt="signOut"
-								className="navbar-button"
+								className="navbar-button hidden"
 							/>
 						</button>
 					</div>
 				) : (
-					<a href="/signin">
-						<button>
+					<a href="https://hackpsu.org/login">
+						<button className="hidden">
 							<Image
 								src={loginButton}
 								width={size}
 								height={50}
 								alt="signIn"
-								className="navbar-button"
+								className="navbar-button hidden"
 							/>
 						</button>
 					</a>

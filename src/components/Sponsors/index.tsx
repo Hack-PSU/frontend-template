@@ -52,12 +52,12 @@ export default function Sponsors() {
 		));
 
 	return (
-		<section id="sponsors" className="flex flex-col items-center w-full gap-8">
-			<div className="w-4/12 flex flex-col items-center">
+		<section id="sponsors" className="flex flex-col items-center w-full mt-20">
+			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl cornerstone-font">Sponsors</h1>
 				<Divider />
 			</div>
-			<div className="bg-transparent">
+			<div className="bg-transparent mt-8">
 				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-5 items-center">
 					{sponsorElements}
 				</div>

@@ -9,7 +9,7 @@
 	font-family: "cornerstone", sans-serif; /* Use the font-family defined earlier */
 }
 
-.w-full {
+.rules-border {
 	border: 2px solid black; /* Adjust the border size and color as needed */
 	padding: 10px; /* Adjust padding as needed */
 	border-radius: 10px;

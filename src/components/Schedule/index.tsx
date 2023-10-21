@@ -10,6 +10,7 @@ import { EventModel } from "@/interfaces";
 import Divider from "../common/Divider";
 import { GenericScheduleEntity, createGenericScheduleEntity } from './generic-schedule-entity';
 import "./schedule.css";
+import { useMediaQuery } from '@mui/material';
 
 // TOOD: Pull these as a distinguishable catgeory from the API so that we don't have to hardcode them.
 const genericScheduleEventsSaturday = [
@@ -42,6 +43,14 @@ const entertainmentEvents = [
 
 // TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
 const scheduleTabsTheme = createTheme({
+  palette: {
+    primary: {
+      main: '#000000',
+      light: '#000000',
+      dark: '#000000',
+      contrastText: '#000000',
+    }
+  },
   components: {
     MuiTabs: {
       styleOverrides: {
@@ -75,8 +84,8 @@ const Schedule = () => {
 	}, []);
 
 	return (
-		<section id="schedule" className="flex flex-col items-center w-full">
-			<div className="w-4/12 flex flex-col items-center">
+		<section id="schedule" className="flex flex-col items-center w-full mt-20">
+			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
 				<Divider />	
 			</div>
@@ -118,7 +127,10 @@ const Schedule = () => {
   }
 
 	function BasicTabs() {
-	  const [value, setValue] = React.useState(0);
+	  // Display smaller font size and less padding on mobile.
+    const isMobile = useMediaQuery("(max-width: 568px)");
+
+    const [value, setValue] = React.useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
       setValue(newValue);
@@ -129,9 +141,24 @@ const Schedule = () => {
         <ThemeProvider theme={scheduleTabsTheme}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }} >
             <Tabs value={value} onChange={handleChange} aria-label="Schedule" centered>
-              <Tab label="Overview" {...a11yProps(0)} className="schedule-tab" />
-              <Tab label="Workshops" {...a11yProps(1)} className="schedule-tab" />
-              <Tab label="Entertainment" {...a11yProps(2)} className="schedule-tab" />
+              <Tab 
+                label="Overview"
+                {...a11yProps(0)} 
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
+              <Tab
+                label="Workshops"
+                {...a11yProps(1)}
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
+              <Tab
+                label="Entertainment"
+                {...a11yProps(2)}
+                sx={{ fontWeight: "bold", fontSize: isMobile ? 12 : 24, paddingX: isMobile ? 0 : 2 }}
+                className="schedule-tab"
+              />
             </Tabs>
           </Box>          
         </ThemeProvider>
@@ -159,7 +186,14 @@ const Schedule = () => {
             <div className="container-fluid">
       			  {events
                 .filter((event) => event.type === "workshop")
-                .sort((eventA, eventB) => eventA.startTime - eventB.startTime)
+                .sort((eventA, eventB) => {
+                  // Sort by start time, then by location name.
+                  if (eventA.startTime != eventB.startTime) {
+                    return eventA.startTime - eventB.startTime;
+                  } else {
+                    return eventA.location.name.localeCompare(eventB.location.name);
+                  }
+                })
                 .map((workshop, index) => (
                   <WorkshopComponent{...workshop} key={index}/>
                 ))

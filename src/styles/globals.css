@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700');
+
 @layer base {
 	:root {
 		--background: 0 0% 100%;
@@ -43,7 +45,7 @@
 			-moz-background-size: cover;
 			-o-background-size: cover;
 			background-size: 100% auto;
-			background-repeat: no-repeat;
+			background-repeat: repeat;
 			background-attachment: fixed;
 			font-family: Lato, Georgia, sans-serif;
 		}
@@ -64,7 +66,18 @@
 }
 
 @layer components {
-	.frame {
+	.mlh-badge {
+    display: block;
+    max-width: 100px;
+    min-width: 60px;
+    position: fixed;
+    right: 50px;
+    top: 0;
+    width: 10%;
+    z-index: 10000;
+  }
+  
+  .frame {
 		background-image: url("../../public/images/SCREEN.png");
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
@@ -98,6 +111,17 @@
 		}
 	}
 
+  .font-lato {
+    font-family: Lato, sans-serif;
+  }
+
+  .link-light-blue {
+    color: rgb(0, 220, 220);
+  }
+  .link-light-blue:hover {
+    text-decoration: underline;
+  }
+
 	.stickers {
 		content: "";
 		position: fixed;
@@ -112,12 +136,15 @@
 		z-index: 1;
 		pointer-events: none;
 	}
-
 	@media (max-width: 960px) {
 		.stickers {
 			display: none;
 		}
 	}
+
+  .shadowtext-on-grid {
+    background: radial-gradient(rgba(0, 0, 0, 40), rgba(0, 0, 0, 0))
+  }
 }
 
 @font-face {

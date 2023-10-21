@@ -7,15 +7,20 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 export default function Example() {
+  // Temporarily redirect to old frontend.
+  useEffect(() => {
+    window.location.replace("https://register.hackpsu.org/profile");
+  });
+
 	const { isAuthenticated, user } = useFirebase();
 	const router = useRouter();
 
 	// TODO: FIX GLITCH WITH REDIRECTING ON REFRESH OF PROFILE PAGE
-	useEffect(() => {
-		if (!isAuthenticated) {
-			router.push("/signin");
-		}
-	}, [isAuthenticated]);
+	// useEffect(() => {
+	// 	if (!isAuthenticated) {
+	// 		router.push("/signin");
+	// 	}
+	// }, [isAuthenticated]);
 
 	const handleDeleteAccount = () => {
 		const confirmDelete = window.confirm(
