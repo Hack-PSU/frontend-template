@@ -186,7 +186,14 @@ const Schedule = () => {
             <div className="container-fluid">
       			  {events
                 .filter((event) => event.type === "workshop")
-                .sort((eventA, eventB) => eventA.startTime - eventB.startTime)
+                .sort((eventA, eventB) => {
+                  // Sort by start time, then by location name.
+                  if (eventA.startTime != eventB.startTime) {
+                    return eventA.startTime - eventB.startTime;
+                  } else {
+                    return eventA.location.name.localeCompare(eventB.location.name);
+                  }
+                })
                 .map((workshop, index) => (
                   <WorkshopComponent{...workshop} key={index}/>
                 ))
