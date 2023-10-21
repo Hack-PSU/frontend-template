@@ -58,9 +58,6 @@ const FAQ = () => {
 		<section className="faq-section">
 			<div className="faq-header">
 				<h1 className="faq-title">FAQ</h1>
-		<section className="faq-section">
-			<div className="faq-header">
-				<h1 className="faq-title">FAQ</h1>
 				<Divider />
 				<dl className="faq-list">
 					{faqs.map((faq, index) => (
@@ -69,7 +66,7 @@ const FAQ = () => {
 								<CustomCollapsible
 									question={faq.question}
 									answer={faq.answer}
-                  link={faq.link}
+									link={faq.link}
 								/>
 							</div>
 						</React.Fragment>
