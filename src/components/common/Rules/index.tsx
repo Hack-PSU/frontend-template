@@ -10,7 +10,7 @@ const Rules = () => {
 			</div>
 			<div className="w-10/12">
 				<div
-					className="w-full rules-border rounded-lg p-10 shadow-lg"
+					className="w-full rules-border rounded-lg shadow-lg"
 					style={{
 						backgroundImage: 'url("/SCREEN.png")', // Adjust the path to your image
 						backgroundSize: "cover", // Adjust the background size as needed
