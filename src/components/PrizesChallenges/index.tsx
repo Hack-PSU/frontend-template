@@ -104,7 +104,7 @@ const ChallengesCarousel = () => {
             {/* Challenge Slide 2 */}
             <li className="carousel__slide" key={1}>
               <div className="slide">
-                <div className="black-box text-left">
+                <div className="black-box">
                   <h2 className="text-4xl font-bold text-center mb-2">
                     Social Impact Award
                   </h2>
@@ -120,7 +120,7 @@ const ChallengesCarousel = () => {
             {/* Challenge Slide 3 */}
             <li className="carousel__slide" key={2}>
               <div className="slide">
-                <div className="black-box text-left">
+                <div className="black-box">
                   <h2 className="text-4xl font-bold text-center mb-2">
                     Entrepreneurship Award
                   </h2>
@@ -136,7 +136,7 @@ const ChallengesCarousel = () => {
             {/* Challenge Slide 4 */}
             <li className="carousel__slide" key={3}>
               <div className="slide">
-                <div className="black-box text-left">
+                <div className="black-box">
                   <h2 className="text-4xl font-bold text-center mb-2">
                     Generative AI Award
                   </h2>
