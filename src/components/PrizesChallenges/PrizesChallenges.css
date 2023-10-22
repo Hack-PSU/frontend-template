@@ -1,149 +1,183 @@
 /* CAROUSEL */
 .carousel-container {
-  display: inline-block;
-  width: 100%;
+	display: inline-block;
+	width: 100%;
 }
 .carousel {
-  min-height: 400px;
-  min-width: 600px;
-  margin: auto;
-  overflow: hidden;
-  position: relative;
-  padding: 0;
-  list-style: none;
+	min-height: 400px;
+	min-width: 600px;
+	margin: auto;
+	overflow: hidden;
+	position: relative;
+	padding: 0;
+	list-style: none;
 }
 @media (max-width: 500px) {
-  .carousel {
-    height: 55vh;
-    max-width: 500px;
-  }
+	.carousel {
+		height: 55vh;
+		max-width: 500px;
+	}
 }
 
 /* CAROUSEL ITEMS */
 .carousel__track {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  padding: 0;
-  margin: 0;
-  height: 100%;
-  transition: transform 0.5s ease 0s;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	padding: 0;
+	margin: 0;
+	height: 100%;
+	transition: transform 0.5s ease 0s;
 }
 .carousel__track .carousel__slide {
-  display: block;
-  left: 0;
-  right: 0;
-  opacity: 1;
+	display: block;
+	left: 0;
+	right: 0;
+	opacity: 1;
 }
 .carousel__slide {
-  height: fit-content;
-  position: absolute;
-  opacity: 0;
-  overflow-x: hidden;
+	height: fit-content;
+	position: absolute;
+	opacity: 0;
+	overflow-x: hidden;
 }
 .slide {
-  min-height: 400px;
-  width: 35vw;
-  margin: auto;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: top;
-  font-size: 20px;
-  text-shadow: black 0 0 2em;
-  overflow-y: block;
+	min-height: 400px;
+	width: 35vw;
+	margin: auto;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: top;
+	font-size: 20px;
+	text-shadow: black 0 0 2em;
+	overflow-y: block;
 }
 @media (max-width: 500px) {
-  .slide {
-    width: 82vw;
-    margin: 0;
-    padding: 0;
-  }
+	.slide {
+		width: 82vw;
+		margin: 0;
+		padding: 0;
+	}
 }
 
 .black-box {
-  background-image: url("/SCREEN.png");
-  background-size: cover;
-  background-position: center;
-  color: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: 100%;
-  justify-content: center;
-  text-align: left;
+	background-image: url("/SCREEN.png");
+	background-size: cover;
+	background-position: center;
+	color: white;
+	--border-width: 8px;
+
+	position: relative;
+
+	border-radius: var(--border-width);
+
+	&::after {
+		position: absolute;
+		content: "";
+		top: calc(-1 * var(--border-width));
+		left: calc(-1 * var(--border-width));
+		z-index: -1;
+		width: calc(100% + var(--border-width) * 2);
+		height: calc(100% + var(--border-width) * 2);
+		background: linear-gradient(
+			60deg,
+			hsl(224, 85%, 66%),
+			hsl(269, 85%, 66%),
+			hsl(314, 85%, 66%),
+			hsl(359, 85%, 66%),
+			hsl(44, 85%, 66%),
+			hsl(89, 85%, 66%),
+			hsl(134, 85%, 66%),
+			hsl(179, 85%, 66%)
+		);
+		background-size: 300% 300%;
+		background-position: 0 50%;
+		border-radius: calc(2 * var(--border-width));
+		animation: moveGradient 4s alternate infinite;
+	}
+}
+@keyframes moveGradient {
+	50% {
+		background-position: 100% 50%;
+	}
 }
 
 /* CAROUSEL ANIMATIONS */
 .carousel__track .carousel__slide:nth-of-type(1) {
-  transform: translateX(0%);
+	transform: translateX(0%);
 }
 .carousel__track .carousel__slide:nth-of-type(2) {
-  transform: translateX(100%);
+	transform: translateX(100%);
 }
 .carousel__track .carousel__slide:nth-of-type(3) {
-  transform: translateX(200%);
+	transform: translateX(200%);
 }
 .carousel__track .carousel__slide:nth-of-type(4) {
-  transform: translateX(300%);
+	transform: translateX(300%);
 }
 .carousel__activator {
-  display: none;
+	display: none;
 }
 .carousel__activator:nth-of-type(1):checked ~ .carousel__track {
-  transform: translateX(0%);
+	transform: translateX(0%);
 }
 .carousel__activator:nth-of-type(1):checked ~ .carousel__slide:nth-of-type(1) {
-  transition: opacity 0.5s, transform 0.5s;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 1;
-  transform: scale(1);
+	transition: opacity 0.5s, transform 0.5s;
+	top: 0;
+	left: 0;
+	right: 0;
+	opacity: 1;
+	transform: scale(1);
 }
 .carousel__activator:nth-of-type(2):checked ~ .carousel__track {
-  transform: translateX(-100%);
+	transform: translateX(-100%);
 }
 .carousel__activator:nth-of-type(2):checked ~ .carousel__slide:nth-of-type(2) {
-  transition: opacity 0.5s, transform 0.5s;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 1;
-  transform: scale(1);
+	transition: opacity 0.5s, transform 0.5s;
+	top: 0;
+	left: 0;
+	right: 0;
+	opacity: 1;
+	transform: scale(1);
 }
 .carousel__activator:nth-of-type(3):checked ~ .carousel__track {
-  transform: translateX(-200%);
+	transform: translateX(-200%);
 }
 .carousel__activator:nth-of-type(3):checked ~ .carousel__slide:nth-of-type(3) {
-  transition: opacity 0.5s, transform 0.5s;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 1;
-  transform: scale(1);
+	transition: opacity 0.5s, transform 0.5s;
+	top: 0;
+	left: 0;
+	right: 0;
+	opacity: 1;
+	transform: scale(1);
 }
 .carousel__activator:nth-of-type(4):checked ~ .carousel__track {
-  transform: translateX(-300%);
+	transform: translateX(-300%);
 }
 .carousel__activator:nth-of-type(4):checked ~ .carousel__slide:nth-of-type(4) {
-  transition: opacity 0.5s, transform 0.5s;
-  top: 0;
-  left: 0;
-  right: 0;
-  opacity: 1;
-  transform: scale(1);
+	transition: opacity 0.5s, transform 0.5s;
+	top: 0;
+	left: 0;
+	right: 0;
+	opacity: 1;
+	transform: scale(1);
 }
 
 /* ARROW ICONS */
 .carousel-arrow-icon {
-  transform: scale(2.5);
-  
-  /* Cover only the transparent arrow in the middle. */
-  background: radial-gradient(ellipse at center,  white 0%, white 50%, transparent 51%);
+	transform: scale(2.5);
+
+	/* Cover only the transparent arrow in the middle. */
+	background: radial-gradient(
+		ellipse at center,
+		white 0%,
+		white 50%,
+		transparent 51%
+	);
 }
 .carousel-arrow-icon:hover {
-  cursor: pointer;
+	cursor: pointer;
 }
