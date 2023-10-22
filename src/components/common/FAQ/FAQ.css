@@ -2,7 +2,6 @@
 	font-family: "cornerstone";
 	src: url("/Cornerstone.ttf");
 }
-
 /* Style for the FAQ section container */
 .faq-section {
 	display: flex;
@@ -27,7 +26,6 @@
 	line-height: 1;
 	font-family: "cornerstone", sans-serif; /* 3rem font size */
 }
-
 .faq-list {
 	margin-top: 2.5rem;
 	width: 100%;
@@ -43,7 +41,7 @@
 }
 
 .faq-button-container {
-	background-color: rgb(227, 227, 102);
+	background-color: #faee56;
 	margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
 	margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
 	border-radius: 15px;
