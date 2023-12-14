@@ -67,7 +67,8 @@ const Schedule = () => {
 
 	useEffect(() => {
 		// Fetch the set of events from the API.
-    const apiEndpoint = "https://api-v3-production-oz3dekgbpa-uk.a.run.app/events";
+    const apiEndpoint = process.env.NEXT_PUBLIC_BASE_URL_V3 + "events";
+    
 		fetch(apiEndpoint)
 			.then((response) => {
 				if (!response.ok) {

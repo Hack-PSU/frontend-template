@@ -10,7 +10,7 @@ export default function Sponsors() {
 	const [sponsors, setSponsors] = React.useState<Sponsor[]>([]);
 
 	useEffect(() => {
-		const apiEndpoint = "https://api-v3-production-oz3dekgbpa-uk.a.run.app/sponsors";
+		const apiEndpoint = process.env.NEXT_PUBLIC_BASE_URL_V3 + "/sponsors";
 		fetch(apiEndpoint)
 			.then((response) => {
 				if (!response.ok) {
