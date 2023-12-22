@@ -4,8 +4,8 @@
 	width: 100%;
 }
 .carousel {
-	min-height: 400px;
-	min-width: 600px;
+	min-height: 450px;
+	min-width: min(600px, 100%);
 	margin: auto;
 	overflow: hidden;
 	position: relative;
@@ -29,6 +29,7 @@
 	padding: 0;
 	margin: 0;
 	height: 100%;
+	width: 100%;
 	transition: transform 0.5s ease 0s;
 }
 .carousel__track .carousel__slide {
@@ -42,10 +43,12 @@
 	position: absolute;
 	opacity: 0;
 	overflow-x: hidden;
+	justify-content: center;
+	width: 100%;
 }
 .slide {
 	min-height: 400px;
-	width: 35vw;
+	width: clamp(35vw, min(75%, 35vw), 75%);
 	margin: auto;
 	padding: 20px;
 	display: flex;
@@ -54,12 +57,15 @@
 	font-size: 20px;
 	text-shadow: black 0 0 2em;
 	overflow-y: block;
+	justify-content: center;
+	align-items: center;
 }
-@media (max-width: 500px) {
+@media (max-width: 768px) {
 	.slide {
-		width: 82vw;
-		margin: 0;
-		padding: 0;
+		width: 90%;
+		height: 100%;
+		padding: 8px;
+		margin: auto;
 	}
 }
 
@@ -69,35 +75,36 @@
 	background-position: center;
 	color: white;
 	--border-width: 8px;
-  padding: 1rem;
+	padding: 1rem;
+	box-sizing: border-box;
 
 	position: relative;
 
 	border-radius: var(--border-width);
 }
 .black-box::after {
-  position: absolute;
-  content: "";
-  top: calc(-1 * var(--border-width));
-  left: calc(-1 * var(--border-width));
-  z-index: -1;
-  width: calc(100% + var(--border-width) * 2);
-  height: calc(100% + var(--border-width) * 2);
-  background: linear-gradient(
-    60deg,
-    hsl(224, 85%, 66%),
-    hsl(269, 85%, 66%),
-    hsl(314, 85%, 66%),
-    hsl(359, 85%, 66%),
-    hsl(44, 85%, 66%),
-    hsl(89, 85%, 66%),
-    hsl(134, 85%, 66%),
-    hsl(179, 85%, 66%)
-  );
-  background-size: 300% 300%;
-  background-position: 0 50%;
-  border-radius: calc(2 * var(--border-width));
-  animation: moveGradient 4s alternate infinite;
+	position: absolute;
+	content: "";
+	top: calc(-1 * var(--border-width));
+	left: calc(-1 * var(--border-width));
+	z-index: -1;
+	width: calc(100% + var(--border-width) * 2);
+	height: calc(100% + var(--border-width) * 2);
+	background: linear-gradient(
+		60deg,
+		hsl(224, 85%, 66%),
+		hsl(269, 85%, 66%),
+		hsl(314, 85%, 66%),
+		hsl(359, 85%, 66%),
+		hsl(44, 85%, 66%),
+		hsl(89, 85%, 66%),
+		hsl(134, 85%, 66%),
+		hsl(179, 85%, 66%)
+	);
+	background-size: 300% 300%;
+	background-position: 0 50%;
+	border-radius: calc(2 * var(--border-width));
+	animation: moveGradient 4s alternate infinite;
 }
 @keyframes moveGradient {
 	50% {

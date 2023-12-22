@@ -25,7 +25,9 @@ export default function Navbar() {
 	return (
 		<nav
 			className={`sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block  ${
-				scrolled ? "border-b border-gray-200 bg-white/50 backdrop-blur-xl" : "bg-white/0"
+				scrolled
+					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
+					: "bg-white/0"
 			} z-30 transition-all`}
 		>
 			<div className="flex flex-row justify-evenly mr-10">
@@ -107,7 +109,20 @@ export default function Navbar() {
 					</button>
 				</a>
 
-        {isAuthenticated ? (
+				<a
+					id="mlh-trust-badge"
+					className="mlh-badge"
+					href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
+					target="_blank"
+				>
+					<img
+						src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
+						alt="Major League Hacking 2024 Hackathon Season"
+						className="w-full"
+					/>
+				</a>
+
+				{isAuthenticated ? (
 					<div className="flex flex-row h-full items-center gap-8">
 						<Link href="/profile">
 							<UserCircleIcon className="h-12 w-12 mt-1" />

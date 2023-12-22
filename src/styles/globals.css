@@ -26,6 +26,7 @@
 		--input: 240 5.9% 90%;
 		--ring: 240 5.9% 10%;
 		--radius: 0.5rem;
+		--link-color: #3498db;
 	}
 
 	/* Account for fixed size of the Navbar upon jumping to links. */
@@ -38,23 +39,21 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+
+		font-family: Lato, Georgia, sans-serif;
+		font-feature-settings: "rlig" 1, "calt" 1;
+		background-image: url("../../public/images/FRAME_PATTERN.png");
+		-webkit-background-size: cover;
+		-moz-background-size: cover;
+		-o-background-size: cover;
+		background-attachment: fixed;
+
 		@media (min-width: 768px) {
-			font-feature-settings: "rlig" 1, "calt" 1;
-			background-image: url("../../public/images/FRAME_PATTERN.png");
-			-webkit-background-size: cover;
-			-moz-background-size: cover;
-			-o-background-size: cover;
 			background-size: 100% auto;
 			background-repeat: repeat;
-			background-attachment: fixed;
-			font-family: Lato, Georgia, sans-serif;
 		}
+
 		@media (max-width: 768px) {
-			font-feature-settings: "rlig" 1, "calt" 1;
-			background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)),
-				url("../../public/images/FRAME_PATTERN.png");
-			font-family: Lato, Georgia, sans-serif;
-			background-attachment: fixed;
 			background-size: cover;
 			background-position: center center;
 		}
@@ -88,10 +87,8 @@
 		--border-width: 8px;
 		position: relative;
 		@media (max-width: 960px) {
-			background: none;
-		}
-		@media (max-width: 1080px) {
-			border: none;
+			background-size: cover;
+			background-position: center center;
 		}
 		border-radius: var(--border-width);
 	}
@@ -142,13 +139,6 @@
 		font-family: Lato, sans-serif;
 	}
 
-	.link-light-blue {
-		color: rgb(0, 220, 220);
-	}
-	.link-light-blue:hover {
-		text-decoration: underline;
-	}
-
 	.stickers {
 		content: "";
 		position: fixed;
@@ -182,4 +172,31 @@
 @font-face {
 	font-family: "cornerstone";
 	src: url("../../public/fonts/Cornerstone.ttf");
+}
+
+a {
+	color: var(--link-color);
+	text-decoration: underline;
+}
+
+a:hover {
+	color: var(--link-color);
+	text-decoration: underline;
+	text-shadow: 0 0 1px var(--link-color);
+}
+
+.mobile-container {
+	display: flex;
+	flex-direction: column;
+	height: 100vh;
+	overflow-y: scroll;
+	scroll-snap-type: y mandatory;
+	scroll-behavior: smooth;
+}
+
+.mobile-content {
+	scroll-snap-align: start;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }

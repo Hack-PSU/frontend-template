@@ -9,7 +9,7 @@ const MobileApp = () => {
 				<h1 className="font-bold text-6xl cornerstone-font">Mobile App</h1>
 				<Divider />
 			</div>
-			<div className="frame md:text-white flex flex-col items-center justify-center p-8">
+			<div className="frame w-4/5 text-white flex flex-col items-center justify-center p-8">
 				<p className="font-bold">
 					Get our app on Google Play and the App Store!
 				</p>
@@ -21,11 +21,11 @@ const MobileApp = () => {
 							rel="noopener noreferrer"
 						>
 							{/* TODO: Set up Next.js SVG handling for iOS store icon. */}
-              <img
+							<img
 								src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1604620800&h=413f442f188f45f269ac02e9fafd7e0f"
 								alt="Download on the App Store"
 								height="100"
-                width="180"
+								width="180"
 							/>
 						</a>
 					</div>
@@ -37,8 +37,8 @@ const MobileApp = () => {
 						>
 							<Image
 								src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                height="100"
-                width="200"
+								height="100"
+								width="200"
 								alt="Get it on Google Play"
 							/>
 						</a>

@@ -3,7 +3,7 @@ import "./rules.css";
 
 const Rules = () => {
 	return (
-		<section className="flex flex-col items-center w-full gap-8">
+		<section className="flex flex-col items-center w-full gap-8 mb-4">
 			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
 				<h1 className="custom-font">Rules</h1>
 				<Divider />
@@ -36,11 +36,8 @@ const Rules = () => {
 						</li>
 						<li key={3}>
 							All projects must be submitted through{" "}
-							<a href="http://devpost.hackpsu.org" className="link-light-blue">
-								Devpost
-							</a>{" "}
-							by 12PM on Sunday (even if not completed!) and can be edited until
-							1:45PM Sunday.
+							<a href="http://devpost.hackpsu.org">Devpost</a> by 12PM on Sunday
+							(even if not completed!) and can be edited until 1:45PM Sunday.
 						</li>
 						<li key={4}>
 							All project code must be attached to the project{"'"}s Devpost
@@ -56,10 +53,7 @@ const Rules = () => {
 						</li>
 						<li key={7}>
 							All participants must agree to the{" "}
-							<a
-								href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-								className="link-light-blue"
-							>
+							<a href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
 								MLH Code of Conduct
 							</a>
 							.
