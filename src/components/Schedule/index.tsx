@@ -94,7 +94,7 @@ const Schedule = () => {
         <div className="w-10/12 mx-auto my-2">
         <div className="container-fluid generic-schedule-container p-10 mx-auto">
 							<div className="text-white text-center text-bold md:text-3xl sm:text-2lg">
-						Check back later for more updates
+						Check back soon for more details
 					</div>
         </div>
       </div>
