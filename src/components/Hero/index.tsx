@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Logo from "../../../public/images/LOGO_FA23_NoBG.png";
+import Logo from "../../../public/images/LOGO_SP24_OLD_NoBG.png";
 import Register from "@/../public/images/TEXTBOX_register.png";
 import Discord from "@/../public/images/TEXTBOX_discord.png";
 

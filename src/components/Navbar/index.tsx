@@ -5,7 +5,7 @@ import Link from "next/link";
 
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import Logo from "../../../public/images/LOGO_FA23_NoBG.png";
+import Logo from "../../../public/images/LOGO_SP24_OLD_NoBG.png";
 import infoButton from "../../../public/images/buttons/BUTTON_INFO.png";
 import scheduleButton from "../../../public/images/buttons/BUTTON_SCHEDULE.png";
 import prizesButton from "../../../public/images/buttons/BUTTON_PRIZES.png";
