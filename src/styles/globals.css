@@ -196,6 +196,7 @@ a:hover {
 
 .mobile-content {
 	scroll-snap-align: start;
+	scroll-padding: 0 20px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
