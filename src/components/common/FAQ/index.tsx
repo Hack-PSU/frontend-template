@@ -55,7 +55,7 @@ const faqs = [
 
 const FAQ = () => {
 	return (
-		<section className="faq-section">
+		<section className="faq-section mt-4">
 			<div className="faq-header">
 				<h1 className="faq-title">FAQ</h1>
 				<Divider />

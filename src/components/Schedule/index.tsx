@@ -90,20 +90,23 @@ const Schedule = () => {
 	}, []);
 
 	return (
-		<section id="schedule" className="flex flex-col items-center w-full mt-20">
+		<section
+			id="schedule"
+			className="flex flex-col items-center w-full my-20 md:my-10"
+		>
 			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
 				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
 				<Divider />
 			</div>
-      <ThemeProvider theme={scheduleTabsTheme}>
-        <div className="w-10/12 mx-auto my-2">
-        <div className="container-fluid generic-schedule-container p-10 mx-auto">
-							<div className="text-white text-center text-bold md:text-3xl sm:text-2lg">
-						Check back soon for more details
+			<ThemeProvider theme={scheduleTabsTheme}>
+				<div className="w-10/12 mx-auto my-2">
+					<div className="container-fluid generic-schedule-container p-10 mx-auto">
+						<div className="text-white text-center text-bold md:text-3xl sm:text-2lg">
+							Check back soon for more details
+						</div>
 					</div>
-        </div>
-      </div>
-				</ThemeProvider>
+				</div>
+			</ThemeProvider>
 			{/* <BasicTabs /> */}
 		</section>
 	);

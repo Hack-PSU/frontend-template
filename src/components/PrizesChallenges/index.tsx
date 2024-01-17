@@ -14,7 +14,7 @@ const PrizesChallenges = () => {
 				</h1>
 				<Divider />
 			</div>
-			<div className="w-4/5 mt-4 md:mt-0">
+			<div className="w-full mt-4 md:mt-0">
 				<ChallengesCarousel />
 			</div>
 			<div className="w-11/12 md:w-5/12 p-3 bg-black rounded-lg text-center mt-20">
@@ -178,7 +178,7 @@ const ChallengesCarousel = () => {
 					</div>
 				</div>
 			</div>
-			<div className="flex flex-row w-1/2 mx-auto mt-4 md:mt-0">
+			<div className="flex flex-row w-1/2 mx-auto mt-0">
 				<ArrowCircleLeft
 					className="mx-auto carousel-arrow-icon"
 					onClick={() => {

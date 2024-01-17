@@ -3,7 +3,7 @@ import "./rules.css";
 
 const Rules = () => {
 	return (
-		<section className="flex flex-col items-center w-full gap-8 mb-4">
+		<section className="flex flex-col items-center w-full gap-8 my-4">
 			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
 				<h1 className="custom-font">Rules</h1>
 				<Divider />
@@ -18,7 +18,7 @@ const Rules = () => {
 						// Adjust the background position as needed
 					}}
 				>
-					<ul className="list-inside list-disc text-white font-lato text-lg md:text-lg shadowtext-on-grid">
+					<ul className="list-inside list-disc text-white font-lato text-md md:text-lg shadowtext-on-grid">
 						<li key={0}>
 							All participants must be at least 18 years old and a student of
 							some university (or a recent PSU graduate within less than one
