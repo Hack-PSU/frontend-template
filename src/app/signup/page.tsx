@@ -1,16 +1,18 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+
+/* Signup is used to add a user to the Firebase DB. */
 
 const Signup: React.FC = () => {
 	const { signUpWithEmailAndPassword, loginWithEmailAndPassword } =
 		useFirebase();
 	const router = useRouter();
 
-	const handleRegister = (event: any) => {
+	const handleSignup = (event: FormEvent) => {
 		event.preventDefault();
 		if (!signupData.email || !signupData.password) {
 			return;
@@ -20,6 +22,7 @@ const Signup: React.FC = () => {
 			(res) => {
 				console.log(res);
 				// void router.push("/");
+				// TODO: Login user on signup
 			}
 		);
 	};
@@ -60,7 +63,7 @@ const Signup: React.FC = () => {
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 					<div className="bg-slate-100 px-6 py-12 shadow sm:rounded-lg sm:px-12">
-						<form className="space-y-6" onSubmit={handleRegister}>
+						<form className="space-y-6" onSubmit={handleSignup}>
 							<div>
 								<label
 									htmlFor="email"
