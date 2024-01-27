@@ -77,6 +77,8 @@ const Registration: React.FC = () => {
 	});
 	const [componentMounted, setComponentMounted] = useState(false); // Handles hydration error
 
+	// TODO: Implement hackathon fetch for date and semester
+
 	async function fetchUserId() {
 		// IMPLEMENT THIS
 		const id = "TEST_ID";
@@ -143,6 +145,7 @@ const Registration: React.FC = () => {
 					</div>
 
 					<form className="form" onSubmit={handleSubmit}>
+						{/** Name */}
 						<div className="card" id="name">
 							<div>
 								<div className="card-header">What is your name?</div>
@@ -174,6 +177,8 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
+
+						{/** Gender */}
 						<div className="card" id="gender">
 							<div className="card-header">
 								Which gender do you identify with?
@@ -224,6 +229,8 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
+
+						{/** Phone Number */}
 						<div className="card" id="phoneNumber">
 							<div className="card-header">What is your phone number?</div>
 							<div className="info">
@@ -242,6 +249,8 @@ const Registration: React.FC = () => {
 								<label className="data-error">Required</label>
 							)}
 						</div>
+
+						{/** Race/Ethnicity */}
 						<div className="card" id="raceEthnicity">
 							<div className="card-header">What is your race/ethnicity?</div>
 							<div className="my-2">
@@ -311,6 +320,8 @@ const Registration: React.FC = () => {
 								<label htmlFor="noDisclose">Prefer not to disclose</label>
 							</div>
 						</div>
+
+						{/** Veteran */}
 						<div className="card" id="veteran">
 							<div className="card-header">Are you a veteran?</div>
 							<div className="my-2">
@@ -345,10 +356,12 @@ const Registration: React.FC = () => {
 								<label htmlFor="no">Prefer not to disclose</label>
 								<br />
 								{!registrationData.veteran && (
-									<label htmlFor="no-disclose-veteran">Required</label>
+									<label className="data-error">Required</label>
 								)}
 							</div>
 						</div>
+
+						{/** Eighteen Before Event */}
 						<div className="card" id="eighteenBeforeEvent">
 							<div className="card-header">
 								Will you be 18 years old before ***EVENT DATE***?
@@ -360,58 +373,492 @@ const Registration: React.FC = () => {
 								onChange={handleToggle}
 							/>
 						</div>
+
+						{/** Shirt Size */}
 						<div className="card" id="shirtSize">
 							<div className="card-header">What is your shirt size?</div>
+							<div className="my-2">
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="XS"
+									id="XS"
+									onChange={handleChange}
+								/>
+								<label htmlFor="XS">X-Small</label>
+								<br />
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="S"
+									id="S"
+									onChange={handleChange}
+								/>
+								<label htmlFor="S">Small</label>
+								<br />
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="M"
+									id="M"
+									onChange={handleChange}
+								/>
+								<label htmlFor="M">Medium</label>
+								<br />
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="L"
+									id="L"
+									onChange={handleChange}
+								/>
+								<label htmlFor="L">Large</label>
+								<br />
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="XL"
+									id="XL"
+									onChange={handleChange}
+								/>
+								<label htmlFor="XL">X-Large</label>
+								<br />
+								<input
+									type="radio"
+									name="shirtSize"
+									required
+									value="XXL"
+									id="XXL"
+									onChange={handleChange}
+								/>
+								<label htmlFor="XXL">XX-Large</label>
+								<br />
+								{!registrationData.shirtSize && (
+									<label className="data-error">Required</label>
+								)}
+							</div>
 						</div>
+
+						{/** Country */}
 						<div className="card" id="country">
 							<div className="card-header">What country are you from?</div>
+							<div className="my-2">
+								<input
+									id="country"
+									name="country"
+									required
+									onChange={handleChange}
+								/>
+							</div>
 						</div>
+
+						{/** Driving */}
 						<div className="card" id="driving">
 							<div className="card-header">
 								Will you be driving to the event?
 							</div>
+							<ToggleSwitch
+								name="driving"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
 						</div>
+
+						{/** First Hackathon */}
 						<div className="card" id="firstHackathon">
 							<div className="card-header">Is this your first hackathon?</div>
+							<ToggleSwitch
+								name="firstHackathon"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
 						</div>
+
+						{/** Dietary Restrictions and Allergies */}
 						<div className="card" id="dietaryAllergies">
 							<div className="card-header">
 								Do you have any dietary restrictions or allergies?
 							</div>
-							{/** conditional formatting if checked YES */}
+							<ToggleSwitch
+								name="hasDietaryRestrictionsOrAllegies"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
+							{registrationData.hasDietaryRestrictionsOrAllegies && (
+								<>
+									<label htmlFor="dietaryRestrictions" className="label">
+										Dietary Restrictions
+									</label>
+									<div className="my-2">
+										<input
+											id="dietaryRestrictions"
+											name="dietaryRestrictions"
+											onChange={handleChange}
+										/>
+									</div>
+									<label htmlFor="allergies" className="label">
+										Allergies
+									</label>
+									<div className="my-2">
+										<input
+											id="allergies"
+											name="allergies"
+											onChange={handleChange}
+										/>
+									</div>
+								</>
+							)}
 						</div>
+
+						{/** Major */}
 						<div className="card" id="major">
 							<div className="card-header">What is your (intended) major?</div>
+							<div className="my-2">
+								<input
+									id="major"
+									name="major"
+									required
+									onChange={handleChange}
+								/>
+							</div>
 						</div>
+
+						{/** University */}
 						<div className="card" id="university">
 							<div className="card-header">What school do you attend?</div>
+							<div className="my-2">
+								<input
+									id="university"
+									name="university"
+									required
+									onChange={handleChange}
+								/>
+							</div>
 						</div>
+
+						{/** Academic Year */}
 						<div className="card" id="academicYear">
 							<div className="card-header">What is your academic year?</div>
+							<div className="my-2">
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="freshman"
+									id="freshman"
+									onChange={handleChange}
+								/>
+								<label htmlFor="freshman">Freshman</label>
+								<br />
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="sophomore"
+									id="sophomore"
+									onChange={handleChange}
+								/>
+								<label htmlFor="sophomore">Sophomore</label>
+								<br />
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="junior"
+									id="junior"
+									onChange={handleChange}
+								/>
+								<label htmlFor="junior">Junior</label>
+								<br />
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="senior"
+									id="senior"
+									onChange={handleChange}
+								/>
+								<label htmlFor="senior">Senior</label>
+								<br />
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="graduate"
+									id="graduate"
+									onChange={handleChange}
+								/>
+								<label htmlFor="graduate">Graduate</label>
+								<br />
+								<input
+									type="radio"
+									name="academicYear"
+									required
+									value="other"
+									id="other"
+									onChange={handleChange}
+								/>
+								<label htmlFor="other">Other</label>
+								<br />
+								{!registrationData.academicYear && (
+									<label className="data-error">Required</label>
+								)}
+							</div>
 						</div>
+
+						{/** Educational Institution Type */}
 						<div className="card" id="educationalInstitutionType">
 							<div className="card-header">
 								What type of educational institution are you enrolled in?
 							</div>
+							<div className="my-2">
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="less-than-secondary"
+									id="less-than-secondary"
+									onChange={handleChange}
+								/>
+								<label htmlFor="less-than-secondary">
+									Less than Secondary / High School
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="secondary"
+									id="secondary"
+									onChange={handleChange}
+								/>
+								<label htmlFor="secondary">Secondary / High School</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="two-year-university"
+									id="two-year-university"
+									onChange={handleChange}
+								/>
+								<label htmlFor="two-year-university">
+									Undergraduate University (2 year - community college or
+									similar)
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="three-plus-year-university"
+									id="three-plus-year-university"
+									onChange={handleChange}
+								/>
+								<label htmlFor="three-plus-year-university">
+									Undergraduate University (3+ year)
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="graduate-university"
+									id="graduate-university"
+									onChange={handleChange}
+								/>
+								<label htmlFor="graduate-university">
+									Graduate University (Masters, Professional, Doctoral, etc.)
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="code-school-or-bootcamp"
+									id="code-school-or-bootcamp"
+									onChange={handleChange}
+								/>
+								<label htmlFor="code-school-or-bootcamp">
+									Code School / Bootcamp
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="vocational-trade-apprenticeship"
+									id="vocational-trade-apprenticeship"
+									onChange={handleChange}
+								/>
+								<label htmlFor="vocational-trade-apprenticeship">
+									Other Vocational / Trade Program or Apprenticeship
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="other"
+									id="other"
+									onChange={handleChange}
+								/>
+								<label htmlFor="other">Other</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="not-a-student"
+									id="not-a-student"
+									onChange={handleChange}
+								/>
+								<label htmlFor="not-a-student">
+									I'm not currently a student
+								</label>
+								<br />
+								<input
+									type="radio"
+									name="educationalInstutionType"
+									required
+									value="prefer-no-answer"
+									id="prefer-no-answer"
+									onChange={handleChange}
+								/>
+								<label htmlFor="prefer-no-answer">Prefer not to answer</label>
+								<br />
+
+								{!registrationData.educationalInstutionType && (
+									<label className="data-error">Required</label>
+								)}
+							</div>
 						</div>
+
+						{/** Resume */}
 						<div className="card" id="resume">
 							<div className="card-header">Submit your resume</div>
+							<div className="info">
+								If a resume is submitted, it will be shared with employers
+								sponsoring HackPSU.
+							</div>
+							<div className="my-2">
+								<input
+									type="file"
+									id="resume"
+									name="resume"
+									required
+									onChange={handleChange}
+									accept="file/pdf"
+								/>
+							</div>
 						</div>
+
+						{/** MLH Code of Conduct */}
 						<div className="card" id="mlhCoc">
 							<div className="card-header">
 								Do you agree to the MLH Code of Conduct?
 							</div>
+							<span>
+								<p className="inline">I have read and agree to the&nbsp;</p>
+								<a
+									href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+									target="_blank"
+								>
+									MLH Code of Conduct
+								</a>
+								<p className="info">
+									To participate at HackPSU, you must agree to this policy.
+								</p>
+							</span>
+							<ToggleSwitch
+								name="mlhCoc"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
+							{!registrationData.mlhCoc && (
+								<label className="data-error">Required</label>
+							)}
 						</div>
+
+						{/** MLH Data Sharing */}
 						<div className="card" id="mlhDcp">
 							<div className="card-header">
 								Do you agree to the MLH Data Sharing
 							</div>
+							<span>
+								By agreeing to this notice, you affirm that: "I authorize you to
+								share my registration information with Major League Hacking for
+								event administration, ranking, MLH administration in-line with
+								the&nbsp;
+								<a href="https://mlh.io/privacy" target="_blank">
+									MLH Privacy Policy
+								</a>
+								. I further agree to the terms of both the&nbsp;
+								<a
+									href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+									target="_blank"
+								>
+									MLH Contest Terms and Conditions
+								</a>
+								&nbsp;and the&nbsp;
+								<a href="https://mlh.io/privacy" target="_blank">
+									MLH Privacy Policy
+								</a>
+								."
+								<br />
+								<br />
+								<p className="info">
+									To participate at HackPSU, you must agree to this policy.
+								</p>
+							</span>
+							<ToggleSwitch
+								name="mlhDcp"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
+							{!registrationData.mlhDcp && (
+								<label className="data-error">Required</label>
+							)}
 						</div>
+
+						{/** Share Email with MLH */}
 						<div className="card" id="shareEmailMlh">
 							<div className="card-header">
 								Do you want to opt into further communications from MLH?
 							</div>
+							<span>
+								<p className="inline">
+									By agreeing to this, you affirm that: "I authorize MLH to send
+									me an email where I can further opt into the MLH Hacker,
+									Events, or Organizer Newsletters and other communications from
+									MLH."
+								</p>
+								<br />
+								<br />
+								<p className="info">
+									This is entirely optional and may be opted into of your
+									choosing.
+								</p>
+							</span>
+							<ToggleSwitch
+								name="shareEmailMlh"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
 						</div>
+
+						{/** Submit */}
 					</form>
 				</div>
 			</div>

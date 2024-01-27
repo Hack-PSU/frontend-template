@@ -38,8 +38,7 @@
 	}
 }
 
-.label {
-	display: block;
+label {
 	font-size: 0.875rem;
 	font-weight: 500;
 	line-height: 1.5;
@@ -74,6 +73,7 @@ input[type="radio"] {
 	margin: 1rem;
 	cursor: pointer;
 	color: var(--selected-input);
+	border: 2px solid var(--selected-input);
 }
 
 input[type="radio"]:checked {
@@ -88,4 +88,5 @@ input[type="radio"]:focus {
 input[type="checkbox"] {
 	margin: 1rem;
 	cursor: pointer;
+	border: 2px solid var(--selected-input);
 }
