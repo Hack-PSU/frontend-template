@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import ToggleSwitch from "@/components/common/ToggleSwitch";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -111,6 +112,14 @@ const Registration: React.FC = () => {
 		setRegistrationData((prevData) => ({
 			...prevData,
 			[name]: valueString,
+		}));
+	};
+
+	const handleToggle = (name: string, isChecked: boolean) => {
+		console.log(name, isChecked);
+		setRegistrationData((prevData) => ({
+			...prevData,
+			[name]: isChecked,
 		}));
 	};
 
@@ -304,11 +313,52 @@ const Registration: React.FC = () => {
 						</div>
 						<div className="card" id="veteran">
 							<div className="card-header">Are you a veteran?</div>
+							<div className="my-2">
+								<input
+									type="radio"
+									name="veteran"
+									required
+									value="yes"
+									id="yes"
+									onChange={handleChange}
+								/>
+								<label htmlFor="yes">Yes</label>
+								<br />
+								<input
+									type="radio"
+									name="veteran"
+									required
+									value="no"
+									id="no"
+									onChange={handleChange}
+								/>
+								<label htmlFor="no">No</label>
+								<br />
+								<input
+									type="radio"
+									name="veteran"
+									required
+									value="no-disclose"
+									id="no-disclose-veteran"
+									onChange={handleChange}
+								/>
+								<label htmlFor="no">Prefer not to disclose</label>
+								<br />
+								{!registrationData.veteran && (
+									<label htmlFor="no-disclose-veteran">Required</label>
+								)}
+							</div>
 						</div>
 						<div className="card" id="eighteenBeforeEvent">
 							<div className="card-header">
 								Will you be 18 years old before ***EVENT DATE***?
 							</div>
+							<ToggleSwitch
+								name="eighteenBeforeEvent"
+								on="Yes"
+								off="No"
+								onChange={handleToggle}
+							/>
 						</div>
 						<div className="card" id="shirtSize">
 							<div className="card-header">What is your shirt size?</div>
