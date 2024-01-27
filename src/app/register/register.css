@@ -1,3 +1,7 @@
+.form {
+	margin-top: 1.5rem;
+}
+
 .card {
 	background-color: #f8fafc;
 	padding: 1rem 1.5rem;
@@ -11,6 +15,17 @@
 	padding: 1rem;
 	font-size: 1.5rem;
 	text-align: center;
+}
+
+.card .info {
+	font-size: small;
+	color: #6c88b7;
+}
+
+.card .data-error {
+	color: #f44336;
+	font-size: 0.875rem;
+	font-weight: 500;
 }
 
 @media (min-width: 640px) {
@@ -29,7 +44,7 @@
 	color: #2d3748;
 }
 
-.input {
+input {
 	display: block;
 	width: 100%;
 	border-radius: 0.375rem;
@@ -44,15 +59,29 @@
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-.input::placeholder {
+input::placeholder {
 	color: #a0aec0;
 }
 
-.input:focus {
+input:focus {
 	border-color: #d2d6dc;
 	box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
 }
 
-.form {
-	margin-top: 1.5rem;
+input[type="radio"] {
+	margin: 1rem;
+	cursor: pointer;
+}
+
+input[type="radio"]:checked {
+	color: #2b6cb0;
+}
+
+input[type="radio"]:focus {
+	color: #2b6cb0;
+}
+
+input[type="checkbox"] {
+	margin: 1rem;
+	cursor: pointer;
 }

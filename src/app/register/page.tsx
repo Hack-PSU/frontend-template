@@ -97,6 +97,21 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: value,
 		}));
+		// console.log(name, value);
+	};
+
+	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { name } = event.target;
+
+		const checkboxes = document.querySelectorAll<HTMLInputElement>(
+			`input[name="${name}"]:checked`
+		);
+		const values = Array.from(checkboxes).map((checkbox) => checkbox.value);
+		const valueString = values.join(", ");
+		setRegistrationData((prevData) => ({
+			...prevData,
+			[name]: valueString,
+		}));
 	};
 
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -129,9 +144,7 @@ const Registration: React.FC = () => {
 									<input
 										id="firstName"
 										name="firstName"
-										type="firstName"
 										required
-										className="input"
 										onChange={handleChange}
 									/>
 								</div>
@@ -142,24 +155,152 @@ const Registration: React.FC = () => {
 									<input
 										id="lastName"
 										name="lastName"
-										type="lastName"
 										required
-										className="input"
 										onChange={handleChange}
 									/>
 								</div>
+								{(!registrationData.firstName ||
+									!registrationData.lastName) && (
+									<label className="data-error">Required</label>
+								)}
 							</div>
 						</div>
 						<div className="card" id="gender">
 							<div className="card-header">
 								Which gender do you identify with?
 							</div>
+							<div className="my-2">
+								<input
+									type="radio"
+									name="gender"
+									required
+									value="male"
+									id="male"
+									onChange={handleChange}
+								/>
+								<label htmlFor="male">Male</label>
+								<br />
+								<input
+									type="radio"
+									name="gender"
+									required
+									value="female"
+									id="female"
+									onChange={handleChange}
+								/>
+								<label htmlFor="female">Female</label>
+								<br />
+								<input
+									type="radio"
+									name="gender"
+									required
+									value="non-binary"
+									id="non-binary"
+									onChange={handleChange}
+								/>
+								<label htmlFor="non-binary">Non-Binary</label>
+								<br />
+								<input
+									type="radio"
+									name="gender"
+									required
+									value="no-disclose"
+									id="no-disclose"
+									onChange={handleChange}
+								/>
+								<label htmlFor="no-disclose">Prefer not to disclose</label>
+								<br />
+								{!registrationData.gender && (
+									<label className="data-error">Required</label>
+								)}
+							</div>
 						</div>
 						<div className="card" id="phoneNumber">
 							<div className="card-header">What is your phone number?</div>
+							<div className="info">
+								This information is required by MLH. Rest assured we won't be
+								spamming your phone.
+							</div>
+							<div className="my-2">
+								<input
+									id="phoneNumber"
+									name="phoneNumber"
+									required
+									onChange={handleChange}
+								/>
+							</div>
+							{!registrationData.phoneNumber && (
+								<label className="data-error">Required</label>
+							)}
 						</div>
 						<div className="card" id="raceEthnicity">
 							<div className="card-header">What is your race/ethnicity?</div>
+							<div className="my-2">
+								<input
+									type="checkbox"
+									id="native"
+									name="race"
+									value="native"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="native">Native American or Alaska Native</label>
+								<br />
+								<input
+									type="checkbox"
+									id="asian"
+									name="race"
+									value="asian"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="asian">Asian</label>
+								<br />
+								<input
+									type="checkbox"
+									id="african"
+									name="race"
+									value="african"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="african">Black or African American</label>
+								<br />
+								<input
+									type="checkbox"
+									id="latinx"
+									name="race"
+									value="latinx"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="latinx">Hispanic or Latinx</label>
+								<br />
+								<input
+									type="checkbox"
+									id="pacific"
+									name="race"
+									value="pacific"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="pacific">
+									Native Hawaiian or Other Pacific Islander
+								</label>
+								<br />
+								<input
+									type="checkbox"
+									id="caucasian"
+									name="race"
+									value="caucasian"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="caucasian">Caucasian</label>
+								<br />
+								<input
+									type="checkbox"
+									id="noDisclose"
+									name="race"
+									value="noDisclose"
+									onChange={handleCheckboxChange}
+								/>
+								<label htmlFor="noDisclose">Prefer not to disclose</label>
+							</div>
 						</div>
 						<div className="card" id="veteran">
 							<div className="card-header">Are you a veteran?</div>
