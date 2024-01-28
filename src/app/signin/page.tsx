@@ -2,12 +2,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SignIn() {
 	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
 	const router = useRouter();
+	const [isMounted, setIsMounted] = useState(false);
 
 	const handleSubmit = (event: any) => {
 		event.preventDefault();
@@ -21,7 +22,11 @@ export default function SignIn() {
 		if (isAuthenticated) {
 			void router.push("/");
 		}
+		setIsMounted(true);
 	}, [router, isAuthenticated]);
+
+	if (!isMounted) return null;
+
 	return (
 		<>
 			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
