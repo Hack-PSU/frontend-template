@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 
@@ -12,19 +12,21 @@ const Signup: React.FC = () => {
 		useFirebase();
 	const router = useRouter();
 
-	const handleSignup = (event: FormEvent) => {
+	const handleSignup = async (event: FormEvent) => {
 		event.preventDefault();
 		if (!signupData.email || !signupData.password) {
 			return;
 		}
 
-		signUpWithEmailAndPassword(signupData.email, signupData.password).then(
-			(res) => {
-				console.log(res);
-				// void router.push("/");
-				// TODO: Login user on signup
-			}
+		// Sign the user up and log them in
+		const res: any = await signUpWithEmailAndPassword(
+			signupData.email,
+			signupData.password
 		);
+		if (res.success) {
+			await loginWithEmailAndPassword(signupData.email, signupData.password);
+			router.push("/");
+		}
 	};
 
 	interface SignupData {
@@ -36,6 +38,7 @@ const Signup: React.FC = () => {
 		email: "",
 		password: "",
 	});
+	const [isMounted, setIsMounted] = useState(false);
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
@@ -44,6 +47,12 @@ const Signup: React.FC = () => {
 			[name]: value,
 		}));
 	};
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
+
+	if (!isMounted) return null;
 
 	return (
 		<>

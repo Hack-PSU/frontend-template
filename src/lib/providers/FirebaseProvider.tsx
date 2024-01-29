@@ -1,6 +1,14 @@
 "use-client";
 
-import React, { createContext, FC, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import React, {
+	createContext,
+	FC,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import {
 	Auth,
 	AuthError,
@@ -10,7 +18,8 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	User,
-	createUserWithEmailAndPassword, onIdTokenChanged,
+	createUserWithEmailAndPassword,
+	onIdTokenChanged,
 } from "firebase/auth";
 import { initApi, resetApi } from "@/lib/api";
 
@@ -27,17 +36,27 @@ type FirebaseProviderHooks = {
 	user?: User;
 	token: string;
 	error: FirebaseAuthError;
-	signUpWithEmailAndPassword(email: string, password: string): Promise<void>;
+	signUpWithEmailAndPassword(
+		email: string,
+		password: string
+	): Promise<SignUpResponse>;
 	loginWithEmailAndPassword(email: string, password: string): Promise<void>;
 	logout(next?: () => Promise<void>): Promise<void>;
-}
+};
 
 type Props = {
 	children: React.ReactNode;
 	auth: Auth;
-}
+};
 
-const FirebaseContext = createContext<FirebaseProviderHooks>({} as FirebaseProviderHooks);
+const FirebaseContext = createContext<FirebaseProviderHooks>(
+	{} as FirebaseProviderHooks
+);
+
+interface SignUpResponse {
+	success: boolean;
+	error?: string;
+}
 
 const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -66,25 +85,54 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		}
 	}, []);
 
-	const resolveAuthState = useCallback(async (user?: User) => {
-		if (user) {
-			const token = await getUserIdToken(user);
-			setToken(token);
-			setUser(user);
-			setIsAuthenticated(true);
-		} else {
-			setUser(undefined);
-			setIsAuthenticated(false);
-			setError(FirebaseAuthError.NONE);
-		}
-	}, [getUserIdToken]);
+	const resolveAuthState = useCallback(
+		async (user?: User) => {
+			if (user) {
+				const token = await getUserIdToken(user);
+				setToken(token);
+				setUser(user);
+				setIsAuthenticated(true);
+			} else {
+				setUser(undefined);
+				setIsAuthenticated(false);
+				setError(FirebaseAuthError.NONE);
+			}
+		},
+		[getUserIdToken]
+	);
 
 	const signUpWithEmailAndPassword: FirebaseProviderHooks["signUpWithEmailAndPassword"] =
 		useCallback(
-			async (email: string, password: string) => {
+			async (email: string, password: string): Promise<SignUpResponse> => {
 				setError(FirebaseAuthError.NONE);
 				try {
 					const userCredential = await createUserWithEmailAndPassword(
+						auth,
+						email,
+						password
+					);
+
+					if (userCredential.user) {
+						await resolveAuthState(userCredential.user);
+						return { success: true };
+					} else {
+						return { success: false, error: "User not created" };
+					}
+				} catch (e) {
+					alert(e);
+					resolveAuthError(e as AuthError);
+					return { success: false, error: e?.toString() ?? "Sign-up failed" };
+				}
+			},
+			[auth, resolveAuthError, resolveAuthState]
+		);
+
+	const loginWithEmailAndPassword: FirebaseProviderHooks["loginWithEmailAndPassword"] =
+		useCallback(
+			async (email, password) => {
+				setError(FirebaseAuthError.NONE);
+				try {
+					const userCredential = await signInWithEmailAndPassword(
 						auth,
 						email,
 						password
@@ -100,29 +148,8 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			[auth, resolveAuthError, resolveAuthState]
 		);
 
-	const loginWithEmailAndPassword: FirebaseProviderHooks["loginWithEmailAndPassword"] =
-		useCallback(
-		async (email, password) => {
-			setError(FirebaseAuthError.NONE);
-			try {
-				const userCredential = await signInWithEmailAndPassword(
-					auth,
-					email,
-					password,
-				);
-
-				if (userCredential.user) {
-					await resolveAuthState(userCredential.user)
-				}
-			} catch (e) {
-				resolveAuthError(e as AuthError)
-			}
-		},
-	[auth, resolveAuthError, resolveAuthState]
-	);
-
-	const logout: FirebaseProviderHooks["logout"] =
-		useCallback(async (next) => {
+	const logout: FirebaseProviderHooks["logout"] = useCallback(
+		async (next) => {
 			try {
 				await signOut(auth);
 				setToken("");
@@ -132,7 +159,9 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			} catch (e) {
 				console.error(e);
 			}
-		}, [auth]);
+		},
+		[auth]
+	);
 
 	useEffect(() => {
 		return onAuthStateChanged(auth, async (user) => {
@@ -151,25 +180,31 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		});
 	}, [auth]);
 
-	const value = useMemo(() => ({
-		isAuthenticated,
-		user,
-		error,
-		token,
-		signUpWithEmailAndPassword,
-		loginWithEmailAndPassword,
-		logout,
-	}), [
-		isAuthenticated,
-		user,
-		error,
-		token,
-		signUpWithEmailAndPassword,
-		loginWithEmailAndPassword,
-		logout,
-	]);
+	const value = useMemo(
+		() => ({
+			isAuthenticated,
+			user,
+			error,
+			token,
+			signUpWithEmailAndPassword,
+			loginWithEmailAndPassword,
+			logout,
+		}),
+		[
+			isAuthenticated,
+			user,
+			error,
+			token,
+			signUpWithEmailAndPassword,
+			loginWithEmailAndPassword,
+			logout,
+		]
+	);
 	return (
-		<FirebaseContext.Provider value={value}> {children} </FirebaseContext.Provider>
+		<FirebaseContext.Provider value={value}>
+			{" "}
+			{children}{" "}
+		</FirebaseContext.Provider>
 	);
 };
 
