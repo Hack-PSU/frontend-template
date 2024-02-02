@@ -7,11 +7,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 export default function Example() {
-  // Temporarily redirect to old frontend.
-  useEffect(() => {
-    window.location.replace("https://register.hackpsu.org/profile");
-  });
-
+	// Temporarily redirect to old frontend.
 	const { isAuthenticated, user } = useFirebase();
 	const router = useRouter();
 
@@ -39,7 +35,7 @@ export default function Example() {
 		setShowQRCode(!showQRCode);
 	};
 
-	if (isAuthenticated) {
+	if (!isAuthenticated) {
 		return (
 			<>
 				<div className="mx-auto max-w-3xl pt-16 lg:flex lg:gap-x-8 lg:px-8">
