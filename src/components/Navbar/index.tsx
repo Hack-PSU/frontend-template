@@ -48,10 +48,10 @@ const buttonImages = [
 		isExternal: false,
 	},
 	{
-		href: "register",
+		href: "https://register.hackpsu.org/register",
 		src: registerButton,
 		alt: "register",
-		isExternal: false,
+		isExternal: true,
 	},
 ];
 
