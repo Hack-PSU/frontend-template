@@ -33,13 +33,13 @@ const Hero = () => {
                                 <BigButton
                                     background={Register}
                                     onClick={() => window.open('https://register.hackpsu.org/register', '_blank')}
-                                    className="mb-4 w-full h-auto"
+                                    className="mb-4 w-full h-fit"
                                 />
 
                                 <BigButton
                                     background={Discord}
                                     onClick={() => window.open('http://discord.hackpsu.org', '_blank')}
-                                    className="mb-4 w-full h-auto"
+                                    className="mb-4 w-full h-fit"
                                 />
                             </div>
                         </div>
