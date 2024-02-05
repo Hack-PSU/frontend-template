@@ -81,6 +81,8 @@ const Registration: React.FC = () => {
 
 	async function fetchUserId() {
 		// IMPLEMENT THIS
+		console.log("hi");
+
 		const id = "TEST_ID";
 		setRegistrationData((prevData) => ({
 			...prevData,
