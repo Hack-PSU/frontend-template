@@ -1,0 +1,11 @@
+.profile-container {
+	background-color: #faee56;
+	color: white;
+	border-radius: 15px;
+	border: 6px solid black;
+	padding: 10px;
+}
+
+.profile-content {
+	/* Add any additional styling for the content here */
+}
