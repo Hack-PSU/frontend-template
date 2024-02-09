@@ -10,7 +10,7 @@ interface Props {
 
 export default function CustomCollapsible({ question, answer, link }: Props) {
 	return (
-		<Disclosure as="div" key={question} className="pt-2">
+		<Disclosure as="div" key={question} className="pt-2 pb-2">
 			{({ open }) => (
 				<>
 					<dt>
