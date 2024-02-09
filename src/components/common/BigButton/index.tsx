@@ -16,7 +16,7 @@ const BigButton = ({
 }: BigButtonProps) => {
 	return (
 		<motion.button
-			className={`w-full h-full ${className || ""}`}
+			className={`w-full ${className || ""}`}
 			onClick={onClick}
 			whileHover={{
 				scale: 1.1,
@@ -27,7 +27,7 @@ const BigButton = ({
 			{background ? (
 				<img
 					src={background.src}
-					className={`w-full h-full ${className || ""}`}
+					className={`w-full ${className || ""}`}
 				/>
 			) : (
 				<></>
