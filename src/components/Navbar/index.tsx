@@ -97,7 +97,7 @@ export default function Navbar() {
 					: "bg-white/0"
 			} z-30 transition-all`}
 		>
-			<div className="flex flex-row justify-evenly mr-10">
+			<div className="flex flex-row justify-evenly mr-[150px]">
 				<a>
 					<Image src={Logo} width={100} height={100} alt="logo" />
 				</a>
