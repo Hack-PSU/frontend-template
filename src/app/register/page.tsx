@@ -4,7 +4,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import ToggleSwitch from "@/components/common/ToggleSwitch";
-import { getActiveHackathon } from "@/lib/common";
+import { getActiveHackathon, getActiveUser } from "@/lib/common";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -80,18 +80,8 @@ const Registration: React.FC = () => {
 
 	const [hackathon, setHackathon] = useState<any>(null);
 
-	// TODO: Implement hackathon fetch for date and semester
-
-	async function fetchUserId() {
-		// IMPLEMENT THIS
-
-		const id = "TEST_ID";
-		setRegistrationData((prevData) => ({
-			...prevData,
-			id: id,
-		}));
-		return;
-	}
+	let { user, isAuthenticated } = useFirebase();
+	const router = useRouter();
 
 	async function fetchHackathon() {
 		const hackathon = await getActiveHackathon();
@@ -99,10 +89,20 @@ const Registration: React.FC = () => {
 	}
 
 	useEffect(() => {
-		fetchUserId();
 		fetchHackathon();
 		setComponentMounted(true);
 	}, []);
+
+	useEffect(() => {
+		if (isAuthenticated) {
+			setRegistrationData((prevData) => ({
+				...prevData,
+				id: user?.uid ?? "",
+			}));
+		} else if (componentMounted) {
+			void router.push("/");
+		}
+	}, [isAuthenticated]);
 
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
