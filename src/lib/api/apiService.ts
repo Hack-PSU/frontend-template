@@ -8,7 +8,7 @@ const VALID_PUT_RESPONSE_STATUS = [200];
 const VALID_PATCH_RESPONSE_STATUS = [200];
 
 // Custom error class for when the API is not initialized with a Firebase user token. Can be bypassed by setting useAuth to False when making specific request.
-export class UninitializedError extends Error {
+class UninitializedError extends Error {
 	constructor(message: string) {
 		super(message);
 		this.name = "UninitializedError";

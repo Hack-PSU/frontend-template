@@ -4,6 +4,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import ToggleSwitch from "@/components/common/ToggleSwitch";
+import { getActiveHackathon } from "@/lib/common";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -15,7 +16,7 @@ import "./register.css";
 
 const Registration: React.FC = () => {
 	// TODO: update some generic strings to better reflect data (e.g. "male"/"female"/"other" for gender rather than string)
-	interface RegistrationData {
+	interface RegistrationData extends FormData {
 		id: string;
 		firstName: string;
 		lastName: string;
@@ -74,14 +75,15 @@ const Registration: React.FC = () => {
 		mlhDcp: false,
 		shareEmailMlh: false,
 		time: 0,
-	});
+	} as RegistrationData);
 	const [componentMounted, setComponentMounted] = useState(false); // Handles hydration error
+
+	const [hackathon, setHackathon] = useState<any>(null);
 
 	// TODO: Implement hackathon fetch for date and semester
 
 	async function fetchUserId() {
 		// IMPLEMENT THIS
-		console.log("hi");
 
 		const id = "TEST_ID";
 		setRegistrationData((prevData) => ({
@@ -91,8 +93,14 @@ const Registration: React.FC = () => {
 		return;
 	}
 
+	async function fetchHackathon() {
+		const hackathon = await getActiveHackathon();
+		setHackathon(hackathon);
+	}
+
 	useEffect(() => {
 		fetchUserId();
+		fetchHackathon();
 		setComponentMounted(true);
 	}, []);
 
@@ -102,7 +110,8 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: value,
 		}));
-		// console.log(name, value);
+
+		console.log(registrationData);
 	};
 
 	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -127,6 +136,17 @@ const Registration: React.FC = () => {
 		}));
 	};
 
+	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { name, files } = event.target;
+		if (files) {
+			const file = files[0];
+			setRegistrationData((prevData) => ({
+				...prevData,
+				[name]: file,
+			}));
+		}
+	};
+
 	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 		// IMPLEMENT THIS
@@ -143,7 +163,7 @@ const Registration: React.FC = () => {
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 					<div className="m-2 text-center">
 						<h1 className="text-4xl font-bold">Registration</h1>
-						<div>... for our Spring 2024 Hackathon!</div>
+						<div>... for our {hackathon?.name ?? ""} Hackathon!</div>
 					</div>
 
 					<form className="form" onSubmit={handleSubmit}>
@@ -366,7 +386,11 @@ const Registration: React.FC = () => {
 						{/** Eighteen Before Event */}
 						<div className="card" id="eighteenBeforeEvent">
 							<div className="card-header">
-								Will you be 18 years old before ***EVENT DATE***?
+								Will you be 18 years old before{" "}
+								{hackathon?.startTime
+									? new Date(hackathon?.startTime).toISOString().split("T")[0]
+									: "the event date"}
+								?
 							</div>
 							<ToggleSwitch
 								name="eighteenBeforeEvent"
@@ -751,16 +775,29 @@ const Registration: React.FC = () => {
 								If a resume is submitted, it will be shared with employers
 								sponsoring HackPSU.
 							</div>
-							<div className="my-2">
-								<input
-									type="file"
-									id="resume"
-									name="resume"
-									required
-									onChange={handleChange}
-									accept="file/pdf"
-								/>
+							<div className="flex justify-center w-full my-2">
+								<div className="file-upload-container">
+									<input
+										type="file"
+										id="resume-input"
+										name="resume"
+										className="input-file"
+										onChange={handleFileChange}
+										accept="application/pdf"
+									/>
+									<label htmlFor="resume-input" className="file-upload-button">
+										Upload Resume
+									</label>
+								</div>
 							</div>
+							{registrationData.resume && (
+								<div className="info">
+									{
+										(registrationData.resume as unknown as { name: string })
+											?.name
+									}
+								</div>
+							)}
 						</div>
 
 						{/** MLH Code of Conduct */}

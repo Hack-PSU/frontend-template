@@ -90,3 +90,25 @@ input[type="checkbox"] {
 	cursor: pointer;
 	border: 2px solid var(--selected-input);
 }
+
+.file-upload-container {
+	position: relative;
+	margin: 2px;
+}
+
+.file-upload-container input[type="file"] {
+	display: none;
+}
+
+.file-upload-button {
+	background-color: var(--button);
+	color: white;
+	padding: 10px 20px;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.file-upload-button:hover,
+.file-upload-button:active {
+	background-color: var(--button-hover);
+}

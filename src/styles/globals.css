@@ -29,6 +29,8 @@
 		--selected-input: #2b6cb0;
 		--radius: 0.5rem;
 		--link-color: #3498db;
+		--button: #007bff;
+		--button-hover: #0056b3;
 	}
 
 	/* Account for fixed size of the Navbar upon jumping to links. */
