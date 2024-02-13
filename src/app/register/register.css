@@ -69,6 +69,11 @@ input:focus {
 	box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
 }
 
+textarea {
+	max-width: 100%;
+	min-width: 100%;
+}
+
 input[type="radio"] {
 	margin: 1rem;
 	cursor: pointer;

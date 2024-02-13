@@ -4,7 +4,10 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import ToggleSwitch from "@/components/common/ToggleSwitch";
-import { getActiveHackathon, getActiveUser } from "@/lib/common";
+import { getActiveHackathon } from "@/lib/common";
+import { writeToDatabase } from "@/lib/database";
+import { User } from "@/interfaces";
+import BigButton from "@/components/common/BigButton";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -42,12 +45,16 @@ const Registration: React.FC = () => {
 			| "graduate"
 			| "other"
 			| "";
-		educationalInstutionType: string;
-		resume: string;
+		educationalInstitutionType: string;
+		resume: any;
 		mlhCoc: boolean;
 		mlhDcp: boolean;
 		shareEmailMlh: boolean;
 		time: number;
+		codingExperience: "none" | "beginner" | "intermediate" | "advanced" | "";
+		referral: string;
+		project: string;
+		expectations: string;
 	}
 
 	const [registrationData, setRegistrationData] = useState<RegistrationData>({
@@ -69,12 +76,16 @@ const Registration: React.FC = () => {
 		major: "",
 		university: "",
 		academicYear: "",
-		educationalInstutionType: "",
-		resume: "",
+		educationalInstitutionType: "",
+		resume: null,
 		mlhCoc: false,
 		mlhDcp: false,
 		shareEmailMlh: false,
 		time: 0,
+		codingExperience: "",
+		referral: "",
+		project: "",
+		expectations: "",
 	} as RegistrationData);
 	const [componentMounted, setComponentMounted] = useState(false); // Handles hydration error
 
@@ -104,7 +115,9 @@ const Registration: React.FC = () => {
 		}
 	}, [isAuthenticated]);
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (
+		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+	) => {
 		const { name, value } = event.target;
 		setRegistrationData((prevData) => ({
 			...prevData,
@@ -147,10 +160,112 @@ const Registration: React.FC = () => {
 		}
 	};
 
-	const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
-		// IMPLEMENT THIS
-		console.log(registrationData);
+
+		// Validate required fields
+		// Null indicates it is just necessary; a value indicates that it must be exactly that value
+		const requiredFields = {
+			id: null,
+			firstName: null,
+			lastName: null,
+			gender: null,
+			phoneNumber: null,
+			veteran: null,
+			eighteenBeforeEvent: true,
+			shirtSize: null,
+			country: null,
+			driving: null,
+			firstHackathon: null,
+			major: null,
+			university: null,
+			academicYear: null,
+			educationalInstitutionType: null,
+			mlhCoc: true,
+			mlhDcp: true,
+		};
+
+		// Check if all required fields are filled
+		const validationData: any = registrationData as any;
+		for (const [key, value] of Object.entries(requiredFields)) {
+			const element = document.getElementById(key);
+
+			if (!element) {
+				// Necessary to avoid TypeScript error
+				console.error(`Element with ID ${key} not found.`);
+				continue;
+			}
+
+			if (validationData[key] === undefined || validationData[key] === "") {
+				element.scrollIntoView({ behavior: "smooth", block: "start" });
+				return;
+			} else if (value !== null && validationData[key] !== value) {
+				element.scrollIntoView({ behavior: "smooth", block: "start" });
+				return;
+			}
+		}
+
+		// Build user object
+		const newUser: User = {
+			id: registrationData.id,
+			firstName: registrationData.firstName,
+			lastName: registrationData.lastName,
+			gender: registrationData.gender,
+			shirtSize: registrationData.shirtSize,
+			dietaryRestriction: registrationData.dietaryRestrictions ?? "",
+			allergies: registrationData.allergies ?? "",
+			university: registrationData.university,
+			email: user?.email ?? "",
+			major: registrationData.major,
+			phone: registrationData.phoneNumber,
+			country: registrationData.country,
+			race: registrationData.race ?? "",
+		};
+
+		const registrationUser = new FormData();
+		Object.entries(newUser).forEach(([key, value]) => {
+			registrationUser.append(key, value);
+		});
+
+		// Handle resume
+		if (registrationData.resume) {
+			registrationUser.append(
+				"resume",
+				registrationData.resume,
+				registrationData.resume.name
+			);
+		}
+
+		console.log("Sending FormData: ", registrationUser);
+
+		// Write user to database
+		const res: any = await writeToDatabase("users", registrationUser);
+
+		if (res?.id) {
+			// Success if post returns user that was created
+			// Now, build the registration object
+			const registration = {
+				userId: res.id,
+				travelReimbursement: false,
+				driving: registrationData.driving,
+				firstHackathon: registrationData.firstHackathon,
+				academicYear: registrationData.academicYear,
+				educationalInstitutionType: registrationData.educationalInstitutionType,
+				codingExperience: registrationData.codingExperience,
+				eighteenBeforeEvent: registrationData.eighteenBeforeEvent,
+				mlhCoc: registrationData.mlhCoc,
+				mlhDcp: registrationData.mlhDcp,
+				referral: registrationData.referral,
+				project: registrationData.project,
+				expectations: registrationData.expectations,
+				shareEmailMlh: registrationData.shareEmailMlh,
+				veteran: registrationData.veteran,
+				time: Date.now(),
+			};
+
+			const regRes: any = await writeToDatabase("registrations", registration);
+			console.log("Registration response: ", regRes);
+		}
 	};
 
 	if (!componentMounted) {
@@ -199,7 +314,6 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
-
 						{/** Gender */}
 						<div className="card" id="gender">
 							<div className="card-header">
@@ -251,7 +365,6 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
-
 						{/** Phone Number */}
 						<div className="card" id="phoneNumber">
 							<div className="card-header">What is your phone number?</div>
@@ -271,7 +384,6 @@ const Registration: React.FC = () => {
 								<label className="data-error">Required</label>
 							)}
 						</div>
-
 						{/** Race/Ethnicity */}
 						<div className="card" id="raceEthnicity">
 							<div className="card-header">What is your race/ethnicity?</div>
@@ -342,7 +454,6 @@ const Registration: React.FC = () => {
 								<label htmlFor="noDisclose">Prefer not to disclose</label>
 							</div>
 						</div>
-
 						{/** Veteran */}
 						<div className="card" id="veteran">
 							<div className="card-header">Are you a veteran?</div>
@@ -382,7 +493,6 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
-
 						{/** Eighteen Before Event */}
 						<div className="card" id="eighteenBeforeEvent">
 							<div className="card-header">
@@ -398,506 +508,619 @@ const Registration: React.FC = () => {
 								off="No"
 								onChange={handleToggle}
 							/>
-						</div>
-
-						{/** Shirt Size */}
-						<div className="card" id="shirtSize">
-							<div className="card-header">What is your shirt size?</div>
-							<div className="my-2">
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="XS"
-									id="XS"
-									onChange={handleChange}
-								/>
-								<label htmlFor="XS">X-Small</label>
-								<br />
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="S"
-									id="S"
-									onChange={handleChange}
-								/>
-								<label htmlFor="S">Small</label>
-								<br />
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="M"
-									id="M"
-									onChange={handleChange}
-								/>
-								<label htmlFor="M">Medium</label>
-								<br />
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="L"
-									id="L"
-									onChange={handleChange}
-								/>
-								<label htmlFor="L">Large</label>
-								<br />
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="XL"
-									id="XL"
-									onChange={handleChange}
-								/>
-								<label htmlFor="XL">X-Large</label>
-								<br />
-								<input
-									type="radio"
-									name="shirtSize"
-									required
-									value="XXL"
-									id="XXL"
-									onChange={handleChange}
-								/>
-								<label htmlFor="XXL">XX-Large</label>
-								<br />
-								{!registrationData.shirtSize && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-
-						{/** Country */}
-						<div className="card" id="country">
-							<div className="card-header">What country are you from?</div>
-							<div className="my-2">
-								<input
-									id="country"
-									name="country"
-									required
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-
-						{/** Driving */}
-						<div className="card" id="driving">
-							<div className="card-header">
-								Will you be driving to the event?
-							</div>
-							<ToggleSwitch
-								name="driving"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-						</div>
-
-						{/** First Hackathon */}
-						<div className="card" id="firstHackathon">
-							<div className="card-header">Is this your first hackathon?</div>
-							<ToggleSwitch
-								name="firstHackathon"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-						</div>
-
-						{/** Dietary Restrictions and Allergies */}
-						<div className="card" id="dietaryAllergies">
-							<div className="card-header">
-								Do you have any dietary restrictions or allergies?
-							</div>
-							<ToggleSwitch
-								name="hasDietaryRestrictionsOrAllegies"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-							{registrationData.hasDietaryRestrictionsOrAllegies && (
-								<>
-									<label htmlFor="dietaryRestrictions" className="label">
-										Dietary Restrictions
-									</label>
-									<div className="my-2">
-										<input
-											id="dietaryRestrictions"
-											name="dietaryRestrictions"
-											onChange={handleChange}
-										/>
-									</div>
-									<label htmlFor="allergies" className="label">
-										Allergies
-									</label>
-									<div className="my-2">
-										<input
-											id="allergies"
-											name="allergies"
-											onChange={handleChange}
-										/>
-									</div>
-								</>
+							{!registrationData.eighteenBeforeEvent && (
+								<label className="data-error">Required</label>
 							)}
 						</div>
-
-						{/** Major */}
-						<div className="card" id="major">
-							<div className="card-header">What is your (intended) major?</div>
-							<div className="my-2">
-								<input
-									id="major"
-									name="major"
-									required
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-
-						{/** University */}
-						<div className="card" id="university">
-							<div className="card-header">What school do you attend?</div>
-							<div className="my-2">
-								<input
-									id="university"
-									name="university"
-									required
-									onChange={handleChange}
-								/>
-							</div>
-						</div>
-
-						{/** Academic Year */}
-						<div className="card" id="academicYear">
-							<div className="card-header">What is your academic year?</div>
-							<div className="my-2">
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="freshman"
-									id="freshman"
-									onChange={handleChange}
-								/>
-								<label htmlFor="freshman">Freshman</label>
-								<br />
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="sophomore"
-									id="sophomore"
-									onChange={handleChange}
-								/>
-								<label htmlFor="sophomore">Sophomore</label>
-								<br />
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="junior"
-									id="junior"
-									onChange={handleChange}
-								/>
-								<label htmlFor="junior">Junior</label>
-								<br />
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="senior"
-									id="senior"
-									onChange={handleChange}
-								/>
-								<label htmlFor="senior">Senior</label>
-								<br />
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="graduate"
-									id="graduate"
-									onChange={handleChange}
-								/>
-								<label htmlFor="graduate">Graduate</label>
-								<br />
-								<input
-									type="radio"
-									name="academicYear"
-									required
-									value="other"
-									id="other"
-									onChange={handleChange}
-								/>
-								<label htmlFor="other">Other</label>
-								<br />
-								{!registrationData.academicYear && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-
-						{/** Educational Institution Type */}
-						<div className="card" id="educationalInstitutionType">
-							<div className="card-header">
-								What type of educational institution are you enrolled in?
-							</div>
-							<div className="my-2">
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="less-than-secondary"
-									id="less-than-secondary"
-									onChange={handleChange}
-								/>
-								<label htmlFor="less-than-secondary">
-									Less than Secondary / High School
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="secondary"
-									id="secondary"
-									onChange={handleChange}
-								/>
-								<label htmlFor="secondary">Secondary / High School</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="two-year-university"
-									id="two-year-university"
-									onChange={handleChange}
-								/>
-								<label htmlFor="two-year-university">
-									Undergraduate University (2 year - community college or
-									similar)
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="three-plus-year-university"
-									id="three-plus-year-university"
-									onChange={handleChange}
-								/>
-								<label htmlFor="three-plus-year-university">
-									Undergraduate University (3+ year)
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="graduate-university"
-									id="graduate-university"
-									onChange={handleChange}
-								/>
-								<label htmlFor="graduate-university">
-									Graduate University (Masters, Professional, Doctoral, etc.)
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="code-school-or-bootcamp"
-									id="code-school-or-bootcamp"
-									onChange={handleChange}
-								/>
-								<label htmlFor="code-school-or-bootcamp">
-									Code School / Bootcamp
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="vocational-trade-apprenticeship"
-									id="vocational-trade-apprenticeship"
-									onChange={handleChange}
-								/>
-								<label htmlFor="vocational-trade-apprenticeship">
-									Other Vocational / Trade Program or Apprenticeship
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="other"
-									id="other"
-									onChange={handleChange}
-								/>
-								<label htmlFor="other">Other</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="not-a-student"
-									id="not-a-student"
-									onChange={handleChange}
-								/>
-								<label htmlFor="not-a-student">
-									I'm not currently a student
-								</label>
-								<br />
-								<input
-									type="radio"
-									name="educationalInstutionType"
-									required
-									value="prefer-no-answer"
-									id="prefer-no-answer"
-									onChange={handleChange}
-								/>
-								<label htmlFor="prefer-no-answer">Prefer not to answer</label>
-								<br />
-
-								{!registrationData.educationalInstutionType && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-
-						{/** Resume */}
-						<div className="card" id="resume">
-							<div className="card-header">Submit your resume</div>
-							<div className="info">
-								If a resume is submitted, it will be shared with employers
-								sponsoring HackPSU.
-							</div>
-							<div className="flex justify-center w-full my-2">
-								<div className="file-upload-container">
-									<input
-										type="file"
-										id="resume-input"
-										name="resume"
-										className="input-file"
-										onChange={handleFileChange}
-										accept="application/pdf"
+						{registrationData.eighteenBeforeEvent && (
+							<>
+								{/** Shirt Size */}
+								<div className="card" id="shirtSize">
+									<div className="card-header">What is your shirt size?</div>
+									<div className="my-2">
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="XS"
+											id="XS"
+											onChange={handleChange}
+										/>
+										<label htmlFor="XS">X-Small</label>
+										<br />
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="S"
+											id="S"
+											onChange={handleChange}
+										/>
+										<label htmlFor="S">Small</label>
+										<br />
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="M"
+											id="M"
+											onChange={handleChange}
+										/>
+										<label htmlFor="M">Medium</label>
+										<br />
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="L"
+											id="L"
+											onChange={handleChange}
+										/>
+										<label htmlFor="L">Large</label>
+										<br />
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="XL"
+											id="XL"
+											onChange={handleChange}
+										/>
+										<label htmlFor="XL">X-Large</label>
+										<br />
+										<input
+											type="radio"
+											name="shirtSize"
+											required
+											value="XXL"
+											id="XXL"
+											onChange={handleChange}
+										/>
+										<label htmlFor="XXL">XX-Large</label>
+										<br />
+										{!registrationData.shirtSize && (
+											<label className="data-error">Required</label>
+										)}
+									</div>
+								</div>
+								{/** Country */}
+								<div className="card" id="country">
+									<div className="card-header">What country are you from?</div>
+									<div className="my-2">
+										<input
+											id="country"
+											name="country"
+											required
+											onChange={handleChange}
+										/>
+									</div>
+									{!registrationData.country && (
+										<label className="data-error">Required</label>
+									)}
+								</div>
+								{/** Driving */}
+								<div className="card" id="driving">
+									<div className="card-header">
+										Will you be driving to the event?
+									</div>
+									<ToggleSwitch
+										name="driving"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
 									/>
-									<label htmlFor="resume-input" className="file-upload-button">
-										Upload Resume
-									</label>
 								</div>
-							</div>
-							{registrationData.resume && (
-								<div className="info">
-									{
-										(registrationData.resume as unknown as { name: string })
-											?.name
-									}
+								{/** First Hackathon */}
+								<div className="card" id="firstHackathon">
+									<div className="card-header">
+										Is this your first hackathon?
+									</div>
+									<ToggleSwitch
+										name="firstHackathon"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
+									/>
 								</div>
-							)}
-						</div>
+								{/** Dietary Restrictions and Allergies */}
+								<div className="card" id="dietaryAllergies">
+									<div className="card-header">
+										Do you have any dietary restrictions or allergies?
+									</div>
+									<ToggleSwitch
+										name="hasDietaryRestrictionsOrAllegies"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
+									/>
+									{registrationData.hasDietaryRestrictionsOrAllegies && (
+										<>
+											<label htmlFor="dietaryRestrictions" className="label">
+												Dietary Restrictions
+											</label>
+											<div className="my-2">
+												<input
+													id="dietaryRestrictions"
+													name="dietaryRestrictions"
+													onChange={handleChange}
+												/>
+											</div>
+											<label htmlFor="allergies" className="label">
+												Allergies
+											</label>
+											<div className="my-2">
+												<input
+													id="allergies"
+													name="allergies"
+													onChange={handleChange}
+												/>
+											</div>
+										</>
+									)}
+								</div>
+								{/** Major */}
+								<div className="card" id="major">
+									<div className="card-header">
+										What is your (intended) major?
+									</div>
+									<div className="my-2">
+										<input
+											id="major"
+											name="major"
+											required
+											onChange={handleChange}
+										/>
+									</div>
+									{!registrationData.major && (
+										<label className="data-error">Required</label>
+									)}
+								</div>
+								{/** University */}
+								<div className="card" id="university">
+									<div className="card-header">What school do you attend?</div>
+									<div className="my-2">
+										<input
+											id="university"
+											name="university"
+											required
+											onChange={handleChange}
+										/>
+									</div>
+									{!registrationData.university && (
+										<label className="data-error">Required</label>
+									)}
+								</div>
+								{/** Academic Year */}
+								<div className="card" id="academicYear">
+									<div className="card-header">What is your academic year?</div>
+									<div className="my-2">
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="freshman"
+											id="freshman"
+											onChange={handleChange}
+										/>
+										<label htmlFor="freshman">Freshman</label>
+										<br />
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="sophomore"
+											id="sophomore"
+											onChange={handleChange}
+										/>
+										<label htmlFor="sophomore">Sophomore</label>
+										<br />
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="junior"
+											id="junior"
+											onChange={handleChange}
+										/>
+										<label htmlFor="junior">Junior</label>
+										<br />
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="senior"
+											id="senior"
+											onChange={handleChange}
+										/>
+										<label htmlFor="senior">Senior</label>
+										<br />
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="graduate"
+											id="graduate"
+											onChange={handleChange}
+										/>
+										<label htmlFor="graduate">Graduate</label>
+										<br />
+										<input
+											type="radio"
+											name="academicYear"
+											required
+											value="other"
+											id="other"
+											onChange={handleChange}
+										/>
+										<label htmlFor="other">Other</label>
+										<br />
+										{!registrationData.academicYear && (
+											<label className="data-error">Required</label>
+										)}
+									</div>
+								</div>
+								{/** Educational Institution Type */}
+								<div className="card" id="educationalInstitutionType">
+									<div className="card-header">
+										What type of educational institution are you enrolled in?
+									</div>
+									<div className="my-2">
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="less-than-secondary"
+											id="less-than-secondary"
+											onChange={handleChange}
+										/>
+										<label htmlFor="less-than-secondary">
+											Less than Secondary / High School
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="secondary"
+											id="secondary"
+											onChange={handleChange}
+										/>
+										<label htmlFor="secondary">Secondary / High School</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="two-year-university"
+											id="two-year-university"
+											onChange={handleChange}
+										/>
+										<label htmlFor="two-year-university">
+											Undergraduate University (2 year - community college or
+											similar)
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="three-plus-year-university"
+											id="three-plus-year-university"
+											onChange={handleChange}
+										/>
+										<label htmlFor="three-plus-year-university">
+											Undergraduate University (3+ year)
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="graduate-university"
+											id="graduate-university"
+											onChange={handleChange}
+										/>
+										<label htmlFor="graduate-university">
+											Graduate University (Masters, Professional, Doctoral,
+											etc.)
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="code-school-or-bootcamp"
+											id="code-school-or-bootcamp"
+											onChange={handleChange}
+										/>
+										<label htmlFor="code-school-or-bootcamp">
+											Code School / Bootcamp
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="vocational-trade-apprenticeship"
+											id="vocational-trade-apprenticeship"
+											onChange={handleChange}
+										/>
+										<label htmlFor="vocational-trade-apprenticeship">
+											Other Vocational / Trade Program or Apprenticeship
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="other"
+											id="other"
+											onChange={handleChange}
+										/>
+										<label htmlFor="other">Other</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="not-a-student"
+											id="not-a-student"
+											onChange={handleChange}
+										/>
+										<label htmlFor="not-a-student">
+											I'm not currently a student
+										</label>
+										<br />
+										<input
+											type="radio"
+											name="educationalInstitutionType"
+											required
+											value="prefer-no-answer"
+											id="prefer-no-answer"
+											onChange={handleChange}
+										/>
+										<label htmlFor="prefer-no-answer">
+											Prefer not to answer
+										</label>
+										<br />
 
-						{/** MLH Code of Conduct */}
-						<div className="card" id="mlhCoc">
-							<div className="card-header">
-								Do you agree to the MLH Code of Conduct?
-							</div>
-							<span>
-								<p className="inline">I have read and agree to the&nbsp;</p>
-								<a
-									href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-									target="_blank"
-								>
-									MLH Code of Conduct
-								</a>
-								<p className="info">
-									To participate at HackPSU, you must agree to this policy.
-								</p>
-							</span>
-							<ToggleSwitch
-								name="mlhCoc"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-							{!registrationData.mlhCoc && (
-								<label className="data-error">Required</label>
-							)}
-						</div>
+										{!registrationData.educationalInstitutionType && (
+											<label className="data-error">Required</label>
+										)}
+									</div>
+								</div>
+								{/** Resume */}
+								<div className="card" id="resume">
+									<div className="card-header">Submit your resume</div>
+									<div className="info">
+										If a resume is submitted, it will be shared with employers
+										sponsoring HackPSU.
+									</div>
+									<div className="flex justify-center w-full my-2">
+										<div className="file-upload-container">
+											<input
+												type="file"
+												id="resume-input"
+												name="resume"
+												className="input-file"
+												onChange={handleFileChange}
+												accept="application/pdf"
+											/>
+											<label
+												htmlFor="resume-input"
+												className="file-upload-button"
+											>
+												Upload Resume
+											</label>
+										</div>
+									</div>
+									{registrationData.resume && (
+										<div className="info">
+											{
+												(registrationData.resume as unknown as { name: string })
+													?.name
+											}
+										</div>
+									)}
+								</div>
+								{/** MLH Code of Conduct */}
+								<div className="card" id="mlhCoc">
+									<div className="card-header">
+										Do you agree to the MLH Code of Conduct?
+									</div>
+									<span>
+										<p className="inline">I have read and agree to the&nbsp;</p>
+										<a
+											href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+											target="_blank"
+										>
+											MLH Code of Conduct
+										</a>
+										<p className="info">
+											To participate at HackPSU, you must agree to this policy.
+										</p>
+									</span>
+									<ToggleSwitch
+										name="mlhCoc"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
+									/>
+									{!registrationData.mlhCoc && (
+										<label className="data-error">Required</label>
+									)}
+								</div>
+								{/** MLH Data Sharing */}
+								<div className="card" id="mlhDcp">
+									<div className="card-header">
+										Do you agree to the MLH Data Sharing
+									</div>
+									<span>
+										By agreeing to this notice, you affirm that: "I authorize
+										you to share my registration information with Major League
+										Hacking for event administration, ranking, MLH
+										administration in-line with the&nbsp;
+										<a href="https://mlh.io/privacy" target="_blank">
+											MLH Privacy Policy
+										</a>
+										. I further agree to the terms of both the&nbsp;
+										<a
+											href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+											target="_blank"
+										>
+											MLH Contest Terms and Conditions
+										</a>
+										&nbsp;and the&nbsp;
+										<a href="https://mlh.io/privacy" target="_blank">
+											MLH Privacy Policy
+										</a>
+										."
+										<br />
+										<br />
+										<p className="info">
+											To participate at HackPSU, you must agree to this policy.
+										</p>
+									</span>
+									<ToggleSwitch
+										name="mlhDcp"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
+									/>
+									{!registrationData.mlhDcp && (
+										<label className="data-error">Required</label>
+									)}
+								</div>
+								{/** Share Email with MLH */}
+								<div className="card" id="shareEmailMlh">
+									<div className="card-header">
+										Do you want to opt into further communications from MLH?
+									</div>
+									<span>
+										<p className="inline">
+											By agreeing to this, you affirm that: "I authorize MLH to
+											send me an email where I can further opt into the MLH
+											Hacker, Events, or Organizer Newsletters and other
+											communications from MLH."
+										</p>
+										<br />
+										<br />
+										<p className="info">
+											This is entirely optional and may be opted into of your
+											choosing.
+										</p>
+									</span>
+									<ToggleSwitch
+										name="shareEmailMlh"
+										on="Yes"
+										off="No"
+										onChange={handleToggle}
+									/>
+								</div>
+								{registrationData.mlhCoc && registrationData.mlhDcp && (
+									<>
+										{/** Coding Experience */}
+										<div className="card" id="codingExperience">
+											<div className="card-header">
+												What is your level of coding experience?
+											</div>
+											<div className="my-2">
+												<input
+													type="radio"
+													name="codingExperience"
+													value="none"
+													id="none"
+													onChange={handleChange}
+												/>
+												<label htmlFor="none">None</label>
+												<br />
+												<input
+													type="radio"
+													name="codingExperience"
+													value="beginner"
+													id="beginner"
+													onChange={handleChange}
+												/>
+												<label htmlFor="beginner">Beginner (0-2 years)</label>
+												<br />
+												<input
+													type="radio"
+													name="codingExperience"
+													value="intermediate"
+													id="intermediate"
+													onChange={handleChange}
+												/>
+												<label htmlFor="intermediate">
+													Intermediate (2-4 years)
+												</label>
+												<br />
+												<input
+													type="radio"
+													name="codingExperience"
+													value="advanced"
+													id="advanced"
+													onChange={handleChange}
+												/>
+												<label htmlFor="advanced">
+													Advanced (&gt; 4 years)
+												</label>
+												<br />
+											</div>
+										</div>
 
-						{/** MLH Data Sharing */}
-						<div className="card" id="mlhDcp">
-							<div className="card-header">
-								Do you agree to the MLH Data Sharing
-							</div>
-							<span>
-								By agreeing to this notice, you affirm that: "I authorize you to
-								share my registration information with Major League Hacking for
-								event administration, ranking, MLH administration in-line with
-								the&nbsp;
-								<a href="https://mlh.io/privacy" target="_blank">
-									MLH Privacy Policy
-								</a>
-								. I further agree to the terms of both the&nbsp;
-								<a
-									href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
-									target="_blank"
-								>
-									MLH Contest Terms and Conditions
-								</a>
-								&nbsp;and the&nbsp;
-								<a href="https://mlh.io/privacy" target="_blank">
-									MLH Privacy Policy
-								</a>
-								."
-								<br />
-								<br />
-								<p className="info">
-									To participate at HackPSU, you must agree to this policy.
-								</p>
-							</span>
-							<ToggleSwitch
-								name="mlhDcp"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-							{!registrationData.mlhDcp && (
-								<label className="data-error">Required</label>
-							)}
-						</div>
+										{/** Referral */}
+										<div className="card" id="referral">
+											<div className="card-header">
+												Where did you hear about HackPSU?
+											</div>
+											<div className="my-2">
+												<input
+													id="referral"
+													name="referral"
+													onChange={handleChange}
+												/>
+											</div>
+										</div>
 
-						{/** Share Email with MLH */}
-						<div className="card" id="shareEmailMlh">
-							<div className="card-header">
-								Do you want to opt into further communications from MLH?
-							</div>
-							<span>
-								<p className="inline">
-									By agreeing to this, you affirm that: "I authorize MLH to send
-									me an email where I can further opt into the MLH Hacker,
-									Events, or Organizer Newsletters and other communications from
-									MLH."
-								</p>
-								<br />
-								<br />
-								<p className="info">
-									This is entirely optional and may be opted into of your
-									choosing.
-								</p>
-							</span>
-							<ToggleSwitch
-								name="shareEmailMlh"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-						</div>
+										{/** Project */}
+										<div className="card" id="project">
+											<div className="card-header">
+												What is a project you're proud of?
+											</div>
+											<div className="my-2">
+												<textarea
+													id="project"
+													name="project"
+													onChange={handleChange}
+												/>
+											</div>
+										</div>
 
-						{/** Submit */}
+										{/** Expectations */}
+										<div className="card" id="expectations">
+											<div className="card-header">
+												What would you like to get out of HackPSU?
+											</div>
+											<div className="my-2">
+												<textarea
+													id="expectations"
+													name="expectations"
+													onChange={handleChange}
+												/>
+											</div>
+										</div>
+
+										{/** Submit */}
+										<div id="submit">
+											<BigButton className="bg-blue-300 border rounded-full p-4 flex justify-center items-center">
+												<p className="text-white">Register</p>
+											</BigButton>
+										</div>
+									</>
+								)}
+							</>
+						)}
+						;
 					</form>
 				</div>
 			</div>
