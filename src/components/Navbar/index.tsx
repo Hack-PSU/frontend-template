@@ -48,7 +48,7 @@ const buttonImages = [
 		isExternal: false,
 	},
 	{
-		href: "https://register.hackpsu.org/register",
+		href: "https://register.hackpsu.org/signup",
 		src: registerButton,
 		alt: "register",
 		isExternal: true,
