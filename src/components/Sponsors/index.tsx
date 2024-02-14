@@ -45,7 +45,7 @@ export default function Sponsors() {
 							>
 								<div className="sponsor-card">
 									<Image
-										className="max-h-16.1 object-contain"
+										className="max-h-[94px] object-contain"
 										src={sponsor.darkLogo}
 										alt={sponsor.name}
 										width={458}
