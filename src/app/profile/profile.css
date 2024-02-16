@@ -6,6 +6,7 @@
 	align-items: flex-start; /* Align items to the top */
 }
 .profile-container {
+	padding: 8px;
 	width: 490px;
 	height: 554px;
 	z-index: 1;
@@ -75,8 +76,8 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	margin-right: 150px;
 }
-
 .qr-button {
 	appearance: none;
 	background-color: transparent;
@@ -123,4 +124,62 @@
 
 .qr-code {
 	margin-top: 16px;
+}
+
+.update-button {
+	background-color: #292929;
+	border: 1px solid #3e3e3e;
+	border-radius: 8px;
+	color: #fff;
+	padding: 14px 24px;
+	text-decoration: none;
+	font-size: 16px;
+	margin: 12px 14px;
+	cursor: pointer;
+}
+
+.update-button:hover {
+	border: 1px solid #fff;
+}
+
+.delete-button {
+	padding: 0.1em 0.25em;
+	width: 13em;
+	height: 4.2em;
+	background-color: #212121;
+	border: 0.08em solid #fff;
+	border-radius: 0.3em;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.delete-button {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	bottom: 0em;
+	width: 8.25em;
+	height: 2.5em;
+	background-color: #212121;
+	border-radius: 0.2em;
+	font-size: 1em;
+	color: #fff;
+	border: 0.08em solid #fff;
+	box-shadow: 0 0.4em 0.1em 0.019em #fff;
+}
+
+.delete-button span:hover {
+	transition: all 0.5s;
+	transform: translate(0, 0.4em);
+	box-shadow: 0 0 0 0 #fff;
+}
+
+.delete-button span:not(hover) {
+	transition: all 1s;
+}
+
+.text-center.profile-text {
+	font-size: 12px;
+	text-align: left;
 }

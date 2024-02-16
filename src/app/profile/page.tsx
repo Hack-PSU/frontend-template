@@ -45,7 +45,7 @@ export default function Example() {
 							<div className="profile-info">
 								<div className="profile-header">
 									<h2 className="text-base font-semibold leading-7 text-white">
-										Profile
+										PROFILE
 									</h2>
 									<button
 										type="button"
