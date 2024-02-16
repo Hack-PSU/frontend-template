@@ -39,99 +39,79 @@ export default function Example() {
 	if (!isAuthenticated) {
 		return (
 			<>
-				<div className="mx-auto max-w-3xl pt-16 lg:flex lg:gap-x-8 lg:px-8 profile-container">
-					<main className="px-4 py-8 sm:px-6 lg:flex-auto lg:px-0 lg:py-10 profile-content">
-						<div className="mx-auto max-w-2xl space-y-16 sm:space-y-20 lg:mx-0 lg:max-w-none">
-							<div>
-								<div className="flex items-center justify-between">
-									<div>
-										<h2 className="text-base font-semibold leading-7 text-gray-900">
-											Profile
-										</h2>
-										<p className="mt-1 text-sm leading-6 text-gray-900">
-											Edit the information you share with HackPSU.
-										</p>
-									</div>
+				<div className="container">
+					<div className="profile-container">
+						<main className="profile-content">
+							<div className="profile-info">
+								<div className="profile-header">
+									<h2 className="text-base font-semibold leading-7 text-white">
+										Profile
+									</h2>
 									<button
 										type="button"
-										className="text-[15px] px-4 py-2 font-light rounded-md border-2 text-red-600 hover:border-red-500"
+										className="delete-button"
 										onClick={handleDeleteAccount}
 									>
 										Delete Account
 									</button>
 								</div>
-
-								<dl className="mt-6 space-y-6 divide-y divide-gray-100 border-t border-gray-200 text-sm leading-6">
-									<div className="pt-6 sm:flex items-center">
-										<dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+								<div className="text-center profile-text">
+									Edit the information you share with HackPSU.
+								</div>
+								<dl className="profile-details">
+									<div className="profile-detail">
+										<dt className="font-medium leading-7 text-white sm:w-64 sm:flex-none sm:pr-6">
 											Name
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="text-gray-900">{user?.displayName}</div>
-											<button
-												type="button"
-												className="text-[15px] px-4 py-1 font-light rounded-md border-[1px] text-indigo-600 hover:border-indigo-600"
-											>
+											<div className="leading-7 text-white">
+												{user?.displayName}
+											</div>
+											<button type="button" className="update-button">
 												Update
 											</button>
 										</dd>
 									</div>
-									<div className="pt-6 sm:flex items-center">
-										<dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+									<div className="profile-detail">
+										<dt className="font-medium leading-7 text-white sm:w-64 sm:flex-none sm:pr-6">
 											Email
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="text-gray-900">{user?.email}</div>
-											<button
-												type="button"
-												className="text-[15px] px-4 py-1 font-light rounded-md border-[1px] text-indigo-600 hover:border-indigo-600"
-											>
+											<div className="leading-7 text-white">{user?.email}</div>
+											<button type="button" className="update-button">
 												Update
 											</button>
 										</dd>
 									</div>
-									<div className="pt-6 sm:flex items-center">
-										<dt className="font-medium text-gray-900 sm:w-64 sm:flex-none sm:pr-6">
+									<div className="profile-detail">
+										<dt className="font-medium leading-7 text-white sm:w-64 sm:flex-none sm:pr-6">
 											Password
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="text-gray-900">•••••••••••</div>
-											<button
-												type="button"
-												className="text-[15px] px-4 py-1 font-light rounded-md border-[1px] text-indigo-600 hover:border-indigo-600"
-											>
+											<div className="leading-7 text-white">•</div>
+											<button type="button" className="update-button">
 												Update
 											</button>
 										</dd>
 									</div>
 								</dl>
 							</div>
-							<div>
-								<h2 className="text-base font-semibold leading-7 text-gray-900">
-									QR Code
-								</h2>
-								<p className="mt-1 text-sm leading-6 text-gray-900">
-									Bring this QR Code to sign-in for the Hackathons and
-									Workshops.
-								</p>
-								<br></br>
-								<button
-									type="button"
-									className="w-[257px] text-[15px] px-4 py-2 font-light rounded-md border-2 text-indigo-600 hover:border-indigo-600"
-									onClick={toggleQRCode}
-								>
-									{showQRCode ? "Hide QR Code" : "View QR Code"}
-								</button>
-								{showQRCode && (
-									<div className="mt-2">
-										{" "}
-										{/* Add margin-top to create a small gap */}
-										<QRCode value="hackpsu.org" className="" />
-									</div>
-								)}
+						</main>
+					</div>
+					<div className="qr-button-container">
+						<p className="mt-1 text-sm leading-7 text-white">
+							Bring this QR Code to sign-in for the Hackathons and Workshops.
+						</p>
+						<br />
+						<button type="button" className="qr-button" onClick={toggleQRCode}>
+							{showQRCode ? "Hide QR Code" : "View QR Code"}
+						</button>
+						{showQRCode && (
+							<div className="qr-code">
+								<QRCode value="hackpsu.org" />
 							</div>
-						</div>
-					</main>
+						)}
+					</div>
 				</div>
 			</>
 		);
