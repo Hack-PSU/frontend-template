@@ -183,6 +183,7 @@ const Registration: React.FC = () => {
 			educationalInstitutionType: null,
 			mlhCoc: true,
 			mlhDcp: true,
+			referral: null,
 		};
 
 		// Check if all required fields are filled
@@ -266,6 +267,8 @@ const Registration: React.FC = () => {
 			const regRes: any = await writeToDatabase("registrations", registration);
 			console.log("Registration response: ", regRes);
 		}
+
+		// Do something on success ??
 	};
 
 	if (!componentMounted) {
@@ -1078,8 +1081,12 @@ const Registration: React.FC = () => {
 													id="referral"
 													name="referral"
 													onChange={handleChange}
+													required
 												/>
 											</div>
+											{!registrationData.referral && (
+												<label className="data-error">Required</label>
+											)}
 										</div>
 
 										{/** Project */}
