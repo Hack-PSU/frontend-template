@@ -1,16 +1,27 @@
 /* Profile.css */
-/* Profile.css */
 .container {
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-start; /* Align items to the top */
+	font-family: "Cornerstone", "Lato", sans-serif;
 }
+
+@media (max-width: 768px) {
+	.container {
+		flex-direction: column;
+		align-items: center;
+		margin-bottom: 100px;
+	}
+}
+
 .profile-container {
 	padding: 8px;
-	width: 590px;
-	height: 554px;
+	width: 100%;
+	max-width: 500px;
+	min-height: 554px; /* Set a minimum height to accommodate content with QR code */
+	height: auto; /* Allow container to grow if content exceeds min-height */
+	aspect-ratio: 590 / 554;
 	z-index: 1;
-	background: rgb(255, 0, 179);
 	background: linear-gradient(
 		137deg,
 		rgb(255, 0, 179) 0%,
@@ -19,7 +30,22 @@
 	transition: 0.3s ease;
 	border-radius: 30px;
 	filter: drop-shadow(0px 0px 30px rgba(209, 38, 197, 0.5));
-	margin-left: 260px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+@media (max-width: 768px) {
+	.profile-container {
+		margin-top: 20px;
+		margin-bottom: 20px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.profile-container {
+		margin-left: 200px;
+		margin-right: 50px;
+	}
 }
 
 .profile-container::after {
@@ -76,8 +102,17 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	margin-right: 230px;
+	padding-right: 30px;
+	padding-left: 30px;
 }
+
+@media (max-width: 768px) {
+	.qr-button-container {
+		padding-right: 5px;
+		padding-left: 5px;
+	}
+}
+
 .qr-button {
 	appearance: none;
 	background-color: transparent;
@@ -87,16 +122,14 @@
 	color: #3b3b3b;
 	cursor: pointer;
 	display: inline-block;
-	font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
-		Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-	font-size: 16px;
+	font-size: 16px; /* Adjusted for readability on all devices */
 	font-weight: 600;
 	line-height: normal;
 	margin: 0;
 	min-height: 3.75em;
 	min-width: 0;
 	outline: none;
-	padding: 1em 2.3em;
+	padding: 1em 2.3em; /* Padding could be adjusted for smaller screens */
 	text-align: center;
 	text-decoration: none;
 	transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
@@ -104,6 +137,13 @@
 	-webkit-user-select: none;
 	touch-action: manipulation;
 	will-change: transform;
+}
+
+@media (max-width: 768px) {
+	.qr-button {
+		font-size: 14px; /* Slightly smaller font size for smaller screens */
+		padding: 0.8em 1.5em; /* Adjust padding for smaller screens */
+	}
 }
 
 .qr-button:disabled {
@@ -126,76 +166,50 @@
 	margin-top: 16px;
 }
 
+.update-button,
+.delete-button {
+	display: inline-flex; /* Use inline-flex to center content within the button */
+	align-items: center; /* Vertically center the text and icons */
+	justify-content: center; /* Horizontally center the text and icons */
+	padding: 0.875em 1.5em; /* Use em units for scalable padding */
+	font-size: 1rem; /* Use rem for scalable font sizes */
+	border-radius: 0.5em; /* Rounded corners */
+	cursor: pointer;
+	transition: all 0.3s ease; /* Smooth transition for hover effects */
+	margin: 0.75em; /* Adequate margin to prevent overlap */
+	border: 1px solid transparent; /* Default border, made transparent for a cleaner look */
+}
+
 .update-button {
 	background-color: #292929;
-	border: 1px solid #3e3e3e;
-	border-radius: 8px;
 	color: #fff;
-	padding: 14px 24px;
-	text-decoration: none;
-	font-size: 16px;
-	margin: 12px 14px;
-	cursor: pointer;
 }
 
 .update-button:hover {
-	border: 1px solid #fff;
+	border-color: #fff; /* Highlight border on hover */
 }
 
 .delete-button {
-	position: relative;
-	display: inline-block;
-	padding: 12px 24px;
-	border: none;
-	font-size: 16px;
 	background-color: inherit;
-	border-radius: 100px;
-	font-weight: 600;
-	color: #ffffff40;
-	box-shadow: 0 0 0 2px #ffffff20;
-	cursor: pointer;
-	overflow: hidden;
-	transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.delete-button span:last-child {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 20px;
-	height: 20px;
-	background-color: #2196f3;
-	border-radius: 50%;
-	opacity: 0;
-	transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.delete-button span:first-child {
-	position: relative;
-	z-index: 1;
+	color: #ffffff66; /* Slightly more opacity for better visibility */
+	box-shadow: 0 0 0 2px #ffffff33; /* Softer shadow */
 }
 
 .delete-button:hover {
-	box-shadow: 0 0 0 5px red;
 	color: red;
+	box-shadow: 0 0 0 3px red; /* More pronounced shadow on hover */
 }
 
 .delete-button:active {
-	scale: 0.95;
+	transform: scale(0.95); /* Use transform for better performance */
 }
 
-.delete-button:hover span:last-child {
-	width: 150px;
-	height: 150px;
-	opacity: 1;
-}
-
-.text-center.profile-text {
-	font-size: 10px;
-	text-align: left;
-}
-
-.text-base.font-semibold.leading-7.text-white {
-	font-size: 20px; /* You can replace 'Arial' with the desired font */
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+	.update-button,
+	.delete-button {
+		padding: 0.75em 1.2em; /* Slightly smaller padding */
+		font-size: 0.9rem; /* Slightly smaller font size */
+		margin: 0.5em; /* Reduce margin to fit smaller screens */
+	}
 }
