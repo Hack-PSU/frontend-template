@@ -91,15 +91,15 @@ export default function Navbar() {
 		<nav
 			className={`navbar ${
 				scrolled ? "navbar-scrolled" : ""
-			} sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block  ${
+			} sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block ${
 				scrolled
-					? "border-b border-gray-200 bg-white/50 backdrop-blur-xl"
+					? "border-b border-gray-200 bg-[#0071bc]/80 backdrop-blur-xl"
 					: "bg-white/0"
 			} z-30 transition-all`}
 		>
 			<div className="flex flex-row justify-evenly mr-[150px]">
 				<a>
-					<Image src={Logo} width={100} height={100} alt="logo" />
+					<Image src={Logo} width={90} height={90} alt="logo" />
 				</a>
 
 				{buttonImages.map(({ href, src, alt, isExternal }, index) => (

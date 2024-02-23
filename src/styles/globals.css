@@ -42,7 +42,7 @@
 
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
-		background-image: url("../../public/images/FRAME_PATTERN.png");
+		background-color: #0071bc;
 		-webkit-background-size: cover;
 		-moz-background-size: cover;
 		-o-background-size: cover;
@@ -58,7 +58,6 @@
 			background-position: center center;
 		}
 	}
-
 }
 
 @layer components {
