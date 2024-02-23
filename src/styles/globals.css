@@ -59,9 +59,6 @@
 		}
 	}
 
-	body::before {
-		@apply stickers;
-	}
 }
 
 @layer components {
@@ -137,26 +134,6 @@
 
 	.font-lato {
 		font-family: Lato, sans-serif;
-	}
-
-	.stickers {
-		content: "";
-		position: fixed;
-		top: -200px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-image: url("../../public/images/STICKERS.png");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center center;
-		z-index: 1;
-		pointer-events: none;
-	}
-	@media (max-width: 960px) {
-		.stickers {
-			display: none;
-		}
 	}
 
 	.shadowtext-on-grid {
