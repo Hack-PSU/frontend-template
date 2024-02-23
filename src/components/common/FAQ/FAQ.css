@@ -41,20 +41,20 @@
 }
 
 .faq-button-header {
-	background-color: #6dba73; /* Adjust the green color to match your design */
+	background-color: #6dba73; 
 	padding: 1rem;
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
-	border: 3px solid black; /* Add a black border */
+	border: 3px solid black; 
 }
 
 .faq-button-content {
-	background-color: #8b5a2b; /* Adjust the brown color to match your design */
+	background-color: #8b5a2b;
 	padding: 1rem;
 	border-bottom-left-radius: 8px;
 	border-bottom-right-radius: 8px;
-	border: 3px solid black; /* Add a black border */
-	border-top: none; /* Remove the top border to prevent doubling up with the header */
+	border: 3px solid black; 
+	border-top: none;
 	color: #FFFFFF;
 	
 }
