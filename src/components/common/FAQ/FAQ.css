@@ -56,4 +56,5 @@
 	border: 3px solid black; /* Add a black border */
 	border-top: none; /* Remove the top border to prevent doubling up with the header */
 	color: #FFFFFF;
+	
 }
