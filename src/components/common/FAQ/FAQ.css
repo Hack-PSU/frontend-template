@@ -40,10 +40,20 @@
 	--tw-divide-y-reverse: 0;
 }
 
-.faq-button-container {
-	background-color: #faee56;
-	margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
-	margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-	border-radius: 15px;
-	border: 4px solid black;
+.faq-button-header {
+	background-color: #6dba73; /* Adjust the green color to match your design */
+	padding: 1rem;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+	border: 3px solid black; /* Add a black border */
+}
+
+.faq-button-content {
+	background-color: #8b5a2b; /* Adjust the brown color to match your design */
+	padding: 1rem;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+	border: 3px solid black; /* Add a black border */
+	border-top: none; /* Remove the top border to prevent doubling up with the header */
+	color: #FFFFFF;
 }
