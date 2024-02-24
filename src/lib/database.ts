@@ -123,7 +123,10 @@ export async function writeToDatabase<T>(table: string, data: any): Promise<T> {
 			return event as unknown as T;
 			break;
 		case "users":
-			const user: User | undefined = await ApiService.put<User>(`/users`, data);
+			const user: User | undefined = await ApiService.post<User>(
+				`/users`,
+				data
+			);
 			return user as unknown as T;
 			break;
 		case "registrations":
