@@ -98,19 +98,25 @@ export default function Example() {
 							</div>
 						</main>
 					</div>
-					<div className="qr-button-container">
-						<p className="mt-1 text-sm leading-7 text-white">
-							Bring this QR Code to sign-in for the Hackathons and Workshops.
-						</p>
-						<br />
-						<button type="button" className="qr-button" onClick={toggleQRCode}>
-							{showQRCode ? "Hide QR Code" : "View QR Code"}
-						</button>
-						{showQRCode && (
-							<div className="qr-code">
-								<QRCode value="hackpsu.org" />
-							</div>
-						)}
+					<div className="qr-container">
+						<div className="qr-button-container">
+							<p className="mt-1 text-sm leading-7 text-white">
+								Bring this QR Code to sign-in for the Hackathons and Workshops.
+							</p>
+							<br />
+							<button
+								type="button"
+								className="qr-button"
+								onClick={toggleQRCode}
+							>
+								{showQRCode ? "Hide QR Code" : "View QR Code"}
+							</button>
+							{showQRCode && (
+								<div className="qr-code">
+									<QRCode value="hackpsu.org" />
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			</>
