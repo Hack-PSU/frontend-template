@@ -38,7 +38,7 @@ export default function Example() {
 		// You can perform additional actions here like updating the database
 	};
 
-	if (!isAuthenticated) {
+	if (isAuthenticated) {
 		return (
 			<>
 				<div className="container">
@@ -161,6 +161,8 @@ export default function Example() {
 			</>
 		);
 	} else {
-		return <></>;
+		useEffect(() => {
+			window.location.replace("https://register.hackpsu.org/signup");
+		}, []);
 	}
 }
