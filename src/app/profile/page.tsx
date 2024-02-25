@@ -8,16 +8,13 @@ import { useState } from "react";
 import "./profile.css";
 
 export default function Example() {
-	// Temporarily redirect to old frontend.
 	const { isAuthenticated, user } = useFirebase();
 	const router = useRouter();
-
-	// TODO: FIX GLITCH WITH REDIRECTING ON REFRESH OF PROFILE PAGE
-	// useEffect(() => {
-	// 	if (!isAuthenticated) {
-	// 		router.push("/signin");
-	// 	}
-	// }, [isAuthenticated]);
+	const [showQRCode, setShowQRCode] = useState(false);
+	const [editingField, setEditingField] = useState(null);
+	const [name, setName] = useState(user?.displayName || "Current Name");
+	const [email, setEmail] = useState(user?.email || "example@example.com");
+	const [password, setPassword] = useState("••••••••••");
 
 	const handleDeleteAccount = () => {
 		const confirmDelete = window.confirm(
@@ -29,11 +26,16 @@ export default function Example() {
 		}
 	};
 
-	const [showQRCode, setShowQRCode] = useState(false); // State to control the QR code visibility
-
-	// Function to toggle QR code visibility
 	const toggleQRCode = () => {
 		setShowQRCode(!showQRCode);
+	};
+
+	const handleUpdateClick = (field) => {
+		setEditingField(field === editingField ? null : field);
+	};
+
+	const handleSaveClick = () => {
+		// You can perform additional actions here like updating the database
 	};
 
 	if (!isAuthenticated) {
@@ -64,11 +66,22 @@ export default function Example() {
 											Name
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="leading-7 text-white">
-												{user?.displayName}
-											</div>
-											<button type="button" className="update-button">
-												Update
+											{editingField === "name" ? (
+												<input
+													type="text"
+													value={name}
+													onChange={(e) => setName(e.target.value)}
+													className="text-black"
+												/>
+											) : (
+												<div className="leading-7 text-white">{name}</div>
+											)}
+											<button
+												type="button"
+												className="update-button"
+												onClick={() => handleUpdateClick("name")}
+											>
+												{editingField === "name" ? "Save" : "Update"}
 											</button>
 										</dd>
 									</div>
@@ -77,9 +90,22 @@ export default function Example() {
 											Email
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="leading-7 text-white">{user?.email}</div>
-											<button type="button" className="update-button">
-												Update
+											{editingField === "email" ? (
+												<input
+													type="email"
+													value={email}
+													onChange={(e) => setEmail(e.target.value)}
+													className="text-black"
+												/>
+											) : (
+												<div className="leading-7 text-white">{email}</div>
+											)}
+											<button
+												type="button"
+												className="update-button"
+												onClick={() => handleUpdateClick("email")}
+											>
+												{editingField === "email" ? "Save" : "Update"}
 											</button>
 										</dd>
 									</div>
@@ -88,9 +114,22 @@ export default function Example() {
 											Password
 										</dt>
 										<dd className="mt-1 flex justify-between gap-x-6 sm:mt-0 sm:flex-auto items-center">
-											<div className="leading-7 text-white">•</div>
-											<button type="button" className="update-button">
-												Update
+											{editingField === "password" ? (
+												<input
+													type="password"
+													value={password}
+													onChange={(e) => setPassword(e.target.value)}
+													className="text-black"
+												/>
+											) : (
+												<div className="leading-7 text-white">{password}</div>
+											)}
+											<button
+												type="button"
+												className="update-button"
+												onClick={() => handleUpdateClick("password")}
+											>
+												{editingField === "password" ? "Save" : "Update"}
 											</button>
 										</dd>
 									</div>
