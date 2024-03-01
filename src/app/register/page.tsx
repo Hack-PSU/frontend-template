@@ -279,9 +279,15 @@ const Registration: React.FC = () => {
 		<>
 			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
-					<div className="m-2 text-center">
-						<h1 className="text-4xl font-bold">Registration</h1>
-						<div>... for our {hackathon?.name ?? ""} Hackathon!</div>
+					<div className="m-2 text-center cornerstone-font">
+						<h1 className="text-4xl font-bold mb-2">Registration</h1>
+						<div>
+							for our{" "}
+							<div className="inline font-bold text-lime-400">
+								{hackathon?.name ?? ""}
+							</div>{" "}
+							Hackathon!
+						</div>
 					</div>
 
 					<form className="form" onSubmit={handleSubmit}>
@@ -1118,8 +1124,8 @@ const Registration: React.FC = () => {
 										</div>
 
 										{/** Submit */}
-										<div id="submit">
-											<BigButton className="bg-blue-300 border rounded-full p-4 flex justify-center items-center">
+										<div id="submit" className="flex items-center">
+											<BigButton className="bg-blue-300 border rounded-full p-4 flex justify-center">
 												<p className="text-white">Register</p>
 											</BigButton>
 										</div>
@@ -1127,7 +1133,6 @@ const Registration: React.FC = () => {
 								)}
 							</>
 						)}
-						;
 					</form>
 				</div>
 			</div>
