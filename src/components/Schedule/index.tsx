@@ -5,24 +5,44 @@ import { EventModel } from "@/interfaces";
 
 const Divider = () => <hr className="my-4 border-black border-[1px]" />;
 
-const DayIndicator = ({ day }: { day: string }) => (
+interface DayIndicatorProps {
+	day: string;
+}
+
+const DayIndicator: React.FC<DayIndicatorProps> = ({ day }) => (
 	<div className="text-center py-4">
 		<h2 className="text-xl font-bold">{day}</h2>
 	</div>
 );
 
-const EventItem = ({ name, time }: { name: string; time: string }) => (
+interface EventItemProps {
+	name: string;
+	time: string;
+}
+
+const EventItem: React.FC<EventItemProps> = ({ name, time }) => (
 	<li className="flex justify-between ">
 		<span className="text-xl">{name}</span>
 		<span className="text-xl">{time}</span>
 	</li>
 );
 
-const Schedule = () => {
-	const [schedule, setSchedule] = useState({});
+interface ScheduleEventDetails {
+	name: string;
+	time: string;
+	day: string;
+	sortKey: Date;
+}
+
+interface ScheduleByCategory {
+	[category: string]: ScheduleEventDetails[];
+}
+
+const Schedule: React.FC = () => {
+	const [schedule, setSchedule] = useState<ScheduleByCategory>({});
 
 	useEffect(() => {
-		const fetchEvents = async () => {
+		const fetchEvents = async (): Promise<EventModel[]> => {
 			const apiEndpoint = `${process.env.NEXT_PUBLIC_BASE_URL_V3}/events`;
 			try {
 				const response = await fetch(apiEndpoint);
@@ -84,48 +104,55 @@ const Schedule = () => {
 	);
 };
 
-const convertEventsToSchedule = (events: EventModel[]) => {
-	const schedule = events.reduce((acc, event) => {
-		const startTime = new Date(event.startTime * 1000);
-		const day = startTime.toLocaleDateString("en-US", {
-			weekday: "long",
-			month: "long",
-			day: "numeric",
-		});
+const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
+	const schedule = events.reduce(
+		(acc: ScheduleByCategory, event: EventModel) => {
+			const startTime = new Date(event.startTime * 1000);
+			const day = startTime.toLocaleDateString("en-US", {
+				weekday: "long",
+				month: "long",
+				day: "numeric",
+			});
 
-		const formattedStartTime = startTime.toLocaleTimeString("en-US", {
-			hour: "numeric",
-			minute: "2-digit",
-		});
-		const endTime = new Date(event.endTime * 1000);
-		const formattedEndTime = endTime.toLocaleTimeString("en-US", {
-			hour: "numeric",
-			minute: "2-digit",
-		});
+			const formattedStartTime = startTime.toLocaleTimeString("en-US", {
+				hour: "numeric",
+				minute: "2-digit",
+			});
+			const endTime = new Date(event.endTime * 1000);
+			const formattedEndTime = endTime.toLocaleTimeString("en-US", {
+				hour: "numeric",
+				minute: "2-digit",
+			});
 
-		const eventType = event.type.charAt(0).toUpperCase() + event.type.slice(1);
-		const eventName = event.name;
-		const eventLocation = event.location.name;
-		const timeRange = `${formattedStartTime} - ${formattedEndTime}`;
+			const eventType =
+				event.type.charAt(0).toUpperCase() + event.type.slice(1);
+			const eventName = event.name;
+			const eventLocation = event.location.name;
+			const timeRange = `${formattedStartTime} - ${formattedEndTime}`;
 
-		const eventDetails = {
-			name: `${eventName} @ ${eventLocation}`,
-			time: timeRange,
-			day,
-			sortKey: startTime,
-		};
+			const eventDetails: ScheduleEventDetails = {
+				name: `${eventName} @ ${eventLocation}`,
+				time: timeRange,
+				day,
+				sortKey: startTime,
+			};
 
-		if (!acc[eventType]) {
-			acc[eventType] = [eventDetails];
-		} else {
-			acc[eventType].push(eventDetails);
-		}
+			if (!acc[eventType]) {
+				acc[eventType] = [eventDetails];
+			} else {
+				acc[eventType].push(eventDetails);
+			}
 
-		return acc;
-	}, {});
+			return acc;
+		},
+		{}
+	);
 
-	Object.keys(schedule).forEach((category) => {
-		schedule[category].sort((a, b) => a.sortKey - b.sortKey);
+	Object.keys(schedule).forEach((category: string) => {
+		schedule[category].sort(
+			(a: ScheduleEventDetails, b: ScheduleEventDetails) =>
+				a.sortKey.getTime() - b.sortKey.getTime()
+		);
 	});
 
 	return schedule;
