@@ -1,91 +1,56 @@
-/* Schedule tab button hover state. 
-TODO: Figure out how to do the rest of the tab styling here without
-      it getting overwritten by Material UI in the browser.
-*/
-.schedule-tab:hover {
-  background-color:rgba(0, 0, 0, 0.22)
+#schedule {
+	font-family: "Cornerstone", "Lato", sans-serif;
+	color: #000000; /* Changed text color to black */
 }
 
-
-/* OVERVIEW AND ENTERTAINMENT */
-.generic-schedule-container {
-  width: 100%;
-  max-width: 700px;
-  border-radius: 1em;
-  background: repeating-linear-gradient(
-    -45deg,
-    #1C204E,
-    #1C204E 75px,
-    #303787 75px,
-    #303787 150px
-  );
-  color: white;
+/* Headless UI Tabs overrides */
+.tab-list {
+	display: flex;
+	justify-content: center;
+	list-style-type: none;
+	padding: 0;
+	background: transparent;
 }
 
-
-/* WORKSHOPS */
-.workshop-card {
-  border-radius: 10px;
-  padding: 20px;
-  background: repeating-linear-gradient(
-    -55deg,
-    #1C204E,
-    #1C204E 75px,
-    #303787 75px,
-    #303787 150px
-  );
-  text-align: left;
-  color:white;
-  max-width: 700px;
+.tab {
+	padding: 16px 32px; /* Increased padding for better readability */
+	cursor: pointer;
+	border-radius: 10px 10px 0 0;
+	background: transparent;
+	font-size: 1.25rem; /* Increased font size for better readability */
 }
 
-.workshop-card:hover {
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+.tab:hover {
+	background-color: rgba(0, 0, 0, 0.22); /* Hover state for tabs */
 }
 
-.workshop-card-title {
-  font-size: 2.0em;
-  font-family: 'Cornerstone', 'Lato', sans-serif;
-  color: #ffffff;
+.tab[aria-selected="true"] {
+	border-bottom: 4px solid black; /* Indicator bar for active tab */
 }
 
-/* Uncomment this for workshop image support. */
-/* .workshop-card-image {
-  display: inline-block;
-  width: 70px;
-  height: 70px;
-  border-radius: 70px;
-  margin: 20px 5px 0 5px;
-  background-size: cover !important;
-  background-position: center !important;
-} */
+/* Content panels */
+.tab-panel {
+	border-radius: 1em;
+	background-image: url("../../../public/SCREEN.png"); /* Updated path for clarity */
+	background-size: cover;
+	background-position: center;
+	padding: 32px; /* Increased padding for better readability */
+	max-width: 700px;
+	margin: 0.5rem auto; /* Center the tab content */
+	color: white; /* Text color for better readability against the background image */
+	font-size: 1.125rem; /* Increased font size for better readability */
+}
 
-/* Properly scale our text and icons on smaller screens and make images go away. */
-@media screen and (max-width: 568px) {
-  .workshop-card {
-    margin-top: 7vh;
-  }
-
-  .workshop-card:nth-of-type(1) {
-    margin-top: 4vh;
-  }
-
-  .workshop-card-title {
-    font-size: 2.15em;
-  }
-
-  /* Uncomment this for workshop image support. */
-  /* .workshop-card-image img {
-    height: 0px;
-  } */
+.tab-panel ul li:hover {
+	background-color: transparent; /* Set the background color to transparent */
 }
 
 .center {
-  text-align: center;
+	text-align: center;
 }
 
 .dateTime {
-  text-align: right;
-  display: inline;
-  float: right;
+	text-align: right;
+	display: inline;
+	float: right;
 }
