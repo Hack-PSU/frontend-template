@@ -74,9 +74,6 @@
 
 	.frame {
 		background-image: url("../../public/images/SCREEN.png");
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;

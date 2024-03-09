@@ -17,9 +17,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-  padding: 1rem;
+  	padding: 1rem;
 
 	border-radius: var(--border-width);
+
+	border: 4px solid green;
 }
 
 @keyframes moveGradient {

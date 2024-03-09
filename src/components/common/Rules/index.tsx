@@ -20,11 +20,8 @@ const Rules = () => (
 			<Divider />
 		</div>
 		<div className="w-10/12">
-			<div
-				className="rules-border rounded-lg shadow-lg bg-cover bg-center p-4"
-				style={{ backgroundImage: 'url("/SCREEN.png")' }}
-			>
-				<ul className="list-inside list-disc text-white font-lato text-md md:text-lg shadowtext-on-grid">
+			<div className="rules-border rounded-lg shadow-lg bg-cover bg-center p-4 bg-[#00000040]">
+				<ul className="list-inside list-disc text-white font-lato text-md md:text-lg ">
 					{rules.map((rule, index) => (
 						<li key={index} dangerouslySetInnerHTML={{ __html: rule }} />
 					))}
