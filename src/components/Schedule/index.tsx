@@ -1,46 +1,63 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Tab } from "@headlessui/react";
 import "./schedule.css";
+import { EventModel } from "@/interfaces";
 
-const mockData = {
-	Overview: [
-		{ name: "Check-In", time: "11AM" },
-		{ name: "Opening Ceremonies", time: "12PM - 1PM" },
-	],
-	Workshops: [
-		{ name: "Intro to React", time: "1PM - 2PM" },
-		{ name: "Advanced CSS", time: "3PM - 4PM" },
-	],
-	Entertainment: [
-		{ name: "Stand-up Comedy", time: "7:30PM" },
-		{ name: "Trivia Night", time: "10:00PM" },
-	],
-};
+const Divider = () => <hr className="my-4 border-black border-[1px]" />;
 
-function Divider() {
-	return <hr className="my-4 border-black border-[1px]" />;
-}
+const DayIndicator = ({ day }: { day: string }) => (
+	<div className="text-center py-4">
+		<h2 className="text-xl font-bold">{day}</h2>
+	</div>
+);
 
-function Schedule() {
+const EventItem = ({ name, time }: { name: string; time: string }) => (
+	<li className="flex justify-between ">
+		<span className="text-xl">{name}</span>
+		<span className="text-xl">{time}</span>
+	</li>
+);
+
+const Schedule = () => {
+	const [schedule, setSchedule] = useState({});
+
+	useEffect(() => {
+		const fetchEvents = async () => {
+			const apiEndpoint = `${process.env.NEXT_PUBLIC_BASE_URL_V3}/events`;
+			try {
+				const response = await fetch(apiEndpoint);
+				if (!response.ok) {
+					throw new Error(`Network response was not ok: ${response.status}`);
+				}
+				return await response.json();
+			} catch (error) {
+				console.error("Error fetching events:", error);
+				return [];
+			}
+		};
+
+		const loadEvents = async () => {
+			const events = await fetchEvents();
+			setSchedule(convertEventsToSchedule(events));
+		};
+
+		loadEvents();
+	}, []);
+
 	return (
 		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
-			{" "}
-			{/* Increased padding and max-width */}
 			<div className="text-center">
-				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>{" "}
-				{/* Increased font size */}
+				<h1 className="font-bold text-6xl">Schedule</h1>
 				<Divider />
 			</div>
 			<Tab.Group>
 				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
-					{" "}
-					{/* Increased padding */}
-					{Object.keys(mockData).map((category) => (
+					{Object.keys(schedule).map((category) => (
 						<Tab
 							key={category}
 							className={({ selected }) =>
 								`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-									selected ? "bg-white " : " hover:bg-white/[0.12]"
+									selected ? "bg-white" : "hover:bg-white/[0.12]"
 								}`
 							}
 						>
@@ -49,35 +66,69 @@ function Schedule() {
 					))}
 				</Tab.List>
 				<Tab.Panels className="mt-4 tab-panel">
-					{" "}
-					{/* Increased margin */}
-					{Object.entries(mockData).map(([category, items], idx) => (
+					{Object.entries(schedule).map(([category, items], idx) => (
 						<Tab.Panel key={idx} className="rounded-xl p-4">
-							{" "}
-							{/* Increased padding */}
-							<ul>
-								{items.map((item, idx) => (
-									<li
-										key={idx}
-										className="flex justify-between p-3 hover:bg-blue-50"
-									>
-										{" "}
-										{/* Increased padding */}
-										<span className="font-semibold text-lg">
-											{item.name}
-										</span>{" "}
-										{/* Increased font size */}
-										<span className="text-md">{item.time}</span>{" "}
-										{/* Increased font size */}
-									</li>
-								))}
-							</ul>
+							{items.map((item, itemIdx, arr) => (
+								<React.Fragment key={itemIdx}>
+									{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
+										<DayIndicator day={item.day} />
+									)}
+									<EventItem name={item.name} time={item.time} />
+								</React.Fragment>
+							))}
 						</Tab.Panel>
 					))}
 				</Tab.Panels>
 			</Tab.Group>
 		</div>
 	);
-}
+};
+
+const convertEventsToSchedule = (events: EventModel[]) => {
+	const schedule = events.reduce((acc, event) => {
+		const startTime = new Date(event.startTime * 1000);
+		const day = startTime.toLocaleDateString("en-US", {
+			weekday: "long",
+			month: "long",
+			day: "numeric",
+		});
+
+		const formattedStartTime = startTime.toLocaleTimeString("en-US", {
+			hour: "numeric",
+			minute: "2-digit",
+		});
+		const endTime = new Date(event.endTime * 1000);
+		const formattedEndTime = endTime.toLocaleTimeString("en-US", {
+			hour: "numeric",
+			minute: "2-digit",
+		});
+
+		const eventType = event.type.charAt(0).toUpperCase() + event.type.slice(1);
+		const eventName = event.name;
+		const eventLocation = event.location.name;
+		const timeRange = `${formattedStartTime} - ${formattedEndTime}`;
+
+		const eventDetails = {
+			name: `${eventName} @ ${eventLocation}`,
+			time: timeRange,
+			day,
+			sortKey: startTime,
+		};
+
+		if (!acc[eventType]) {
+			acc[eventType] = [eventDetails];
+		} else {
+			acc[eventType].push(eventDetails);
+		}
+
+		return acc;
+	}, {});
+
+	Object.keys(schedule).forEach((category) => {
+		schedule[category].sort((a, b) => a.sortKey - b.sortKey);
+	});
+
+	return schedule;
+};
 
 export default Schedule;

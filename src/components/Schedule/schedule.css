@@ -1,6 +1,6 @@
 #schedule {
 	font-family: "Cornerstone", "Lato", sans-serif;
-	color: #000000; /* Changed text color to black */
+	color: #000000;
 }
 
 /* Headless UI Tabs overrides */
@@ -13,36 +13,39 @@
 }
 
 .tab {
-	padding: 16px 32px; /* Increased padding for better readability */
+	padding: 16px 32px;
 	cursor: pointer;
 	border-radius: 10px 10px 0 0;
 	background: transparent;
-	font-size: 1.25rem; /* Increased font size for better readability */
+	font-size: 1.25rem;
+	transition: background-color 0.3s ease;
+	margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
 }
 
 .tab:hover {
-	background-color: rgba(0, 0, 0, 0.22); /* Hover state for tabs */
+	background-color: rgba(0, 0, 0, 0.22);
 }
 
 .tab[aria-selected="true"] {
-	border-bottom: 4px solid black; /* Indicator bar for active tab */
+	border-bottom: 4px solid black;
+	background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Content panels */
 .tab-panel {
 	border-radius: 1em;
-	background-image: url("../../../public/SCREEN.png"); /* Updated path for clarity */
+	background-image: url("../../../public/SCREEN.png");
 	background-size: cover;
 	background-position: center;
-	padding: 32px; /* Increased padding for better readability */
-	max-width: 700px;
-	margin: 0.5rem auto; /* Center the tab content */
-	color: white; /* Text color for better readability against the background image */
-	font-size: 1.125rem; /* Increased font size for better readability */
+	padding: 32px;
+	max-width: 1000px;
+	margin: 0.5rem auto;
+	color: white;
+	font-size: 1.125rem;
 }
 
-.tab-panel ul li:hover {
-	background-color: transparent; /* Set the background color to transparent */
+.tab-panel li:hover {
+	background-color: transparent;
 }
 
 .center {
@@ -53,4 +56,35 @@
 	text-align: right;
 	display: inline;
 	float: right;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+	.tab-list {
+		justify-content: space-around;
+		flex-wrap: wrap;
+	}
+
+	.tab {
+		padding: 8px 16px; /* Reduce padding for tabs on smaller screens */
+		font-size: 1rem; /* Adjust font size for better readability */
+	}
+
+	.tab-panel {
+		padding: 16px; /* Reduce padding for content panels */
+		font-size: 1rem; /* Adjust font size for content */
+	}
+}
+
+@media (max-width: 480px) {
+	.tab-list {
+		flex-direction: column; /* Stack tabs vertically on very small screens */
+		align-items: center;
+	}
+
+	.tab {
+		width: 90%; /* Full-width tabs for very small screens */
+		text-align: center; /* Center tab text */
+		margin-bottom: 8px; /* Add some space between stacked tabs */
+	}
 }
