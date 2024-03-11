@@ -90,9 +90,12 @@ const Registration: React.FC = () => {
 
 	const [hackathon, setHackathon] = useState<any>(null);
 
-	let { user, isAuthenticated } = useFirebase();
+	// Get Firebase user fields
+	const { user, isAuthenticated } = useFirebase();
+
 	const router = useRouter();
 
+	// Scroll to element
 	const handleScroll = (scrollTo: string) => {
 		const element = document.getElementById(scrollTo);
 		if (element == null) {
@@ -143,14 +146,15 @@ const Registration: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
+		console.log(user, isAuthenticated);
 		if (isAuthenticated) {
 			setRegistrationData((prevData) => ({
 				...prevData,
 				id: user?.uid ?? "",
 			}));
-		} else if (componentMounted) {
-			void router.push("/");
 		}
+
+		// Need to handle user not being authenticated, but this callback is hard to work with
 	}, [isAuthenticated]);
 
 	const handleChange = (
@@ -195,6 +199,20 @@ const Registration: React.FC = () => {
 				...prevData,
 				[name]: file,
 			}));
+		}
+	};
+
+	// Allow user to download resume to ensure correct file uploaded
+	const downloadResume = () => {
+		const resume = registrationData.resume;
+		if (resume) {
+			const url = URL.createObjectURL(resume);
+			const a = document.createElement("a");
+			a.href = url;
+			a.download = resume.name;
+			document.body.appendChild(a);
+			a.click();
+			URL.revokeObjectURL(url);
 		}
 	};
 
@@ -960,7 +978,7 @@ const Registration: React.FC = () => {
 										</div>
 									</div>
 									{registrationData.resume && (
-										<div className="info">
+										<a className="resume-download" onClick={downloadResume}>
 											{
 												(
 													registrationData.resume as unknown as {
@@ -968,7 +986,7 @@ const Registration: React.FC = () => {
 													}
 												)?.name
 											}
-										</div>
+										</a>
 									)}
 								</div>
 								{/** MLH Code of Conduct */}
@@ -1187,7 +1205,6 @@ const Registration: React.FC = () => {
 									!registrationData.mlhDcp) ? null : (
 									<a
 										key={field}
-										// href={`#${sidebarFields.get(field)}`}
 										className={
 											selectedSidebarField === field
 												? "sidebar-selected"
