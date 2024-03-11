@@ -18,7 +18,6 @@ import BigButton from "@/components/common/BigButton";
 import "./register.css";
 
 const Registration: React.FC = () => {
-	// TODO: update some generic strings to better reflect data (e.g. "male"/"female"/"other" for gender rather than string)
 	interface RegistrationData extends FormData {
 		id: string;
 		firstName: string;
@@ -93,6 +92,45 @@ const Registration: React.FC = () => {
 
 	let { user, isAuthenticated } = useFirebase();
 	const router = useRouter();
+
+	const handleScroll = (scrollTo: string) => {
+		const element = document.getElementById(scrollTo);
+		if (element == null) {
+			return;
+		}
+
+		// Handle scroll (with offset)
+		const offset = 100;
+		const elementRect = element.getBoundingClientRect().top;
+		const absoluteElementTop = elementRect + window.pageYOffset;
+		const scrollToPosition = absoluteElementTop - offset;
+
+		window.scrollTo({
+			top: scrollToPosition,
+			behavior: "smooth",
+		});
+	};
+
+	const sidebarFields: Map<string, string> = new Map<string, string>([
+		["General", "name"],
+		["Shirt Size", "shirtSize"],
+		["Dietary Restrictions", "dietaryAllergies"],
+		["Education", "educationalInstitutionType"],
+		["MLH Code of Conduct", "mlhCoc"],
+		["MLH Data Sharing", "mlhDcp"],
+		["Additional Questions", "codingExperience"],
+	]);
+
+	const [selectedSidebarField, setSelectedSidebarField] = useState("");
+
+	const handleSidebarSelect = (field: string) => {
+		if (field === selectedSidebarField) {
+			setSelectedSidebarField("");
+		} else {
+			setSelectedSidebarField(field);
+			handleScroll(sidebarFields.get(field) ?? "");
+		}
+	};
 
 	async function fetchHackathon() {
 		const hackathon = await getActiveHackathon();
@@ -198,10 +236,10 @@ const Registration: React.FC = () => {
 			}
 
 			if (validationData[key] === undefined || validationData[key] === "") {
-				element.scrollIntoView({ behavior: "smooth", block: "start" });
+				handleScroll(key);
 				return;
 			} else if (value !== null && validationData[key] !== value) {
-				element.scrollIntoView({ behavior: "smooth", block: "start" });
+				handleScroll(key);
 				return;
 			}
 		}
@@ -267,8 +305,6 @@ const Registration: React.FC = () => {
 			const regRes: any = await writeToDatabase("registrations", registration);
 			console.log("Registration response: ", regRes);
 		}
-
-		// Do something on success ??
 	};
 
 	if (!componentMounted) {
@@ -278,7 +314,7 @@ const Registration: React.FC = () => {
 	return (
 		<>
 			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
-				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
+				<div className="mt-10 mx-auto w-4/5 md:w-[480px]">
 					<div className="m-2 text-center cornerstone-font">
 						<h1 className="text-4xl font-bold mb-2">Registration</h1>
 						<div>
@@ -926,8 +962,11 @@ const Registration: React.FC = () => {
 									{registrationData.resume && (
 										<div className="info">
 											{
-												(registrationData.resume as unknown as { name: string })
-													?.name
+												(
+													registrationData.resume as unknown as {
+														name: string;
+													}
+												)?.name
 											}
 										</div>
 									)}
@@ -1136,6 +1175,41 @@ const Registration: React.FC = () => {
 					</form>
 				</div>
 			</div>
+
+			{/** Sidebar */}
+			{window.innerWidth >= 1024 && ( // Checks whether user in mobile
+				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center">
+					{registrationData.eighteenBeforeEvent && (
+						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
+							{Array.from(sidebarFields.keys()).map((field) =>
+								field === "Additional Questions" &&
+								(!registrationData.mlhCoc ||
+									!registrationData.mlhDcp) ? null : (
+									<a
+										key={field}
+										// href={`#${sidebarFields.get(field)}`}
+										className={
+											selectedSidebarField === field
+												? "sidebar-selected"
+												: "sidebar"
+										}
+										onClick={() => handleSidebarSelect(field)}
+									>
+										{field}
+									</a>
+								)
+							)}
+							<br />
+							<p>
+								Any issues? - Email us at <br />{" "}
+								<a href="mailto:technology@hackpsu.org">
+									technology@hackpsu.org
+								</a>
+							</p>
+						</div>
+					)}
+				</div>
+			)}
 		</>
 	);
 };

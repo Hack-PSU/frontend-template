@@ -74,6 +74,11 @@ textarea {
 	min-width: 100%;
 }
 
+textarea:focus {
+	border-color: #d2d6dc;
+	box-shadow: 0 0 0 2px rgba(66, 153, 225, 0.5);
+}
+
 input[type="radio"] {
 	margin: 1rem;
 	cursor: pointer;
@@ -116,4 +121,43 @@ input[type="checkbox"] {
 .file-upload-button:hover,
 .file-upload-button:active {
 	background-color: var(--button-hover);
+}
+
+.sidebar {
+	color: black;
+	text-decoration: none;
+}
+
+.sidebar:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+.sidebar-selected {
+	color: var(--primary);
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.sidebar-selected:hover {
+	color: black;
+	text-decoration: underline;
+}
+
+.sidebar-selected::before {
+	content: "|";
+	color: var(--primary);
+	position: absolute;
+	left: 5px;
+	transform: translateY(-0.5rem);
+	font-size: 1.5rem;
+}
+
+.sidebar:hover::before {
+	content: "|";
+	color: var(--primary);
+	position: absolute;
+	left: 5px;
+	transform: translateY(-0.5rem);
+	font-size: 1.5rem;
 }
