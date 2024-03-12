@@ -377,5 +377,5 @@ export default function privacy() {
     </div>
   `;
 
-  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />;
+  return <div dangerouslySetInnerHTML={{ __html: htmlString }} />
 }

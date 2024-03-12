@@ -1,6 +1,5 @@
 import { Inter } from "next/font/google";
 
-import Navbar from "@/components/Navbar";
 import LayoutProvider from "@/lib/providers/LayoutProvider";
 import "@/styles/globals.css";
 
@@ -16,7 +15,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 		<html lang="en">
 			<body className={inter.className}>
 				<LayoutProvider>
-					<Navbar />
 					{children}
 				</LayoutProvider>
 			</body>

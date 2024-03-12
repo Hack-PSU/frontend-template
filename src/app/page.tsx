@@ -1,16 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
 
+import FAQ from "@/components/common/FAQ";
+import FAQRules from "@/components/FAQRules";
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import MobileHero from "@/components/Hero/Mobile";
-import Schedule from "@/components/Schedule";
-import FAQRules from "@/components/FAQRules";
-import Rules from "@/components/common/Rules/index";
-import FAQ from "@/components/common/FAQ";
 import MobileApp from "@/components/MobileApp";
+import Navbar from "@/components/Navbar";
 import PrizesChallenges from "@/components/PrizesChallenges";
+import Rules from "@/components/common/Rules";
+import Schedule from "@/components/Schedule";
 import Sponsors from "@/components/Sponsors";
-import Footer from "@/components/Footer";
 
 export default function Home() {
 	const [isRendering, setIsRendering] = useState(true);
@@ -62,7 +63,8 @@ export default function Home() {
 	return (
 		<>
 			<main className="flex min-h-screen flex-col items-center w-full gap-6">
-				<Hero />
+        <Navbar />
+        <Hero />
 				<Schedule />
 				<FAQRules />
 				<MobileApp />
