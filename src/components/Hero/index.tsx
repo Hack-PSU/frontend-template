@@ -16,8 +16,8 @@ const Hero = () => {
 			id="hero"
 			className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-8 mb-8"
 		>
-			<div className="flex p-8 bg-[#00000040] border-4 border-[green] rounded-lg">
-				<div className="hidden md:block">
+			<div className="flex p-8 bg-[#00000080] border-4 border-[green] rounded-lg">
+				<div className="hidden md:block ">
 					<Image src={Logo} width={500} height={500} alt="logo" />
 				</div>
 				<div className="flex flex-col gap-4">

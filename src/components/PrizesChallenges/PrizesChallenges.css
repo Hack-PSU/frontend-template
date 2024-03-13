@@ -71,7 +71,7 @@
 }
 
 .black-box {
-	background-color: rgba(0, 0, 0, 0.5);
+	background-color: rgba(0, 0, 0, 0.75);
 	border: 4px solid green;
 	background-size: cover;
 	background-position: center;

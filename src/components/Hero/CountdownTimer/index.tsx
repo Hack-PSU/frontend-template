@@ -114,7 +114,7 @@ const CountdownTimer = () => {
 	}
 
 	return (
-		<div className="text-center bg-black bg-opacity-30 border-black rounded-sm px-6 py-2">
+		<div className="text-center  border-black rounded-sm px-6 py-2">
 			{state !== 2 ? (
 				<motion.div
 					className="flex space-x-2 text-6xl font-bold text-white justify-between"

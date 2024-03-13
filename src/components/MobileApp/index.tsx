@@ -9,7 +9,7 @@ const MobileApp = () => {
 				<h1 className="font-bold text-6xl cornerstone-font">Mobile App</h1>
 				<Divider />
 			</div>
-			<div className=" w-4/5 text-white flex flex-col items-center justify-center p-8 bg-[#00000040] rounded-lg border-[green] border-4">
+			<div className=" w-4/5 text-white flex flex-col items-center justify-center p-8 bg-[#00000080] rounded-lg border-[green] border-4">
 				<p className="font-bold">
 					Get our app on Google Play and the App Store!
 				</p>

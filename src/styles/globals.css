@@ -67,6 +67,7 @@
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;
+		background-attachment: scroll;
 		--border-width: 8px;
 		position: relative;
 		@media (max-width: 960px) {
