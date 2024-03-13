@@ -23,7 +23,7 @@ const Hero = () => {
 				<div className="flex flex-col gap-4">
 					<CountdownTimer />
 
-					<div className="bg-sky-500 opacity-90 rounded-md p-2">
+					<div className="bg-[rgba(0,113,188,255)] opacity-90 rounded-md p-2">
 						<h2 className="font-bold text-2xl text-center cornerstone-font">
 							Penn State University • Business Building •{" "}
 							{settings.hackathonDateRepr}
