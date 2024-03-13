@@ -42,21 +42,11 @@
 
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
-		background-color: #0071bc;
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-attachment: fixed;
-
-		@media (min-width: 768px) {
-			background-size: 100% auto;
-			background-repeat: repeat;
-		}
-
-		@media (max-width: 768px) {
-			background-size: cover;
-			background-position: center center;
-		}
+		background-color: #588157;
+		background-image: url("../../public/website\ entire\ background.png");
+		background-size: cover;
+		background-position: top center;
+		
 	}
 }
 

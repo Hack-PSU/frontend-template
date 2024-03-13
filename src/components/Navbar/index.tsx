@@ -93,7 +93,7 @@ export default function Navbar() {
 				scrolled ? "navbar-scrolled" : ""
 			} sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block ${
 				scrolled
-					? "border-b border-gray-200 bg-[#0071bc]/80 backdrop-blur-xl"
+					? "border-b border-gray-200 backdrop-blur-xl"
 					: "bg-white/0"
 			} z-30 transition-all`}
 		>

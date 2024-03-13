@@ -156,7 +156,7 @@ const CountdownTimer = () => {
 			) : (
 				<></>
 			)}
-			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 shadowtext-on-grid">
+			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 ">
 				{bannerMessage}
 			</div>
 		</div>
