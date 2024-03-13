@@ -77,7 +77,7 @@ const Schedule: React.FC = () => {
 							key={category}
 							className={({ selected }) =>
 								`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-									selected ? "bg-white" : "hover:bg-white/[0.12]"
+									selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
 								}`
 							}
 						>

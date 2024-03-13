@@ -1,7 +1,7 @@
 import { FaEnvelope, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 const Footer = () => {
-	const social_size = 30;
+	const social_size = 40;
 
 	return (
 		<section className="flex flex-col items-center w-full gap-4 my-20">
@@ -13,7 +13,7 @@ const Footer = () => {
 				>
 					<FaInstagram size={social_size} />
 				</a>
-        <a
+				<a
 					href="https://www.linkedin.com/company/hackpsuofficial/"
 					target="_blank"
 					rel="noopener noreferrer"

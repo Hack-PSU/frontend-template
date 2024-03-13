@@ -17,7 +17,7 @@ const PrizesChallenges = () => {
 			<div className="w-full mt-4 md:mt-0">
 				<ChallengesCarousel />
 			</div>
-			<div className="w-11/12 md:w-5/12 p-3 bg-black rounded-lg text-center mt-20">
+			<div className="w-11/12 md:w-5/12 p-3 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center mt-20">
 				<p className="text-lg text-left text-white">
 					<span
 						style={{ color: "red", fontWeight: "bold", fontSize: "larger" }}
