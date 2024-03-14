@@ -107,7 +107,7 @@ const Schedule: React.FC = () => {
 const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 	const schedule = events.reduce(
 		(acc: ScheduleByCategory, event: EventModel) => {
-			const startTime = new Date(event.startTime * 1000);
+			const startTime = new Date(event.startTime);
 			const day = startTime.toLocaleDateString("en-US", {
 				weekday: "long",
 				month: "long",
@@ -118,7 +118,7 @@ const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 				hour: "numeric",
 				minute: "2-digit",
 			});
-			const endTime = new Date(event.endTime * 1000);
+			const endTime = new Date(event.endTime);
 			const formattedEndTime = endTime.toLocaleTimeString("en-US", {
 				hour: "numeric",
 				minute: "2-digit",
