@@ -1,15 +1,15 @@
 .sponsor-container {
-  background-image: url("../../../public/background_retro.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  border: 5px;
-  padding: 18%;
-  margin: auto;
+	background-image: url("../../../public/heroBackground.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	border: 5px;
+	padding: 14% 22% 22% 22%;
+	margin: auto;
 }
 
 .sponsor-card {
-  background-color: transparent;
-  max-width: 80%;
-  margin: auto;
+	background-color: transparent;
+	max-width: 80%;
+	margin: auto;
 }
