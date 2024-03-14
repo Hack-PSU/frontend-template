@@ -1,5 +1,5 @@
-import Rules from "@/components/common/Rules/index"; // Import the Rules component
-import FAQ from "@/components/common/FAQ"; // Import the FAQ component
+import Rules from "@/components/common/Rules/index"; 
+import FAQ from "@/components/common/FAQ"; 
 
 function FAQPage() {
 	return (

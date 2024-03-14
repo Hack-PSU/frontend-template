@@ -11,6 +11,7 @@ import MobileApp from "@/components/MobileApp";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
+import Submissions from "@/components/common/Submissions";
 
 export default function Home() {
 	const [isRendering, setIsRendering] = useState(true);
@@ -67,6 +68,7 @@ export default function Home() {
 				<FAQRules />
 				<MobileApp />
 				<PrizesChallenges />
+				<Submissions />
 				<Sponsors />
 				<Footer />
 			</main>

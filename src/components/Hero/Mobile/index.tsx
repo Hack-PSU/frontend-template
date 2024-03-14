@@ -17,7 +17,7 @@ const Hero = () => {
 			id="hero"
 			className="flex flex-col items-center justify-center w-4/5 mt-8 mb-8"
 		>
-			<div className="frame flex p-4">
+			<div className=" flex p-8 bg-[#00000040] border-4 border-[green] rounded-lg">
 				<div className="flex flex-col gap-2">
 					<CountdownTimer />
 
