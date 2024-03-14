@@ -24,8 +24,3 @@
 	border: 4px solid green;
 }
 
-@keyframes moveGradient {
-	50% {
-		background-position: 100% 50%;
-	}
-}

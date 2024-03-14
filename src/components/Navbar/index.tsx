@@ -1,7 +1,5 @@
 "use client";
-import { UserCircleIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import Link from "next/link";
 
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -12,8 +10,6 @@ import prizesButton from "../../../public/images/buttons/BUTTON_PRIZES.png";
 import registerButton from "../../../public/images/buttons/BUTTON_REGISTER.png";
 import sponsorsButton from "../../../public/images/buttons/BUTTON_SPONSORS.png";
 import workshopsButton from "../../../public/images/buttons/BUTTON_WORKSHOPS.png";
-import loginButton from "../../../public/images/buttons/BUTTON_LOGIN.png";
-import blankButton from "../../../public/images/buttons/BUTTON_BLANK.png";
 import "./navbar.css";
 
 const buttonImages = [
