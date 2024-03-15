@@ -38,7 +38,7 @@ const Hero = () => {
 								onClick={() =>
 									window.open("https://register.hackpsu.org/register", "_blank")
 								}
-								className="mb-4 w-full h-fit"
+								className="mb-4 w-full"
 							/>
 
 							<BigButton
@@ -46,7 +46,7 @@ const Hero = () => {
 								onClick={() =>
 									window.open("http://discord.hackpsu.org", "_blank")
 								}
-								className="mb-4 w-full h-fit"
+								className="mb-4 w-full"
 							/>
 						</div>
 					</div>
