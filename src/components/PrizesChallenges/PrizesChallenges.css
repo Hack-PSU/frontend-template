@@ -85,12 +85,6 @@
 	border-radius: var(--border-width);
 }
 
-@keyframes moveGradient {
-	50% {
-		background-position: 100% 50%;
-	}
-}
-
 /* CAROUSEL ANIMATIONS */
 .carousel__track .carousel__slide:nth-of-type(1) {
 	transform: translateX(0%);
