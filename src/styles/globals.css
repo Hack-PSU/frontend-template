@@ -34,19 +34,13 @@
 		scroll-margin-top: 130px;
 	}
 
-	* {
-		@apply border-border;
-	}
 	body {
-		@apply bg-background text-foreground;
-
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
 		background-color: #588157;
-		background-image: url("../../public/website\ entire\ background.png");
+		background-image: url("../../public/website_entire_background_s24.png");
 		background-size: cover;
 		background-position: top center;
-		
 	}
 }
 
@@ -77,8 +71,6 @@
 		border-radius: var(--border-width);
 	}
 
-	@keyframes moveGradient {
-	}
 	.cyberspace-front-font {
 		font-family: "cyperspace-front";
 		font-size: 20px;
@@ -97,10 +89,6 @@
 
 	.font-lato {
 		font-family: Lato, sans-serif;
-	}
-
-	.shadowtext-on-grid {
-		background: radial-gradient(rgba(0, 0, 0, 40), rgba(0, 0, 0, 0));
 	}
 }
 
@@ -136,7 +124,7 @@ a:hover {
 
 .mobile-content {
 	scroll-snap-align: start;
-	scroll-padding: 0 20px;
+	scroll-padding: 0 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
