@@ -72,7 +72,9 @@ const Schedule: React.FC = () => {
 			</div>
 			<Tab.Group>
 				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
-					{Object.keys(schedule).map((category) => (
+					{Object.keys(schedule).filter(
+						(category) => category !== "CheckIn"
+					).map((category) => (
 						<Tab
 							key={category}
 							className={({ selected }) =>
@@ -86,18 +88,20 @@ const Schedule: React.FC = () => {
 					))}
 				</Tab.List>
 				<Tab.Panels className="mt-4 tab-panel">
-					{Object.entries(schedule).map(([category, items], idx) => (
-						<Tab.Panel key={idx} className="rounded-xl p-4">
-							{items.map((item, itemIdx, arr) => (
-								<React.Fragment key={itemIdx}>
-									{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
-										<DayIndicator day={item.day} />
-									)}
-									<EventItem name={item.name} time={item.time} />
-								</React.Fragment>
-							))}
-						</Tab.Panel>
-					))}
+					{Object.entries(schedule)
+						.filter(([category]) => category !== "CheckIn")
+						.map(([category, items], idx) => (
+							<Tab.Panel key={idx} className="rounded-xl p-4">
+								{items.map((item, itemIdx, arr) => (
+									<React.Fragment key={itemIdx}>
+										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
+											<DayIndicator day={item.day} />
+										)}
+										<EventItem name={item.name} time={item.time} />
+									</React.Fragment>
+								))}
+							</Tab.Panel>
+						))}
 				</Tab.Panels>
 			</Tab.Group>
 		</div>
