@@ -69,7 +69,7 @@ export default function Home() {
 				<MobileApp />
 				<PrizesChallenges />
 				<Submissions />
-				<Sponsors />
+				{/* <Sponsors /> */}
 				<Footer />
 			</main>
 		</>
