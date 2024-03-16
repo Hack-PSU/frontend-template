@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { getActiveHackathon } from "@/lib/common";
 
-const CountdownTimer = () => {
+const CountdownTimer: React.FC<Props> = () => {
 	// Get Hackathon data
 	const [hackathon, setHackathon] = useState<any>(null);
 	useEffect(() => {
@@ -101,17 +101,11 @@ const CountdownTimer = () => {
 		return () => clearInterval(interval);
 	}, [state]);
 
-	// Ensure everything loaded before rendering
-	if (hackathon === null || state === -1) return null;
-
-	if (
-		days === Infinity ||
-		hours === Infinity ||
-		minutes === Infinity ||
-		seconds === Infinity
-	) {
-		return null;
-	}
+	const renderTime = (metric: number): string => {
+		// Hide numbers if component initially loading
+		if (Math.abs(metric) === Infinity) return "⠀";
+		else return metric.toString();
+	};
 
 	return (
 		<div className="text-center  border-black rounded-sm px-6 py-2">
@@ -123,19 +117,19 @@ const CountdownTimer = () => {
 				>
 					<div className="w-1/4">
 						<motion.div className="cyberspace-front-font mb-4">
-							{days}
+							{renderTime(days)}
 						</motion.div>
 						<div className="text-base">{days === 1 ? "Day" : "Days"}</div>
 					</div>
 					<div className="w-1/4">
 						<motion.div className="cyberspace-front-font mb-4">
-							{hours}
+							{renderTime(hours)}
 						</motion.div>
 						<div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
 					</div>
 					<div className="w-1/4">
 						<motion.div className="cyberspace-front-font mb-4">
-							{minutes}
+							{renderTime(minutes)}
 						</motion.div>
 						<div className="text-base">
 							{minutes === 1 ? "Minute" : "Minutes"}
@@ -146,7 +140,7 @@ const CountdownTimer = () => {
 							className="cyberspace-front-font mb-4"
 							animate={secondsControls}
 						>
-							{seconds}
+							{renderTime(seconds)}
 						</motion.div>
 						<div className="text-base">
 							{seconds === 1 ? "Second" : "Seconds"}
