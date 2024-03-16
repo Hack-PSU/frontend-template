@@ -6,6 +6,10 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "firebasestorage.googleapis.com",
 			},
+			{
+				protocol: "https",
+				hostname: "storage.googleapis.com",
+			},
 			// TODO: Set up Next.js SVG handling.
 			// {
 			//   protocol: "https",
@@ -19,7 +23,6 @@ const nextConfig = {
 					"/intl/en_us/badges/static/images/badges/en_badge_web_generic.png",
 			},
 		],
-		domains: ["firebasestorage.googleapis.com", "storage.googleapis.com"],
 	},
 };
 

@@ -1,300 +1,165 @@
-"use client";
-import Box from "@mui/material/Box";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-import parse from "html-react-parser";
-import React, { useEffect } from "react";
-
-import { EventModel } from "@/interfaces";
-import Divider from "../common/Divider";
-import {
-	GenericScheduleEntity,
-	createGenericScheduleEntity,
-} from "./generic-schedule-entity";
+import React, { useState, useEffect } from "react";
+import { Tab } from "@headlessui/react";
 import "./schedule.css";
-import { useMediaQuery } from "@mui/material";
+import { EventModel } from "@/interfaces";
 
-import { readFromDatabase } from "@/lib/database";
+const Divider = () => <hr className="my-4 border-black border-[1px]" />;
 
-// TOOD: Pull these as a distinguishable catgeory from the API so that we don't have to hardcode them.
-const genericScheduleEventsSaturday = [
-	createGenericScheduleEntity("Check-In", "11AM"),
-	createGenericScheduleEntity("Opening Ceremonies", "12PM - 1PM"),
-	createGenericScheduleEntity("Team Building", "1PM - 2PM"),
-	createGenericScheduleEntity("Workshops", "1PM - 7PM"),
-	createGenericScheduleEntity("Lunch", "1PM - 4PM"),
-	createGenericScheduleEntity("Hacking Begins", "2PM"),
-	createGenericScheduleEntity("Dinner", "7PM - 9PM"),
-];
+interface DayIndicatorProps {
+	day: string;
+}
 
-const genericScheduleEventsSunday = [
-	createGenericScheduleEntity("Midnight Snack", "12AM - 1AM"),
-	createGenericScheduleEntity("Elliott's Early Morning Yoga", "3AM - 3:30AM"),
-	createGenericScheduleEntity("Brunch", "10AM - 12PM"),
-	createGenericScheduleEntity("Hacking Ends", "1:45PM"),
-	createGenericScheduleEntity("Judging Expo", "2PM - 3:30PM"),
-	createGenericScheduleEntity("Closing Ceremonies", "4:30PM - 5:30PM"),
-];
+const DayIndicator: React.FC<DayIndicatorProps> = ({ day }) => (
+	<div className="text-center py-4">
+		<h2 className="text-xl font-bold">{day}</h2>
+	</div>
+);
 
-const entertainmentEvents = [
-	createGenericScheduleEntity("Football: PSU vs. OSU", "12PM - 3:30PM"),
-	createGenericScheduleEntity("Fun Mini-events", "4PM - 6PM"),
-	createGenericScheduleEntity("Stand-up Comedy", "7:30PM"),
-	createGenericScheduleEntity("Bob Ross MSPaint", "9:00PM"),
-	createGenericScheduleEntity("Trivia", "10:00PM"),
-	createGenericScheduleEntity("Geoguesser", "10:30PM"),
-];
+interface EventItemProps {
+	name: string;
+	time: string;
+}
 
-// TODO: Figure out to correctly style the indicator in plain CSS without having to do this CSS-in-JS weirdness.
-const scheduleTabsTheme = createTheme({
-	palette: {
-		primary: {
-			main: "#000000",
-			light: "#000000",
-			dark: "#000000",
-			contrastText: "#000000",
-		},
-	},
-	components: {
-		MuiTabs: {
-			styleOverrides: {
-				indicator: {
-					backgroundColor: "black",
-				},
-			},
-		},
-	},
-});
+const EventItem: React.FC<EventItemProps> = ({ name, time }) => (
+	<li className="flex justify-between ">
+		<span className="text-xl">{name}</span>
+		<span className="text-xl">{time}</span>
+	</li>
+);
 
-const Schedule = () => {
-	const [events, setEvents] = React.useState<EventModel[]>([]);
+interface ScheduleEventDetails {
+	name: string;
+	time: string;
+	day: string;
+	sortKey: Date;
+}
+
+interface ScheduleByCategory {
+	[category: string]: ScheduleEventDetails[];
+}
+
+const Schedule: React.FC = () => {
+	const [schedule, setSchedule] = useState<ScheduleByCategory>({});
 
 	useEffect(() => {
-		// Fetch the set of events from the API.
-		const apiEndpoint = process.env.NEXT_PUBLIC_BASE_URL_V3 + "/events";
-
-		fetch(apiEndpoint)
-			.then((response) => {
+		const fetchEvents = async (): Promise<EventModel[]> => {
+			const apiEndpoint = `${process.env.NEXT_PUBLIC_BASE_URL_V3}/events`;
+			try {
+				const response = await fetch(apiEndpoint);
 				if (!response.ok) {
 					throw new Error(`Network response was not ok: ${response.status}`);
 				}
-				return response.json();
-			})
-			.then((data) => {
-				setEvents(data);
-			})
-			.catch((error) => {
+				return await response.json();
+			} catch (error) {
 				console.error("Error fetching events:", error);
-			});
+				return [];
+			}
+		};
+
+		const loadEvents = async () => {
+			const events = await fetchEvents();
+			setSchedule(convertEventsToSchedule(events));
+		};
+
+		loadEvents();
 	}, []);
 
 	return (
-		<section
-			id="schedule"
-			className="flex flex-col items-center w-full my-20 md:my-10"
-		>
-			<div className="w-11/12 md:w-5/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl cornerstone-font">Schedule</h1>
+		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
+			<div className="text-center">
+				<h1 className="font-bold text-6xl">Schedule</h1>
 				<Divider />
 			</div>
-			<ThemeProvider theme={scheduleTabsTheme}>
-				<div className="w-10/12 mx-auto my-2">
-					<div className="container-fluid generic-schedule-container p-10 mx-auto">
-						<div className="text-white text-center text-bold md:text-3xl sm:text-2lg">
-							Check back soon for more details
-						</div>
-					</div>
-				</div>
-			</ThemeProvider>
-			{/* <BasicTabs /> */}
-		</section>
+			<Tab.Group>
+				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
+					{Object.keys(schedule).filter(
+						(category) => category !== "CheckIn"
+					).map((category) => (
+						<Tab
+							key={category}
+							className={({ selected }) =>
+								`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
+									selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
+								}`
+							}
+						>
+							{category}
+						</Tab>
+					))}
+				</Tab.List>
+				<Tab.Panels className="mt-4 tab-panel">
+					{Object.entries(schedule)
+						.filter(([category]) => category !== "CheckIn")
+						.map(([category, items], idx) => (
+							<Tab.Panel key={idx} className="rounded-xl p-4">
+								{items.map((item, itemIdx, arr) => (
+									<React.Fragment key={itemIdx}>
+										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
+											<DayIndicator day={item.day} />
+										)}
+										<EventItem name={item.name} time={item.time} />
+									</React.Fragment>
+								))}
+							</Tab.Panel>
+						))}
+				</Tab.Panels>
+			</Tab.Group>
+		</div>
+	);
+};
+
+const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
+	const schedule = events.reduce(
+		(acc: ScheduleByCategory, event: EventModel) => {
+			const startTime = new Date(event.startTime);
+			const day = startTime.toLocaleDateString("en-US", {
+				weekday: "long",
+				month: "long",
+				day: "numeric",
+			});
+
+			const formattedStartTime = startTime.toLocaleTimeString("en-US", {
+				hour: "numeric",
+				minute: "2-digit",
+			});
+			const endTime = new Date(event.endTime);
+			const formattedEndTime = endTime.toLocaleTimeString("en-US", {
+				hour: "numeric",
+				minute: "2-digit",
+			});
+
+			const eventType =
+				event.type.charAt(0).toUpperCase() + event.type.slice(1);
+			const eventName = event.name;
+			const eventLocation = event.location.name;
+			const timeRange = `${formattedStartTime} - ${formattedEndTime}`;
+
+			const eventDetails: ScheduleEventDetails = {
+				name: `${eventName} @ ${eventLocation}`,
+				time: timeRange,
+				day,
+				sortKey: startTime,
+			};
+
+			if (!acc[eventType]) {
+				acc[eventType] = [eventDetails];
+			} else {
+				acc[eventType].push(eventDetails);
+			}
+
+			return acc;
+		},
+		{}
 	);
 
-	interface TabPanelProps {
-		children?: React.ReactNode;
-		index: number;
-		value: number;
-	}
-
-	function CustomTabPanel(props: TabPanelProps) {
-		const { children, value, index, ...other } = props;
-
-		return (
-			<div
-				role="tabpanel"
-				hidden={value !== index}
-				id={`simple-tabpanel-${index}`}
-				aria-labelledby={`simple-tab-${index}`}
-				{...other}
-			>
-				{value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-			</div>
+	Object.keys(schedule).forEach((category: string) => {
+		schedule[category].sort(
+			(a: ScheduleEventDetails, b: ScheduleEventDetails) =>
+				a.sortKey.getTime() - b.sortKey.getTime()
 		);
-	}
+	});
 
-	function a11yProps(index: number) {
-		return {
-			id: `simple-tab-${index}`,
-			"aria-controls": `simple-tabpanel-${index}`,
-		};
-	}
-
-	function BasicTabs() {
-		// Display smaller font size and less padding on mobile.
-		const isMobile = useMediaQuery("(max-width: 568px)");
-
-		const [value, setValue] = React.useState(0);
-
-		const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-			setValue(newValue);
-		};
-
-		return (
-			<Box sx={{ width: "100%" }}>
-				<ThemeProvider theme={scheduleTabsTheme}>
-					<Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-						<Tabs
-							value={value}
-							onChange={handleChange}
-							aria-label="Schedule"
-							centered
-						>
-							<Tab
-								label="Overview"
-								{...a11yProps(0)}
-								sx={{
-									fontWeight: "bold",
-									fontSize: isMobile ? 12 : 24,
-									paddingX: isMobile ? 0 : 2,
-								}}
-								className="schedule-tab"
-							/>
-							<Tab
-								label="Workshops"
-								{...a11yProps(1)}
-								sx={{
-									fontWeight: "bold",
-									fontSize: isMobile ? 12 : 24,
-									paddingX: isMobile ? 0 : 2,
-								}}
-								className="schedule-tab"
-							/>
-							<Tab
-								label="Entertainment"
-								{...a11yProps(2)}
-								sx={{
-									fontWeight: "bold",
-									fontSize: isMobile ? 12 : 24,
-									paddingX: isMobile ? 0 : 2,
-								}}
-								className="schedule-tab"
-							/>
-						</Tabs>
-					</Box>
-				</ThemeProvider>
-				<CustomTabPanel value={value} index={0}>
-					<div id="schedule" className="w-10/12 mx-auto">
-						<div className="container-fluid generic-schedule-container p-10 mx-auto">
-							<div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg">
-								SATURDAY
-							</div>
-							<div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
-								{genericScheduleEventsSaturday.map((event, index) => (
-									<GenericScheduleComponent {...event} key={index} />
-								))}
-							</div>
-							<div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg mt-10">
-								SUNDAY
-							</div>
-							<div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
-								{genericScheduleEventsSunday.map((event, index) => (
-									<GenericScheduleComponent {...event} key={index} />
-								))}
-							</div>
-						</div>
-					</div>
-				</CustomTabPanel>
-				<CustomTabPanel value={value} index={1}>
-					<div id="workshop-container" className="container-fluid nopadding">
-						<div className="col-xl-1"></div>
-						<div className="container-fluid">
-							{events
-								.filter((event) => event.type === "workshop")
-								.sort((eventA, eventB) => {
-									// Sort by start time, then by location name.
-									if (eventA.startTime != eventB.startTime) {
-										return eventA.startTime - eventB.startTime;
-									} else {
-										return eventA.location.name.localeCompare(
-											eventB.location.name
-										);
-									}
-								})
-								.map((workshop, index) => (
-									<WorkshopComponent {...workshop} key={index} />
-								))}
-						</div>
-					</div>
-				</CustomTabPanel>
-				<CustomTabPanel value={value} index={2}>
-					<div id="schedule" className="w-10/12 mx-auto">
-						<div className="container-fluid generic-schedule-container p-10 mx-auto">
-							<div className="text-white text-center text-bold underline md:text-4xl sm:text-2lg">
-								SATURDAY
-							</div>
-							<div className="grid grid-cols-2 gap-y-3 text-white md:text-3xl sm:text-lg">
-								{entertainmentEvents.map((event, index) => (
-									<GenericScheduleComponent {...event} key={index} />
-								))}
-							</div>
-						</div>
-					</div>
-				</CustomTabPanel>
-			</Box>
-		);
-	}
-
-	function GenericScheduleComponent(event: GenericScheduleEntity) {
-		return (
-			<>
-				<div className="w-3/4">{event.title}</div>
-				<div className="text-right">{event.timing}</div>
-			</>
-		);
-	}
-
-	function WorkshopComponent(workshop: EventModel) {
-		return (
-			<div className="workshop-card mx-auto my-3">
-				<div className="inline">
-					<p className="workshop-card-title inline">{workshop.name}</p>
-					<p className="dateTime">
-						October 21st
-						<br />
-						{`${new Date(workshop.startTime).getHours() - 12}:00PM`} -{" "}
-						{`${new Date(workshop.endTime).getHours() - 12}:00PM`}
-					</p>
-				</div>
-				<p>
-					<b>Location:</b> {workshop.location.name}
-				</p>
-				<br />
-				{parse(workshop.description ?? "")}
-				<br />
-				{/* Uncomment the below line for workshop relevant skills/tags support. */}
-				{/* <div><p><b>Skills/Software:</b> {workshop.wsRelevantSkills}</p></div> */}
-				<div className="mt-10">
-					<b>Presenters:</b>
-				</div>
-				<div>
-					<div className="row">{workshop.wsPresenterNames}</div>
-					{/* Uncomment below line for workshop image support */}
-					{/* <div className="workshop-card-image tooltipped" data-position="bottom" id="presenter1"></div> */}
-				</div>
-			</div>
-		);
-	}
+	return schedule;
 };
 
 export default Schedule;

@@ -38,33 +38,13 @@
 		scroll-margin-top: 130px;
 	}
 
-	* {
-		@apply border-border;
-	}
 	body {
-		@apply bg-background text-foreground;
-
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
-		background-image: url("../../public/images/FRAME_PATTERN.png");
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
-		background-attachment: fixed;
-
-		@media (min-width: 768px) {
-			background-size: 100% auto;
-			background-repeat: repeat;
-		}
-
-		@media (max-width: 768px) {
-			background-size: cover;
-			background-position: center center;
-		}
-	}
-
-	body::before {
-		@apply stickers;
+		background-color: #588157;
+		background-image: url("../../public/website_entire_background_s24.png");
+		background-size: cover;
+		background-position: top center;
 	}
 }
 
@@ -82,12 +62,10 @@
 
 	.frame {
 		background-image: url("../../public/images/SCREEN.png");
-		-webkit-background-size: cover;
-		-moz-background-size: cover;
-		-o-background-size: cover;
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;
+		background-attachment: scroll;
 		--border-width: 8px;
 		position: relative;
 		@media (max-width: 960px) {
@@ -96,33 +74,7 @@
 		}
 		border-radius: var(--border-width);
 	}
-	.frame::after {
-		position: absolute;
-		content: "";
-		top: calc(-1 * var(--border-width));
-		left: calc(-1 * var(--border-width));
-		z-index: -1;
-		width: calc(100% + var(--border-width) * 2);
-		height: calc(100% + var(--border-width) * 2);
-		background: linear-gradient(
-			60deg,
-			hsl(224, 85%, 66%),
-			hsl(269, 85%, 66%),
-			hsl(314, 85%, 66%),
-			hsl(359, 85%, 66%),
-			hsl(44, 85%, 66%),
-			hsl(89, 85%, 66%),
-			hsl(134, 85%, 66%),
-			hsl(179, 85%, 66%)
-		);
-		background-size: 300% 300%;
-		background-position: 0 50%;
-		border-radius: calc(2 * var(--border-width));
-		animation: moveGradient 4s alternate infinite;
-	}
 
-	@keyframes moveGradient {
-	}
 	.cyberspace-front-font {
 		font-family: "cyperspace-front";
 		font-size: 20px;
@@ -141,30 +93,6 @@
 
 	.font-lato {
 		font-family: Lato, sans-serif;
-	}
-
-	.stickers {
-		content: "";
-		position: fixed;
-		top: -200px;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-image: url("../../public/images/STICKERS.png");
-		background-size: cover;
-		background-repeat: no-repeat;
-		background-position: center center;
-		z-index: 1;
-		pointer-events: none;
-	}
-	@media (max-width: 960px) {
-		.stickers {
-			display: none;
-		}
-	}
-
-	.shadowtext-on-grid {
-		background: radial-gradient(rgba(0, 0, 0, 40), rgba(0, 0, 0, 0));
 	}
 }
 
@@ -200,7 +128,7 @@ a:hover {
 
 .mobile-content {
 	scroll-snap-align: start;
-	scroll-padding: 0 20px;
+	scroll-padding: 0 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
