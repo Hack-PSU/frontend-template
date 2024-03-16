@@ -9,6 +9,7 @@ import { writeToDatabase } from "@/lib/database";
 import { User } from "@/interfaces";
 import BigButton from "@/components/common/BigButton";
 import TelephoneFormatter from "@/components/common/TelephoneFormatter";
+import Alert from "@/components/common/Alert";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -154,10 +155,20 @@ const Registration: React.FC = () => {
 				}));
 			} else {
 				// Redirect user to homepage if not logged in
+				alert("You must be signed in to register for HackPSU. Redirecting...");
 				router.push("/");
 			}
 		}
 	}, [isAuthenticated, userDataLoaded]);
+
+	// Alert
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [alertMessage, setAlertMessage] = useState<string>("");
+
+	const alert = (message: string) => {
+		setAlertMessage(message);
+		setShowAlert(true);
+	};
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -276,6 +287,7 @@ const Registration: React.FC = () => {
 				}
 
 				handleScroll(key);
+				alert("Please fill out all required fields.");
 				return;
 			} else if (value !== null && validationData[key] !== value) {
 				handleScroll(key);
@@ -1242,6 +1254,11 @@ const Registration: React.FC = () => {
 						</div>
 					)}
 				</div>
+			)}
+
+			{/** Alert handler */}
+			{showAlert && (
+				<Alert message={alertMessage} onClose={() => setShowAlert(false)} />
 			)}
 		</>
 	);
