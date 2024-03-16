@@ -16,7 +16,7 @@ const BigButton = ({
 }: BigButtonProps) => {
 	return (
 		<motion.button
-			className={`w-full ${className || ""}`}
+			className={`w-full hover:cursor-pointer ${className || ""}`}
 			onClick={onClick}
 			whileHover={{
 				scale: 1.1,
