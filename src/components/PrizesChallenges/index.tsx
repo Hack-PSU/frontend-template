@@ -7,9 +7,7 @@ const PrizesChallenges = () => {
 		<section id="prizes" className="flex flex-col items-center w-full mt-20">
 			<div className="w-full max-w-6xl flex flex-col items-center">
 				{" "}
-				<h1 className="cornerstone-font font-bold text-6xl text-center">
-					Prizes & Challenges
-				</h1>
+				<h1 className="section-header-text">Prizes & Challenges</h1>
 				<Divider />
 				<div className="w-full grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
 					{" "}

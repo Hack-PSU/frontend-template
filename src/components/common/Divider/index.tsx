@@ -1,3 +1,3 @@
 export default function Divider() {
-	return <span className="bg-black h-0.5 w-full" />;
+	return <span className="bg-white h-0.5 w-full" />;
 }
