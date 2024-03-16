@@ -26,7 +26,9 @@ const faqs = [
 		question: "Can I be reimbursed for travel?",
 		answer:
 			"Travel reimbursements will be handled at the registration table Saturday after 3pm and Sunday from 11am-1pm. Please come to the table with everyone that you traveled with, and the receipts for your transportation costs. If you spoke with us directly about special consideration, please have any emails/messages shared open and ready! For more information, please refer to our Travel Reimbursement Policy.",
-		link: "https://app.hackpsu.org/travel-reimbursement",
+		link: {
+			target: "https://app.hackpsu.org/travel-reimbursement",
+		},
 	},
 	{
 		question: "How does extra credit work?",
@@ -37,19 +39,28 @@ const faqs = [
 		question: "How do I submit a project?",
 		answer:
 			"All projects will be submitted through the HackPSU Devpost by Sunday 12:00pm (even if not completed), then you'll be able to edit your Devpost submission until 1:45pm. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, slide into a DM, messenger pigeon, drone, overnight express mail, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed. View more requirements when submitting a project in the Devpost Rules.",
-		link: "http://devpost.hackpsu.org/",
+		link: {
+			target: "http://devpost.hackpsu.org/",
+			text: "devpost.hackpsu.org",
+		},
 	},
 	{
 		question: "What is Devpost?",
 		answer:
 			"Devpost is a project submission platform used by many hackathons and technology-focused events. You and/or your team will be asked to submit your project through our Spring 2024 Devpost. For those who have never used Devpost before or would like a refresher, head over to the info booth!",
-		link: "http://devpost.hackpsu.org/",
+			link: {
+				target: "http://devpost.hackpsu.org/",
+				text: "devpost.hackpsu.org",
+			},
 	},
 	{
 		question: "When are project submissions due?",
 		answer:
 			"You must have a Devpost submission created by Sunday 12pm (even if not completed) on our Devpost page. However, you can continue editing the submission until hacking ends on Sunday at 1:45pm.",
-		link: "http://devpost.hackpsu.org/",
+			link: {
+				target: "http://devpost.hackpsu.org/",
+				text: "devpost.hackpsu.org",
+			},
 	},
 ];
 

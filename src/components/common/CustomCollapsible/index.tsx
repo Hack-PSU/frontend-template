@@ -5,10 +5,13 @@ import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 interface Props {
 	question: string;
 	answer: string;
-	link?: string | undefined;
+	link?: {
+		target: string;
+		text?: string | undefined;
+	}
 }
 
-export default function CustomCollapsible({ question, answer, link }: Props) {
+export default function CustomCollapsible({ question, answer, link, }: Props) {
 	return (
 		<Disclosure as="div" key={question} className="faq-collapsible">
 			{({ open }) => (
@@ -32,12 +35,12 @@ export default function CustomCollapsible({ question, answer, link }: Props) {
 						<p className="text-white-custom">{answer}</p>
 						{link && (
 							<a
-								href={link}
+								href={link.target}
 								target="_blank"
 								rel="noopener noreferrer"
 								className="text-blu-custom hover:underline"
 							>
-								{link}
+								{link.text || link.target}
 							</a>
 						)}
 					</Disclosure.Panel>
