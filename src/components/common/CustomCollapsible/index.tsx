@@ -2,6 +2,8 @@
 import { Disclosure } from "@headlessui/react";
 import { MinusSmallIcon, PlusSmallIcon } from "@heroicons/react/24/outline";
 
+import "./customCollapsible.css";
+
 interface Props {
 	question: string;
 	answer: string;
@@ -38,7 +40,7 @@ export default function CustomCollapsible({ question, answer, link, }: Props) {
 								href={link.target}
 								target="_blank"
 								rel="noopener noreferrer"
-								className="text-blu-custom hover:underline"
+								className="text-blue-custom"
 							>
 								{link.text || link.target}
 							</a>
