@@ -92,7 +92,7 @@ const Registration: React.FC = () => {
 	const [hackathon, setHackathon] = useState<any>(null);
 
 	// Get Firebase user fields
-	const { user, isAuthenticated, logout, userDataLoaded } = useFirebase();
+	const { user, isAuthenticated, userDataLoaded } = useFirebase();
 	const router = useRouter();
 
 	// Scroll to element
@@ -102,7 +102,7 @@ const Registration: React.FC = () => {
 			return;
 		}
 
-		// Handle scroll (with offset)
+		// Handle scroll (with offset for Navbar)
 		const offset = 100;
 		const elementRect = element.getBoundingClientRect().top;
 		const absoluteElementTop = elementRect + window.scrollY;
@@ -146,16 +146,17 @@ const Registration: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		if (userDataLoaded)
+		if (userDataLoaded) {
 			if (isAuthenticated) {
 				setRegistrationData((prevData) => ({
 					...prevData,
 					id: user?.uid ?? "",
 				}));
-			} else if (!isAuthenticated && userDataLoaded) {
+			} else {
 				// Redirect user to homepage if not logged in
 				router.push("/");
 			}
+		}
 	}, [isAuthenticated, userDataLoaded]);
 
 	const handleChange = (
@@ -166,8 +167,6 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: value,
 		}));
-
-		console.log(registrationData);
 	};
 
 	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -192,7 +191,6 @@ const Registration: React.FC = () => {
 	};
 
 	const handleToggle = (name: string, isChecked: boolean) => {
-		console.log(name, isChecked);
 		setRegistrationData((prevData) => ({
 			...prevData,
 			[name]: isChecked,
@@ -316,8 +314,6 @@ const Registration: React.FC = () => {
 			);
 		}
 
-		console.log("Sending FormData: ", registrationUser);
-
 		// Write user to database
 		const res: any = await writeToDatabase("users", registrationUser);
 
@@ -344,18 +340,12 @@ const Registration: React.FC = () => {
 			};
 
 			const regRes: any = await writeToDatabase("registrations", registration);
-			console.log("Registration response: ", regRes);
 		}
 	};
 
 	if (!componentMounted) {
 		return null;
 	}
-
-	const doLogout = async () => {
-		await logout();
-		console.log("Logged out");
-	};
 
 	return (
 		<>
@@ -370,7 +360,6 @@ const Registration: React.FC = () => {
 							</div>{" "}
 							Hackathon!
 						</div>
-						<button onClick={doLogout}>Logout (test)</button>
 					</div>
 
 					<form className="form" onSubmit={handleSubmit}>

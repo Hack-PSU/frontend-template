@@ -42,6 +42,7 @@ type FirebaseProviderHooks = {
 	): Promise<SignUpResponse>;
 	loginWithEmailAndPassword(email: string, password: string): Promise<void>;
 	logout(next?: () => Promise<void>): Promise<void>;
+	userDataLoaded: boolean;
 };
 
 type Props = {
