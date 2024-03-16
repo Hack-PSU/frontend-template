@@ -178,6 +178,7 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: value,
 		}));
+		setShowAlert(false);
 	};
 
 	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -192,6 +193,7 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: valueString,
 		}));
+		setShowAlert(false);
 	};
 
 	const handlePhoneInput = (name: string, phone: string) => {
@@ -199,6 +201,7 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: phone,
 		}));
+		setShowAlert(false);
 	};
 
 	const handleToggle = (name: string, isChecked: boolean) => {
@@ -206,6 +209,7 @@ const Registration: React.FC = () => {
 			...prevData,
 			[name]: isChecked,
 		}));
+		setShowAlert(false);
 	};
 
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -217,6 +221,7 @@ const Registration: React.FC = () => {
 				[name]: file,
 			}));
 		}
+		setShowAlert(false);
 	};
 
 	// Allow user to download resume to ensure correct file uploaded
