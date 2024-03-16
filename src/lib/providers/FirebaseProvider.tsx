@@ -63,6 +63,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	const [user, setUser] = useState<User | undefined>();
 	const [error, setError] = useState<FirebaseAuthError>(FirebaseAuthError.NONE);
 	const [token, setToken] = useState<string>("");
+	const [userDataLoaded, setUserDataLoaded] = useState<boolean>(false);
 
 	const getUserIdToken = useCallback(async (user: User) => {
 		return await getIdToken(user);
@@ -97,6 +98,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				setIsAuthenticated(false);
 				setError(FirebaseAuthError.NONE);
 			}
+			setUserDataLoaded(true);
 		},
 		[getUserIdToken]
 	);
@@ -154,6 +156,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				await signOut(auth);
 				setToken("");
 				setIsAuthenticated(false);
+				setUserDataLoaded(false);
 
 				await next?.();
 			} catch (e) {
@@ -189,6 +192,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
 			logout,
+			userDataLoaded, // Use this to check if user data has been loaded from Firebase
 		}),
 		[
 			isAuthenticated,
@@ -198,6 +202,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
 			logout,
+			userDataLoaded,
 		]
 	);
 	return (

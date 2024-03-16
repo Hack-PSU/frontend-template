@@ -130,34 +130,34 @@ input[type="checkbox"] {
 
 .sidebar {
 	color: black;
+	display: inline-block;
+	white-space: nowrap;
+	max-width: min-content;
 	text-decoration: none;
 }
 
 .sidebar:hover {
 	color: black;
+	cursor: pointer;
 	text-decoration: underline;
 }
 
 .sidebar-selected {
 	color: var(--primary);
 	font-weight: bold;
+	display: inline-block;
+	white-space: nowrap;
+	max-width: min-content;
 	text-decoration: none;
 }
 
 .sidebar-selected:hover {
 	color: black;
+	cursor: pointer;
 	text-decoration: underline;
 }
 
-.sidebar-selected::before {
-	content: "|";
-	color: var(--primary);
-	position: absolute;
-	left: 5px;
-	transform: translateY(-0.5rem);
-	font-size: 1.5rem;
-}
-
+.sidebar-selected::before,
 .sidebar:hover::before {
 	content: "|";
 	color: var(--primary);

@@ -8,6 +8,7 @@ import { getActiveHackathon } from "@/lib/common";
 import { writeToDatabase } from "@/lib/database";
 import { User } from "@/interfaces";
 import BigButton from "@/components/common/BigButton";
+import TelephoneFormatter from "@/components/common/TelephoneFormatter";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -91,8 +92,7 @@ const Registration: React.FC = () => {
 	const [hackathon, setHackathon] = useState<any>(null);
 
 	// Get Firebase user fields
-	const { user, isAuthenticated } = useFirebase();
-
+	const { user, isAuthenticated, logout, userDataLoaded } = useFirebase();
 	const router = useRouter();
 
 	// Scroll to element
@@ -105,7 +105,7 @@ const Registration: React.FC = () => {
 		// Handle scroll (with offset)
 		const offset = 100;
 		const elementRect = element.getBoundingClientRect().top;
-		const absoluteElementTop = elementRect + window.pageYOffset;
+		const absoluteElementTop = elementRect + window.scrollY;
 		const scrollToPosition = absoluteElementTop - offset;
 
 		window.scrollTo({
@@ -146,16 +146,17 @@ const Registration: React.FC = () => {
 	}, []);
 
 	useEffect(() => {
-		console.log(user, isAuthenticated);
-		if (isAuthenticated) {
-			setRegistrationData((prevData) => ({
-				...prevData,
-				id: user?.uid ?? "",
-			}));
-		}
-
-		// Need to handle user not being authenticated, but this callback is hard to work with
-	}, [isAuthenticated]);
+		if (userDataLoaded)
+			if (isAuthenticated) {
+				setRegistrationData((prevData) => ({
+					...prevData,
+					id: user?.uid ?? "",
+				}));
+			} else if (!isAuthenticated && userDataLoaded) {
+				// Redirect user to homepage if not logged in
+				router.push("/");
+			}
+	}, [isAuthenticated, userDataLoaded]);
 
 	const handleChange = (
 		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -180,6 +181,13 @@ const Registration: React.FC = () => {
 		setRegistrationData((prevData) => ({
 			...prevData,
 			[name]: valueString,
+		}));
+	};
+
+	const handlePhoneInput = (name: string, phone: string) => {
+		setRegistrationData((prevData) => ({
+			...prevData,
+			[name]: phone,
 		}));
 	};
 
@@ -244,7 +252,18 @@ const Registration: React.FC = () => {
 
 		// Check if all required fields are filled
 		const validationData: any = registrationData as any;
-		for (const [key, value] of Object.entries(requiredFields)) {
+		for (let [key, value] of Object.entries(requiredFields)) {
+			// Separate validation for user_id
+			if (key == "id") {
+				if (!validationData.id) {
+					console.error("User not logged in; no user id found.");
+					alert("You must be logged in to register for HackPSU."); // The user should always redirect automatically, but this is a backup
+					return;
+				} else {
+					continue;
+				}
+			}
+
 			const element = document.getElementById(key);
 
 			if (!element) {
@@ -254,6 +273,10 @@ const Registration: React.FC = () => {
 			}
 
 			if (validationData[key] === undefined || validationData[key] === "") {
+				if (key == "firstName" || key == "lastName") {
+					key = "name"; // Scroll to top of input container
+				}
+
 				handleScroll(key);
 				return;
 			} else if (value !== null && validationData[key] !== value) {
@@ -329,6 +352,11 @@ const Registration: React.FC = () => {
 		return null;
 	}
 
+	const doLogout = async () => {
+		await logout();
+		console.log("Logged out");
+	};
+
 	return (
 		<>
 			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -342,6 +370,7 @@ const Registration: React.FC = () => {
 							</div>{" "}
 							Hackathon!
 						</div>
+						<button onClick={doLogout}>Logout (test)</button>
 					</div>
 
 					<form className="form" onSubmit={handleSubmit}>
@@ -356,7 +385,7 @@ const Registration: React.FC = () => {
 									<input
 										id="firstName"
 										name="firstName"
-										required
+										// required
 										onChange={handleChange}
 									/>
 								</div>
@@ -367,7 +396,7 @@ const Registration: React.FC = () => {
 									<input
 										id="lastName"
 										name="lastName"
-										required
+										// required
 										onChange={handleChange}
 									/>
 								</div>
@@ -386,7 +415,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									required
+									// required
 									value="male"
 									id="male"
 									onChange={handleChange}
@@ -396,7 +425,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									required
+									// required
 									value="female"
 									id="female"
 									onChange={handleChange}
@@ -406,7 +435,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									required
+									// required
 									value="non-binary"
 									id="non-binary"
 									onChange={handleChange}
@@ -416,7 +445,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									required
+									// required
 									value="no-disclose"
 									id="no-disclose"
 									onChange={handleChange}
@@ -436,11 +465,9 @@ const Registration: React.FC = () => {
 								spamming your phone.
 							</div>
 							<div className="my-2">
-								<input
-									id="phoneNumber"
+								<TelephoneFormatter
 									name="phoneNumber"
-									required
-									onChange={handleChange}
+									onChange={handlePhoneInput}
 								/>
 							</div>
 							{!registrationData.phoneNumber && (
@@ -524,7 +551,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									required
+									// required
 									value="yes"
 									id="yes"
 									onChange={handleChange}
@@ -534,7 +561,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									required
+									// required
 									value="no"
 									id="no"
 									onChange={handleChange}
@@ -544,7 +571,7 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									required
+									// required
 									value="no-disclose"
 									id="no-disclose-veteran"
 									onChange={handleChange}
@@ -584,7 +611,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="XS"
 											id="XS"
 											onChange={handleChange}
@@ -594,7 +621,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="S"
 											id="S"
 											onChange={handleChange}
@@ -604,7 +631,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="M"
 											id="M"
 											onChange={handleChange}
@@ -614,7 +641,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="L"
 											id="L"
 											onChange={handleChange}
@@ -624,7 +651,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="XL"
 											id="XL"
 											onChange={handleChange}
@@ -634,7 +661,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="shirtSize"
-											required
+											// required
 											value="XXL"
 											id="XXL"
 											onChange={handleChange}
@@ -653,7 +680,7 @@ const Registration: React.FC = () => {
 										<input
 											id="country"
 											name="country"
-											required
+											// required
 											onChange={handleChange}
 										/>
 									</div>
@@ -730,7 +757,7 @@ const Registration: React.FC = () => {
 										<input
 											id="major"
 											name="major"
-											required
+											// required
 											onChange={handleChange}
 										/>
 									</div>
@@ -745,7 +772,7 @@ const Registration: React.FC = () => {
 										<input
 											id="university"
 											name="university"
-											required
+											// required
 											onChange={handleChange}
 										/>
 									</div>
@@ -760,7 +787,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="freshman"
 											id="freshman"
 											onChange={handleChange}
@@ -770,7 +797,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="sophomore"
 											id="sophomore"
 											onChange={handleChange}
@@ -780,7 +807,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="junior"
 											id="junior"
 											onChange={handleChange}
@@ -790,7 +817,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="senior"
 											id="senior"
 											onChange={handleChange}
@@ -800,7 +827,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="graduate"
 											id="graduate"
 											onChange={handleChange}
@@ -810,7 +837,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="academicYear"
-											required
+											// required
 											value="other"
 											id="other"
 											onChange={handleChange}
@@ -831,7 +858,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="less-than-secondary"
 											id="less-than-secondary"
 											onChange={handleChange}
@@ -843,7 +870,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="secondary"
 											id="secondary"
 											onChange={handleChange}
@@ -853,7 +880,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="two-year-university"
 											id="two-year-university"
 											onChange={handleChange}
@@ -866,7 +893,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="three-plus-year-university"
 											id="three-plus-year-university"
 											onChange={handleChange}
@@ -878,7 +905,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="graduate-university"
 											id="graduate-university"
 											onChange={handleChange}
@@ -891,7 +918,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="code-school-or-bootcamp"
 											id="code-school-or-bootcamp"
 											onChange={handleChange}
@@ -903,7 +930,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="vocational-trade-apprenticeship"
 											id="vocational-trade-apprenticeship"
 											onChange={handleChange}
@@ -915,7 +942,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="other"
 											id="other"
 											onChange={handleChange}
@@ -925,7 +952,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="not-a-student"
 											id="not-a-student"
 											onChange={handleChange}
@@ -937,7 +964,7 @@ const Registration: React.FC = () => {
 										<input
 											type="radio"
 											name="educationalInstitutionType"
-											required
+											// required
 											value="prefer-no-answer"
 											id="prefer-no-answer"
 											onChange={handleChange}
@@ -1144,7 +1171,7 @@ const Registration: React.FC = () => {
 													id="referral"
 													name="referral"
 													onChange={handleChange}
-													required
+													// required
 												/>
 											</div>
 											{!registrationData.referral && (
