@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { getActiveHackathon } from "@/lib/common";
 
-const CountdownTimer: React.FC<Props> = () => {
+const CountdownTimer: React.FC = () => {
 	// Get Hackathon data
 	const [hackathon, setHackathon] = useState<any>(null);
 	useEffect(() => {
