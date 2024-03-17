@@ -13,7 +13,7 @@ const Submissions: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    http://devpost.hackpsu.org
+                    devpost.hackpsu.org
                 </a>
                 . Make sure to submit your project (even if not completed) on Devpost by 12
                 PM Sunday! You can edit it until 1:45 PM Sunday. This is a hard deadline -
