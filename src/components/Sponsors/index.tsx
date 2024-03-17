@@ -29,7 +29,7 @@ export default function Sponsors() {
 	return (
 		<section id="sponsors" className="flex flex-col items-center w-full mt-20">
 			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
-				<h1 className="font-bold text-6xl cornerstone-font">Sponsors</h1>
+				<h1 className="section-header-text">Sponsors</h1>
 				<Divider />
 			</div>
 			<div className="bg-transparent mt-8">

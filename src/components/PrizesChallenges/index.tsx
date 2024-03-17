@@ -7,9 +7,7 @@ const PrizesChallenges = () => {
 		<section id="prizes" className="flex flex-col items-center w-full mt-20">
 			<div className="w-full max-w-6xl flex flex-col items-center">
 				{" "}
-				<h1 className="cornerstone-font font-bold text-6xl text-center">
-					Prizes & Challenges
-				</h1>
+				<h1 className="section-header-text">Prizes & Challenges</h1>
 				<Divider />
 				<div className="w-full grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
 					{" "}
@@ -24,16 +22,21 @@ const PrizesChallenges = () => {
 						extra="Winners will also receive MLH winner pins."
 					/>
 					<AwardBox
-						title="Entrepreneurship Award"
-						description="Awarded to the hack with the most sustainable business model, including considerations of monetization, target audience, and future growth. A total of $750 will be paid out via Amazon gift cards split evenly among the winning team members."
-					/>
-					<AwardBox
-						title="Sustainability Award"
+						title="Sustainability Track"
 						description="Awarded to the team that demonstrates the most innovative use of technology to promote sustainability and environmental stewardship. A total of $150 will be distributed as Amazon gift cards, divided equally among the members of the winning team."
 					/>
 					<AwardBox
-						title="Generative AI Award"
+						title="Generative AI Track"
 						description="Awarded to the hack with the best use of generative artificial intelligence. A total of $150 will be paid out via Amazon gift cards split evenly among the winning team members."
+					/>
+					<AwardBox
+						title="Peraton Award"
+						description="Awarded to the hack with the best use of React. Winners demonstrate proficiency in crafting user-friendly interfaces and dynamic applications. A total of $500 will be split evenly among the winning team members."
+					/>
+					<AwardBox
+						title="Entrepreneurship Award"
+						description="Awarded to the hack with the most sustainable business model, including considerations of monetization, target audience, and future growth. A total of $750 will be paid out via Amazon gift cards split evenly among the winning team members."
+						extra="Sponsored and judged by NES."
 					/>
 				</div>
 			</div>
