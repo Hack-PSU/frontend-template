@@ -68,7 +68,7 @@ const FAQ = () => {
 	return (
 		<section className="faq-section mt-4 mb-20 md:mb-0">
 			<div className="faq-header">
-				<h1 className="faq-title">FAQ</h1>
+				<h1 className="section-header-text">FAQ</h1>
 				<Divider />
 				<dl className="faq-list">
 					{faqs.map((faq, index) => (

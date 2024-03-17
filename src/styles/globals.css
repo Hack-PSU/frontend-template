@@ -87,6 +87,17 @@
 		}
 	}
 
+	.section-header-text {
+		color: white;
+		font-family: "cornerstone";
+		font-size: 4rem;
+		text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
+			2px 2px 0 black;
+		font-weight: bold;
+		line-height: 1;
+		text-align: center;
+	}
+
 	.font-lato {
 		font-family: Lato, sans-serif;
 	}

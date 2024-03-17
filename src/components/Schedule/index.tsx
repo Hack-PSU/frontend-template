@@ -3,7 +3,7 @@ import { Tab } from "@headlessui/react";
 import "./schedule.css";
 import { EventModel } from "@/interfaces";
 
-const Divider = () => <hr className="my-4 border-black border-[1px]" />;
+const Divider = () => <hr className="my-4 border-white border-[1px]" />;
 
 interface DayIndicatorProps {
 	day: string;
@@ -67,25 +67,25 @@ const Schedule: React.FC = () => {
 	return (
 		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
 			<div className="text-center">
-				<h1 className="font-bold text-6xl">Schedule</h1>
+				<h1 className="section-header-text">Schedule</h1>
 				<Divider />
 			</div>
 			<Tab.Group>
 				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
-					{Object.keys(schedule).filter(
-						(category) => category !== "CheckIn"
-					).map((category) => (
-						<Tab
-							key={category}
-							className={({ selected }) =>
-								`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-									selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
-								}`
-							}
-						>
-							{category}
-						</Tab>
-					))}
+					{Object.keys(schedule)
+						.filter((category) => category !== "CheckIn")
+						.map((category) => (
+							<Tab
+								key={category}
+								className={({ selected }) =>
+									`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
+										selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
+									}`
+								}
+							>
+								{category}
+							</Tab>
+						))}
 				</Tab.List>
 				<Tab.Panels className="mt-4 tab-panel">
 					{Object.entries(schedule)
