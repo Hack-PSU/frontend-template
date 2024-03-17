@@ -35,6 +35,10 @@ const PrizesChallenges = () => {
 						title="Generative AI Award"
 						description="Awarded to the hack with the best use of generative artificial intelligence. A total of $150 will be paid out via Amazon gift cards split evenly among the winning team members."
 					/>
+					<AwardBox
+						title=" Best Web Hack Using React"
+						description="Sponsored by Peraton. Each participant on the winning team will receive a $100 gift card, Peraton swag and merch"
+					/>
 				</div>
 			</div>
 		</section>
