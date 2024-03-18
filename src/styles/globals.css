@@ -131,11 +131,13 @@ a:hover {
 	overflow-y: scroll;
 	scroll-snap-type: y mandatory;
 	scroll-behavior: smooth;
+	border: white 1px solid;
 }
 
 .mobile-content {
 	scroll-snap-align: start;
-	scroll-padding: 0 50px;
+	scroll-padding-top: 50px;
+	scroll-padding-bottom: 50px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
