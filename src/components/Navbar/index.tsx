@@ -43,12 +43,12 @@ const buttonImages = [
 		alt: "workshops",
 		isExternal: false,
 	},
-	{
+/* 	{
 		href: "https://register.hackpsu.org/signup",
 		src: registerButton,
 		alt: "register",
 		isExternal: true,
-	},
+	}, */
 ];
 
 const NavbarButton = ({
