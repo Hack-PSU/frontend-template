@@ -4,144 +4,109 @@ import Image from "next/image";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Logo from "../../../public/logo.png";
-import blankButton from "../../../public/images/buttons/BUTTON_BLANK.png";
-
+import infoButton from "../../../public/images/buttons/BUTTON_INFO.png";
+import scheduleButton from "../../../public/images/buttons/BUTTON_SCHEDULE.png";
+import prizesButton from "../../../public/images/buttons/BUTTON_PRIZES.png";
+import registerButton from "../../../public/images/buttons/BUTTON_REGISTER.png";
+import sponsorsButton from "../../../public/images/buttons/BUTTON_SPONSORS.png";
+import workshopsButton from "../../../public/images/buttons/BUTTON_WORKSHOPS.png";
 import "./navbar.css";
 
-interface NavbarButtonProps {
-	href: string;
-	alt: string;
-	src?: any;
-	isExternal?: boolean;
-	children?: React.ReactNode;
-	onClick?: () => void;
-}
+const buttonImages = [
+	{
+		href: "#faq",
+		src: infoButton,
+		alt: "info",
+		isExternal: false,
+	},
+	{
+		href: "#schedule",
+		src: scheduleButton,
+		alt: "schedule",
+		isExternal: false,
+	},
+	{
+		href: "#prizes",
+		src: prizesButton,
+		alt: "prizes",
+		isExternal: false,
+	},
+	{
+		href: "#sponsors",
+		src: sponsorsButton,
+		alt: "sponsors",
+		isExternal: false,
+	},
+	{
+		href: "#schedule",
+		src: workshopsButton,
+		alt: "workshops",
+		isExternal: false,
+	},
+/* 	{
+		href: "https://register.hackpsu.org/signup",
+		src: registerButton,
+		alt: "register",
+		isExternal: true,
+	}, */
+];
 
-const NavbarButton: React.FC<NavbarButtonProps> = ({
+const NavbarButton = ({
 	href,
-	src = blankButton,
+	src,
 	alt,
 	isExternal = false,
-	children,
-	onClick,
-}) => {
-	return (
-		<a
-			href={href}
-			target={isExternal ? "_blank" : "_self"}
-			rel={isExternal ? "noopener noreferrer" : undefined}
-			onClick={onClick}
-		>
-			<button className="relative">
-				<Image
-					src={src}
-					width={150}
-					height={50}
-					alt={alt}
-					className="navbar-button w-full h-full"
-				/>
-				<span
-					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg pointer-events-none"
-					style={{ color: "#2d82a1" }}
-				>
-					{(children as string).toUpperCase()}
-				</span>
-			</button>
-		</a>
-	);
-};
+}: {
+	href: string;
+	src: any;
+	alt: string;
+	isExternal?: boolean;
+}) => (
+	<a
+		href={href}
+		target={isExternal ? "_blank" : "_self"}
+		rel={isExternal ? "noopener noreferrer" : undefined}
+	>
+		<button>
+			<Image
+				src={src}
+				width={150}
+				height={50}
+				alt={alt}
+				className="navbar-button"
+			/>
+		</button>
+	</a>
+);
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
-	const { logout, isAuthenticated, userDataLoaded } = useFirebase();
-
-	const buttonImages = [
-		{
-			href: "#faq",
-			alt: "info",
-			text: "info",
-			isExternal: false,
-		},
-		{
-			href: "#schedule",
-			alt: "schedule",
-			text: "schedule",
-			isExternal: false,
-		},
-		{
-			href: "#prizes",
-			alt: "prizes",
-			text: "prizes",
-			isExternal: false,
-		},
-		{
-			href: "#sponsors",
-			alt: "sponsors",
-			text: "sponsors",
-			isExternal: false,
-		},
-		{
-			href: "#workshops",
-			alt: "workshops",
-			text: "workshops",
-			isExternal: false,
-		},
-	];
-
-  // Uncomment this to enable registration on Navbar
-	/*if (userDataLoaded && isAuthenticated) {
-		buttonImages.push({
-			href: "/register",
-			alt: "register",
-			text: "register",
-			isExternal: false,
-		});
-		buttonImages.push({
-			href: "/",
-			alt: "signout",
-			text: "signout",
-			isExternal: false,
-		});
-	} else {
-		buttonImages.push({
-			href: "/signin",
-			alt: "signin",
-			text: "signin",
-			isExternal: false,
-		});
-		buttonImages.push({
-			href: "/signup",
-			alt: "signup",
-			text: "signup",
-			isExternal: false,
-		});
-	}*/
+	const { logout, isAuthenticated } = useFirebase();
 
 	return (
 		<nav
 			className={`navbar ${
 				scrolled ? "navbar-scrolled" : ""
 			} sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block ${
-				scrolled ? "border-b border-gray-200 backdrop-blur-xl" : "bg-white/0"
+				scrolled
+					? "border-b border-gray-200 backdrop-blur-xl"
+					: "bg-white/0"
 			} z-30 transition-all`}
 		>
 			<div className="flex flex-row justify-evenly mr-[150px]">
-				<a href="/">
+				<a>
 					<Image src={Logo} width={90} height={90} alt="logo" />
 				</a>
 
-				{buttonImages.map(({ href, alt, text, isExternal }, index) => (
+				{buttonImages.map(({ href, src, alt, isExternal }, index) => (
 					<NavbarButton
 						key={index}
 						href={href}
+						src={src}
 						alt={alt}
 						isExternal={isExternal}
-						onClick={text === "signout" ? logout : undefined}
-					>
-						{text}
-					</NavbarButton>
+					/>
 				))}
-
 				<MLHBadge />
 			</div>
 		</nav>

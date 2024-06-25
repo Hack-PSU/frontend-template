@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import Logo from "@/../public/images/LOGO_FA23_NoBG.png";
 import Register from "@/../public/images/TEXTBOX_register.png";
 import Discord from "@/../public/images/TEXTBOX_discord.png";
 
@@ -8,7 +10,7 @@ import CountdownTimer from "../CountdownTimer";
 import BigButton from "@/components/common/BigButton";
 
 const Hero = () => {
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const { isAuthenticated } = useFirebase();
 
 	return (
 		<section
@@ -34,19 +36,19 @@ const Hero = () => {
 								<div className="p-4 flex flex-wrap justify-center">
 									<BigButton
 										background={Register}
-										onClick={() => window.open("/register", "_self")}
+										onClick={() => {
+											window.open(
+												"https://register.hackpsu.org/register",
+												"_blank"
+											);
+										}}
 										className="mb-2 w-full"
 									></BigButton>
 
 									<BigButton
 										background={Discord}
 										onClick={() => {
-											window.open(
-												userDataLoaded && isAuthenticated
-													? "/register"
-													: "/signup",
-												"_self"
-											);
+											window.open("http://discord.hackpsu.org", "_blank");
 										}}
 										className="mb-4 w-full"
 									></BigButton>

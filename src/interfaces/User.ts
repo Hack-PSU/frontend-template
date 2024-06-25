@@ -12,7 +12,7 @@ export interface User {
 	phone: string;
 	country: string;
 	race?: string;
-	resume?: any;
+	resume?: string;
 }
 
 import { Registration } from "./Registration";

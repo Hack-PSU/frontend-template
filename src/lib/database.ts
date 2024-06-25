@@ -1,11 +1,5 @@
 import ApiService from "./api/apiService";
-import {
-	Hackathon,
-	User,
-	Sponsor,
-	EventModel,
-	Registration,
-} from "@/interfaces";
+import { Hackathon, User, Sponsor, EventModel, Registration } from "@/interfaces";
 
 /**
  * Reads data from a database table based on the specified table name and optional ID.
@@ -28,9 +22,10 @@ export async function readFromDatabase<T>(
 	switch (table.toLowerCase()) {
 		case "events":
 			if (args?.id === undefined) {
-				const events: EventModel[] | undefined = await ApiService.get<
-					EventModel[]
-				>(`/events`, useAuth);
+				const events: EventModel[] | undefined = await ApiService.get<EventModel[]>(
+					`/events`,
+					useAuth
+				);
 				return events as unknown as T;
 			} else {
 				const event: EventModel | undefined = await ApiService.get<EventModel>(
