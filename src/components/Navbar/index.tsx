@@ -88,7 +88,7 @@ export default function Navbar() {
 		},
 	];
 
-  // Uncomment this to enable registration on Navbar
+	// Uncomment this to enable registration on Navbar
 	/*if (userDataLoaded && isAuthenticated) {
 		buttonImages.push({
 			href: "/register",
