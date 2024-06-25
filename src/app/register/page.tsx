@@ -1,11 +1,10 @@
 "use client";
-import Link from "next/link";
 import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import ToggleSwitch from "@/components/common/ToggleSwitch";
 import { getActiveHackathon } from "@/lib/common";
-import { writeToDatabase } from "@/lib/database";
+import { writeToDatabase, updateInDatabase } from "@/lib/database";
 import { User } from "@/interfaces";
 import BigButton from "@/components/common/BigButton";
 import TelephoneFormatter from "@/components/common/TelephoneFormatter";
@@ -156,7 +155,7 @@ const Registration: React.FC = () => {
 			} else {
 				// Redirect user to homepage if not logged in
 				alert("You must be signed in to register for HackPSU. Redirecting...");
-				router.push("/");
+				router.push("/signup");
 			}
 		}
 	}, [isAuthenticated, userDataLoaded]);
@@ -164,9 +163,16 @@ const Registration: React.FC = () => {
 	// Alert
 	const [showAlert, setShowAlert] = useState<boolean>(false);
 	const [alertMessage, setAlertMessage] = useState<string>("");
+	const [alertSeverity, setAlertSeverity] = useState<
+		"error" | "warning" | "info" | "success" | ""
+	>("");
 
-	const alert = (message: string) => {
+	const alert = (
+		message: string,
+		severity: "error" | "warning" | "info" | "success" | "" = "error"
+	) => {
 		setAlertMessage(message);
+		setAlertSeverity(severity);
 		setShowAlert(true);
 	};
 
@@ -332,32 +338,56 @@ const Registration: React.FC = () => {
 		}
 
 		// Write user to database
-		const res: any = await writeToDatabase("users", registrationUser);
+		writeToDatabase("users", registrationUser).catch((err: any) => {
+			// Assume user already exists, so try a PATCH
+			const updateUser = newUser;
 
-		if (res?.id) {
-			// Success if post returns user that was created
-			// Now, build the registration object
-			const registration = {
-				userId: res.id,
-				travelReimbursement: false,
-				driving: registrationData.driving,
-				firstHackathon: registrationData.firstHackathon,
-				academicYear: registrationData.academicYear,
-				educationalInstitutionType: registrationData.educationalInstitutionType,
-				codingExperience: registrationData.codingExperience,
-				eighteenBeforeEvent: registrationData.eighteenBeforeEvent,
-				mlhCoc: registrationData.mlhCoc,
-				mlhDcp: registrationData.mlhDcp,
-				referral: registrationData.referral,
-				project: registrationData.project,
-				expectations: registrationData.expectations,
-				shareEmailMlh: registrationData.shareEmailMlh,
-				veteran: registrationData.veteran,
-				time: Date.now(),
-			};
+			updateInDatabase("users", updateUser)
+				.then((res: any) => {
+					// Success on update
+					console.log("Update user response: ", res);
+				})
+				.catch((err: any) => {
+					// Unknown error
+					alert(
+						"Unknown error while registering user; please relog and try again."
+					);
+					console.error("Error handling request to register user: ", err);
+					return;
+				});
+		});
 
-			const regRes: any = await writeToDatabase("registrations", registration);
-		}
+		// Build the registration object
+		const registration = {
+			userId: registrationData.id,
+			travelReimbursement: false,
+			driving: registrationData.driving,
+			firstHackathon: registrationData.firstHackathon,
+			academicYear: registrationData.academicYear,
+			educationalInstitutionType: registrationData.educationalInstitutionType,
+			codingExperience: registrationData.codingExperience,
+			eighteenBeforeEvent: registrationData.eighteenBeforeEvent,
+			mlhCoc: registrationData.mlhCoc,
+			mlhDcp: registrationData.mlhDcp,
+			referral: registrationData.referral,
+			project: registrationData.project,
+			expectations: registrationData.expectations,
+			shareEmailMlh: registrationData.shareEmailMlh,
+			veteran: registrationData.veteran,
+			time: Date.now(),
+		};
+
+		writeToDatabase("registrations", registration)
+			.then((res: any) => {
+				alert("You are now registered for the hackathon!", "success");
+				// Navigate user home
+				setTimeout(() => {
+					window.location.href = "/";
+				}, 3000);
+			})
+			.catch((err: any) => {
+				alert("You are already registered for the Hackathon!", "warning");
+			});
 	};
 
 	if (!componentMounted) {
@@ -1263,7 +1293,11 @@ const Registration: React.FC = () => {
 
 			{/** Alert handler */}
 			{showAlert && (
-				<Alert message={alertMessage} onClose={() => setShowAlert(false)} />
+				<Alert
+					message={alertMessage}
+					onClose={() => setShowAlert(false)}
+					severity={alertSeverity}
+				/>
 			)}
 		</>
 	);

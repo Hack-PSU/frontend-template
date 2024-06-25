@@ -40,7 +40,10 @@ type FirebaseProviderHooks = {
 		email: string,
 		password: string
 	): Promise<SignUpResponse>;
-	loginWithEmailAndPassword(email: string, password: string): Promise<void>;
+	loginWithEmailAndPassword(
+		email: string,
+		password: string
+	): Promise<LoginResponse>;
 	logout(next?: () => Promise<void>): Promise<void>;
 	userDataLoaded: boolean;
 };
@@ -55,6 +58,11 @@ const FirebaseContext = createContext<FirebaseProviderHooks>(
 );
 
 interface SignUpResponse {
+	success: boolean;
+	error?: string;
+}
+
+interface LoginResponse {
 	success: boolean;
 	error?: string;
 }
@@ -122,7 +130,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 						return { success: false, error: "User not created" };
 					}
 				} catch (e) {
-					alert(e);
 					resolveAuthError(e as AuthError);
 					return { success: false, error: e?.toString() ?? "Sign-up failed" };
 				}
@@ -132,7 +139,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 
 	const loginWithEmailAndPassword: FirebaseProviderHooks["loginWithEmailAndPassword"] =
 		useCallback(
-			async (email, password) => {
+			async (email, password): Promise<LoginResponse> => {
 				setError(FirebaseAuthError.NONE);
 				try {
 					const userCredential = await signInWithEmailAndPassword(
@@ -143,9 +150,13 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 
 					if (userCredential.user) {
 						await resolveAuthState(userCredential.user);
+						return { success: true };
+					} else {
+						return { success: false, error: "User not found" };
 					}
 				} catch (e) {
 					resolveAuthError(e as AuthError);
+					return { success: false, error: e?.toString() ?? "Login failed" };
 				}
 			},
 			[auth, resolveAuthError, resolveAuthState]

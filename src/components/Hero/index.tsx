@@ -9,7 +9,7 @@ import CountdownTimer from "./CountdownTimer";
 import BigButton from "@/components/common/BigButton";
 
 const Hero = () => {
-	const { isAuthenticated } = useFirebase();
+	const { isAuthenticated, userDataLoaded } = useFirebase();
 
 	return (
 		<section
@@ -36,7 +36,10 @@ const Hero = () => {
 							<BigButton
 								background={Register}
 								onClick={() =>
-									window.open("https://register.hackpsu.org/register", "_blank")
+									window.open(
+										userDataLoaded && isAuthenticated ? "/register" : "/signup",
+										"_self"
+									)
 								}
 								className="mb-4 w-full"
 							/>
