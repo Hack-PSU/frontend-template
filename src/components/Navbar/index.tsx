@@ -81,14 +81,15 @@ export default function Navbar() {
 			isExternal: false,
 		},
 		{
-			href: "#schedule",
+			href: "#workshops",
 			alt: "workshops",
 			text: "workshops",
 			isExternal: false,
 		},
 	];
 
-	if (userDataLoaded && isAuthenticated) {
+  // Uncomment this to enable registration on Navbar
+	/*if (userDataLoaded && isAuthenticated) {
 		buttonImages.push({
 			href: "/register",
 			alt: "register",
@@ -114,7 +115,7 @@ export default function Navbar() {
 			text: "signup",
 			isExternal: false,
 		});
-	}
+	}*/
 
 	return (
 		<nav

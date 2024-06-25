@@ -16,7 +16,7 @@ const rules = [
 const Rules = () => (
 	<section className="flex flex-col items-center w-full gap-8 my-4">
 		<div className="w-11/12 md:w-5/12 flex flex-col items-center">
-			<h1 className="custom-font">Rules</h1>
+			<h1 className="section-header-text">Rules</h1>
 			<Divider />
 		</div>
 		<div className="w-10/12">

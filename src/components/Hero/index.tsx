@@ -33,7 +33,7 @@ const Hero = () => {
 
 					<div className="flex flex-col items-center justify-center">
 						<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
-							<BigButton
+{/* 							<BigButton
 								background={Register}
 								onClick={() =>
 									window.open(
@@ -42,7 +42,7 @@ const Hero = () => {
 									)
 								}
 								className="mb-4 w-full"
-							/>
+							/> */}
 
 							<BigButton
 								background={Discord}
