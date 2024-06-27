@@ -52,6 +52,8 @@ const CountdownTimer: React.FC = () => {
 	const endDate = new Date(hackathon?.endTime || new Date());
 
 	const updateCountdown = () => {
+		if (!hackathon) return;
+
 		const now = new Date();
 		let difference = targetDate.getTime() - now.getTime();
 
