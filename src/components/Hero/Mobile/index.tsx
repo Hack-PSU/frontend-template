@@ -34,7 +34,7 @@ const Hero = () => {
 						{!isAuthenticated ? (
 							<div className="flex flex-col items-center justify-center">
 								<div className="p-4 flex flex-wrap justify-center">
-									<BigButton
+{/* 									<BigButton
 										background={Register}
 										onClick={() => {
 											window.open(
@@ -43,7 +43,7 @@ const Hero = () => {
 											);
 										}}
 										className="mb-2 w-full"
-									></BigButton>
+									></BigButton> */}
 
 									<BigButton
 										background={Discord}
