@@ -497,8 +497,8 @@ const Registration: React.FC = () => {
 						<div className="card" id="phoneNumber">
 							<div className="card-header">What is your phone number?</div>
 							<div className="info">
-								This information is required by MLH. Rest assured we won't be
-								spamming your phone.
+								This information is required by MLH. Rest assured we won&apos;t
+								be spamming your phone.
 							</div>
 							<div className="my-2">
 								<TelephoneFormatter
@@ -994,7 +994,7 @@ const Registration: React.FC = () => {
 											onChange={handleChange}
 										/>
 										<label htmlFor="not-a-student">
-											I'm not currently a student
+											I&apos;m not currently a student
 										</label>
 										<br />
 										<input
@@ -1085,9 +1085,9 @@ const Registration: React.FC = () => {
 										Do you agree to the MLH Data Sharing
 									</div>
 									<span>
-										By agreeing to this notice, you affirm that: "I authorize
-										you to share my registration information with Major League
-										Hacking for event administration, ranking, MLH
+										By agreeing to this notice, you affirm that: &quot;I
+										authorize you to share my registration information with
+										Major League Hacking for event administration, ranking, MLH
 										administration in-line with the&nbsp;
 										<a href="https://mlh.io/privacy" target="_blank">
 											MLH Privacy Policy
@@ -1103,7 +1103,7 @@ const Registration: React.FC = () => {
 										<a href="https://mlh.io/privacy" target="_blank">
 											MLH Privacy Policy
 										</a>
-										."
+										.&quot;
 										<br />
 										<br />
 										<p className="info">
@@ -1127,10 +1127,10 @@ const Registration: React.FC = () => {
 									</div>
 									<span>
 										<p className="inline">
-											By agreeing to this, you affirm that: "I authorize MLH to
-											send me an email where I can further opt into the MLH
-											Hacker, Events, or Organizer Newsletters and other
-											communications from MLH."
+											By agreeing to this, you affirm that: &quot;I authorize
+											MLH to send me an email where I can further opt into the
+											MLH Hacker, Events, or Organizer Newsletters and other
+											communications from MLH.&quot;
 										</p>
 										<br />
 										<br />
@@ -1218,7 +1218,7 @@ const Registration: React.FC = () => {
 										{/** Project */}
 										<div className="card" id="project">
 											<div className="card-header">
-												What is a project you're proud of?
+												What is a project you&apos;re proud of?
 											</div>
 											<div className="my-2">
 												<textarea
