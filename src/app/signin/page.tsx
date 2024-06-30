@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import Alert from "@/components/common/Alert";
 
 export default function SignIn() {
-	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
+	const { loginWithEmailAndPassword, isAuthenticated, userDataLoaded } =
+		useFirebase();
 	const router = useRouter();
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -26,7 +27,7 @@ export default function SignIn() {
 	};
 
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (userDataLoaded && isAuthenticated) {
 			void router.push("/");
 		}
 		setIsMounted(true);
@@ -44,7 +45,7 @@ export default function SignIn() {
 				<div className="sm:mx-auto sm:w-full sm:max-w-md">
 					<Image
 						className="mx-auto w-auto"
-						src="/HackPSUBWLogo1.png"
+						src="/images/HackPSUBWLogo1.png"
 						alt="HackPSU logo"
 						width={100}
 						height={100}
