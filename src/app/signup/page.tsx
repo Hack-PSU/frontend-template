@@ -1,23 +1,31 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useEffect, useState } from "react";
+import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Alert from "@/components/common/Alert";
 
-export default function SignIn() {
-	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
-	const router = useRouter();
-	const [isMounted, setIsMounted] = useState(false);
+/* Signup is used to add a user to the Firebase DB. */
 
-	const handleSubmit = async (event: any) => {
+const Signup: React.FC = () => {
+	const { signUpWithEmailAndPassword, loginWithEmailAndPassword } =
+		useFirebase();
+	const router = useRouter();
+
+	const handleSignup = async (event: FormEvent) => {
 		event.preventDefault();
-		const formData = new FormData(event.target);
-		const userEmail = String(formData.get("email"));
-		const userPassword = String(formData.get("password"));
-		const res: any = await loginWithEmailAndPassword(userEmail, userPassword);
+		if (!signupData.email || !signupData.password) {
+			return;
+		}
+
+		// Sign the user up and log them in
+		const res: any = await signUpWithEmailAndPassword(
+			signupData.email,
+			signupData.password
+		);
 		if (res.success) {
+			await loginWithEmailAndPassword(signupData.email, signupData.password);
 			router.push("/");
 		} else {
 			setAlertMessage(res.error);
@@ -25,16 +33,32 @@ export default function SignIn() {
 		}
 	};
 
-	useEffect(() => {
-		if (isAuthenticated) {
-			void router.push("/");
-		}
-		setIsMounted(true);
-	}, [router, isAuthenticated]);
+	interface SignupData {
+		email: string;
+		password: string;
+	}
+
+	const [signupData, setSignupData] = useState<SignupData>({
+		email: "",
+		password: "",
+	});
+	const [isMounted, setIsMounted] = useState(false);
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setSignupData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
 
 	// Alert
 	const [showAlert, setShowAlert] = useState<boolean>(false);
 	const [alertMessage, setAlertMessage] = useState<string>("");
+
+	useEffect(() => {
+		setIsMounted(true);
+	}, []);
 
 	if (!isMounted) return null;
 
@@ -50,13 +74,13 @@ export default function SignIn() {
 						height={100}
 					/>
 					<h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-						Sign in to your account
+						Create an account
 					</h2>
 				</div>
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 					<div className="bg-slate-100 px-6 py-12 shadow sm:rounded-lg sm:px-12">
-						<form className="space-y-6" onSubmit={handleSubmit}>
+						<form className="space-y-6" onSubmit={handleSignup}>
 							<div>
 								<label
 									htmlFor="email"
@@ -72,6 +96,7 @@ export default function SignIn() {
 										autoComplete="email"
 										required
 										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
@@ -91,33 +116,8 @@ export default function SignIn() {
 										autoComplete="current-password"
 										required
 										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										onChange={handleChange}
 									/>
-								</div>
-							</div>
-
-							<div className="flex items-center justify-between">
-								<div className="flex items-center">
-									<input
-										id="remember-me"
-										name="remember-me"
-										type="checkbox"
-										className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-									/>
-									<label
-										htmlFor="remember-me"
-										className="ml-3 block text-sm leading-6 text-gray-900"
-									>
-										Remember me
-									</label>
-								</div>
-
-								<div className="text-sm leading-6">
-									<a
-										href="#"
-										className="font-semibold text-indigo-600 hover:text-indigo-500"
-									>
-										Forgot password?
-									</a>
 								</div>
 							</div>
 
@@ -126,7 +126,7 @@ export default function SignIn() {
 									type="submit"
 									className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 								>
-									Sign in
+									Create account
 								</button>
 							</div>
 						</form>
@@ -134,12 +134,12 @@ export default function SignIn() {
 
 					<div className="bg-slate-100 mt-10 p-2 shadow sm:rounded-lg sm:px-12">
 						<p className="text-center text-sm text-gray-500">
-							Not a hacker yet?{" "}
+							Already have an account?{" "}
 							<Link
-								href="/signup"
+								href="/signin"
 								className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
 							>
-								Register Here.
+								Log in here.
 							</Link>
 						</p>
 					</div>
@@ -152,4 +152,6 @@ export default function SignIn() {
 			)}
 		</>
 	);
-}
+};
+
+export default Signup;
