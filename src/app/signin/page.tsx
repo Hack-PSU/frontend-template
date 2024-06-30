@@ -7,7 +7,8 @@ import { useRouter } from "next/navigation";
 import Alert from "@/components/common/Alert";
 
 export default function SignIn() {
-	const { loginWithEmailAndPassword, isAuthenticated } = useFirebase();
+	const { loginWithEmailAndPassword, isAuthenticated, userDataLoaded } =
+		useFirebase();
 	const router = useRouter();
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -26,7 +27,7 @@ export default function SignIn() {
 	};
 
 	useEffect(() => {
-		if (isAuthenticated) {
+		if (userDataLoaded && isAuthenticated) {
 			void router.push("/");
 		}
 		setIsMounted(true);
