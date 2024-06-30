@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-
+import { usePathname } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Logo from "../../../public/logo.png";
@@ -32,7 +32,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
 		>
-			<button className="relative">
+			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5">
 				<Image
 					src={src}
 					width={150}
@@ -41,7 +41,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 					className="navbar-button w-full h-full"
 				/>
 				<span
-					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg pointer-events-none"
+					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
 					style={{ color: "#2d82a1" }}
 				>
 					{(children as string).toUpperCase()}
@@ -55,33 +55,36 @@ export default function Navbar() {
 	const scrolled = useScroll(50);
 	const { logout, isAuthenticated, userDataLoaded } = useFirebase();
 
+	const pathname = usePathname();
+	const isHome: boolean = pathname === "/";
+
 	const buttonImages = [
 		{
-			href: "#faq",
+			href: isHome ? "#faq" : "/#faq",
 			alt: "info",
 			text: "info",
 			isExternal: false,
 		},
 		{
-			href: "#schedule",
+			href: isHome ? "#schedule" : "/#schedule",
 			alt: "schedule",
 			text: "schedule",
 			isExternal: false,
 		},
 		{
-			href: "#prizes",
+			href: isHome ? "#prizes" : "/#prizes",
 			alt: "prizes",
 			text: "prizes",
 			isExternal: false,
 		},
 		{
-			href: "#sponsors",
+			href: isHome ? "#sponsors" : "/#sponsors",
 			alt: "sponsors",
 			text: "sponsors",
 			isExternal: false,
 		},
 		{
-			href: "#workshops",
+			href: isHome ? "#workshops" : "/#workshops",
 			alt: "workshops",
 			text: "workshops",
 			isExternal: false,
