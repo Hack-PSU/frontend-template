@@ -9,6 +9,7 @@ import { User } from "@/interfaces";
 import BigButton from "@/components/common/BigButton";
 import TelephoneFormatter from "@/components/common/TelephoneFormatter";
 import Alert from "@/components/common/Alert";
+import Autocomplete from "@/components/common/Autocomplete";
 
 /*
  * Registration is used to add a user to table of hackathon participants.
@@ -230,6 +231,14 @@ const Registration: React.FC = () => {
 		setShowAlert(false);
 	};
 
+	const handleAutocompleteChange = (name: string, value: string) => {
+		setRegistrationData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+		setShowAlert(false);
+	};
+
 	// Allow user to download resume to ensure correct file uploaded
 	const downloadResume = () => {
 		const resume = registrationData.resume;
@@ -342,19 +351,14 @@ const Registration: React.FC = () => {
 			// Assume user already exists, so try a PATCH
 			const updateUser = newUser;
 
-			updateInDatabase("users", updateUser)
-				.then((res: any) => {
-					// Success on update
-					console.log("Update user response: ", res);
-				})
-				.catch((err: any) => {
-					// Unknown error
-					alert(
-						"Unknown error while registering user; please relog and try again."
-					);
-					console.error("Error handling request to register user: ", err);
-					return;
-				});
+			updateInDatabase("users", updateUser).catch((err: any) => {
+				// Unknown error
+				alert(
+					"Unknown error while registering user; please relog and try again."
+				);
+				console.error("Error handling request to register user: ", err);
+				return;
+			});
 		});
 
 		// Build the registration object
@@ -713,11 +717,9 @@ const Registration: React.FC = () => {
 								<div className="card" id="country">
 									<div className="card-header">What country are you from?</div>
 									<div className="my-2">
-										<input
-											id="country"
-											name="country"
-											// required
-											onChange={handleChange}
+										<Autocomplete
+											data="country"
+											onSelectionChange={handleAutocompleteChange}
 										/>
 									</div>
 									{!registrationData.country && (
@@ -790,11 +792,9 @@ const Registration: React.FC = () => {
 										What is your (intended) major?
 									</div>
 									<div className="my-2">
-										<input
-											id="major"
-											name="major"
-											// required
-											onChange={handleChange}
+										<Autocomplete
+											data="major"
+											onSelectionChange={handleAutocompleteChange}
 										/>
 									</div>
 									{!registrationData.major && (
@@ -805,11 +805,9 @@ const Registration: React.FC = () => {
 								<div className="card" id="university">
 									<div className="card-header">What school do you attend?</div>
 									<div className="my-2">
-										<input
-											id="university"
-											name="university"
-											// required
-											onChange={handleChange}
+										<Autocomplete
+											data="university"
+											onSelectionChange={handleAutocompleteChange}
 										/>
 									</div>
 									{!registrationData.university && (
@@ -1203,11 +1201,10 @@ const Registration: React.FC = () => {
 												Where did you hear about HackPSU?
 											</div>
 											<div className="my-2">
-												<input
-													id="referral"
-													name="referral"
-													onChange={handleChange}
-													// required
+												<Autocomplete
+													data="referral"
+													onSelectionChange={handleAutocompleteChange}
+													searchTermMin={1}
 												/>
 											</div>
 											{!registrationData.referral && (
@@ -1259,7 +1256,7 @@ const Registration: React.FC = () => {
 
 			{/** Sidebar */}
 			{window.innerWidth >= 1024 && ( // Checks whether user in mobile
-				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center">
+				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:block">
 					{registrationData.eighteenBeforeEvent && (
 						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
 							{Array.from(sidebarFields.keys()).map((field) =>
