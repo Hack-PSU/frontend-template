@@ -1,6 +1,6 @@
 "use client";
-import Register from "@/../public/images/TEXTBOX_register.png";
-import Discord from "@/../public/images/TEXTBOX_discord.png";
+import Register from "@/../public/textbox-register.png";
+import Discord from "@/../public/textbox-discord.png";
 
 import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -32,7 +32,7 @@ const Hero = () => {
 						{!isAuthenticated ? (
 							<div className="flex flex-col items-center justify-center">
 								<div className="p-4 flex flex-wrap justify-center">
-{/* 									<BigButton
+									{/* 									<BigButton
 										background={Register}
 										onClick={() => window.open("/register", "_self")}
 										className="mb-2 w-full"

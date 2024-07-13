@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Logo from "../../../public/logo.png";
-import blankButton from "../../../public/images/buttons/BUTTON_BLANK.png";
+import blankButton from "../../../public/button-blank.png";
 
 import "./navbar.css";
 
