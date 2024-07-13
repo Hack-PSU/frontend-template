@@ -1256,7 +1256,7 @@ const Registration: React.FC = () => {
 
 			{/** Sidebar */}
 			{window.innerWidth >= 1024 && ( // Checks whether user in mobile
-				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:block">
+				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:flex">
 					{registrationData.eighteenBeforeEvent && (
 						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
 							{Array.from(sidebarFields.keys()).map((field) =>

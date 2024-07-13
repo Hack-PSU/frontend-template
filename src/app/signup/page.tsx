@@ -68,7 +68,7 @@ const Signup: React.FC = () => {
 				<div className="sm:mx-auto sm:w-full sm:max-w-md">
 					<Image
 						className="mx-auto w-auto"
-						src="/images/HackPSUBWLogo1.png"
+						src="/hackpsu-bw-logo1.png"
 						alt="HackPSU logo"
 						width={100}
 						height={100}

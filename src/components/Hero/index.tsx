@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
-import Register from "@/../public/images/TEXTBOX_register.png";
-import Discord from "@/../public/images/TEXTBOX_discord.png";
+import Register from "@/../public/textbox-register.png";
+import Discord from "@/../public/textbox-discord.png";
 
 import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -33,7 +33,7 @@ const Hero = () => {
 
 					<div className="flex flex-col items-center justify-center">
 						<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
-{/* 							<BigButton
+							{/* 							<BigButton
 								background={Register}
 								onClick={() =>
 									window.open(

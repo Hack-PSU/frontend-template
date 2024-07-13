@@ -42,7 +42,7 @@
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
 		background-color: #588157;
-		background-image: url("../../public/website_entire_background_s24.png");
+		background-image: url("../../public/website-background.png");
 		background-size: cover;
 		background-position: top center;
 	}
@@ -61,7 +61,7 @@
 	}
 
 	.frame {
-		background-image: url("../../public/images/SCREEN.png");
+		background-image: url("../../public/screen.png");
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;
