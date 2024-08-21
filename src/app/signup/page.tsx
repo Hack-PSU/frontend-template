@@ -27,6 +27,8 @@ const Signup: React.FC = () => {
 		if (res.success) {
 			await loginWithEmailAndPassword(signupData.email, signupData.password);
 			router.push("/");
+		} else if (res.error === "FirebaseError: Firebase: Error (auth/email-already-in-use).") {
+			router.push("/signin");
 		} else {
 			setAlertMessage(res.error);
 			setShowAlert(true);
