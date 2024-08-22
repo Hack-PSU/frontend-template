@@ -9,9 +9,17 @@ import Alert from "@/components/common/Alert";
 /* Signup is used to add a user to the Firebase DB. */
 
 const Signup: React.FC = () => {
-	const { signUpWithEmailAndPassword, loginWithEmailAndPassword } =
-		useFirebase();
+	const {
+		signUpWithEmailAndPassword,
+		loginWithEmailAndPassword,
+		isAuthenticated,
+		userDataLoaded,
+	} = useFirebase();
 	const router = useRouter();
+
+	if (userDataLoaded && isAuthenticated) {
+		router.push("/profile");
+	}
 
 	const handleSignup = async (event: FormEvent) => {
 		event.preventDefault();
@@ -26,8 +34,11 @@ const Signup: React.FC = () => {
 		);
 		if (res.success) {
 			await loginWithEmailAndPassword(signupData.email, signupData.password);
-			router.push("/");
-		} else if (res.error === "FirebaseError: Firebase: Error (auth/email-already-in-use).") {
+			router.push("/register");
+		} else if (
+			res.error ===
+			"FirebaseError: Firebase: Error (auth/email-already-in-use)."
+		) {
 			router.push("/signin");
 		} else {
 			setAlertMessage(res.error);

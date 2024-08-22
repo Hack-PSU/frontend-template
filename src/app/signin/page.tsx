@@ -5,9 +5,10 @@ import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Alert from "@/components/common/Alert";
+import { readFromDatabase } from "@/lib/database";
 
 export default function SignIn() {
-	const { loginWithEmailAndPassword, isAuthenticated, userDataLoaded } =
+	const { loginWithEmailAndPassword, isAuthenticated, userDataLoaded, user } =
 		useFirebase();
 	const router = useRouter();
 	const [isMounted, setIsMounted] = useState(false);
@@ -28,7 +29,13 @@ export default function SignIn() {
 
 	useEffect(() => {
 		if (userDataLoaded && isAuthenticated) {
-			void router.push("/");
+			// Check if user is registered
+			readFromDatabase("users", { id: user?.uid }).catch((error) => {
+				// if not registered redirect to register page
+				router.push("/register");
+			});
+			// If user is registered redirect to profile page
+			void router.push("/profile");
 		}
 		setIsMounted(true);
 	}, [router, isAuthenticated]);
@@ -96,7 +103,7 @@ export default function SignIn() {
 								</div>
 							</div>
 
-							<div className="flex items-center justify-between">
+							{/* <div className="flex items-center justify-between">
 								<div className="flex items-center">
 									<input
 										id="remember-me"
@@ -112,15 +119,15 @@ export default function SignIn() {
 									</label>
 								</div>
 
-								<div className="text-sm leading-6">
+ 								<div className="text-sm leading-6">
 									<a
 										href="#"
 										className="font-semibold text-indigo-600 hover:text-indigo-500"
 									>
 										Forgot password?
 									</a>
-								</div>
-							</div>
+								</div> 
+							</div> */}
 
 							<div>
 								<button

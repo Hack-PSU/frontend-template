@@ -386,7 +386,7 @@ const Registration: React.FC = () => {
 				alert("You are now registered for the hackathon!", "success");
 				// Navigate user home
 				setTimeout(() => {
-					window.location.href = "/";
+					window.location.href = "/profile";
 				}, 3000);
 			})
 			.catch((err: any) => {

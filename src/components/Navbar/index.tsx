@@ -5,6 +5,8 @@ import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Logo from "../../../public/logo.png";
 import blankButton from "../../../public/button-blank.png";
+import HomeIcon from "@mui/icons-material/Home";
+import { useRouter } from "next/navigation";
 
 import "./navbar.css";
 
@@ -58,6 +60,8 @@ export default function Navbar() {
 	const pathname = usePathname();
 	const isHome: boolean = pathname === "/";
 
+	const router = useRouter();
+
 	const buttonImages = [
 		{
 			href: isHome ? "#faq" : "/#faq",
@@ -92,60 +96,60 @@ export default function Navbar() {
 	];
 
 	// Uncomment this to enable registration on Navbar
-	/*if (userDataLoaded && isAuthenticated) {
+	if (userDataLoaded && isAuthenticated) {
 		buttonImages.push({
-			href: "/register",
-			alt: "register",
-			text: "register",
-			isExternal: false,
-		});
-		buttonImages.push({
-			href: "/",
-			alt: "signout",
-			text: "signout",
+			href: "/profile",
+			alt: "profile",
+			text: "profile",
 			isExternal: false,
 		});
 	} else {
 		buttonImages.push({
-			href: "/signin",
-			alt: "signin",
-			text: "signin",
-			isExternal: false,
-		});
-		buttonImages.push({
 			href: "/signup",
-			alt: "signup",
-			text: "signup",
+			alt: "register",
+			text: "register",
 			isExternal: false,
 		});
-	}*/
+	}
 
 	return (
 		<nav
 			className={`navbar ${
 				scrolled ? "navbar-scrolled" : ""
-			} sticky top-0 w-full p-2 justify-evenly md:h-24 hidden md:block ${
+			} sticky top-0 w-full p-2 justify-evenly md:h-24 md:block ${
 				scrolled ? "border-b border-gray-200 backdrop-blur-xl" : "bg-white/0"
 			} z-30 transition-all`}
 		>
-			<div className="flex flex-row justify-evenly mr-[150px]">
+			<div className="flex flex-row md:justify-evenly md:mr-[150px] md:px-0">
 				<a href="/">
 					<Image src={Logo} width={90} height={90} alt="logo" />
 				</a>
 
-				{buttonImages.map(({ href, alt, text, isExternal }, index) => (
-					<NavbarButton
-						key={index}
-						href={href}
-						alt={alt}
-						isExternal={isExternal}
-						onClick={text === "signout" ? logout : undefined}
+				{/* Home button for mobile */}
+				<div className="md:hidden flex justify-end w-full">
+					<button
+						className="text-white"
+						onClick={() => router.push("/")}
+						aria-label="Toggle Menu"
 					>
-						{text}
-					</NavbarButton>
-				))}
+						<HomeIcon fontSize="large" />
+					</button>
+				</div>
 
-				<MLHBadge />
+				<div className="hidden md:flex md:items-center md:space-x-6 lg:space-x-8">
+					{buttonImages.map(({ href, alt, text, isExternal }, index) => (
+						<NavbarButton
+							key={index}
+							href={href}
+							alt={alt}
+							isExternal={isExternal}
+							onClick={text === "signout" ? logout : undefined}
+						>
+							{text}
+						</NavbarButton>
+					))}
+					<MLHBadge />
+				</div>
 			</div>
 		</nav>
 	);
@@ -155,12 +159,12 @@ const MLHBadge = () => (
 	<a
 		id="mlh-trust-badge"
 		className="mlh-badge"
-		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2024-season&utm_content=white"
+		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=white"
 		target="_blank"
 		rel="noopener noreferrer"
 	>
 		<Image
-			src="https://s3.amazonaws.com/logged-assets/trust-badge/2024/mlh-trust-badge-2024-white.svg"
+			src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-white.svg"
 			alt="Major League Hacking 2024 Hackathon Season"
 			width={100}
 			height={100}

@@ -32,11 +32,11 @@ const Hero = () => {
 						{!isAuthenticated ? (
 							<div className="flex flex-col items-center justify-center">
 								<div className="p-4 flex flex-wrap justify-center">
-									{/* 									<BigButton
+ 									<BigButton
 										background={Register}
-										onClick={() => window.open("/register", "_self")}
+										onClick={() => window.open("/signup", "_self")}
 										className="mb-2 w-full"
-									></BigButton> */}
+									></BigButton>
 
 									<BigButton
 										background={Discord}
@@ -53,7 +53,29 @@ const Hero = () => {
 								</div>
 							</div>
 						) : (
-							<></>
+							<>
+								<div className="flex flex-col items-center justify-center">
+									<div className="p-4 flex flex-wrap justify-center">
+										<BigButton
+											background={Register}
+											onClick={() => window.open("/signup", "_self")}
+											className="mb-2 w-full"
+										></BigButton>
+										<BigButton
+											background={Discord}
+											onClick={() => {
+												window.open(
+													userDataLoaded && isAuthenticated
+														? "/register"
+														: "/signup",
+													"_self"
+												);
+											}}
+											className="mb-4 w-full"
+										></BigButton>
+									</div>
+								</div>
+							</>
 						)}
 					</div>
 				</div>
