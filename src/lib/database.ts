@@ -85,7 +85,7 @@ export async function readFromDatabase<T>(
 		case "users":
 			if (args?.id === undefined) {
 				const users: User[] | undefined = await ApiService.get<User[]>(
-					`/users`,
+					`/users/info/me`,
 					useAuth
 				);
 				return users as unknown as T;

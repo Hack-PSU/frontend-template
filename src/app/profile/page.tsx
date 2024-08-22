@@ -16,8 +16,14 @@ export default function Example() {
 	// Redirect if not authenticated
 	useEffect(() => {
 		if (userDataLoaded && isAuthenticated) {
-			readFromDatabase("users", { id: user?.uid })
-				.then((data) => {
+			readFromDatabase("users", {})
+				.then((data: any) => {
+					// data is a json object {}, if it is empty or does not contain the registration field, redirect to register page
+					if (!!(data && Object.keys(data).length === 0)) {
+						router.push("/register");
+					} else if (data && data.registration === null) {
+						router.push("/register");
+					}
 					setUserData(data);
 				})
 				.catch((error) => {
