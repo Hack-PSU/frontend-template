@@ -346,21 +346,6 @@ const Registration: React.FC = () => {
 			);
 		}
 
-		// Write user to database
-		writeToDatabase("users", registrationUser).catch((err: any) => {
-			// Assume user already exists, so try a PATCH
-			const updateUser = newUser;
-
-			updateInDatabase("users", updateUser).catch((err: any) => {
-				// Unknown error
-				alert(
-					"Unknown error while registering user; please relog and try again."
-				);
-				console.error("Error handling request to register user: ", err);
-				return;
-			});
-		});
-
 		// Build the registration object
 		const registration = {
 			userId: registrationData.id,
@@ -381,7 +366,22 @@ const Registration: React.FC = () => {
 			time: Date.now(),
 		};
 
-		writeToDatabase("registrations", registration)
+		// Write user to database
+		await writeToDatabase("users", registrationUser).catch((err: any) => {
+			// Assume user already exists, so try a PATCH
+			const updateUser = newUser;
+
+			updateInDatabase("users", updateUser).catch((err: any) => {
+				// Unknown error
+				alert(
+					"Unknown error while registering user; please relog and try again."
+				);
+				console.error("Error handling request to register user: ", err);
+				return;
+			});
+		});
+
+		await writeToDatabase("registrations", registration)
 			.then((res: any) => {
 				alert("You are now registered for the hackathon!", "success");
 				// Navigate user home
