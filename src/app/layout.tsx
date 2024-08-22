@@ -7,7 +7,7 @@ import "@/styles/globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-	title: "HackPSU Spring 2024",
+	title: "HackPSU Fall 2024",
 	description: "Main website for HackPSU",
 };
 

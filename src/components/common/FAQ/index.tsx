@@ -47,7 +47,7 @@ const faqs = [
 	{
 		question: "What is Devpost?",
 		answer:
-			"Devpost is a project submission platform used by many hackathons and technology-focused events. You and/or your team will be asked to submit your project through our Spring 2024 Devpost. For those who have never used Devpost before or would like a refresher, head over to the info booth!",
+			"Devpost is a project submission platform used by many hackathons and technology-focused events. You and/or your team will be asked to submit your project through our Fall 2024 Devpost. For those who have never used Devpost before or would like a refresher, head over to the info booth!",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",

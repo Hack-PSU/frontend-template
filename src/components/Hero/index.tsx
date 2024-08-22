@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
-import Register from "@/../public/images/TEXTBOX_register.png";
-import Discord from "@/../public/images/TEXTBOX_discord.png";
+import Register from "@/../public/textbox-register.png";
+import Discord from "@/../public/textbox-discord.png";
 
 import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -9,12 +9,12 @@ import CountdownTimer from "./CountdownTimer";
 import BigButton from "@/components/common/BigButton";
 
 const Hero = () => {
-	const { isAuthenticated } = useFirebase();
+	const { isAuthenticated, userDataLoaded } = useFirebase();
 
 	return (
 		<section
 			id="hero"
-			className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-8 mb-8"
+			className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-[6rem] mb-8"
 		>
 			<div className="flex p-8 bg-[#00000080] border-4 border-[green] rounded-lg">
 				<div className="hidden md:block ">
@@ -33,13 +33,16 @@ const Hero = () => {
 
 					<div className="flex flex-col items-center justify-center">
 						<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
-{/* 							<BigButton
+							<BigButton
 								background={Register}
 								onClick={() =>
-									window.open("https://register.hackpsu.org/register", "_blank")
+									window.open(
+										userDataLoaded && isAuthenticated ? "/signin" : "/signup",
+										"_self"
+									)
 								}
 								className="mb-4 w-full"
-							/> */}
+							/>
 
 							<BigButton
 								background={Discord}

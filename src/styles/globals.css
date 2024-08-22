@@ -6,27 +6,31 @@
 
 @layer base {
 	:root {
-		--background: 0 0% 100%;
-		--foreground: 240 10% 3.9%;
-		--card: 0 0% 100%;
-		--card-foreground: 240 10% 3.9%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 240 10% 3.9%;
-		--primary: 240 5.9% 10%;
-		--primary-foreground: 0 0% 98%;
-		--secondary: 240 4.8% 95.9%;
-		--secondary-foreground: 240 5.9% 10%;
-		--muted: 240 4.8% 95.9%;
-		--muted-foreground: 240 3.8% 46.1%;
-		--accent: 240 4.8% 95.9%;
-		--accent-foreground: 240 5.9% 10%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 240 5.9% 90%;
-		--input: 240 5.9% 90%;
-		--ring: 240 5.9% 10%;
+		--background: hsl(0 0% 100%);
+		--foreground: hsl(240 10% 3.9%);
+		--card: #f8fafc;
+		--card-foreground: hsl(240 10% 3.9%);
+		--popover: hsl(0 0% 100%);
+		--popover-foreground: hsl(240 10% 3.9%);
+		--primary: hsl(240, 60%, 11%);
+		--primary-foreground: hsl(0 0% 98%);
+		--secondary: hsl(240 4.8% 95.9%);
+		--secondary-foreground: hsl(240 5.9% 10%);
+		--muted: hsl(240 4.8% 95.9%);
+		--muted-foreground: hsl(240 3.8% 46.1%);
+		--accent: hsl(240 4.8% 95.9%);
+		--accent-foreground: hsl(240 5.9% 10%);
+		--destructive: hsl(0 84.2% 60.2%);
+		--destructive-foreground: hsl(0 0% 98%);
+		--border: hsl(240 5.9% 90%);
+		--ring: hsl(240 5.9% 10%);
+		--input: hsl(240 5.9% 90%);
+		--input-content: #2d3748;
+		--selected-input: #2b6cb0;
 		--radius: 0.5rem;
 		--link-color: #3498db;
+		--button: #007bff;
+		--button-hover: #0056b3;
 	}
 
 	/* Account for fixed size of the Navbar upon jumping to links. */
@@ -38,7 +42,7 @@
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
 		background-color: #588157;
-		background-image: url("../../public/website_entire_background_s24.png");
+		background-image: url("../../public/website-background.png");
 		background-size: cover;
 		background-position: top center;
 	}
@@ -57,7 +61,7 @@
 	}
 
 	.frame {
-		background-image: url("../../public/images/SCREEN.png");
+		background-image: url("../../public/screen.png");
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;

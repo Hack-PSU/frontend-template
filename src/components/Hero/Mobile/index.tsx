@@ -1,8 +1,6 @@
 "use client";
-import Image from "next/image";
-import Logo from "@/../public/images/LOGO_FA23_NoBG.png";
-import Register from "@/../public/images/TEXTBOX_register.png";
-import Discord from "@/../public/images/TEXTBOX_discord.png";
+import Register from "@/../public/textbox-register.png";
+import Discord from "@/../public/textbox-discord.png";
 
 import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -10,7 +8,7 @@ import CountdownTimer from "../CountdownTimer";
 import BigButton from "@/components/common/BigButton";
 
 const Hero = () => {
-	const { isAuthenticated } = useFirebase();
+	const { isAuthenticated, userDataLoaded } = useFirebase();
 
 	return (
 		<section
@@ -34,28 +32,50 @@ const Hero = () => {
 						{!isAuthenticated ? (
 							<div className="flex flex-col items-center justify-center">
 								<div className="p-4 flex flex-wrap justify-center">
-{/* 									<BigButton
+ 									<BigButton
 										background={Register}
-										onClick={() => {
-											window.open(
-												"https://register.hackpsu.org/register",
-												"_blank"
-											);
-										}}
+										onClick={() => window.open("/signup", "_self")}
 										className="mb-2 w-full"
-									></BigButton> */}
+									></BigButton>
 
 									<BigButton
 										background={Discord}
 										onClick={() => {
-											window.open("http://discord.hackpsu.org", "_blank");
+											window.open(
+												userDataLoaded && isAuthenticated
+													? "/register"
+													: "/signup",
+												"_self"
+											);
 										}}
 										className="mb-4 w-full"
 									></BigButton>
 								</div>
 							</div>
 						) : (
-							<></>
+							<>
+								<div className="flex flex-col items-center justify-center">
+									<div className="p-4 flex flex-wrap justify-center">
+										<BigButton
+											background={Register}
+											onClick={() => window.open("/signup", "_self")}
+											className="mb-2 w-full"
+										></BigButton>
+										<BigButton
+											background={Discord}
+											onClick={() => {
+												window.open(
+													userDataLoaded && isAuthenticated
+														? "/register"
+														: "/signup",
+													"_self"
+												);
+											}}
+											className="mb-4 w-full"
+										></BigButton>
+									</div>
+								</div>
+							</>
 						)}
 					</div>
 				</div>
