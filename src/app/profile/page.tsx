@@ -29,6 +29,10 @@ export default function Example() {
 				.catch((error) => {
 					router.push("/register");
 				});
+		} else if (userDataLoaded && !isAuthenticated) {
+			router.push("/signin");
+		} else {
+			router.push("/");
 		}
 	}, [router, isAuthenticated, userDataLoaded, user]);
 

@@ -6,10 +6,16 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Alert from "@/components/common/Alert";
 import { readFromDatabase } from "@/lib/database";
+import { Google as GoogleIcon } from "@mui/icons-material";
 
 export default function SignIn() {
-	const { loginWithEmailAndPassword, isAuthenticated, userDataLoaded, user } =
-		useFirebase();
+	const {
+		loginWithEmailAndPassword,
+		signInWithGoogle,
+		isAuthenticated,
+		userDataLoaded,
+		user,
+	} = useFirebase();
 	const router = useRouter();
 	const [isMounted, setIsMounted] = useState(false);
 
@@ -19,6 +25,16 @@ export default function SignIn() {
 		const userEmail = String(formData.get("email"));
 		const userPassword = String(formData.get("password"));
 		const res: any = await loginWithEmailAndPassword(userEmail, userPassword);
+		if (res.success) {
+			router.push("/");
+		} else {
+			setAlertMessage(res.error);
+			setShowAlert(true);
+		}
+	};
+
+	const handleGoogleSignIn = async () => {
+		const res: any = await signInWithGoogle();
 		if (res.success) {
 			router.push("/");
 		} else {
@@ -103,32 +119,6 @@ export default function SignIn() {
 								</div>
 							</div>
 
-							{/* <div className="flex items-center justify-between">
-								<div className="flex items-center">
-									<input
-										id="remember-me"
-										name="remember-me"
-										type="checkbox"
-										className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-									/>
-									<label
-										htmlFor="remember-me"
-										className="ml-3 block text-sm leading-6 text-gray-900"
-									>
-										Remember me
-									</label>
-								</div>
-
- 								<div className="text-sm leading-6">
-									<a
-										href="#"
-										className="font-semibold text-indigo-600 hover:text-indigo-500"
-									>
-										Forgot password?
-									</a>
-								</div> 
-							</div> */}
-
 							<div>
 								<button
 									type="submit"
@@ -138,6 +128,28 @@ export default function SignIn() {
 								</button>
 							</div>
 						</form>
+
+						{/* Divider */}
+						<div className="relative mt-6">
+							<div className="absolute inset-0 flex items-center">
+								<div className="w-full border-t border-gray-300"></div>
+							</div>
+							<div className="relative flex justify-center text-sm">
+								<span className="bg-slate-100 px-2 text-gray-500">or</span>
+							</div>
+						</div>
+
+						{/* Google Sign-In Button */}
+						<div className="mt-6">
+							<button
+								type="button"
+								onClick={handleGoogleSignIn}
+								className="flex w-full justify-center items-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+							>
+								<GoogleIcon className="mr-2" />
+								Sign in with Google
+							</button>
+						</div>
 					</div>
 
 					<div className="bg-slate-100 mt-10 p-2 shadow sm:rounded-lg sm:px-12">
