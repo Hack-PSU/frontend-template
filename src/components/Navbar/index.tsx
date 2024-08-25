@@ -105,7 +105,7 @@ export default function Navbar() {
 		});
 	} else {
 		buttonImages.push({
-			href: "/signup",
+			href: "/signin",
 			alt: "register",
 			text: "register",
 			isExternal: false,
