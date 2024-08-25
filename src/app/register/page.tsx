@@ -156,10 +156,10 @@ const Registration: React.FC = () => {
 			} else {
 				// Redirect user to homepage if not logged in
 				alert("You must be signed in to register for HackPSU. Redirecting...");
-				router.push("/signup");
+				router.push("/signin");
 			}
 		}
-	}, [isAuthenticated, userDataLoaded]);
+	}, [isAuthenticated, router, user?.uid, userDataLoaded]);
 
 	// Alert
 	const [showAlert, setShowAlert] = useState<boolean>(false);

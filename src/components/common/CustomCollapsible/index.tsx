@@ -10,10 +10,10 @@ interface Props {
 	link?: {
 		target: string;
 		text?: string | undefined;
-	}
+	};
 }
 
-export default function CustomCollapsible({ question, answer, link, }: Props) {
+export default function CustomCollapsible({ question, answer, link }: Props) {
 	return (
 		<Disclosure as="div" key={question} className="faq-collapsible">
 			{({ open }) => (

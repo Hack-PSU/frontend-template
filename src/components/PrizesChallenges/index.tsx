@@ -35,8 +35,8 @@ const PrizesChallenges = () => {
 					/>
 					<AwardBox
 						title="Entrepreneurship Award"
-						description="Awarded to the hack with the most sustainable business model, including considerations of monetization, target audience, and future growth. A total of $500 will be paid out via Amazon gift cards split evenly among the winning team members."
-						extra="Sponsored and judged by NES."
+						description="Awarded to the hack with the most sustainable business model, including considerations of monetization, target audience, and future growth. A total of $750 will be paid out via Amazon gift cards split evenly among the winning team members."
+						extra=""
 					/>
 				</div>
 			</div>

@@ -20,6 +20,8 @@ import {
 	User,
 	createUserWithEmailAndPassword,
 	onIdTokenChanged,
+	signInWithPopup,
+	GoogleAuthProvider,
 } from "firebase/auth";
 import { initApi, resetApi } from "@/lib/api";
 
@@ -44,6 +46,7 @@ type FirebaseProviderHooks = {
 		email: string,
 		password: string
 	): Promise<LoginResponse>;
+	signInWithGoogle(): Promise<LoginResponse>;
 	logout(next?: () => Promise<void>): Promise<void>;
 	userDataLoaded: boolean;
 };
@@ -162,6 +165,28 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			[auth, resolveAuthError, resolveAuthState]
 		);
 
+	const signInWithGoogle: FirebaseProviderHooks["signInWithGoogle"] =
+		useCallback(async (): Promise<LoginResponse> => {
+			setError(FirebaseAuthError.NONE);
+			try {
+				const provider = new GoogleAuthProvider();
+				const userCredential = await signInWithPopup(auth, provider);
+
+				if (userCredential.user) {
+					await resolveAuthState(userCredential.user);
+					return { success: true };
+				} else {
+					return { success: false, error: "Google sign-in failed" };
+				}
+			} catch (e) {
+				resolveAuthError(e as AuthError);
+				return {
+					success: false,
+					error: e?.toString() ?? "Google sign-in failed",
+				};
+			}
+		}, [auth, resolveAuthError, resolveAuthState]);
+
 	const logout: FirebaseProviderHooks["logout"] = useCallback(
 		async (next) => {
 			try {
@@ -203,6 +228,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			token,
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
+			signInWithGoogle,
 			logout,
 			userDataLoaded, // Use this to check if user data has been loaded from Firebase
 		}),
@@ -213,6 +239,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			token,
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
+			signInWithGoogle,
 			logout,
 			userDataLoaded,
 		]
