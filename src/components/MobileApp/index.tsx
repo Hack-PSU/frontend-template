@@ -21,7 +21,7 @@ const MobileApp = () => {
 							rel="noopener noreferrer"
 						>
 							{/* TODO: Set up Next.js SVG handling for iOS store icon. */}
-							<img
+							<Image
 								src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1604620800&h=413f442f188f45f269ac02e9fafd7e0f"
 								alt="Download on the App Store"
 								height="100"

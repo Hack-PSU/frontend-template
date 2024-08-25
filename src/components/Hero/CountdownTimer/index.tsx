@@ -101,7 +101,7 @@ const CountdownTimer: React.FC = () => {
 		const interval = setInterval(updateCountdown, 1000);
 
 		return () => clearInterval(interval);
-	}, [state]);
+	}, [state, updateCountdown]);
 
 	const renderTime = (metric: number): string => {
 		// Hide numbers if component initially loading

@@ -6,9 +6,10 @@ import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import CountdownTimer from "../CountdownTimer";
 import BigButton from "@/components/common/BigButton";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const router = useRouter();
 
 	return (
 		<section
@@ -29,54 +30,25 @@ const Hero = () => {
 					</div>
 
 					<div>
-						{!isAuthenticated ? (
-							<div className="flex flex-col items-center justify-center">
-								<div className="p-4 flex flex-wrap justify-center">
- 									<BigButton
-										background={Register}
-										onClick={() => window.open("/signup", "_self")}
-										className="mb-2 w-full"
-									></BigButton>
+						<div className="flex flex-col items-center justify-center">
+							<div className="p-4 flex flex-wrap justify-center">
+								<BigButton
+									background={Register}
+									onClick={() => {
+										router.push("/signin");
+									}}
+									className="mb-2 w-full"
+								></BigButton>
 
-									<BigButton
-										background={Discord}
-										onClick={() => {
-											window.open(
-												userDataLoaded && isAuthenticated
-													? "/register"
-													: "/signup",
-												"_self"
-											);
-										}}
-										className="mb-4 w-full"
-									></BigButton>
-								</div>
+								<BigButton
+									background={Discord}
+									onClick={() => {
+										window.open("http://discord.hackpsu.org", "_blank");
+									}}
+									className="mb-4 w-full"
+								></BigButton>
 							</div>
-						) : (
-							<>
-								<div className="flex flex-col items-center justify-center">
-									<div className="p-4 flex flex-wrap justify-center">
-										<BigButton
-											background={Register}
-											onClick={() => window.open("/signup", "_self")}
-											className="mb-2 w-full"
-										></BigButton>
-										<BigButton
-											background={Discord}
-											onClick={() => {
-												window.open(
-													userDataLoaded && isAuthenticated
-														? "/register"
-														: "/signup",
-													"_self"
-												);
-											}}
-											className="mb-4 w-full"
-										></BigButton>
-									</div>
-								</div>
-							</>
-						)}
+						</div>
 					</div>
 				</div>
 			</div>

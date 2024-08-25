@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { readFromDatabase } from "@/lib/database";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import Image from "next/image";
 
 export default function Example() {
 	const { isAuthenticated, userDataLoaded, user, logout } = useFirebase();
@@ -18,10 +19,11 @@ export default function Example() {
 		if (userDataLoaded && isAuthenticated) {
 			readFromDatabase("users", {})
 				.then((data: any) => {
-					// data is a json object {}, if it is empty or does not contain the registration field, redirect to register page
+					// redirect to register if user data is empty (user has not been created)
 					if (!!(data && Object.keys(data).length === 0)) {
 						router.push("/register");
 					} else if (data && data.registration === null) {
+						// redirect to register if user has not registered (but user exists, presumably old user)
 						router.push("/register");
 					}
 					setUserData(data);
@@ -30,9 +32,8 @@ export default function Example() {
 					router.push("/register");
 				});
 		} else if (userDataLoaded && !isAuthenticated) {
+			// redirect to sign in if not authenticated
 			router.push("/signin");
-		} else {
-			router.push("/");
 		}
 	}, [router, isAuthenticated, userDataLoaded, user]);
 
@@ -60,10 +61,12 @@ export default function Example() {
 					<div className="text-center">
 						<div className="flex justify-center mb-4">
 							{user?.photoURL ? (
-								<img
+								<Image
+									src={user.photoURL}
+									alt="Profile Picture"
+									width={80}
+									height={80}
 									className="w-20 h-20 sm:w-24 sm:h-24 rounded-full"
-									src={user?.photoURL}
-									alt="Profile"
 								/>
 							) : (
 								<AccountCircleIcon style={{ fontSize: 80, color: "white" }} />

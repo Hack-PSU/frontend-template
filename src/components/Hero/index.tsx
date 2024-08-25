@@ -7,9 +7,11 @@ import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import CountdownTimer from "./CountdownTimer";
 import BigButton from "@/components/common/BigButton";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
 	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const router = useRouter();
 
 	return (
 		<section
@@ -35,20 +37,15 @@ const Hero = () => {
 						<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
 							<BigButton
 								background={Register}
-								onClick={() =>
-									window.open(
-										userDataLoaded && isAuthenticated ? "/signin" : "/signup",
-										"_self"
-									)
-								}
+								onClick={() => router.push("/signin")}
 								className="mb-4 w-full"
 							/>
 
 							<BigButton
 								background={Discord}
-								onClick={() =>
-									window.open("http://discord.hackpsu.org", "_blank")
-								}
+								onClick={() => {
+									window.open("http://discord.hackpsu.org", "_blank");
+								}}
 								className="mb-4 w-full"
 							/>
 						</div>

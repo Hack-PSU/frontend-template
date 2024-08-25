@@ -1,64 +1,91 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useEffect, useState } from "react";
+import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Alert from "@/components/common/Alert";
-import { readFromDatabase } from "@/lib/database";
 import { Google as GoogleIcon } from "@mui/icons-material";
 
-export default function SignIn() {
+const AuthPage: React.FC = () => {
 	const {
+		signUpWithEmailAndPassword,
 		loginWithEmailAndPassword,
 		signInWithGoogle,
 		isAuthenticated,
 		userDataLoaded,
-		user,
 	} = useFirebase();
 	const router = useRouter();
+
+	const [authData, setAuthData] = useState<{ email: string; password: string }>(
+		{
+			email: "",
+			password: "",
+		}
+	);
 	const [isMounted, setIsMounted] = useState(false);
 
-	const handleSubmit = async (event: any) => {
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [alertMessage, setAlertMessage] = useState<string>("");
+
+	useEffect(() => {
+		if (userDataLoaded && isAuthenticated) {
+			router.push("/profile");
+		}
+		setIsMounted(true);
+	}, [isAuthenticated, userDataLoaded, router]);
+
+	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = event.target;
+		setAuthData((prevData) => ({
+			...prevData,
+			[name]: value,
+		}));
+	};
+
+	const handleSubmit = async (event: FormEvent) => {
 		event.preventDefault();
-		const formData = new FormData(event.target);
-		const userEmail = String(formData.get("email"));
-		const userPassword = String(formData.get("password"));
-		const res: any = await loginWithEmailAndPassword(userEmail, userPassword);
-		if (res.success) {
-			router.push("/");
+		const { email, password } = authData;
+
+		// Attempt to sign up the user
+		const signUpRes = await signUpWithEmailAndPassword(email, password);
+		if (signUpRes.success) {
+			// Successful sign-up, proceed to register
+			await loginWithEmailAndPassword(email, password);
+			router.push("/register");
+		} else if (
+			signUpRes.error &&
+			signUpRes.error.includes("auth/email-already-in-use")
+		) {
+			// Email already in use, try signing in
+			const signInRes = await loginWithEmailAndPassword(email, password);
+			if (signInRes.success) {
+				// Successful sign-in, redirect to profile
+				router.push("/profile");
+			} else {
+				// Sign-in failed, show alert
+				setAlertMessage(
+					signInRes.error ? signInRes.error : "Unknown error occurred"
+				);
+				setShowAlert(true);
+			}
 		} else {
-			setAlertMessage(res.error);
+			// Other sign-up errors
+			setAlertMessage(
+				signUpRes.error ? signUpRes.error : "Unknown error occurred"
+			);
 			setShowAlert(true);
 		}
 	};
 
 	const handleGoogleSignIn = async () => {
-		const res: any = await signInWithGoogle();
+		const res = await signInWithGoogle();
 		if (res.success) {
 			router.push("/");
 		} else {
-			setAlertMessage(res.error);
+			setAlertMessage(res.error ? res.error : "Unknown error occurred");
 			setShowAlert(true);
 		}
 	};
-
-	useEffect(() => {
-		if (userDataLoaded && isAuthenticated) {
-			// Check if user is registered
-			readFromDatabase("users", { id: user?.uid }).catch((error) => {
-				// if not registered redirect to register page
-				router.push("/register");
-			});
-			// If user is registered redirect to profile page
-			void router.push("/profile");
-		}
-		setIsMounted(true);
-	}, [router, isAuthenticated]);
-
-	// Alert
-	const [showAlert, setShowAlert] = useState<boolean>(false);
-	const [alertMessage, setAlertMessage] = useState<string>("");
 
 	if (!isMounted) return null;
 
@@ -74,7 +101,7 @@ export default function SignIn() {
 						height={100}
 					/>
 					<h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-						Sign in to your account
+						Sign in or create an account
 					</h2>
 				</div>
 
@@ -96,6 +123,7 @@ export default function SignIn() {
 										autoComplete="email"
 										required
 										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
@@ -115,6 +143,7 @@ export default function SignIn() {
 										autoComplete="current-password"
 										required
 										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										onChange={handleChange}
 									/>
 								</div>
 							</div>
@@ -124,12 +153,11 @@ export default function SignIn() {
 									type="submit"
 									className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 								>
-									Sign in
+									Continue
 								</button>
 							</div>
 						</form>
 
-						{/* Divider */}
 						<div className="relative mt-6">
 							<div className="absolute inset-0 flex items-center">
 								<div className="w-full border-t border-gray-300"></div>
@@ -139,7 +167,6 @@ export default function SignIn() {
 							</div>
 						</div>
 
-						{/* Google Sign-In Button */}
 						<div className="mt-6">
 							<button
 								type="button"
@@ -154,22 +181,18 @@ export default function SignIn() {
 
 					<div className="bg-slate-100 mt-10 p-2 shadow sm:rounded-lg sm:px-12">
 						<p className="text-center text-sm text-gray-500">
-							Not a hacker yet?{" "}
-							<Link
-								href="/signup"
-								className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
-							>
-								Register Here.
-							</Link>
+							Already have an account? Just enter your email and password and
+							click continue.
 						</p>
 					</div>
 				</div>
 			</div>
 
-			{/** Alert handler */}
 			{showAlert && (
 				<Alert message={alertMessage} onClose={() => setShowAlert(false)} />
 			)}
 		</>
 	);
-}
+};
+
+export default AuthPage;

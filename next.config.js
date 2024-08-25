@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
+		dangerouslyAllowSVG: true, // Apple App Store badge is SVG.
 		remotePatterns: [
 			{
 				protocol: "https",
@@ -22,6 +23,15 @@ const nextConfig = {
 				pathname:
 					"/intl/en_us/badges/static/images/badges/en_badge_web_generic.png",
 			},
+			{
+				hostname:"*googleusercontent.com",
+			},
+			 {
+				hostname:"tools.applemediaservices.com"
+			 },
+			 {
+				hostname:"s3.amazonaws.com"
+			 },
 		],
 	},
 };
