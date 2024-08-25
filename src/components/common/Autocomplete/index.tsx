@@ -40,7 +40,7 @@ const Autocomplete: React.FC<Props> = ({
 		query.length >= searchTermMin
 			? options.filter((item) =>
 					item.toLowerCase().includes(query.toLowerCase())
-			  )
+				)
 			: [];
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -165,8 +165,8 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			[auth, resolveAuthError, resolveAuthState]
 		);
 
-	const signInWithGoogle: FirebaseProviderHooks["signInWithGoogle"] = useCallback(
-		async (): Promise<LoginResponse> => {
+	const signInWithGoogle: FirebaseProviderHooks["signInWithGoogle"] =
+		useCallback(async (): Promise<LoginResponse> => {
 			setError(FirebaseAuthError.NONE);
 			try {
 				const provider = new GoogleAuthProvider();
@@ -180,11 +180,12 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				}
 			} catch (e) {
 				resolveAuthError(e as AuthError);
-				return { success: false, error: e?.toString() ?? "Google sign-in failed" };
+				return {
+					success: false,
+					error: e?.toString() ?? "Google sign-in failed",
+				};
 			}
-		},
-		[auth, resolveAuthError, resolveAuthState]
-	);
+		}, [auth, resolveAuthError, resolveAuthState]);
 
 	const logout: FirebaseProviderHooks["logout"] = useCallback(
 		async (next) => {

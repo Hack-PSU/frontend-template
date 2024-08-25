@@ -3,9 +3,8 @@ import ApiService from "@/lib/api/apiService";
 
 export async function getActiveUser(): Promise<UserProfile | undefined> {
 	try {
-		const user: UserProfile | undefined = await ApiService.get<UserProfile>(
-			`/users/info/me`
-		);
+		const user: UserProfile | undefined =
+			await ApiService.get<UserProfile>(`/users/info/me`);
 		return user;
 	} catch {
 		return undefined;

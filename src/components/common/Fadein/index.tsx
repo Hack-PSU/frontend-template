@@ -26,7 +26,7 @@ export function FadeIn(
 						initial: "hidden",
 						whileInView: "visible",
 						viewport,
-				  })}
+					})}
 			{...props}
 		/>
 	);

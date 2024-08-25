@@ -24,14 +24,14 @@ const nextConfig = {
 					"/intl/en_us/badges/static/images/badges/en_badge_web_generic.png",
 			},
 			{
-				hostname:"*googleusercontent.com",
+				hostname: "*googleusercontent.com",
 			},
-			 {
-				hostname:"tools.applemediaservices.com"
-			 },
-			 {
-				hostname:"s3.amazonaws.com"
-			 },
+			{
+				hostname: "tools.applemediaservices.com",
+			},
+			{
+				hostname: "s3.amazonaws.com",
+			},
 		],
 	},
 };
