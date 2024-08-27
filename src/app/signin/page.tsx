@@ -4,15 +4,20 @@ import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Alert from "@/components/common/Alert";
-import { Google as GoogleIcon } from "@mui/icons-material";
+import {
+	Google as GoogleIcon,
+	GitHub as GithubIcon,
+} from "@mui/icons-material";
 
 const AuthPage: React.FC = () => {
 	const {
 		signUpWithEmailAndPassword,
 		loginWithEmailAndPassword,
 		signInWithGoogle,
+		signInWithGithub,
 		isAuthenticated,
 		userDataLoaded,
+		resetPassword,
 	} = useFirebase();
 	const router = useRouter();
 
@@ -80,11 +85,41 @@ const AuthPage: React.FC = () => {
 	const handleGoogleSignIn = async () => {
 		const res = await signInWithGoogle();
 		if (res.success) {
-			router.push("/");
+			router.push("/profile");
 		} else {
 			setAlertMessage(res.error ? res.error : "Unknown error occurred");
 			setShowAlert(true);
 		}
+	};
+
+	const handleGithubSignIn = async () => {
+		const res = await signInWithGithub();
+		if (res.success) {
+			router.push("/profile");
+		} else {
+			setAlertMessage(res.error ? res.error : "Unknown error occurred");
+			setShowAlert(true);
+		}
+	};
+
+	const handleForgotPassword = async () => {
+		if (!authData.email) {
+			setAlertMessage(
+				"Please enter your email address to reset your password."
+			);
+			setShowAlert(true);
+			return;
+		}
+
+		const res = await resetPassword(authData.email);
+		if (res.success) {
+			setAlertMessage(
+				"Password reset email sent! Please check your inbox / spam folder."
+			);
+		} else {
+			setAlertMessage(res.error ? res.error : "Error sending reset email.");
+		}
+		setShowAlert(true);
 	};
 
 	if (!isMounted) return null;
@@ -148,12 +183,19 @@ const AuthPage: React.FC = () => {
 								</div>
 							</div>
 
-							<div>
+							<div className="flex justify-between">
 								<button
 									type="submit"
 									className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 								>
 									Continue
+								</button>
+								<button
+									type="button"
+									onClick={handleForgotPassword}
+									className="text-sm text-indigo-600 hover:text-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								>
+									Forgot password?
 								</button>
 							</div>
 						</form>
@@ -175,6 +217,17 @@ const AuthPage: React.FC = () => {
 							>
 								<GoogleIcon className="mr-2" />
 								Sign in with Google
+							</button>
+						</div>
+
+						<div className="mt-6">
+							<button
+								type="button"
+								onClick={handleGithubSignIn}
+								className="flex w-full justify-center items-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+							>
+								<GithubIcon className="mr-2" />
+								Sign in with GitHub
 							</button>
 						</div>
 					</div>

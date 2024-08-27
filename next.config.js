@@ -32,6 +32,9 @@ const nextConfig = {
 			{
 				hostname: "s3.amazonaws.com",
 			},
+			{
+				hostname: "avatars.githubusercontent.com",
+			},
 		],
 	},
 };
