@@ -34,7 +34,7 @@ const nextConfig = {
 			},
 			{
 				hostname: "avatars.githubusercontent.com",
-			}
+			},
 		],
 	},
 };
