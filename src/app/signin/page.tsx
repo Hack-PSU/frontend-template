@@ -13,6 +13,7 @@ const AuthPage: React.FC = () => {
 		signInWithGoogle,
 		isAuthenticated,
 		userDataLoaded,
+		resetPassword,
 	} = useFirebase();
 	const router = useRouter();
 
@@ -87,6 +88,24 @@ const AuthPage: React.FC = () => {
 		}
 	};
 
+	const handleForgotPassword = async () => {
+		if (!authData.email) {
+			setAlertMessage(
+				"Please enter your email address to reset your password."
+			);
+			setShowAlert(true);
+			return;
+		}
+
+		const res = await resetPassword(authData.email);
+		if (res.success) {
+			setAlertMessage("Password reset email sent! Please check your inbox / spam folder.");
+		} else {
+			setAlertMessage(res.error ? res.error : "Error sending reset email.");
+		}
+		setShowAlert(true);
+	};
+
 	if (!isMounted) return null;
 
 	return (
@@ -148,12 +167,19 @@ const AuthPage: React.FC = () => {
 								</div>
 							</div>
 
-							<div>
+							<div className="flex justify-between">
 								<button
 									type="submit"
 									className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
 								>
 									Continue
+								</button>
+								<button
+									type="button"
+									onClick={handleForgotPassword}
+									className="text-sm text-indigo-600 hover:text-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								>
+									Forgot password?
 								</button>
 							</div>
 						</form>

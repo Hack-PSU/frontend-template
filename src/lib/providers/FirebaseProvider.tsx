@@ -22,6 +22,7 @@ import {
 	onIdTokenChanged,
 	signInWithPopup,
 	GoogleAuthProvider,
+	sendPasswordResetEmail,
 } from "firebase/auth";
 import { initApi, resetApi } from "@/lib/api";
 
@@ -49,6 +50,7 @@ type FirebaseProviderHooks = {
 	signInWithGoogle(): Promise<LoginResponse>;
 	logout(next?: () => Promise<void>): Promise<void>;
 	userDataLoaded: boolean;
+	resetPassword(email: string): Promise<{ success: boolean; error?: string }>;
 };
 
 type Props = {
@@ -203,6 +205,21 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		[auth]
 	);
 
+	const resetPassword: FirebaseProviderHooks["resetPassword"] = useCallback(
+		async (email: string): Promise<{ success: boolean; error?: string }> => {
+			try {
+				await sendPasswordResetEmail(auth, email);
+				return { success: true };
+			} catch (e) {
+				return {
+					success: false,
+					error: e?.toString() ?? "Password reset failed",
+				};
+			}
+		},
+		[auth]
+	);
+
 	useEffect(() => {
 		return onAuthStateChanged(auth, async (user) => {
 			await resolveAuthState(user ?? undefined);
@@ -230,7 +247,8 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			loginWithEmailAndPassword,
 			signInWithGoogle,
 			logout,
-			userDataLoaded, // Use this to check if user data has been loaded from Firebase
+			userDataLoaded,
+			resetPassword,
 		}),
 		[
 			isAuthenticated,
@@ -241,6 +259,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			loginWithEmailAndPassword,
 			signInWithGoogle,
 			logout,
+			resetPassword,
 			userDataLoaded,
 		]
 	);
