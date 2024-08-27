@@ -27,7 +27,8 @@ const faqs = [
 		answer:
 			"Travel reimbursements will be handled at the registration table Saturday after 3pm and Sunday from 11am-1pm. Please come to the table with everyone that you traveled with, and the receipts for your transportation costs. If you spoke with us directly about special consideration, please have any emails/messages shared open and ready! For more information, please refer to our Travel Reimbursement Policy.",
 		link: {
-			target: "https://app.hackpsu.org/travel-reimbursement",
+			target: "/travel",
+			text: "Travel Reimbursement Policy",
 		},
 	},
 	{
