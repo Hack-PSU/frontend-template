@@ -88,26 +88,29 @@ const PrivacyPolicy = () => {
 					stored or processed on our servers.
 				</div>
 				<div className="my-2">
-					<strong>Do we use 'cookies'?</strong>
+					<strong>Do we use &apos;cookies&apos;?</strong>
 				</div>
 				<div className="my-2">
 					Yes. Cookies are small files that a site or its service provider
-					transfers to your computer's hard drive through your Web browser (if
-					you allow) that enables the site's or service provider's systems to
-					recognize your browser and capture and remember certain information.
-					For instance, we use cookies to help us remember and process the items
-					in your shopping cart. They are also used to help us understand your
-					preferences based on previous or current site activity, which enables
-					us to provide you with improved services. We also use cookies to help
-					us compile aggregate data about site traffic and site interaction so
-					that we can offer better site experiences and tools in the future.
+					transfers to your computer&apos;s hard drive through your Web browser
+					(if you allow) that enables the site&apos;s or service provider&apos;s
+					systems to recognize your browser and capture and remember certain
+					information. For instance, we use cookies to help us remember and
+					process the items in your shopping cart. They are also used to help us
+					understand your preferences based on previous or current site
+					activity, which enables us to provide you with improved services. We
+					also use cookies to help us compile aggregate data about site traffic
+					and site interaction so that we can offer better site experiences and
+					tools in the future.
 				</div>
 				<div className="my-2">
 					<strong>We use cookies to:</strong>
 				</div>
 				<div className="ml-8 my-2 list-disc">
 					<ul>
-						<li>Understand and save user's preferences for future visits.</li>
+						<li>
+							Understand and save user&apos;s preferences for future visits.
+						</li>
 					</ul>
 				</div>
 				<div className="my-2">
@@ -127,10 +130,11 @@ const PrivacyPolicy = () => {
 					other parties who assist us in operating our website, conducting our
 					business, or serving our users, so long as those parties agree to keep
 					this information confidential. We may also release information when
-					it's release is appropriate to comply with the law, enforce our site
-					policies, or protect ours or others' rights, property, or safety.
-					However, non-personally identifiable visitor information may be
-					provided to other parties for marketing, advertising, or other uses.
+					it&apos;s release is appropriate to comply with the law, enforce our
+					site policies, or protect ours or others&apos; rights, property, or
+					safety. However, non-personally identifiable visitor information may
+					be provided to other parties for marketing, advertising, or other
+					uses.
 				</div>
 				<div className="my-2">
 					<strong>Third-party links</strong>
@@ -143,9 +147,9 @@ const PrivacyPolicy = () => {
 					<strong>Google</strong>
 				</div>
 				<div className="my-2">
-					Google's advertising requirements can be summed up by Google's
-					Advertising Principles. They are put in place to provide a positive
-					experience for users.
+					Google&apos;s advertising requirements can be summed up by
+					Google&apos;s Advertising Principles. They are put in place to provide
+					a positive experience for users.
 					<a
 						href="https://support.google.com/adwordspolicy/answer/1316548?hl=en"
 						target="_blank"
@@ -160,8 +164,8 @@ const PrivacyPolicy = () => {
 				</div>
 				<div className="my-2">
 					Google, as a third-party vendor, uses cookies to serve ads on our
-					site. Google's use of the DART cookie enables it to serve ads to our
-					users based on previous visits to our site and other sites on the
+					site. Google&apos;s use of the DART cookie enables it to serve ads to
+					our users based on previous visits to our site and other sites on the
 					Internet. Users may opt out of the use of the DART cookie by visiting
 					the Google Ad and Content Network privacy policy.
 				</div>
@@ -195,13 +199,13 @@ const PrivacyPolicy = () => {
 				</div>
 				<div className="my-2">
 					CalOPPA is the first state law in the nation to require commercial
-					websites and online services to post a privacy policy. The law's reach
-					stretches well beyond California to require any person or company in
-					the United States (and conceivably the world) that operates websites
-					collecting Personally Identifiable Information from California
-					consumers to post a conspicuous privacy policy on its website stating
-					exactly the information being collected and those individuals or
-					companies with whom it is being shared.
+					websites and online services to post a privacy policy. The law&apos;s
+					reach stretches well beyond California to require any person or
+					company in the United States (and conceivably the world) that operates
+					websites collecting Personally Identifiable Information from
+					California consumers to post a conspicuous privacy policy on its
+					website stating exactly the information being collected and those
+					individuals or companies with whom it is being shared.
 				</div>
 				<div className="my-2">
 					<strong>According to CalOPPA, we agree to the following:</strong>
@@ -213,8 +217,8 @@ const PrivacyPolicy = () => {
 					entering our website.
 				</div>
 				<div className="my-2">
-					Our Privacy Policy link includes the word 'Privacy' and can easily be
-					found on the page specified above.
+					Our Privacy Policy link includes the word &apos;Privacy&apos; and can
+					easily be found on the page specified above.
 				</div>
 				<div className="my-2">
 					<strong>You will be notified of any Privacy Policy changes:</strong>
@@ -243,7 +247,7 @@ const PrivacyPolicy = () => {
 					<strong>Does our site allow third-party behavioral tracking?</strong>
 				</div>
 				<div className="my-2">
-					It's also important to note that we do not allow third-party
+					It&apos;s also important to note that we do not allow third-party
 					behavioral tracking.
 				</div>
 				<div className="text-blue-500 my-2">
@@ -251,11 +255,11 @@ const PrivacyPolicy = () => {
 				</div>
 				<div className="my-2">
 					When it comes to the collection of personal information from children
-					under the age of 13 years old, the Children's Online Privacy
+					under the age of 13 years old, the Children&apos;s Online Privacy
 					Protection Act (COPPA) puts parents in control. The Federal Trade
-					Commission, United States' consumer protection agency, enforces the
-					COPPA Rule, which spells out what operators of websites and online
-					services must do to protect children's privacy and safety online.
+					Commission, United States&apos; consumer protection agency, enforces
+					the COPPA Rule, which spells out what operators of websites and online
+					services must do to protect children&apos;s privacy and safety online.
 				</div>
 				<div className="my-2">
 					We do not specifically market to children under the age of 13 years

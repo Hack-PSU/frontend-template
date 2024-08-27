@@ -14,12 +14,12 @@ const TravelReimbursementPolicy = () => {
 				<p className="my-2">
 					Participants arriving by bus or plane can be reimbursed up to $110. A
 					taxi or ride-sharing service (e.g., Lyft or Uber) can also be
-					reimbursed, but will count toward the participant's $110.
+					reimbursed, but will count toward the participant&apos;s $110.
 				</p>
 				<p className="my-2">
 					Original receipts must be provided at the event in order to receive
 					any reimbursement. Digital receipts are accepted for bus/plane tickets
-					and for gas on the participant's return trip only.
+					and for gas on the participant&apos;s return trip only.
 				</p>
 				<p className="my-2">
 					Reimbursements may take up to 2 months. HackPSU does not reimburse
