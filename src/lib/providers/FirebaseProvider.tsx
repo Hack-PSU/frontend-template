@@ -23,6 +23,7 @@ import {
 	signInWithPopup,
 	GoogleAuthProvider,
 	sendPasswordResetEmail,
+	GithubAuthProvider,
 } from "firebase/auth";
 import { initApi, resetApi } from "@/lib/api";
 
@@ -48,6 +49,7 @@ type FirebaseProviderHooks = {
 		password: string
 	): Promise<LoginResponse>;
 	signInWithGoogle(): Promise<LoginResponse>;
+	signInWithGithub(): Promise<LoginResponse>;
 	logout(next?: () => Promise<void>): Promise<void>;
 	userDataLoaded: boolean;
 	resetPassword(email: string): Promise<{ success: boolean; error?: string }>;
@@ -189,6 +191,28 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			}
 		}, [auth, resolveAuthError, resolveAuthState]);
 
+	const signInWithGithub: FirebaseProviderHooks["signInWithGithub"] =
+		useCallback(async (): Promise<LoginResponse> => {
+			setError(FirebaseAuthError.NONE);
+			try {
+				const provider = new GithubAuthProvider();
+				const userCredential = await signInWithPopup(auth, provider);
+
+				if (userCredential.user) {
+					await resolveAuthState(userCredential.user);
+					return { success: true };
+				} else {
+					return { success: false, error: "Github sign-in failed" };
+				}
+			} catch (e) {
+				resolveAuthError(e as AuthError);
+				return {
+					success: false,
+					error: e?.toString() ?? "Github sign-in failed",
+				};
+			}
+		}, [auth, resolveAuthError, resolveAuthState]);
+
 	const logout: FirebaseProviderHooks["logout"] = useCallback(
 		async (next) => {
 			try {
@@ -246,6 +270,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
 			signInWithGoogle,
+			signInWithGithub,
 			logout,
 			userDataLoaded,
 			resetPassword,
@@ -258,6 +283,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			loginWithEmailAndPassword,
 			signInWithGoogle,
+			signInWithGithub,
 			logout,
 			resetPassword,
 			userDataLoaded,
