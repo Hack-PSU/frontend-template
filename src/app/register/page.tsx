@@ -28,7 +28,7 @@ const Registration: React.FC = () => {
 		phoneNumber: string;
 		race: string;
 		veteran: string;
-		eighteenBeforeEvent: boolean;
+		age: number;
 		shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "";
 		country: string;
 		driving: boolean;
@@ -66,7 +66,7 @@ const Registration: React.FC = () => {
 		phoneNumber: "",
 		race: "",
 		veteran: "",
-		eighteenBeforeEvent: false,
+		age: 0,
 		shirtSize: "",
 		country: "",
 		driving: false,
@@ -178,7 +178,7 @@ const Registration: React.FC = () => {
 	};
 
 	const handleChange = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
 	) => {
 		const { name, value } = event.target;
 		setRegistrationData((prevData) => ({
@@ -187,6 +187,15 @@ const Registration: React.FC = () => {
 		}));
 		setShowAlert(false);
 	};
+
+	const handleNumericSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+		const { name, value } = event.target;
+		setRegistrationData((prevData) => ({
+			...prevData,
+			[name]: Number(value),
+		}));
+		setShowAlert(false);
+	}
 
 	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name } = event.target;
@@ -265,7 +274,7 @@ const Registration: React.FC = () => {
 			gender: null,
 			phoneNumber: null,
 			veteran: null,
-			eighteenBeforeEvent: true,
+			age: null,
 			shirtSize: null,
 			country: null,
 			driving: null,
@@ -313,6 +322,12 @@ const Registration: React.FC = () => {
 				handleScroll(key);
 				return;
 			}
+
+			if (validationData.age < 18) {
+				alert("You must be 18 years or older to participate.");
+				handleScroll("age");
+				return;
+			}
 		}
 
 		// Build user object
@@ -355,7 +370,7 @@ const Registration: React.FC = () => {
 			academicYear: registrationData.academicYear,
 			educationalInstitutionType: registrationData.educationalInstitutionType,
 			codingExperience: registrationData.codingExperience,
-			eighteenBeforeEvent: registrationData.eighteenBeforeEvent,
+			age: registrationData.age,
 			mlhCoc: registrationData.mlhCoc,
 			mlhDcp: registrationData.mlhDcp,
 			referral: registrationData.referral,
@@ -623,26 +638,33 @@ const Registration: React.FC = () => {
 								)}
 							</div>
 						</div>
-						{/** Eighteen Before Event */}
-						<div className="card" id="eighteenBeforeEvent">
+						{/** Age */}
+						<div className="card" id="age">
 							<div className="card-header">
-								Will you be 18 years old before{" "}
+								What will your age be on{" "}
 								{hackathon?.startTime
 									? new Date(hackathon?.startTime).toISOString().split("T")[0]
-									: "the event date"}
-								?
+									: "the event date"}?
+								<p className='info'>You must be 18 years or older to participate.</p>
 							</div>
-							<ToggleSwitch
-								name="eighteenBeforeEvent"
-								on="Yes"
-								off="No"
-								onChange={handleToggle}
-							/>
-							{!registrationData.eighteenBeforeEvent && (
+							<select
+								name="age"
+								onChange={handleNumericSelectionChange}
+								value={registrationData.age}
+							>
+								<option value={0}>Select age</option>
+								{Array.from({ length: 100 - 12 + 1 }, (_, i) => (
+									<option key={i + 12} value={i + 12}>
+									{i + 12}
+									</option>
+									))}
+							</select>
+							<br />
+							{!registrationData.age && (
 								<label className="data-error">Required</label>
 							)}
 						</div>
-						{registrationData.eighteenBeforeEvent && (
+						{!!registrationData.age && (
 							<>
 								{/** Shirt Size */}
 								<div className="card" id="shirtSize">
@@ -715,7 +737,7 @@ const Registration: React.FC = () => {
 								</div>
 								{/** Country */}
 								<div className="card" id="country">
-									<div className="card-header">What country are you from?</div>
+									<div className="card-header">What is your country of residence?</div>
 									<div className="my-2">
 										<Autocomplete
 											data="country"
@@ -1125,10 +1147,8 @@ const Registration: React.FC = () => {
 									</div>
 									<span>
 										<p className="inline">
-											By agreeing to this, you affirm that: &quot;I authorize
-											MLH to send me an email where I can further opt into the
-											MLH Hacker, Events, or Organizer Newsletters and other
-											communications from MLH.&quot;
+											By agreeing to this, you affirm that: &quot;I authorize MLH to send me occasional 
+											emails about relevant events, career opportunities, and community announcements.&quot;
 										</p>
 										<br />
 										<br />
@@ -1257,7 +1277,7 @@ const Registration: React.FC = () => {
 			{/** Sidebar */}
 			{window.innerWidth >= 1024 && ( // Checks whether user in mobile
 				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:flex">
-					{registrationData.eighteenBeforeEvent && (
+					{!!registrationData.age && (
 						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
 							{Array.from(sidebarFields.keys()).map((field) =>
 								field === "Additional Questions" &&

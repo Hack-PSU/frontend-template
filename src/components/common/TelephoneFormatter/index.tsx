@@ -20,6 +20,8 @@ const TelephoneFormatter: React.FC<Props> = ({ name, onChange }) => {
 			<PhoneInput
 				key={`phone-input-${name}`}
 				country={"us"}
+				containerStyle={{width:'100%'}}
+				inputStyle={{width:'min(100%, 200px)'}}
 				value={phone}
 				onChange={(phone) => handlePhoneChange(phone)}
 			/>
