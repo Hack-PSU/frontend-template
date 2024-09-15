@@ -7,7 +7,7 @@ export interface Registration {
 	academicYear: string;
 	educationalInstitutionType: string;
 	codingExperience: string;
-	eighteenBeforeEvent: boolean;
+	age: number;
 	mlhCoc: boolean;
 	mlhDcp: boolean;
 	referral: string;
