@@ -16,7 +16,7 @@ const TelephoneFormatter: React.FC<Props> = ({ name, onChange }) => {
 	};
 
 	return (
-		<div>
+		<>
 			<PhoneInput
 				key={`phone-input-${name}`}
 				country={"us"}
@@ -25,7 +25,7 @@ const TelephoneFormatter: React.FC<Props> = ({ name, onChange }) => {
 				value={phone}
 				onChange={(phone) => handlePhoneChange(phone)}
 			/>
-		</div>
+		</>
 	);
 };
 
