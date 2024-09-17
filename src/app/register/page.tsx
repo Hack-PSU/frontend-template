@@ -1037,7 +1037,7 @@ const Registration: React.FC = () => {
 								</div>
 								{/** Resume */}
 								<div className="card" id="resume">
-									<div className="card-header">Submit your resume</div>
+									<div className="card-header">Submit a PDF of your resume</div>
 									<div className="info">
 										If a resume is submitted, it will be shared with employers
 										sponsoring HackPSU.
