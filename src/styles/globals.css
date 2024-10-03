@@ -41,8 +41,8 @@
 	body {
 		font-family: Lato, Georgia, sans-serif;
 		font-feature-settings: "rlig" 1, "calt" 1;
-		background-color: #588157;
-		background-image: url("../../public/website-background.png");
+		background-color: #7DD8FF;
+		transition: background-color 0.1s linear;
 		background-size: cover;
 		background-position: top center;
 	}
