@@ -1,7 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 
-function mixColor(color1: number[], color2: number[], factor: number){
+type RGBColor = [number, number, number];
+
+function mixColor(color1: RGBColor, color2: RGBColor, factor: number){
     if (arguments.length < 3) { 
         factor = 0.5; 
       }
@@ -21,15 +23,15 @@ const ScrollingGradient = () => {
     useEffect(() => {
       const handleScroll = () => {
         // Get the scroll position and document height
-        const scrollTop = window.scrollY; 
-        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight;
         // Calculate scroll factor
         const scrollFraction = scrollTop / docHeight;
   
         // The two colors we're mixing
-        const startColor = [125, 216, 255]; // Day Color
-        const endColor = [25, 7, 66]; // Night Color
+        const startColor: RGBColor = [125, 216, 255]; // Day Color
+        const endColor: RGBColor = [25, 7, 66]; // Night Color
         
         const newColor = mixColor(startColor, endColor, scrollFraction);
         
