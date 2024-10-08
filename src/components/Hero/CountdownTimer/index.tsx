@@ -3,160 +3,153 @@ import { motion, useAnimation } from "framer-motion";
 import { getActiveHackathon } from "@/lib/common";
 
 const CountdownTimer: React.FC = () => {
-	// Get Hackathon data
-	const [hackathon, setHackathon] = useState<any>(null);
-	useEffect(() => {
-		getActiveHackathon()
-			.then((data) => {
-				setHackathon(data);
-				initializeFields(data);
-			})
-			.catch((error) => {
-				console.error(error);
-			});
-	}, []);
+    // Get Hackathon data
+    const [hackathon, setHackathon] = useState<any>(null);
+    useEffect(() => {
+        getActiveHackathon()
+            .then((data) => {
+                setHackathon(data);
+                initializeFields(data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
-	const [days, setDays] = useState(Infinity);
-	const [hours, setHours] = useState(Infinity);
-	const [minutes, setMinutes] = useState(Infinity);
-	const [seconds, setSeconds] = useState(Infinity);
-	const [bannerMessage, setBannerMessage] = useState("");
-	const [targetDate, setTargetDate] = useState<Date>(new Date());
-	const [state, setState] = useState(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
+    const [days, setDays] = useState(Infinity);
+    const [hours, setHours] = useState(Infinity);
+    const [minutes, setMinutes] = useState(Infinity);
+    const [seconds, setSeconds] = useState(Infinity);
+    const [bannerMessage, setBannerMessage] = useState("");
+    const [targetDate, setTargetDate] = useState<Date>(new Date());
+    const [state, setState] = useState(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 
-	const initializeFields = (data: any) => {
-		// Initialize fields
-		let initialDate = new Date(data.startTime);
-		let initialState = 0;
-		if (initialDate.getTime() - new Date().getTime() <= 0) {
-			initialDate = new Date(data.endTime);
-			initialState = 1;
-			if (initialDate.getTime() - new Date().getTime() <= 0) {
-				initialState = 2;
-			}
-		}
+    const initializeFields = (data: any) => {
+        let initialDate = new Date(data.startTime);
+        let initialState = 0;
+        if (initialDate.getTime() - new Date().getTime() <= 0) {
+            initialDate = new Date(data.endTime);
+            initialState = 1;
+            if (initialDate.getTime() - new Date().getTime() <= 0) {
+                initialState = 2;
+            }
+        }
 
-		let initialMessage = "until HackPSU!";
-		if (initialState === 1) {
-			initialMessage = "until the end of the Hackathon!";
-		} else if (initialState === 2) {
-			initialMessage = "The Hackathon is over. See you next semester!";
-		}
+        let initialMessage = "until HackPSU!";
+        if (initialState === 1) {
+            initialMessage = "until the end of the Hackathon!";
+        } else if (initialState === 2) {
+            initialMessage = "The Hackathon is over. See you next semester!";
+        }
 
-		setBannerMessage(initialMessage);
-		setTargetDate(initialDate);
-		setState(initialState);
-	};
+        setBannerMessage(initialMessage);
+        setTargetDate(initialDate);
+        setState(initialState);
+    };
 
-	const secondsControls = useAnimation();
-	const endDate = new Date(hackathon?.endTime || new Date());
+    const secondsControls = useAnimation();
+    const endDate = new Date(hackathon?.endTime || new Date());
 
-	const updateCountdown = () => {
-		if (!hackathon) return;
+    const updateCountdown = () => {
+        if (!hackathon) return;
 
-		const now = new Date();
-		let difference = targetDate.getTime() - now.getTime();
+        const now = new Date();
+        let difference = targetDate.getTime() - now.getTime();
 
-		if (difference <= 0) {
-			if (state === 0) {
-				setBannerMessage("until the end of the Hackathon!");
-				setTargetDate(endDate);
-				setState(1);
-				difference = targetDate.getTime() - now.getTime();
-			} else {
-				setBannerMessage("The Hackathon is over. See you next semester!");
-				setState(2);
-				setDays(-Infinity);
-				setHours(-Infinity);
-				setMinutes(-Infinity);
-				setSeconds(-Infinity);
-				return;
-			}
-		}
+        if (difference <= 0) {
+            if (state === 0) {
+                setBannerMessage("until the end of the Hackathon!");
+                setTargetDate(endDate);
+                setState(1);
+                difference = targetDate.getTime() - now.getTime();
+            } else {
+                setBannerMessage("The Hackathon is over. See you next semester!");
+                setState(2);
+                setDays(-Infinity);
+                setHours(-Infinity);
+                setMinutes(-Infinity);
+                setSeconds(-Infinity);
+                return;
+            }
+        }
 
-		const d = Math.floor(difference / (1000 * 60 * 60 * 24));
-		setDays(d);
+        const d = Math.floor(difference / (1000 * 60 * 60 * 24));
+        setDays(d);
 
-		const h = Math.floor(
-			(difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-		);
-		setHours(h);
+        const h = Math.floor(
+            (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        setHours(h);
 
-		const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-		setMinutes(m);
+        const m = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        setMinutes(m);
 
-		const s = Math.floor((difference % (1000 * 60)) / 1000);
-		setSeconds(s);
+        const s = Math.floor((difference % (1000 * 60)) / 1000);
+        setSeconds(s);
 
-		if (d !== Infinity) {
-			secondsControls.start({ scaleY: 1 });
-			setTimeout(() => {
-				setSeconds(s);
-				secondsControls.start({ scaleY: 0 });
-			}, 500);
-		}
-	};
+        if (d !== Infinity) {
+            secondsControls.start({ scaleY: 1 });
+            setTimeout(() => {
+                setSeconds(s);
+                secondsControls.start({ scaleY: 0 });
+            }, 500);
+        }
+    };
 
-	useEffect(() => {
-		const interval = setInterval(updateCountdown, 1000);
+    useEffect(() => {
+        const interval = setInterval(updateCountdown, 1000);
+        return () => clearInterval(interval);
+    }, [state, updateCountdown]);
 
-		return () => clearInterval(interval);
-	}, [state, updateCountdown]);
+    const renderTime = (metric: number): string => {
+        if (Math.abs(metric) === Infinity) return "⠀";
+        return metric.toString();
+    };
 
-	const renderTime = (metric: number): string => {
-		// Hide numbers if component initially loading
-		if (Math.abs(metric) === Infinity) return "⠀";
-		else return metric.toString();
-	};
-
-	return (
-		<div className="text-center  border-black rounded-sm px-6 py-2">
-			{state !== 2 ? (
-				<motion.div
-					className="flex space-x-2 text-6xl font-bold text-white justify-between"
-					initial={{ scaleY: 0 }}
-					animate={{ scaleY: 1 }}
-				>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
-							{renderTime(days)}
-						</motion.div>
-						<div className="text-base">{days === 1 ? "Day" : "Days"}</div>
-					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
-							{renderTime(hours)}
-						</motion.div>
-						<div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
-					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
-							{renderTime(minutes)}
-						</motion.div>
-						<div className="text-base">
-							{minutes === 1 ? "Minute" : "Minutes"}
-						</div>
-					</div>
-					<div className="w-1/4">
-						<motion.div
-							className="cyberspace-front-font mb-4"
-							animate={secondsControls}
-						>
-							{renderTime(seconds)}
-						</motion.div>
-						<div className="text-base">
-							{seconds === 1 ? "Second" : "Seconds"}
-						</div>
-					</div>
-				</motion.div>
-			) : (
-				<></>
-			)}
-			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 ">
-				{bannerMessage}
-			</div>
-		</div>
-	);
+    return (
+        <div className="text-center border-black rounded-sm px-6 py-2">
+            {state !== 2 ? (
+                <motion.div
+                    className="flex justify-around space-x-12 text-6xl font-bold text-sky-400"
+                    initial={{ scaleY: 0 }}
+                    animate={{ scaleY: 1 }}
+                >
+                    <div className="flex flex-col items-center">
+                        <motion.div className="cyberspace-front-font mb-4">
+                            {renderTime(days)}
+                        </motion.div>
+                        <div className="text-base">{days === 1 ? "Day" : "Days"}</div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <motion.div className="cyberspace-front-font mb-4">
+                            {renderTime(hours)}
+                        </motion.div>
+                        <div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <motion.div className="cyberspace-front-font mb-4">
+                            {renderTime(minutes)}
+                        </motion.div>
+                        <div className="text-base">{minutes === 1 ? "Minute" : "Minutes"}</div>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <motion.div
+                            className="cyberspace-front-font mb-4"
+                            animate={secondsControls}
+                        >
+                            {renderTime(seconds)}
+                        </motion.div>
+                        <div className="text-base">{seconds === 1 ? "Second" : "Seconds"}</div>
+                    </div>
+                </motion.div>
+            ) : (
+                <></>
+            )}
+            <div className="sm:text-2xl md:text-3xl font-bold text-sky-500 cornerstone-font mt-3">
+                {bannerMessage}
+            </div>
+        </div>
+    );
 };
 
 export default CountdownTimer;
