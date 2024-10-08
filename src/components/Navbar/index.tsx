@@ -34,7 +34,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
 		>
-			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5">
+			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5 mt-[-20px]">
 				<Image
 					src={src}
 					width={150}
@@ -43,7 +43,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 					className="navbar-button w-full h-full"
 				/>
 				<span
-					className="absolute inset-0 transform-translate-y-1.5 flex items-center justify-center rye-font text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
+					className="absolute inset-0 mt-[-5px] flex items-center justify-center rye-font text-xs md:text-sm xl:text-md transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5"
 					style={{ color: "#800000" }}
 				>
 					{(children as string).toUpperCase()}
