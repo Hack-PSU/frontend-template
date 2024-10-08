@@ -3,8 +3,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import Logo from "../../../public/logo.png";
-import blankButton from "../../../public/button-blank.png";
+import Logo from "../../../public/FA24_logo.png";
+import blankButton from "../../../public/navbar_button_FINAL.png";
 import HomeIcon from "@mui/icons-material/Home";
 import { useRouter } from "next/navigation";
 
@@ -43,8 +43,8 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 					className="navbar-button w-full h-full"
 				/>
 				<span
-					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
-					style={{ color: "#2d82a1" }}
+					className="absolute inset-0 transform-translate-y-1.5 flex items-center justify-center rye-font text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
+					style={{ color: "#800000" }}
 				>
 					{(children as string).toUpperCase()}
 				</span>
