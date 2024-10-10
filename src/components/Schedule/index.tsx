@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tab } from "@headlessui/react";
 import "./schedule.css";
 import { EventModel } from "@/interfaces";
+import Booth from "../../../public/booth.png";
 
 const Divider = () => <hr className="my-4 border-white border-[1px]" />;
 
@@ -65,45 +66,47 @@ const Schedule: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
-			<div className="text-center">
-				<h1 className="section-header-text">Schedule</h1>
-				<Divider />
+		<div className="booth-frame relative flex justify-center items-center">
+			<div className="schedule-content w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
+				<div className="text-center">
+					<h1 className="section-header-text">Schedule</h1>
+					<Divider />
+				</div>
+				<Tab.Group>
+					<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
+						{Object.keys(schedule)
+							.filter((category) => category !== "CheckIn")
+							.map((category) => (
+								<Tab
+									key={category}
+									className={({ selected }) =>
+										`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
+											selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
+										}`
+									}
+								>
+									{category}
+								</Tab>
+							))}
+					</Tab.List>
+					<Tab.Panels className="mt-4 tab-panel">
+						{Object.entries(schedule)
+							.filter(([category]) => category !== "CheckIn")
+							.map(([category, items], idx) => (
+								<Tab.Panel key={idx} className="rounded-xl p-4">
+									{items.map((item, itemIdx, arr) => (
+										<React.Fragment key={itemIdx}>
+											{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
+												<DayIndicator day={item.day} />
+											)}
+											<EventItem name={item.name} time={item.time} />
+										</React.Fragment>
+									))}
+								</Tab.Panel>
+							))}
+					</Tab.Panels>
+				</Tab.Group>
 			</div>
-			<Tab.Group>
-				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
-					{Object.keys(schedule)
-						.filter((category) => category !== "CheckIn")
-						.map((category) => (
-							<Tab
-								key={category}
-								className={({ selected }) =>
-									`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-										selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
-									}`
-								}
-							>
-								{category}
-							</Tab>
-						))}
-				</Tab.List>
-				<Tab.Panels className="mt-4 tab-panel">
-					{Object.entries(schedule)
-						.filter(([category]) => category !== "CheckIn")
-						.map(([category, items], idx) => (
-							<Tab.Panel key={idx} className="rounded-xl p-4">
-								{items.map((item, itemIdx, arr) => (
-									<React.Fragment key={itemIdx}>
-										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
-											<DayIndicator day={item.day} />
-										)}
-										<EventItem name={item.name} time={item.time} />
-									</React.Fragment>
-								))}
-							</Tab.Panel>
-						))}
-				</Tab.Panels>
-			</Tab.Group>
 		</div>
 	);
 };

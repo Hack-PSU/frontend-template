@@ -3,6 +3,26 @@
 	color: #000000;
 }
 
+.booth-frame {
+	background-image: url("/booth.png");
+	background-size: 2500px;
+	background-position: 40% 50%;
+	height: 100vh; 
+	width: 100%;
+
+  }
+
+  .schedule-content {
+	width: 50%; 
+	max-width: 800px;
+	position: absolute;
+	top: 50%; 
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 2rem;
+	box-sizing: border-box;
+}	
+
 /* Headless UI Tabs overrides */
 .tab-list {
 	display: flex;
@@ -36,7 +56,6 @@
 /* Content panels */
 .tab-panel {
 	border-radius: 1em;
-	border: 4px solid green;
 	background-color: #00000080;
 	background-size: cover;
 	background-position: center;
