@@ -2,15 +2,14 @@ import React from "react";
 import Divider from "../common/Divider";
 import "./PrizesChallenges.css";
 
-const PrizesChallenges = () => {
+// Main Component
+const PrizesChallenges: React.FC = () => {
 	return (
 		<section id="prizes" className="flex flex-col items-center w-full mt-20">
 			<div className="w-full max-w-6xl flex flex-col items-center">
-				{" "}
 				<h1 className="section-header-text">Prizes & Challenges</h1>
 				<Divider />
 				<div className="w-full grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
-					{" "}
 					<AwardBox
 						title="HackPSU Grand Prize"
 						description="The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally."
@@ -44,6 +43,7 @@ const PrizesChallenges = () => {
 	);
 };
 
+// Interfaces for props
 interface Prize {
 	place: string;
 	amount: string;
@@ -52,10 +52,11 @@ interface Prize {
 interface AwardBoxProps {
 	title: string;
 	description: string;
-	prizes?: Prize[]; // Now explicitly typed as an array of Prize objects
+	prizes?: Prize[]; // Optional prizes prop explicitly typed as an array of Prize objects
 	extra?: string;
 }
 
+// AwardBox Component
 const AwardBox: React.FC<AwardBoxProps> = ({
 	title,
 	description,
@@ -63,26 +64,32 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 	extra,
 }) => {
 	return (
-		<div className="p-3 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
-			<h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white">
-				{title}
-			</h2>
-			<p className="text-base md:text-lg text-white mb-2">{description}</p>
-			{prizes.length > 0 && (
-				<table className="table-auto mt-2 text-white mx-auto">
-					<tbody>
-						{prizes.map((prize, index) => (
-							<tr key={index}>
-								<td className="text-base md:text-lg px-4">{prize.place}:</td>
-								<td className="text-base md:text-lg">{prize.amount}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			)}
-			{extra && (
-				<div className="text-base md:text-lg text-white mt-2">{extra}</div>
-			)}
+		<div className="p-3 award-box">
+			<div className="text-box">
+				<h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+					{title}
+				</h2>
+				<p className="text-base md:text-lg text-white mb-2">{description}</p>
+
+				{/* Prizes Table */}
+				{prizes.length > 0 && (
+					<table className="table-auto mt-2 text-white mx-auto">
+						<tbody>
+							{prizes.map((prize, index) => (
+								<tr key={index}>
+									<td className="text-base md:text-lg px-4">{prize.place}:</td>
+									<td className="text-base md:text-lg">{prize.amount}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				)}
+
+				{/* Extra Info */}
+				{extra && (
+					<div className="text-base md:text-lg text-white mt-2">{extra}</div>
+				)}
+			</div>
 		</div>
 	);
 };
