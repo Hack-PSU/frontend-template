@@ -24,7 +24,7 @@ const PrizesChallenges = () => {
           {/* Peraton Challenge */}
 		  <AwardBox
 			title="Peraton Challenge"
-			description="Create the best web hack using React. Judging will consider overall user experience and UI design."
+			description="Most Creative Implementation of Generative AI"
 			prizes={[
 			  {
 				place: "Prize",
