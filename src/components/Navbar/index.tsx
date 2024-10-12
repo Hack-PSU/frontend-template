@@ -3,12 +3,10 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import Logo from "../../../public/logo.png";
-import blankButton from "../../../public/button-blank.png";
+import Logo from "../../../public/FA24_logo.png";
+import blankButton from "../../../public/navbar_button_FINAL.png";
 import HomeIcon from "@mui/icons-material/Home";
 import { useRouter } from "next/navigation";
-
-import "./navbar.css";
 
 interface NavbarButtonProps {
 	href: string;
@@ -34,18 +32,15 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
 		>
-			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5">
+			<button className="relative mt-[-20px] transition-all duration-150 ease-[cubic-bezier(0.4, 0, 0.2, 1)] hover:scale-[1.2] hover:-translate-y-1.5">
 				<Image
 					src={src}
-					width={150}
-					height={50}
+					width={180}
+					height={80}
 					alt={alt}
-					className="navbar-button w-full h-full"
+					className="w-full h-full"
 				/>
-				<span
-					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
-					style={{ color: "#2d82a1" }}
-				>
+				<span className="absolute inset-0 mt-[-5px] flex items-center justify-center font-rye text-xs md:text-sm xl:text-md text-[#800000]">
 					{(children as string).toUpperCase()}
 				</span>
 			</button>

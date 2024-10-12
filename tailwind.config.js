@@ -2,6 +2,10 @@
 module.exports = {
 	theme: {
 		extend: {
+			fontFamily:{
+				"rye": ["Rye", "cursive"],
+
+			},
 			colors: {
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

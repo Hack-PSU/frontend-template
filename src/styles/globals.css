@@ -91,6 +91,14 @@
 		}
 	}
 
+	.rye-font {
+		font-family: "rye";
+		font-size: 18px;
+		@media (min-width: 768px) {
+			font-size: 24px;
+		}
+	}
+
 	.section-header-text {
 		color: white;
 		font-family: "cornerstone";
@@ -115,6 +123,11 @@
 @font-face {
 	font-family: "cornerstone";
 	src: url("../../public/fonts/Cornerstone.ttf");
+}
+
+@font-face {
+	font-family: "rye";
+	src: url("../../public/fonts/Rye.ttf");
 }
 
 a {
