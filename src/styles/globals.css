@@ -117,6 +117,16 @@
 	src: url("../../public/fonts/Cornerstone.ttf");
 }
 
+@font-face {
+	font-family: "noto-serif";
+	src: url("https://fonts.googleapis.com/css2?family=Noto+Serif&display=swap");
+}
+
+@font-face {
+	font-family: "rye";
+	src: url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
+}
+
 a {
 	color: var(--link-color);
 	text-decoration: underline;
