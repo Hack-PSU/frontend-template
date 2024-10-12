@@ -8,8 +8,6 @@ import blankButton from "../../../public/navbar_button_FINAL.png";
 import HomeIcon from "@mui/icons-material/Home";
 import { useRouter } from "next/navigation";
 
-import "./navbar.css";
-
 interface NavbarButtonProps {
 	href: string;
 	alt: string;
@@ -34,18 +32,15 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
 		>
-			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5 mt-[-20px]">
+			<button className="relative mt-[-20px] transition-all duration-150 ease-[cubic-bezier(0.4, 0, 0.2, 1)] hover:scale-[1.2] hover:-translate-y-1.5">
 				<Image
 					src={src}
-					width={150}
-					height={50}
+					width={180}
+					height={80}
 					alt={alt}
-					className="navbar-button w-full h-full"
+					className="w-full h-full"
 				/>
-				<span
-					className="absolute inset-0 mt-[-5px] flex items-center justify-center rye-font text-xs md:text-sm xl:text-md transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5"
-					style={{ color: "#800000" }}
-				>
+				<span className="absolute inset-0 mt-[-5px] flex items-center justify-center font-rye text-xs md:text-sm xl:text-md text-[#800000]">
 					{(children as string).toUpperCase()}
 				</span>
 			</button>
