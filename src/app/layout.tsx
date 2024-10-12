@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import LayoutProvider from "@/lib/providers/LayoutProvider";
 import "@/styles/globals.css";
+import ScrollingGradient from "@/components/ScrollGradient/scroll-gradient";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,6 +20,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
+			<ScrollingGradient />
 				<LayoutProvider>
 					<Navbar />
 					{children}
