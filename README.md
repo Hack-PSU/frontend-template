@@ -33,3 +33,6 @@ Fortunately most of the data that we show on our pages doesn't change frequently
 ## Customization
 
 The goal of this template is to be easily stylable. One way we will accomplish this is will custom theme colors defined in `tailwind.config.ts`. [Custom Tailwind Colors](https://tailwindcss.com/docs/customizing-colors)
+
+
+QA updates!
