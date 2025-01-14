@@ -56,7 +56,7 @@ const Autocomplete: React.FC<Props> = ({
 
 	return (
 		<div className="combobox" id={`${data}-autocomplete`}>
-			<Combobox value={query} onChange={handleSelectionChange}>
+			<Combobox value={query} onChange={handleSelectionChange} as="ul">
 				<Combobox.Input
 					className="combobox-input"
 					onChange={handleTextChange}
