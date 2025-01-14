@@ -40,3 +40,6 @@ next-env.d.ts
 
 # package-lock.json - this project is not using npm, but this gets generated accidentally sometimes.
 package-lock.json
+
+# Sentry Config File
+.env.sentry-build-plugin
