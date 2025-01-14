@@ -75,7 +75,7 @@ const Schedule: React.FC = () => {
 					{Object.keys(schedule)
 						.filter((category) => category !== "CheckIn")
 						.map((category) => (
-							<Tab
+							<Tab as="div"
 								key={category}
 								className={({ selected }) =>
 									`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
