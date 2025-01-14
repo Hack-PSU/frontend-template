@@ -56,16 +56,16 @@ const Autocomplete: React.FC<Props> = ({
 
 	return (
 		<div className="combobox" id={`${data}-autocomplete`}>
-			<Combobox value={query} onChange={handleSelectionChange}>
-				<Combobox.Input
+			<Combobox value={query} onChange={handleSelectionChange} as="div">
+				<Combobox.Input as="div"
 					className="combobox-input"
 					onChange={handleTextChange}
 					placeholder="Type to search..."
 				/>
 				{filteredData.length > 0 && (
-					<Combobox.Options className="combobox-options">
+					<Combobox.Options as="div" className="combobox-options">
 						{filteredData.map((country, idx) => (
-							<Combobox.Option key={idx} value={country} as={Fragment}>
+							<Combobox.Option  key={idx} value={country} as="div">
 								{({ active }) => (
 									<li
 										className={`${active ? "option-hovered" : "option-item"}`}
