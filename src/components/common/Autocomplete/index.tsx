@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState } from "react";
 import { Combobox } from "@headlessui/react";
 import countryData from "./assets/countries.json";
 import majorData from "./assets/majors.json";
@@ -56,7 +56,7 @@ const Autocomplete: React.FC<Props> = ({
 
 	return (
 		<div className="combobox" id={`${data}-autocomplete`}>
-			<Combobox value={query} onChange={handleSelectionChange}>
+			<Combobox value={query} onChange={handleSelectionChange} as="ul">
 				<Combobox.Input
 					className="combobox-input"
 					onChange={handleTextChange}
@@ -65,14 +65,17 @@ const Autocomplete: React.FC<Props> = ({
 				{filteredData.length > 0 && (
 					<Combobox.Options className="combobox-options">
 						{filteredData.map((country, idx) => (
-							<Combobox.Option key={idx} value={country} as={Fragment}>
-								{({ active }) => (
-									<li
-										className={`${active ? "option-hovered" : "option-item"}`}
-									>
-										{country}
-									</li>
-								)}
+							<Combobox.Option
+								key={idx}
+								value={country}
+								as="li"
+
+								// Use Headless UI's className as a function syntax
+								className={({ active }) =>
+									active ? "option-hovered" : "option-item"
+								}
+							>
+								{country}
 							</Combobox.Option>
 						))}
 					</Combobox.Options>
