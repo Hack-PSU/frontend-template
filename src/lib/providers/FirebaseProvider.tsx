@@ -1,14 +1,15 @@
-"use-client";
+"use client";
 
 import React, {
-	createContext,
-	FC,
 	useCallback,
 	useContext,
 	useEffect,
 	useMemo,
 	useState,
+	createContext,
+	FC,
 } from "react";
+import * as Sentry from "@sentry/nextjs";
 import {
 	Auth,
 	AuthError,
@@ -109,10 +110,12 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				setToken(token);
 				setUser(user);
 				setIsAuthenticated(true);
+				Sentry.setUser({ id: user.uid, email: user.email || "" });
 			} else {
 				setUser(undefined);
 				setIsAuthenticated(false);
 				setError(FirebaseAuthError.NONE);
+				Sentry.setUser(null);
 			}
 			setUserDataLoaded(true);
 		},
@@ -129,7 +132,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 						email,
 						password
 					);
-
 					if (userCredential.user) {
 						await resolveAuthState(userCredential.user);
 						return { success: true };
@@ -154,7 +156,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 						email,
 						password
 					);
-
 					if (userCredential.user) {
 						await resolveAuthState(userCredential.user);
 						return { success: true };
@@ -175,7 +176,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			try {
 				const provider = new GoogleAuthProvider();
 				const userCredential = await signInWithPopup(auth, provider);
-
 				if (userCredential.user) {
 					await resolveAuthState(userCredential.user);
 					return { success: true };
@@ -197,7 +197,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			try {
 				const provider = new GithubAuthProvider();
 				const userCredential = await signInWithPopup(auth, provider);
-
 				if (userCredential.user) {
 					await resolveAuthState(userCredential.user);
 					return { success: true };
@@ -220,11 +219,8 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				setToken("");
 				setIsAuthenticated(false);
 				setUserDataLoaded(false);
-
 				await next?.();
-			} catch (e) {
-				console.error(e);
-			}
+			} catch (e) {}
 		},
 		[auth]
 	);
@@ -253,6 +249,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	useEffect(() => {
 		return onIdTokenChanged(auth, async (user) => {
 			// initialize api if user exists
+
 			if (user) {
 				await initApi(user);
 			} else {
@@ -289,10 +286,10 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			userDataLoaded,
 		]
 	);
+
 	return (
 		<FirebaseContext.Provider value={value}>
-			{" "}
-			{children}{" "}
+			{children}
 		</FirebaseContext.Provider>
 	);
 };
