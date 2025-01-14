@@ -21,7 +21,7 @@ interface EventItemProps {
 }
 
 const EventItem: React.FC<EventItemProps> = ({ name, time }) => (
-	<li className="flex justify-between ">
+	<li className="flex justify-between">
 		<span className="text-xl">{name}</span>
 		<span className="text-xl">{time}</span>
 	</li>
@@ -70,8 +70,8 @@ const Schedule: React.FC = () => {
 				<h1 className="section-header-text">Schedule</h1>
 				<Divider />
 			</div>
-			<Tab.Group>
-				<Tab.List className="tab-list flex space-x-2 rounded-xl p-2">
+			<Tab.Group as="div">
+				<Tab.List as="div" className="tab-list flex space-x-2 rounded-xl p-2">
 					{Object.keys(schedule)
 						.filter((category) => category !== "CheckIn")
 						.map((category) => (
@@ -87,11 +87,12 @@ const Schedule: React.FC = () => {
 							</Tab>
 						))}
 				</Tab.List>
-				<Tab.Panels className="mt-4 tab-panel">
+
+				<Tab.Panels as="div" className="mt-4 tab-panel">
 					{Object.entries(schedule)
 						.filter(([category]) => category !== "CheckIn")
 						.map(([category, items], idx) => (
-							<Tab.Panel key={idx} className="rounded-xl p-4">
+							<Tab.Panel key={idx} as="div" className="rounded-xl p-4">
 								{items.map((item, itemIdx, arr) => (
 									<React.Fragment key={itemIdx}>
 										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
@@ -146,7 +147,6 @@ const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 			} else {
 				acc[eventType].push(eventDetails);
 			}
-
 			return acc;
 		},
 		{}
@@ -154,8 +154,7 @@ const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 
 	Object.keys(schedule).forEach((category: string) => {
 		schedule[category].sort(
-			(a: ScheduleEventDetails, b: ScheduleEventDetails) =>
-				a.sortKey.getTime() - b.sortKey.getTime()
+			(a, b) => a.sortKey.getTime() - b.sortKey.getTime()
 		);
 	});
 
