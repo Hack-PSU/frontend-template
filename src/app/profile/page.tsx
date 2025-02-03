@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { readFromDatabase } from "@/lib/database";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Image from "next/image";
+import textbox from "../../../public/Text Box.svg"
 
 export default function Example() {
 	const { isAuthenticated, userDataLoaded, user, logout } = useFirebase();
@@ -57,8 +58,8 @@ export default function Example() {
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
 			<div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-xl">
-				<div className="bg-gradient-to-r from-[#00000080] to-[#000000f1] border-green-500 border-4 rounded-lg px-6 py-10 shadow-lg sm:px-12">
-					<div className="text-center">
+			<img src={textbox} alt="silly goose"></img>
+			<div className="text-center">
 						<div className="flex justify-center mb-4">
 							{user?.photoURL ? (
 								<Image
@@ -130,7 +131,6 @@ export default function Example() {
 							Sign Out
 						</button>
 					</div>
-				</div>
 			</div>
 		</div>
 	);
