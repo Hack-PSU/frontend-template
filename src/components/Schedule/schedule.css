@@ -16,7 +16,7 @@
 	padding: 16px 32px;
 	cursor: pointer;
 	border-radius: 10px 10px 0 0;
-	background: rgba(0, 0, 0, 0.75);
+	background: black;
 	font-size: 1.25rem;
 	transition: background-color 0.3s ease;
 	margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
@@ -28,23 +28,26 @@
 }
 
 .tab[aria-selected="true"] {
-	background-color: rgba(245, 245, 220, 0.75);
-	border-bottom: 4px solid black;
+	background: url('/Text Box.svg') no-repeat center center;
+	background-size: cover;
+	background-color: transparent;
 	color: black;
 }
 
 /* Content panels */
 .tab-panel {
 	border-radius: 1em;
-	border: 4px solid green;
-	background-color: #00000080;
+	background: url('/Text Box.svg') no-repeat center center;
+	background-color: transparent;
 	background-size: cover;
 	background-position: center;
 	padding: 32px;
+	height: auto;
+	min-height: 600px;
 	max-width: 1000px;
 	margin: 0.5rem auto;
-	color: white;
-	font-size: 1.125rem;
+	color: black;
+	font-size: 1.25rem;
 }
 
 .tab-panel li:hover {
