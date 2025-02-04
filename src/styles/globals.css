@@ -40,11 +40,16 @@
 
 	body {
 		font-family: Lato, Georgia, sans-serif;
-		font-feature-settings: "rlig" 1, "calt" 1;
-		background-color: #588157;
-		background-image: url("../../public/website-background.png");
-		background-size: cover;
-		background-position: top center;
+		font-feature-settings:
+			"rlig" 1,
+			"calt" 1;
+		background-image: linear-gradient(to top, #d7f6ff, #0e1e25 80%);
+		background-size: cover, cover;
+		background-position:
+			top center,
+			top center;
+		min-height: 00vh;
+		margin: 0;
 	}
 }
 
@@ -95,7 +100,10 @@
 		color: white;
 		font-family: "cornerstone";
 		font-size: 4rem;
-		text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
+		text-shadow:
+			-2px -2px 0 black,
+			2px -2px 0 black,
+			-2px 2px 0 black,
 			2px 2px 0 black;
 		font-weight: bold;
 		line-height: 1;
