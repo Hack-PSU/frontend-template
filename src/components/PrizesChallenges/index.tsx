@@ -4,7 +4,7 @@ import "./PrizesChallenges.css";
 
 const PrizesChallenges = () => {
   return (
-    <section id="prizes" className="flex flex-col items-center w-full mt-20">
+    <section id="prizes" className="flex flex-col items-center w-full mt-20 ">
       <div className="w-full max-w-6xl flex flex-col items-center">
         <h1 className="section-header-text">Prizes & Challenges</h1>
         <Divider />
@@ -117,25 +117,33 @@ const AwardBox: React.FC<AwardBoxProps> = ({
   extra,
 }) => {
   return (
-    <div className="p-3 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+    <div className="
+      w-[500px]  
+      h-[300px]
+      p-3 
+      bg-[url('/Prize_textbox.svg')] 
+      bg-no-repeat 
+      bg-center 
+      bg-contain 
+      text-center">
+      <h2 className="text-2xl md:text-2xl font-bold text-center mb-2 text-red">
         {title}
       </h2>
-      <p className="text-base md:text-lg text-white mb-2">{description}</p>
+      <p className="text-sm md:text-lg text-red mb-2">{description}</p>
       {prizes.length > 0 && (
-        <table className="table-auto mt-2 text-white mx-auto">
+        <table className="table-auto mt-2 text-red mx-auto">
           <tbody>
             {prizes.map((prize, index) => (
               <tr key={index}>
-                <td className="text-base md:text-lg px-4">{prize.place}:</td>
-                <td className="text-base md:text-lg text-left">{prize.amount}</td>
+                <td className="text-sm md:text-lg px-4">{prize.place}:</td>
+                <td className="text-sm md:text-lg text-left">{prize.amount}</td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
       {extra && (
-        <div className="text-base md:text-lg text-white mt-2">{extra}</div>
+        <div className="text-sm md:text-lg text-white mt-2">{extra}</div>
       )}
     </div>
   );
