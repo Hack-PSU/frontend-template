@@ -14,13 +14,13 @@ const rules = [
 ];
 
 const Rules = () => (
-	<section className="flex flex-col items-center w-full gap-8 my-4">
-		<div className="w-11/12 md:w-5/12 flex flex-col items-center">
+	<section className="flex flex-col items-center w-full gap-8 my-8">
+		<div className="w-11/12 md:w-11/12 flex flex-col items-center">
 			<h1 className="section-header-text">Rules</h1>
 			<Divider />
 		</div>
-		<div className="w-10/12">
-			<div className="rules-border rounded-lg shadow-lg bg-cover bg-center p-4 bg-[#00000080]">
+		<div className="w-11/12">
+			<div className="rules-border rounded-lg shadow-lg bg-cover bg-center p-1 bg-[#00000080]">
 				<ul className="list-inside list-disc text-white font-lato text-md md:text-lg ">
 					{rules.map((rule, index) => (
 						<li key={index} dangerouslySetInnerHTML={{ __html: rule }} />
