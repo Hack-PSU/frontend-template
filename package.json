@@ -10,10 +10,12 @@
 		"fmt": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
 	},
 	"dependencies": {
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
 		"@headlessui/react": "^1.7.17",
 		"@heroicons/react": "^2.0.18",
 		"@mui/icons-material": "^5.14.14",
-		"@mui/material": "^5.14.13",
+		"@mui/material": "^6.4.3",
 		"@radix-ui/react-switch": "^1.1.0",
 		"@sentry/nextjs": "^8",
 		"@svgr/webpack": "^8.1.0",
