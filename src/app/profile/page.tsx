@@ -3,25 +3,49 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUser, useUserInfoMe } from "@/lib/api/user/hook";
-import QRCode from "react-qr-code";
+import { useUserInfoMe } from "@/lib/api/user/hook"; // or wherever it's located
+import { useCreateWalletPass } from "@/lib/api/wallet/hook"; // your custom hook
 import Image from "next/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import textbox from "../../../public/Text Box.svg";
+import googleWalletImg from "../../../public/google_wallet.svg"; // <-- import your SVG
+import QRCode from "react-qr-code";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
 	const router = useRouter();
-
 	const { data: userData } = useUserInfoMe();
 
+	// Prepare the createWalletPass mutation
+	const { mutateAsync: createWalletPass } = useCreateWalletPass();
+
+	const [showQRCode, setShowQRCode] = useState(true);
+	const toggleQRCode = () => setShowQRCode((prev) => !prev);
+
+	// Handle add-to-wallet click
+	const handleAddToGoogleWallet = async () => {
+		try {
+			if (!user) return; // Just a safeguard
+			// Call the mutation, passing the user’s UID (or whichever ID your backend needs)
+			const response = await createWalletPass(user.uid);
+
+			// Assuming the response has a `link` property with the URL
+			if (response?.walletLink) {
+				window.open(response.walletLink, "_blank");
+			} else {
+				console.error("No wallet link received:", response);
+			}
+		} catch (error) {
+			console.error("Error creating wallet pass:", error);
+			alert("Failed to create Google Wallet pass.");
+		}
+	};
+
 	useEffect(() => {
+		// If auth is resolved and we're not authenticated, redirect
 		if (!isLoading && !isAuthenticated) {
-			// Not logged in, send to sign in page.
 			router.push("/signin");
 		} else if (user && userData) {
-			// If the fetched user data is empty or missing required registration info,
-			// redirect to the register page.
+			// If user is logged in but missing registration info, redirect
 			if (!userData.registration) {
 				router.push("/register");
 			}
@@ -38,12 +62,10 @@ export default function Profile() {
 		}
 	};
 
-	const [showQRCode, setShowQRCode] = useState(true);
-	const toggleQRCode = () => setShowQRCode((prev) => !prev);
-
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
 			<div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-xl">
+				{/* Profile header */}
 				<div className="text-center">
 					<div className="flex justify-center mb-4">
 						{user?.photoURL ? (
@@ -61,6 +83,7 @@ export default function Profile() {
 					<h2 className="text-xl sm:text-2xl font-bold text-white">Profile</h2>
 				</div>
 
+				{/* Basic info */}
 				<dl className="mt-6 space-y-4 divide-y divide-white text-white text-base sm:text-lg">
 					<div className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:items-center">
 						<div className="font-medium sm:w-64 sm:flex-none sm:pr-6">Name</div>
@@ -78,6 +101,7 @@ export default function Profile() {
 					</div>
 				</dl>
 
+				{/* QR code section */}
 				<div className="mt-8">
 					<h2 className="text-lg sm:text-xl font-semibold text-white">
 						QR Code
@@ -105,6 +129,24 @@ export default function Profile() {
 					)}
 				</div>
 
+				{/* ADD TO GOOGLE WALLET BUTTON */}
+				<div className="mt-8 flex flex-col items-center">
+					<button
+						type="button"
+						onClick={handleAddToGoogleWallet}
+						className="hover:opacity-80 transition-opacity duration-200"
+					>
+						<Image
+							src={googleWalletImg}
+							alt="Add to Google Wallet"
+							width={200}
+							height={50}
+							priority
+						/>
+					</button>
+				</div>
+
+				{/* Sign-out button */}
 				<div className="mt-8">
 					<button
 						type="button"
