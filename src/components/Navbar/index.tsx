@@ -55,7 +55,7 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
-	const { logout, isAuthenticated, userDataLoaded } = useFirebase();
+	const { logout, isAuthenticated, isLoading, user } = useFirebase();
 
 	const pathname = usePathname();
 	const isHome: boolean = pathname === "/";
@@ -96,7 +96,7 @@ export default function Navbar() {
 	];
 
 	// Uncomment this to enable registration on Navbar
-	if (userDataLoaded && isAuthenticated) {
+	if (!isLoading && isAuthenticated) {
 		buttonImages.push({
 			href: "/profile",
 			alt: "profile",

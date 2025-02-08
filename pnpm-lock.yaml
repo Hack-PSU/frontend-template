@@ -32,6 +32,9 @@ importers:
       '@tailwindcss/forms':
         specifier: ^0.5.5
         version: 0.5.10(tailwindcss@3.3.2)
+      '@tanstack/react-query':
+        specifier: ^5.66.0
+        version: 5.66.0(react@18.3.1)
       '@types/luxon':
         specifier: ^3.3.2
         version: 3.4.2
@@ -63,7 +66,7 @@ importers:
         specifier: 13.4.2
         version: 13.4.2(eslint@8.40.0)(typescript@5.0.4)
       firebase:
-        specifier: ^9.22.0
+        specifier: ^9.23.0
         version: 9.23.0
       form-data:
         specifier: ^4.0.0
@@ -71,6 +74,9 @@ importers:
       framer-motion:
         specifier: ^10.12.11
         version: 10.18.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      jwt-decode:
+        specifier: ^4.0.0
+        version: 4.0.0
       luxon:
         specifier: ^3.4.2
         version: 3.5.0
@@ -95,6 +101,9 @@ importers:
       react-qr-code:
         specifier: ^2.0.12
         version: 2.0.15(react@18.3.1)
+      root:
+        specifier: git+https://github.com/tanstack/react-query.git
+        version: git+https://github.com/tanstack/react-query.git#7ff544e12e79388e513b1cd886aeb946f80f0153
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -1837,6 +1846,14 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || >= 3.0.0-alpha.1 || >= 4.0.0-alpha.20 || >= 4.0.0-beta.1'
 
+  '@tanstack/query-core@5.66.0':
+    resolution: {integrity: sha512-J+JeBtthiKxrpzUu7rfIPDzhscXF2p5zE/hVdrqkACBP8Yu0M96mwJ5m/8cPPYQE9aRNvXztXHlNwIh4FEeMZw==}
+
+  '@tanstack/react-query@5.66.0':
+    resolution: {integrity: sha512-z3sYixFQJe8hndFnXgWu7C79ctL+pI0KAelYyW+khaNJ1m22lWrhJU2QrsTcRKMuVPtoZvfBYrTStIdKo+x0Xw==}
+    peerDependencies:
+      react: ^18 || ^19
+
   '@tanstack/react-virtual@3.12.0':
     resolution: {integrity: sha512-6krceiPN07kpxXmU6m8AY7EL0X1gHLu8m3nJdh4phvktzVNxkQfBmSwnRUpoUjGQO1PAn8wSAhYaL8hY1cS1vw==}
     peerDependencies:
@@ -3077,6 +3094,10 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
+  jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
+
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
 
@@ -3631,6 +3652,10 @@ packages:
     resolution: {integrity: sha512-GVsDdsbJzzy4S/v3dqWPJ7EfvZJfCHiDqe80IyrF59LYuP+e6U1LJoUqeuqRbwAWoMNoXivMNeNAOf5E22VA1w==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
     hasBin: true
+
+  root@git+https://github.com/tanstack/react-query.git#7ff544e12e79388e513b1cd886aeb946f80f0153:
+    resolution: {commit: 7ff544e12e79388e513b1cd886aeb946f80f0153, repo: https://github.com/tanstack/react-query.git, type: git}
+    version: 0.0.0
 
   run-parallel@1.2.0:
     resolution: {integrity: sha512-5l4VyZR86LZ/lDxZTR6jqL8AFE2S0IFLMP26AbjsLVADxHdhB/c0GUsH+y39UfCi3dzz8OlQuPmnaJOMoDHQBA==}
@@ -6245,6 +6270,13 @@ snapshots:
       mini-svg-data-uri: 1.4.4
       tailwindcss: 3.3.2
 
+  '@tanstack/query-core@5.66.0': {}
+
+  '@tanstack/react-query@5.66.0(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.66.0
+      react: 18.3.1
+
   '@tanstack/react-virtual@3.12.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/virtual-core': 3.12.0
@@ -7750,6 +7782,8 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
+  jwt-decode@4.0.0: {}
+
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
@@ -8295,6 +8329,8 @@ snapshots:
   rollup@3.29.5:
     optionalDependencies:
       fsevents: 2.3.3
+
+  root@git+https://github.com/tanstack/react-query.git#7ff544e12e79388e513b1cd886aeb946f80f0153: {}
 
   run-parallel@1.2.0:
     dependencies:

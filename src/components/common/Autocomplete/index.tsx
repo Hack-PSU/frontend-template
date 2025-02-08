@@ -69,7 +69,6 @@ const Autocomplete: React.FC<Props> = ({
 								key={idx}
 								value={country}
 								as="li"
-
 								// Use Headless UI's className as a function syntax
 								className={({ active }) =>
 									active ? "option-hovered" : "option-item"
