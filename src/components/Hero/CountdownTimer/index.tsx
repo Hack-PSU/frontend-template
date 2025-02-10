@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { getActiveHackathon } from "@/lib/common";
-
+import "./timer.css";
 const CountdownTimer: React.FC = () => {
 	// Get Hackathon data
 	const [hackathon, setHackathon] = useState<any>(null);
@@ -118,33 +118,37 @@ const CountdownTimer: React.FC = () => {
 					animate={{ scaleY: 1 }}
 				>
 					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(days)}
 						</motion.div>
-						<div className="text-base">{days === 1 ? "Day" : "Days"}</div>
+						<div className="limelight-regular text-base">
+							{days === 1 ? "Day" : "Days"}
+						</div>
 					</div>
 					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(hours)}
 						</motion.div>
-						<div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
+						<div className="limelight-regular text-base">
+							{hours === 1 ? "Hour" : "Hours"}
+						</div>
 					</div>
 					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(minutes)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{minutes === 1 ? "Minute" : "Minutes"}
 						</div>
 					</div>
 					<div className="w-1/4">
 						<motion.div
-							className="cyberspace-front-font mb-4"
+							className="limelight-regular mb-4"
 							animate={secondsControls}
 						>
 							{renderTime(seconds)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{seconds === 1 ? "Second" : "Seconds"}
 						</div>
 					</div>
@@ -152,7 +156,7 @@ const CountdownTimer: React.FC = () => {
 			) : (
 				<></>
 			)}
-			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 ">
+			<div className="limelight-regular sm:text-2xl md:text-3xl font-bold cornerstone-font mt-3 ">
 				{bannerMessage}
 			</div>
 		</div>
