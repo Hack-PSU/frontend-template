@@ -108,7 +108,7 @@ export default function Navbar() {
 					: "bg-customRed"
 			} z-30 transition-all border-b-4 border-customYellow bg-customRed`}
 		>
-			<div className="flex flex-row justify-center">
+			<div className="flex flex-row justify-center mr-8">
 				<div className="flex flex-row space-x-6">
 					{buttonImages
 						.slice(0, 3)
