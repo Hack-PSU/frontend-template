@@ -1,15 +1,15 @@
 "use client";
+
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useRouter } from "next/navigation";
 
 interface NavbarButtonProps {
 	href: string;
 	alt: string;
 	isExternal?: boolean;
-	children?: React.ReactNode;
+	children: string;
 	onClick?: () => void;
 }
 
@@ -28,13 +28,15 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			onClick={onClick}
 			className="relative bottom-2 transition-all duration-150 ease-[cubic-bezier(0.4, 0, 0.2, 1)] hover:scale-[1.2] hover:-translate-y-1.5"
 		>
-			<img
+			<Image
 				src="/Navbar.svg"
 				alt={alt}
 				className="rounded-md w-40 h-auto"
+				width={160}
+				height={100}
 			/>
 			<span className="absolute inset-0 bottom-1/2 mt-5 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
-				{(children as string).toUpperCase()}
+				{children.toUpperCase()}
 			</span>
 		</a>
 	);
@@ -42,20 +44,11 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
-	const { logout, isAuthenticated, userDataLoaded } = useFirebase();
-
+	const { isAuthenticated, userDataLoaded } = useFirebase();
 	const pathname = usePathname();
-	const isHome: boolean = pathname === "/";
-
-	const router = useRouter();
+	const isHome = pathname === "/";
 
 	const buttonImages = [
-		{
-			href: "/profile",
-			alt: "profile",
-			text: "profile",
-			isExternal: false,
-		},
 		{
 			href: isHome ? "#faq" : "/#faq",
 			alt: "info",
@@ -86,9 +79,15 @@ export default function Navbar() {
 			text: "workshops",
 			isExternal: false,
 		},
+		{
+			href: "/profile",
+			alt: "profile",
+			text: "profile",
+			isExternal: false,
+		},
 	];
 
-	// Uncomment this to enable registration on Navbar
+	// If the user is not authenticated, show the registration button.
 	if (!userDataLoaded || !isAuthenticated) {
 		buttonImages.splice(3, 1, {
 			href: "/signin",
@@ -100,13 +99,7 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`navbar ${
-				scrolled ? "navbar-scrolled" : ""
-			} sticky top-0 w-full p-2 justify-evenly md:h-24 md:block bg-customRed border-customYellow${
-				scrolled
-					? "border-b border-customYellow backdrop-blur-xl"
-					: "bg-customRed"
-			} z-30 transition-all border-b-4 border-customYellow bg-customRed`}
+			className={`navbar sticky top-0 w-full p-2 justify-evenly md:h-24 md:block bg-customRed border-b-4 border-customYellow z-30 transition-all`}
 		>
 			<div className="flex flex-row justify-center mr-8">
 				<div className="flex flex-row space-x-6">
@@ -118,14 +111,19 @@ export default function Navbar() {
 								href={href}
 								alt={alt}
 								isExternal={isExternal}
-								onClick={text === "signout" ? logout : undefined}
 							>
 								{text}
 							</NavbarButton>
 						))}
 				</div>
 				<a href="/" className="flex items-center justify-center">
-					<img src="logo.png" alt="Logo Background" className=" h-40 w-auto" />
+					<Image
+						src="/logo.png"
+						alt="Logo Background"
+						className="h-40 w-auto"
+						width={160}
+						height={160}
+					/>
 				</a>
 				<div className="flex flex-row space-x-6">
 					{buttonImages
@@ -136,7 +134,6 @@ export default function Navbar() {
 								href={href}
 								alt={alt}
 								isExternal={isExternal}
-								onClick={text === "signout" ? logout : undefined}
 							>
 								{text}
 							</NavbarButton>
