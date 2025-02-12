@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
 
 @layer base {
 	:root {
@@ -107,6 +108,7 @@
 	}
 }
 
+
 @font-face {
 	font-family: "cyperspace-front";
 	src: url("../../public/fonts/CyberspaceRacewayFront.otf");
@@ -115,6 +117,11 @@
 @font-face {
 	font-family: "cornerstone";
 	src: url("../../public/fonts/Cornerstone.ttf");
+}
+
+@font-face {
+	font-family: "rye";
+	src: url("../../public/fonts/Rye-Regular.ttf");
 }
 
 a {
