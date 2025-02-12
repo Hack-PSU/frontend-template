@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import HomeIcon from "@mui/icons-material/Home";
 
 interface NavbarButtonProps {
 	href: string;
@@ -46,6 +47,7 @@ export default function Navbar() {
 	const scrolled = useScroll(50);
 	const { isAuthenticated, userDataLoaded } = useFirebase();
 	const pathname = usePathname();
+	const router = useRouter();
 	const isHome = pathname === "/";
 
 	const buttonImages = [
@@ -99,9 +101,21 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`navbar sticky top-0 w-full p-2 justify-evenly md:h-24 md:block bg-customRed border-b-4 border-customYellow z-30 transition-all`}
+			className={`navbar sticky top-0 w-full p-2 justify-evenly md:h-24 md:block bg-customRed border-b-4 border-customYellow z-30 transition-all ${
+				scrolled ? "shadow-md" : ""
+			}`}
 		>
-			<div className="flex flex-row justify-center mr-8">
+			<div className="md:hidden flex justify-end w-full">
+				<button
+					className="text-white"
+					onClick={() => router.push("/")}
+					aria-label="Go Home"
+				>
+					<HomeIcon fontSize="large" />
+				</button>
+			</div>
+
+			<div className="hidden md:flex flex-row justify-center mr-8">
 				<div className="flex flex-row space-x-6">
 					{buttonImages
 						.slice(0, 3)
@@ -116,6 +130,7 @@ export default function Navbar() {
 							</NavbarButton>
 						))}
 				</div>
+
 				<a href="/" className="flex items-center justify-center">
 					<Image
 						src="/logo.png"
@@ -125,6 +140,7 @@ export default function Navbar() {
 						height={160}
 					/>
 				</a>
+
 				<div className="flex flex-row space-x-6">
 					{buttonImages
 						.slice(3)
@@ -139,6 +155,7 @@ export default function Navbar() {
 							</NavbarButton>
 						))}
 				</div>
+
 				<MLHBadge />
 			</div>
 		</nav>
