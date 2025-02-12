@@ -8,8 +8,20 @@ const PrizesChallenges = () => {
       <div className="w-full max-w-6xl flex flex-col items-center">
         <h1 className="section-header-text">Prizes & Challenges</h1>
         <Divider />
+        
+        {/* Coming Soon Message */}
+        <div className="w-full p-8 mt-4">
+          <div className="p-6 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">Coming Soon</h2>
+            <p className="text-lg text-white">New prizes and challenges will be released soon!</p>
+          </div>
+        </div>
+        
+        {/* Commented out the following code to hide the prizes and challenges */}
+        {/* 
         <div className="w-full grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
-          {/* HackPSU Grand Prize remains the same */}
+          {/* HackPSU Grand Prize */}
+          {/* 
           <AwardBox
             title="HackPSU Grand Prize"
             description="The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally."
@@ -20,21 +32,25 @@ const PrizesChallenges = () => {
             ]}
             extra="Winners will also receive MLH winner pins."
           />
-
+          {/* End of HackPSU Grand Prize */}
+          
           {/* Peraton Challenge */}
-		  <AwardBox
-			title="Peraton Challenge"
-			description="Most Creative Implementation of Generative AI"
-			prizes={[
-			  {
-				place: "Prize",
-				amount:
-				  "Peraton Backpack with Swag and $100 Amazon Gift Card for each team member",
-			  },
-			]}
-		  />
+          {/* 
+          <AwardBox
+            title="Peraton Challenge"
+            description="Most Creative Implementation of Generative AI"
+            prizes={[
+              {
+                place: "Prize",
+                amount:
+                  "Peraton Backpack with Swag and $100 Amazon Gift Card for each team member",
+              },
+            ]}
+          />
+          {/* End of Peraton Challenge */}
 
           {/* Smeal Challenge */}
+          {/* 
           <AwardBox
             title="Smeal Challenge"
             description="Build a platform that helps students identify steps to achieve their career goals based on educational backgrounds."
@@ -45,8 +61,10 @@ const PrizesChallenges = () => {
               },
             ]}
           />
+          {/* End of Smeal Challenge */}
 
           {/* Snap Challenge */}
+          {/* 
           <AwardBox
             title="Snap Challenge"
             description="Create a Lens on Spectacles that pushes the boundaries of wearable AR. Showcase innovative ways Spectacles can enhance real-world experiences."
@@ -56,8 +74,10 @@ const PrizesChallenges = () => {
               { place: "3rd Place", amount: "Alexa Power Bank" },
             ]}
           />
+          {/* End of Snap Challenge */}
 
           {/* ICDS Challenge */}
+          {/* 
           <AwardBox
             title="ICDS Challenge"
             description="Develop a RAG chatbot to answer questions based on the ICDS user guide. Judged on quiz performance and design principles."
@@ -69,8 +89,10 @@ const PrizesChallenges = () => {
               },
             ]}
           />
+          {/* End of ICDS Challenge */}
 
           {/* Nittany AI Challenge */}
+          {/* 
           <AwardBox
             title="Nittany AI Challenge"
             description="Use AI/ML/GenAI to address problems in health, humanitarianism, education, or the environment."
@@ -92,11 +114,13 @@ const PrizesChallenges = () => {
               },
             ]}
           />
-        </div>
-      </div>
-    </section>
-  );
-};
+          {/* End of Nittany AI Challenge */}
+        {/* </div>
+                */}
+              </div>
+            </section>
+          );
+        };
 
 interface Prize {
   place: string;
@@ -106,7 +130,7 @@ interface Prize {
 interface AwardBoxProps {
   title: string;
   description: string;
-  prizes?: Prize[]; // Now explicitly typed as an array of Prize objects
+  prizes?: Prize[];
   extra?: string;
 }
 
