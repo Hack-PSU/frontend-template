@@ -1,30 +1,23 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
-
-import { Sponsor } from "../../interfaces/Sponsor";
+import React from "react";
 import Divider from "../common/Divider";
 import "./sponsors.css";
+import { useAllSponsors } from "@/lib/api/sponsor/hook";
 
 export default function Sponsors() {
-	const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+	// Use the React Query hook to fetch sponsors.
+	const { data: sponsors, isLoading, error } = useAllSponsors();
 
-	useEffect(() => {
-		async function fetchSponsors() {
-			const apiEndpoint = `${process.env.NEXT_PUBLIC_BASE_URL_V3}/sponsors`;
-			try {
-				const response = await fetch(apiEndpoint);
-				if (!response.ok) {
-					throw new Error(`Network response was not ok: ${response.status}`);
-				}
-				const data = await response.json();
-				setSponsors(data.sort((a: Sponsor, b: Sponsor) => a.order - b.order)); // Sort sponsors once when setting state
-			} catch (error) {
-				console.error("Error fetching sponsors:", error);
-			}
-		}
+	if (isLoading) {
+		return <div>Loading sponsors...</div>;
+	}
 
-		fetchSponsors();
-	}, []);
+	if (error || !sponsors) {
+		return <div>Error loading sponsors.</div>;
+	}
+
+	// Sort sponsors by the 'order' property.
+	const sortedSponsors = sponsors.sort((a, b) => a.order - b.order);
 
 	return (
 		<section id="sponsors" className="flex flex-col items-center w-full mt-20">
@@ -34,9 +27,8 @@ export default function Sponsors() {
 			</div>
 			<div className="bg-transparent mt-8">
 				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-5 items-center">
-					{sponsors.map((sponsor, index) => (
-						<div key={index} className="sponsor-container">
-							{" "}
+					{sortedSponsors.map((sponsor) => (
+						<div key={sponsor.id} className="sponsor-container">
 							<a
 								href={sponsor.link}
 								target="_blank"
@@ -46,7 +38,7 @@ export default function Sponsors() {
 								<div className="sponsor-card">
 									<Image
 										className="max-h-[94px] object-contain"
-										src={sponsor.darkLogo}
+										src={sponsor.darkLogo || ""}
 										alt={sponsor.name}
 										width={458}
 										height={48}
