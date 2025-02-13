@@ -2,12 +2,7 @@
 module.exports = {
 	theme: {
 		extend: {
-			fontFamily: {
-				rye: ['Rye']
-			  },
 			colors: {
-				customRed: "rgb(162,0,33)",
-				customYellow: "rgb(239,160,11)",
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
