@@ -9,7 +9,6 @@ const PrizesChallenges = () => {
 				<h1 className="section-header-text">Prizes & Challenges</h1>
 				<Divider />
 
-				{/* Coming Soon Message */}
 				<div className="w-full p-8 mt-4">
 					<div className="p-6 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
 						<p className="text-xl text-white ">
