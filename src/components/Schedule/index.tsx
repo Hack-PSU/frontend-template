@@ -88,11 +88,11 @@ const Schedule: React.FC = () => {
 						))}
 				</Tab.List>
 
-				<Tab.Panels as="div" className="mt-4 tab-panel">
+				<Tab.Panels as="div" className="tab-panel">
 					{Object.entries(schedule)
 						.filter(([category]) => category !== "CheckIn")
 						.map(([category, items], idx) => (
-							<Tab.Panel key={idx} as="div" className="rounded-xl p-4">
+							<Tab.Panel key={idx} as="div" className="rounded-xl p-2 m-8">
 								{items.map((item, itemIdx, arr) => (
 									<React.Fragment key={itemIdx}>
 										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
