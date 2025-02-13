@@ -18,9 +18,8 @@ const PrizesChallenges = () => {
 				</div>
 
 				{/* Commented out the following code to hide the prizes and challenges */}
-				{/* 
+				{/*
         <div className="w-full grid md:grid-cols-1 lg:grid-cols-2 gap-8 mt-4">
-          {/* HackPSU Grand Prize remains the same */}
           <AwardBox
             title="HackPSU Grand Prize"
             description="The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally."
@@ -32,7 +31,6 @@ const PrizesChallenges = () => {
             extra="Winners will also receive MLH winner pins."
           />
 
-          {/* Peraton Challenge */}
 		  <AwardBox
 			title="Peraton Challenge"
 			description="Most Creative Implementation of Generative AI"
@@ -45,7 +43,6 @@ const PrizesChallenges = () => {
 			]}
 		  />
 
-          {/* Smeal Challenge */}
           <AwardBox
             title="Smeal Challenge"
             description="Build a platform that helps students identify steps to achieve their career goals based on educational backgrounds."
@@ -57,7 +54,6 @@ const PrizesChallenges = () => {
             ]}
           />
 
-          {/* Snap Challenge */}
           <AwardBox
             title="Snap Challenge"
             description="Create a Lens on Spectacles that pushes the boundaries of wearable AR. Showcase innovative ways Spectacles can enhance real-world experiences."
@@ -68,7 +64,6 @@ const PrizesChallenges = () => {
             ]}
           />
 
-          {/* ICDS Challenge */}
           <AwardBox
             title="ICDS Challenge"
             description="Develop a RAG chatbot to answer questions based on the ICDS user guide. Judged on quiz performance and design principles."
@@ -81,7 +76,6 @@ const PrizesChallenges = () => {
             ]}
           />
 
-          {/* Nittany AI Challenge */}
           <AwardBox
             title="Nittany AI Challenge"
             description="Use AI/ML/GenAI to address problems in health, humanitarianism, education, or the environment."
@@ -104,52 +98,55 @@ const PrizesChallenges = () => {
             ]}
           />
         </div>
-      </div>
-    </section>
-  );
+            */}
+			</div>
+		</section>
+	);
 };
 
 interface Prize {
-  place: string;
-  amount: string;
+	place: string;
+	amount: string;
 }
 
 interface AwardBoxProps {
-  title: string;
-  description: string;
-  prizes?: Prize[]; // Now explicitly typed as an array of Prize objects
-  extra?: string;
+	title: string;
+	description: string;
+	prizes?: Prize[]; // Now explicitly typed as an array of Prize objects
+	extra?: string;
 }
 
 const AwardBox: React.FC<AwardBoxProps> = ({
-  title,
-  description,
-  prizes = [],
-  extra,
+	title,
+	description,
+	prizes = [],
+	extra,
 }) => {
-  return (
-    <div className="p-3 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
-      <h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white">
-        {title}
-      </h2>
-      <p className="text-base md:text-lg text-white mb-2">{description}</p>
-      {prizes.length > 0 && (
-        <table className="table-auto mt-2 text-white mx-auto">
-          <tbody>
-            {prizes.map((prize, index) => (
-              <tr key={index}>
-                <td className="text-base md:text-lg px-4">{prize.place}:</td>
-                <td className="text-base md:text-lg text-left">{prize.amount}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      {extra && (
-        <div className="text-base md:text-lg text-white mt-2">{extra}</div>
-      )}
-    </div>
-  );
+	return (
+		<div className="p-3 bg-[rgba(0,0,0,0.75)] border-[green] border-4 rounded-lg text-center">
+			<h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-white">
+				{title}
+			</h2>
+			<p className="text-base md:text-lg text-white mb-2">{description}</p>
+			{prizes.length > 0 && (
+				<table className="table-auto mt-2 text-white mx-auto">
+					<tbody>
+						{prizes.map((prize, index) => (
+							<tr key={index}>
+								<td className="text-base md:text-lg px-4">{prize.place}:</td>
+								<td className="text-base md:text-lg text-left">
+									{prize.amount}
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			)}
+			{extra && (
+				<div className="text-base md:text-lg text-white mt-2">{extra}</div>
+			)}
+		</div>
+	);
 };
 
 export default PrizesChallenges;
