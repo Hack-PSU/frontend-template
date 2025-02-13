@@ -65,21 +65,22 @@ const Schedule: React.FC = () => {
 	}, []);
 
 	return (
-		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
+		<div className="w-full max-w-5xl px-8 py-20 sm:px-0 rye-regular" id="schedule">
 			<div className="text-center">
-				<h1 className="section-header-text">Schedule</h1>
+				<h1 className="section-header-text rye-regular">Schedule</h1>
 				<Divider />
 			</div>
-			<Tab.Group as="div">
-				<Tab.List as="div" className="tab-list flex space-x-2 rounded-xl p-2">
+			<Tab.Group as="div" className="tab-container">
+				<Tab.List as="div" className="tab-list flex rounded-xl p-2 relative transform translate-y-[60px] mx-12">
 					{Object.keys(schedule)
 						.filter((category) => category !== "CheckIn")
 						.map((category) => (
-							<Tab as="div"
+							<Tab
+								as="div"
 								key={category}
 								className={({ selected }) =>
 									`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-										selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
+										selected ? "bg-[#ffffff]" : ""
 									}`
 								}
 							>
