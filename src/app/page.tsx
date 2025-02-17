@@ -28,19 +28,39 @@ export default function Home() {
 	const { scrollYProgress } = useScroll();
 	const progress = useTransform(scrollYProgress, [0, 0.99], [0, 1]);
 
-	const moonLeft = useTransform(progress, [0, 0.5], ["5px", "110vw"]);
-	const moonRotate = useTransform(progress, [0, 1], [0, 0]);
-
-	const sunLeft = useTransform(
+	const moonPosition = useTransform(
 		progress,
-		[0.5, 1],
-		["-15vw", "85vw"]
+		[0, 1],
+		[(-Math.PI * Math.sqrt(3)) / 2, 0]
 	);
-	const sunRotate = useTransform(progress, [0, 1], [0, 0]);
+	const sunPosition = useTransform(
+		progress,
+		[0, 1],
+		[0, (-Math.PI * Math.sqrt(3)) / 2]
+	);
+
+	const moonLeft = useTransform(moonPosition, (angle) => {
+		const left = 50 + 40 * Math.cos(angle);
+		return `${left === 50 ? -150 : left}vw`;
+	});
+
+	const moonTop = useTransform(moonPosition, (angle) => {
+		const top = 50 + 40 * Math.sin(angle);
+		return `${top === 50 ? -150 : top}vh`;
+	});
+
+	const sunLeft = useTransform(sunPosition, (angle) => {
+		const left = 50 + 40 * Math.cos(angle);
+		return `${left === 50 ? -150 : left}vw`;
+	});
+
+	const sunTop = useTransform(sunPosition, (angle) => {
+		const top = 50 + 40 * Math.sin(angle);
+		return `${top === 50 ? -150 : top}vh`;
+	});
 
 	return (
 		<>
-			{/* Background container for the assets */}
 			<div
 				style={{
 					position: "fixed",
@@ -54,22 +74,20 @@ export default function Home() {
 				<motion.div
 					style={{
 						position: "absolute",
-						top: "120px",
+						top: moonTop,
 						left: moonLeft,
-						rotate: moonRotate,
 					}}
 				>
-					<Image src="/moon.png" alt="Moon" width={150} height={150} />
+					<Image src="/moon.png" alt="Moon" width={250} height={250} />
 				</motion.div>
 				<motion.div
 					style={{
 						position: "absolute",
-						top: "120px",
+						top: sunTop,
 						left: sunLeft,
-						rotate: sunRotate,
 					}}
 				>
-					<Image src="/sun.png" alt="Sun" width={200} height={200} />
+					<Image src="/sun.png" alt="Sun" width={250} height={250} />
 				</motion.div>
 			</div>
 
