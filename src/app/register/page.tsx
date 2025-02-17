@@ -1,63 +1,68 @@
 "use client";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
+
+import React, {
+	useState,
+	ChangeEvent,
+	FormEvent,
+	useEffect,
+	useCallback,
+} from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import ToggleSwitch from "@/components/common/ToggleSwitch";
-import { getActiveHackathon } from "@/lib/common";
-import { writeToDatabase, updateInDatabase } from "@/lib/database";
-import { User } from "@/interfaces";
 import BigButton from "@/components/common/BigButton";
 import TelephoneFormatter from "@/components/common/TelephoneFormatter";
 import Alert from "@/components/common/Alert";
 import Autocomplete from "@/components/common/Autocomplete";
 
-/*
- * Registration is used to add a user to table of hackathon participants.
- * This is done by first creating the user,
- * then adding the user to the table of participants.
- */
+// React Query hooks for hackathon, user and registration operations:
+import { useActiveHackathonForStatic } from "@/lib/api/hackathon";
+import { useUpdateUser, useCreateUser, useReplaceUser } from "@/lib/api/user";
+import { useCreateRegistration } from "@/lib/api/registration";
 
 import "./register.css";
 
-const Registration: React.FC = () => {
-	interface RegistrationData extends FormData {
-		id: string;
-		firstName: string;
-		lastName: string;
-		gender: "male" | "female" | "non-binary" | "no-disclose" | "";
-		phoneNumber: string;
-		race: string;
-		veteran: string;
-		age: number;
-		shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "";
-		country: string;
-		driving: boolean;
-		firstHackathon: boolean;
-		hasDietaryRestrictionsOrAllegies: boolean;
-		dietaryRestrictions: string | null;
-		allergies: string | null;
-		major: string;
-		university: string;
-		academicYear:
-			| "freshman"
-			| "sophomore"
-			| "junior"
-			| "senior"
-			| "graduate"
-			| "other"
-			| "";
-		educationalInstitutionType: string;
-		resume: any;
-		mlhCoc: boolean;
-		mlhDcp: boolean;
-		shareEmailMlh: boolean;
-		time: number;
-		codingExperience: "none" | "beginner" | "intermediate" | "advanced" | "";
-		referral: string;
-		project: string;
-		expectations: string;
-	}
+// Local interface for our registration form state.
+interface RegistrationData {
+	id: string;
+	firstName: string;
+	lastName: string;
+	gender: "male" | "female" | "non-binary" | "no-disclose" | "";
+	phoneNumber: string;
+	race: string;
+	veteran: string;
+	age: number;
+	shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "";
+	country: string;
+	driving: boolean;
+	firstHackathon: boolean;
+	hasDietaryRestrictionsOrAllegies: boolean;
+	dietaryRestrictions: string | null;
+	allergies: string | null;
+	major: string;
+	university: string;
+	academicYear:
+		| "freshman"
+		| "sophomore"
+		| "junior"
+		| "senior"
+		| "graduate"
+		| "other"
+		| "";
+	educationalInstitutionType: string;
+	resume: File | null;
+	mlhCoc: boolean;
+	mlhDcp: boolean;
+	shareEmailMlh: boolean;
+	time: number;
+	codingExperience: "none" | "beginner" | "intermediate" | "advanced" | "";
+	referral: string;
+	project: string;
+	expectations: string;
+}
 
+const Registration: React.FC = () => {
+	// Local form state.
 	const [registrationData, setRegistrationData] = useState<RegistrationData>({
 		id: "",
 		firstName: "",
@@ -87,34 +92,29 @@ const Registration: React.FC = () => {
 		referral: "",
 		project: "",
 		expectations: "",
-	} as RegistrationData);
-	const [componentMounted, setComponentMounted] = useState(false); // Handles hydration error
+	});
+	const [componentMounted, setComponentMounted] = useState(false);
+	const [selectedSidebarField, setSelectedSidebarField] = useState("");
 
-	const [hackathon, setHackathon] = useState<any>(null);
+	// Alert state.
+	const [showAlert, setShowAlert] = useState<boolean>(false);
+	const [alertMessage, setAlertMessage] = useState<string>("");
+	const [alertSeverity, setAlertSeverity] = useState<
+		"error" | "warning" | "info" | "success" | ""
+	>("");
 
-	// Get Firebase user fields
-	const { user, isAuthenticated, userDataLoaded } = useFirebase();
+	// Firebase authentication.
+	const { user, isAuthenticated } = useFirebase();
 	const router = useRouter();
 
-	// Scroll to element
-	const handleScroll = (scrollTo: string) => {
-		const element = document.getElementById(scrollTo);
-		if (element == null) {
-			return;
-		}
+	// Get the active hackathon via React Query.
+	const {
+		data: hackathon,
+		isLoading: hackathonLoading,
+		error: hackathonError,
+	} = useActiveHackathonForStatic();
 
-		// Handle scroll (with offset for Navbar)
-		const offset = 100;
-		const elementRect = element.getBoundingClientRect().top;
-		const absoluteElementTop = elementRect + window.scrollY;
-		const scrollToPosition = absoluteElementTop - offset;
-
-		window.scrollTo({
-			top: scrollToPosition,
-			behavior: "smooth",
-		});
-	};
-
+	// Sidebar fields mapping.
 	const sidebarFields: Map<string, string> = new Map<string, string>([
 		["General", "name"],
 		["Shirt Size", "shirtSize"],
@@ -125,8 +125,18 @@ const Registration: React.FC = () => {
 		["Additional Questions", "codingExperience"],
 	]);
 
-	const [selectedSidebarField, setSelectedSidebarField] = useState("");
+	// Scroll handler.
+	const handleScroll = (scrollTo: string) => {
+		const element = document.getElementById(scrollTo);
+		if (!element) return;
+		const offset = 100;
+		const elementRect = element.getBoundingClientRect().top;
+		const absoluteElementTop = elementRect + window.scrollY;
+		const scrollToPosition = absoluteElementTop - offset;
+		window.scrollTo({ top: scrollToPosition, behavior: "smooth" });
+	};
 
+	// Sidebar selection handler.
 	const handleSidebarSelect = (field: string) => {
 		if (field === selectedSidebarField) {
 			setSelectedSidebarField("");
@@ -136,39 +146,26 @@ const Registration: React.FC = () => {
 		}
 	};
 
-	async function fetchHackathon() {
-		const hackathon = await getActiveHackathon();
-		setHackathon(hackathon);
-	}
-
+	// Set component mounted to avoid hydration issues.
 	useEffect(() => {
-		fetchHackathon();
 		setComponentMounted(true);
 	}, []);
 
+	// If the user data has loaded, set the registration user ID.
 	useEffect(() => {
-		if (userDataLoaded) {
-			if (isAuthenticated) {
-				setRegistrationData((prevData) => ({
-					...prevData,
-					id: user?.uid ?? "",
-				}));
-			} else {
-				// Redirect user to homepage if not logged in
-				alert("You must be signed in to register for HackPSU. Redirecting...");
-				router.push("/signin");
-			}
+		if (isAuthenticated) {
+			setRegistrationData((prevData) => ({
+				...prevData,
+				id: user?.uid ?? "",
+			}));
+		} else {
+			//alert("You must be signed in to register for HackPSU. Redirecting...");
+			router.push("/signin");
 		}
-	}, [isAuthenticated, router, user?.uid, userDataLoaded]);
+	}, [isAuthenticated, user, router]);
 
-	// Alert
-	const [showAlert, setShowAlert] = useState<boolean>(false);
-	const [alertMessage, setAlertMessage] = useState<string>("");
-	const [alertSeverity, setAlertSeverity] = useState<
-		"error" | "warning" | "info" | "success" | ""
-	>("");
-
-	const alert = (
+	// Helper function for alerts.
+	const alertFn = (
 		message: string,
 		severity: "error" | "warning" | "info" | "success" | "" = "error"
 	) => {
@@ -177,8 +174,11 @@ const Registration: React.FC = () => {
 		setShowAlert(true);
 	};
 
+	// Standard change handlers.
 	const handleChange = (
-		event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+		event: ChangeEvent<
+			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+		>
 	) => {
 		const { name, value } = event.target;
 		setRegistrationData((prevData) => ({
@@ -188,26 +188,26 @@ const Registration: React.FC = () => {
 		setShowAlert(false);
 	};
 
-	const handleNumericSelectionChange = (event: ChangeEvent<HTMLSelectElement>) => {
+	const handleNumericSelectionChange = (
+		event: ChangeEvent<HTMLSelectElement>
+	) => {
 		const { name, value } = event.target;
 		setRegistrationData((prevData) => ({
 			...prevData,
 			[name]: Number(value),
 		}));
 		setShowAlert(false);
-	}
+	};
 
 	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name } = event.target;
-
 		const checkboxes = document.querySelectorAll<HTMLInputElement>(
 			`input[name="${name}"]:checked`
 		);
 		const values = Array.from(checkboxes).map((checkbox) => checkbox.value);
-		const valueString = values.join(", ");
 		setRegistrationData((prevData) => ({
 			...prevData,
-			[name]: valueString,
+			[name]: values.join(", "),
 		}));
 		setShowAlert(false);
 	};
@@ -231,10 +231,9 @@ const Registration: React.FC = () => {
 	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const { name, files } = event.target;
 		if (files) {
-			const file = files[0];
 			setRegistrationData((prevData) => ({
 				...prevData,
-				[name]: file,
+				[name]: files[0],
 			}));
 		}
 		setShowAlert(false);
@@ -248,7 +247,7 @@ const Registration: React.FC = () => {
 		setShowAlert(false);
 	};
 
-	// Allow user to download resume to ensure correct file uploaded
+	// Allow the user to download the resume file.
 	const downloadResume = () => {
 		const resume = registrationData.resume;
 		if (resume) {
@@ -262,12 +261,17 @@ const Registration: React.FC = () => {
 		}
 	};
 
+	// Set up React Query mutations.
+	const createRegistrationMutation = useCreateRegistration();
+	const updateUserMutation = useReplaceUser();
+	// (Optionally, you might also include useCreateUser if needed.)
+
+	// Form submission handler.
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
 
-		// Validate required fields
-		// Null indicates it is just necessary; a value indicates that it must be exactly that value
-		const requiredFields = {
+		// Validate required fields.
+		const requiredFields: { [key: string]: any } = {
 			id: null,
 			firstName: null,
 			lastName: null,
@@ -288,51 +292,43 @@ const Registration: React.FC = () => {
 			referral: null,
 		};
 
-		// Check if all required fields are filled
-		const validationData: any = registrationData as any;
+		const validationData: any = registrationData;
 		for (let [key, value] of Object.entries(requiredFields)) {
-			// Separate validation for user_id
-			if (key == "id") {
+			if (key === "id") {
 				if (!validationData.id) {
 					console.error("User not logged in; no user id found.");
-					alert("You must be logged in to register for HackPSU."); // The user should always redirect automatically, but this is a backup
+					alertFn("You must be logged in to register for HackPSU.");
 					return;
 				} else {
 					continue;
 				}
 			}
-
 			const element = document.getElementById(key);
-
 			if (!element) {
-				// Necessary to avoid TypeScript error
 				console.error(`Element with ID ${key} not found.`);
 				continue;
 			}
-
 			if (validationData[key] === undefined || validationData[key] === "") {
-				if (key == "firstName" || key == "lastName") {
-					key = "name"; // Scroll to top of input container
+				// For name fields, scroll to the container.
+				if (key === "firstName" || key === "lastName") {
+					key = "name";
 				}
-
 				handleScroll(key);
-				alert("Please fill out all required fields.");
+				alertFn("Please fill out all required fields.");
 				return;
 			} else if (value !== null && validationData[key] !== value) {
 				handleScroll(key);
 				return;
 			}
-
 			if (validationData.age < 18) {
-				alert("You must be 18 years or older to participate.");
+				alertFn("You must be 18 years or older to participate.");
 				handleScroll("age");
 				return;
 			}
 		}
 
-		// Build user object
-		const newUser: User = {
-			id: registrationData.id,
+		// Build the user object for the database.
+		const newUser = {
 			firstName: registrationData.firstName,
 			lastName: registrationData.lastName,
 			gender: registrationData.gender,
@@ -347,23 +343,19 @@ const Registration: React.FC = () => {
 			race: registrationData.race ?? "",
 		};
 
-		const registrationUser = new FormData();
-		Object.entries(newUser).forEach(([key, value]) => {
-			registrationUser.append(key, value);
-		});
-
-		// Handle resume
-		if (registrationData.resume) {
-			registrationUser.append(
-				"resume",
-				registrationData.resume,
-				registrationData.resume.name
-			);
+		// Update the user in the database.
+		try {
+			await updateUserMutation.mutateAsync({
+				id: registrationData.id,
+				data: newUser,
+			});
+		} catch (err) {
+			console.error("Error updating user:", err);
+			// Optionally, try creating the user if update fails.
 		}
 
-		// Build the registration object
+		// Build the registration object (include the hackathon ID if available).
 		const registration = {
-			userId: registrationData.id,
 			travelReimbursement: false,
 			driving: registrationData.driving,
 			firstHackathon: registrationData.firstHackathon,
@@ -381,36 +373,27 @@ const Registration: React.FC = () => {
 			time: Date.now(),
 		};
 
-		// Write user to database
-		await writeToDatabase("users", registrationUser).catch((err: any) => {
-			// Assume user already exists, so try a PATCH
-			const updateUser = newUser;
-
-			updateInDatabase("users", updateUser).catch((err: any) => {
-				// Unknown error
-				alert(
-					"Unknown error while registering user; please relog and try again."
-				);
-				console.error("Error handling request to register user: ", err);
-				return;
+		// Create the registration entry.
+		try {
+			await createRegistrationMutation.mutateAsync({
+				userId: registrationData.id,
+				data: registration,
 			});
-		});
-
-		await writeToDatabase("registrations", registration)
-			.then((res: any) => {
-				alert("You are now registered for the hackathon!", "success");
-				// Navigate user home
-				setTimeout(() => {
-					window.location.href = "/profile";
-				}, 3000);
-			})
-			.catch((err: any) => {
-				alert("You are already registered for the Hackathon!", "warning");
-			});
+			alertFn("You are now registered for the hackathon!", "success");
+			setTimeout(() => {
+				router.push("/profile");
+			}, 3000);
+		} catch (err: any) {
+			console.error("Error creating registration:", err);
+			alertFn("You are already registered for the Hackathon!", "warning");
+		}
 	};
 
-	if (!componentMounted) {
-		return null;
+	if (!componentMounted || hackathonLoading) {
+		return <div>Loading...</div>;
+	}
+	if (hackathonError) {
+		return <div>Error loading hackathon data.</div>;
 	}
 
 	return (
@@ -421,9 +404,9 @@ const Registration: React.FC = () => {
 						<h1 className="text-4xl font-bold mb-2">Registration</h1>
 						<div>
 							for our{" "}
-							<div className="inline font-bold text-lime-400">
+							<span className="inline font-bold text-lime-400">
 								{hackathon?.name ?? ""}
-							</div>{" "}
+							</span>{" "}
 							Hackathon!
 						</div>
 					</div>
@@ -440,7 +423,6 @@ const Registration: React.FC = () => {
 									<input
 										id="firstName"
 										name="firstName"
-										// required
 										onChange={handleChange}
 									/>
 								</div>
@@ -451,7 +433,6 @@ const Registration: React.FC = () => {
 									<input
 										id="lastName"
 										name="lastName"
-										// required
 										onChange={handleChange}
 									/>
 								</div>
@@ -470,7 +451,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									// required
 									value="male"
 									id="male"
 									onChange={handleChange}
@@ -480,7 +460,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									// required
 									value="female"
 									id="female"
 									onChange={handleChange}
@@ -490,7 +469,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									// required
 									value="non-binary"
 									id="non-binary"
 									onChange={handleChange}
@@ -500,7 +478,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="gender"
-									// required
 									value="no-disclose"
 									id="no-disclose"
 									onChange={handleChange}
@@ -516,8 +493,7 @@ const Registration: React.FC = () => {
 						<div className="card" id="phoneNumber">
 							<div className="card-header">What is your phone number?</div>
 							<div className="info">
-								This information is required by MLH. Rest assured we won&apos;t
-								be spamming your phone.
+								This information is required by MLH. We won’t spam your phone.
 							</div>
 							<div className="my-2">
 								<TelephoneFormatter
@@ -606,7 +582,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									// required
 									value="yes"
 									id="yes"
 									onChange={handleChange}
@@ -616,7 +591,6 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									// required
 									value="no"
 									id="no"
 									onChange={handleChange}
@@ -626,12 +600,13 @@ const Registration: React.FC = () => {
 								<input
 									type="radio"
 									name="veteran"
-									// required
 									value="no-disclose"
 									id="no-disclose-veteran"
 									onChange={handleChange}
 								/>
-								<label htmlFor="no">Prefer not to disclose</label>
+								<label htmlFor="no-disclose-veteran">
+									Prefer not to disclose
+								</label>
 								<br />
 								{!registrationData.veteran && (
 									<label className="data-error">Required</label>
@@ -643,9 +618,12 @@ const Registration: React.FC = () => {
 							<div className="card-header">
 								What will your age be on{" "}
 								{hackathon?.startTime
-									? new Date(hackathon?.startTime).toISOString().split("T")[0]
-									: "the event date"}?
-								<p className='info'>You must be 18 years or older to participate.</p>
+									? new Date(hackathon.startTime).toISOString().split("T")[0]
+									: "the event date"}
+								?
+								<p className="info">
+									You must be 18 years or older to participate.
+								</p>
 							</div>
 							<select
 								name="age"
@@ -653,11 +631,11 @@ const Registration: React.FC = () => {
 								value={registrationData.age}
 							>
 								<option value={0}>Select age</option>
-								{Array.from({ length: 100 - 12 + 1 }, (_, i) => (
+								{Array.from({ length: 89 }, (_, i) => (
 									<option key={i + 12} value={i + 12}>
-									{i + 12}
+										{i + 12}
 									</option>
-									))}
+								))}
 							</select>
 							<br />
 							{!registrationData.age && (
@@ -670,66 +648,25 @@ const Registration: React.FC = () => {
 								<div className="card" id="shirtSize">
 									<div className="card-header">What is your shirt size?</div>
 									<div className="my-2">
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="XS"
-											id="XS"
-											onChange={handleChange}
-										/>
-										<label htmlFor="XS">X-Small</label>
-										<br />
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="S"
-											id="S"
-											onChange={handleChange}
-										/>
-										<label htmlFor="S">Small</label>
-										<br />
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="M"
-											id="M"
-											onChange={handleChange}
-										/>
-										<label htmlFor="M">Medium</label>
-										<br />
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="L"
-											id="L"
-											onChange={handleChange}
-										/>
-										<label htmlFor="L">Large</label>
-										<br />
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="XL"
-											id="XL"
-											onChange={handleChange}
-										/>
-										<label htmlFor="XL">X-Large</label>
-										<br />
-										<input
-											type="radio"
-											name="shirtSize"
-											// required
-											value="XXL"
-											id="XXL"
-											onChange={handleChange}
-										/>
-										<label htmlFor="XXL">XX-Large</label>
-										<br />
+										{["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+											<React.Fragment key={size}>
+												<input
+													type="radio"
+													name="shirtSize"
+													value={size}
+													id={size}
+													onChange={handleChange}
+												/>
+												<label htmlFor={size}>
+													{size === "XS"
+														? "X-Small"
+														: size === "XXL"
+															? "XX-Large"
+															: size}
+												</label>
+												<br />
+											</React.Fragment>
+										))}
 										{!registrationData.shirtSize && (
 											<label className="data-error">Required</label>
 										)}
@@ -737,7 +674,9 @@ const Registration: React.FC = () => {
 								</div>
 								{/** Country */}
 								<div className="card" id="country">
-									<div className="card-header">What is your country of residence?</div>
+									<div className="card-header">
+										What is your country of residence?
+									</div>
 									<div className="my-2">
 										<Autocomplete
 											data="country"
@@ -840,66 +779,28 @@ const Registration: React.FC = () => {
 								<div className="card" id="academicYear">
 									<div className="card-header">What is your academic year?</div>
 									<div className="my-2">
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="freshman"
-											id="freshman"
-											onChange={handleChange}
-										/>
-										<label htmlFor="freshman">Freshman</label>
-										<br />
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="sophomore"
-											id="sophomore"
-											onChange={handleChange}
-										/>
-										<label htmlFor="sophomore">Sophomore</label>
-										<br />
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="junior"
-											id="junior"
-											onChange={handleChange}
-										/>
-										<label htmlFor="junior">Junior</label>
-										<br />
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="senior"
-											id="senior"
-											onChange={handleChange}
-										/>
-										<label htmlFor="senior">Senior</label>
-										<br />
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="graduate"
-											id="graduate"
-											onChange={handleChange}
-										/>
-										<label htmlFor="graduate">Graduate</label>
-										<br />
-										<input
-											type="radio"
-											name="academicYear"
-											// required
-											value="other"
-											id="other"
-											onChange={handleChange}
-										/>
-										<label htmlFor="other">Other</label>
-										<br />
+										{[
+											"freshman",
+											"sophomore",
+											"junior",
+											"senior",
+											"graduate",
+											"other",
+										].map((year) => (
+											<React.Fragment key={year}>
+												<input
+													type="radio"
+													name="academicYear"
+													value={year}
+													id={year}
+													onChange={handleChange}
+												/>
+												<label htmlFor={year}>
+													{year.charAt(0).toUpperCase() + year.slice(1)}
+												</label>
+												<br />
+											</React.Fragment>
+										))}
 										{!registrationData.academicYear && (
 											<label className="data-error">Required</label>
 										)}
@@ -911,125 +812,63 @@ const Registration: React.FC = () => {
 										What type of educational institution are you enrolled in?
 									</div>
 									<div className="my-2">
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="less-than-secondary"
-											id="less-than-secondary"
-											onChange={handleChange}
-										/>
-										<label htmlFor="less-than-secondary">
-											Less than Secondary / High School
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="secondary"
-											id="secondary"
-											onChange={handleChange}
-										/>
-										<label htmlFor="secondary">Secondary / High School</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="two-year-university"
-											id="two-year-university"
-											onChange={handleChange}
-										/>
-										<label htmlFor="two-year-university">
-											Undergraduate University (2 year - community college or
-											similar)
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="three-plus-year-university"
-											id="three-plus-year-university"
-											onChange={handleChange}
-										/>
-										<label htmlFor="three-plus-year-university">
-											Undergraduate University (3+ year)
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="graduate-university"
-											id="graduate-university"
-											onChange={handleChange}
-										/>
-										<label htmlFor="graduate-university">
-											Graduate University (Masters, Professional, Doctoral,
-											etc.)
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="code-school-or-bootcamp"
-											id="code-school-or-bootcamp"
-											onChange={handleChange}
-										/>
-										<label htmlFor="code-school-or-bootcamp">
-											Code School / Bootcamp
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="vocational-trade-apprenticeship"
-											id="vocational-trade-apprenticeship"
-											onChange={handleChange}
-										/>
-										<label htmlFor="vocational-trade-apprenticeship">
-											Other Vocational / Trade Program or Apprenticeship
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="other"
-											id="other"
-											onChange={handleChange}
-										/>
-										<label htmlFor="other">Other</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="not-a-student"
-											id="not-a-student"
-											onChange={handleChange}
-										/>
-										<label htmlFor="not-a-student">
-											I&apos;m not currently a student
-										</label>
-										<br />
-										<input
-											type="radio"
-											name="educationalInstitutionType"
-											// required
-											value="prefer-no-answer"
-											id="prefer-no-answer"
-											onChange={handleChange}
-										/>
-										<label htmlFor="prefer-no-answer">
-											Prefer not to answer
-										</label>
-										<br />
-
+										{[
+											{
+												value: "less-than-secondary",
+												label: "Less than Secondary / High School",
+											},
+											{
+												value: "secondary",
+												label: "Secondary / High School",
+											},
+											{
+												value: "two-year-university",
+												label:
+													"Undergraduate University (2 year - community college or similar)",
+											},
+											{
+												value: "three-plus-year-university",
+												label: "Undergraduate University (3+ year)",
+											},
+											{
+												value: "graduate-university",
+												label:
+													"Graduate University (Masters, Professional, Doctoral, etc.)",
+											},
+											{
+												value: "code-school-or-bootcamp",
+												label: "Code School / Bootcamp",
+											},
+											{
+												value: "vocational-trade-apprenticeship",
+												label:
+													"Other Vocational / Trade Program or Apprenticeship",
+											},
+											{
+												value: "other",
+												label: "Other",
+											},
+											{
+												value: "not-a-student",
+												label: "I'm not currently a student",
+											},
+											{
+												value: "prefer-no-answer",
+												label: "Prefer not to answer",
+											},
+										].map((option) => (
+											<React.Fragment key={option.value}>
+												<input
+													type="radio"
+													name="educationalInstitutionType"
+													value={option.value}
+													id={option.value}
+													onChange={handleChange}
+												/>
+												<label htmlFor={option.value}>{option.label}</label>
+												<br />
+											</React.Fragment>
+										))}
 										{!registrationData.educationalInstitutionType && (
 											<label className="data-error">Required</label>
 										)}
@@ -1062,13 +901,7 @@ const Registration: React.FC = () => {
 									</div>
 									{registrationData.resume && (
 										<a className="resume-download" onClick={downloadResume}>
-											{
-												(
-													registrationData.resume as unknown as {
-														name: string;
-													}
-												)?.name
-											}
+											{(registrationData.resume as File).name}
 										</a>
 									)}
 								</div>
@@ -1082,6 +915,7 @@ const Registration: React.FC = () => {
 										<a
 											href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
 											target="_blank"
+											rel="noopener noreferrer"
 										>
 											MLH Code of Conduct
 										</a>
@@ -1102,30 +936,19 @@ const Registration: React.FC = () => {
 								{/** MLH Data Sharing */}
 								<div className="card" id="mlhDcp">
 									<div className="card-header">
-										Do you agree to the MLH Data Sharing
+										Do you agree to the MLH Data Sharing?
 									</div>
 									<span>
-										By agreeing to this notice, you affirm that: &quot;I
-										authorize you to share my registration information with
-										Major League Hacking for event administration, ranking, MLH
-										administration in-line with the&nbsp;
-										<a href="https://mlh.io/privacy" target="_blank">
-											MLH Privacy Policy
-										</a>
-										. I further agree to the terms of both the&nbsp;
+										By agreeing, you authorize MLH to share your registration
+										information with event sponsors and MLH as outlined in the{" "}
 										<a
-											href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+											href="https://mlh.io/privacy"
 											target="_blank"
+											rel="noopener noreferrer"
 										>
-											MLH Contest Terms and Conditions
-										</a>
-										&nbsp;and the&nbsp;
-										<a href="https://mlh.io/privacy" target="_blank">
 											MLH Privacy Policy
 										</a>
-										.&quot;
-										<br />
-										<br />
+										.
 										<p className="info">
 											To participate at HackPSU, you must agree to this policy.
 										</p>
@@ -1147,15 +970,12 @@ const Registration: React.FC = () => {
 									</div>
 									<span>
 										<p className="inline">
-											By agreeing to this, you affirm that: &quot;I authorize MLH to send me occasional 
-											emails about relevant events, career opportunities, and community announcements.&quot;
+											I authorize MLH to send me occasional emails about
+											relevant events and opportunities.
 										</p>
 										<br />
 										<br />
-										<p className="info">
-											This is entirely optional and may be opted into of your
-											choosing.
-										</p>
+										<p className="info">This is entirely optional.</p>
 									</span>
 									<ToggleSwitch
 										name="shareEmailMlh"
@@ -1214,7 +1034,6 @@ const Registration: React.FC = () => {
 												<br />
 											</div>
 										</div>
-
 										{/** Referral */}
 										<div className="card" id="referral">
 											<div className="card-header">
@@ -1231,11 +1050,10 @@ const Registration: React.FC = () => {
 												<label className="data-error">Required</label>
 											)}
 										</div>
-
 										{/** Project */}
 										<div className="card" id="project">
 											<div className="card-header">
-												What is a project you&apos;re proud of?
+												What is a project you’re proud of?
 											</div>
 											<div className="my-2">
 												<textarea
@@ -1245,7 +1063,6 @@ const Registration: React.FC = () => {
 												/>
 											</div>
 										</div>
-
 										{/** Expectations */}
 										<div className="card" id="expectations">
 											<div className="card-header">
@@ -1259,7 +1076,6 @@ const Registration: React.FC = () => {
 												/>
 											</div>
 										</div>
-
 										{/** Submit */}
 										<div id="submit" className="flex items-center">
 											<BigButton className="bg-blue-300 border rounded-full p-4 flex justify-center">
@@ -1274,10 +1090,10 @@ const Registration: React.FC = () => {
 				</div>
 			</div>
 
-			{/** Sidebar */}
-			{window.innerWidth >= 1024 && ( // Checks whether user in mobile
+			{/** Sidebar (shown on large screens) */}
+			{typeof window !== "undefined" && window.innerWidth >= 1024 && (
 				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:flex">
-					{!!registrationData.age && (
+					{registrationData.age ? (
 						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
 							{Array.from(sidebarFields.keys()).map((field) =>
 								field === "Additional Questions" &&
@@ -1304,11 +1120,11 @@ const Registration: React.FC = () => {
 								</a>
 							</p>
 						</div>
-					)}
+					) : null}
 				</div>
 			)}
 
-			{/** Alert handler */}
+			{/** Alert */}
 			{showAlert && (
 				<Alert
 					message={alertMessage}

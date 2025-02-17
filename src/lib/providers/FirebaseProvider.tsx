@@ -1,289 +1,294 @@
-"use client";
-
 import React, {
-	useCallback,
+	createContext,
 	useContext,
 	useEffect,
-	useMemo,
 	useState,
-	createContext,
+	useCallback,
+	useMemo,
 	FC,
 } from "react";
-import * as Sentry from "@sentry/nextjs";
 import {
 	Auth,
-	AuthError,
-	AuthErrorCodes,
+	User,
 	getIdToken,
 	onAuthStateChanged,
-	signInWithEmailAndPassword,
-	signOut,
-	User,
-	createUserWithEmailAndPassword,
 	onIdTokenChanged,
+	signInWithEmailAndPassword,
+	createUserWithEmailAndPassword,
 	signInWithPopup,
-	GoogleAuthProvider,
+	signOut,
 	sendPasswordResetEmail,
+	GoogleAuthProvider,
 	GithubAuthProvider,
 } from "firebase/auth";
-import { initApi, resetApi } from "@/lib/api";
+import { jwtDecode } from "jwt-decode";
 
-export enum FirebaseAuthError {
-	NONE,
-	INVALID_EMAIL,
-	INVALID_PASSWORD,
-	EMAIL_EXISTS,
-	WEAK_PASSWORD,
+// Internal role definitions (used for permission checking only)
+enum Role {
+	NONE = 0,
+	VOLUNTEER,
+	TEAM,
+	EXEC,
+	TECH,
+	FINANCE,
 }
 
-type FirebaseProviderHooks = {
+const MINIMUM_ROLE = Role.NONE; // Only users with a role >= TEAM may access the app
+
+// Helpers to decode the JWT and extract the role claim.
+// (Assumes your custom claim is stored under "production" or "staging".)
+function extractAuthToken(token: string): string {
+	return token.startsWith("Bearer ") ? token.slice(7) : token;
+}
+
+function getRole(token: string): number {
+	try {
+		const extractedToken = extractAuthToken(token);
+		const decoded: any = jwtDecode(extractedToken);
+		// Try to read the role from either "production" or "staging"
+		const role = decoded.production ?? decoded.staging;
+		return role !== undefined ? role : Role.NONE;
+	} catch {
+		return Role.NONE;
+	}
+}
+
+// Public context type – notice we are not using custom error types here.
+type FirebaseContextType = {
+	isLoading: boolean;
 	isAuthenticated: boolean;
 	user?: User;
 	token: string;
-	error: FirebaseAuthError;
-	signUpWithEmailAndPassword(
-		email: string,
-		password: string
-	): Promise<SignUpResponse>;
-	loginWithEmailAndPassword(
-		email: string,
-		password: string
-	): Promise<LoginResponse>;
-	signInWithGoogle(): Promise<LoginResponse>;
-	signInWithGithub(): Promise<LoginResponse>;
-	logout(next?: () => Promise<void>): Promise<void>;
-	userDataLoaded: boolean;
-	resetPassword(email: string): Promise<{ success: boolean; error?: string }>;
+	error: string;
+	loginWithEmailAndPassword(email: string, password: string): Promise<void>;
+	signUpWithEmailAndPassword(email: string, password: string): Promise<void>;
+	signInWithGoogle(): Promise<void>;
+	signInWithGithub(): Promise<void>;
+	resetPassword(email: string): Promise<void>;
+	logout(): Promise<void>;
 };
+
+const FirebaseContext = createContext<FirebaseContextType | null>(null);
 
 type Props = {
 	children: React.ReactNode;
 	auth: Auth;
 };
 
-const FirebaseContext = createContext<FirebaseProviderHooks>(
-	{} as FirebaseProviderHooks
-);
-
-interface SignUpResponse {
-	success: boolean;
-	error?: string;
-}
-
-interface LoginResponse {
-	success: boolean;
-	error?: string;
-}
-
 const FirebaseProvider: FC<Props> = ({ children, auth }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const [user, setUser] = useState<User | undefined>();
-	const [error, setError] = useState<FirebaseAuthError>(FirebaseAuthError.NONE);
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+	const [user, setUser] = useState<User | null>(null);
 	const [token, setToken] = useState<string>("");
-	const [userDataLoaded, setUserDataLoaded] = useState<boolean>(false);
+	const [error, setError] = useState<string>("");
 
-	const getUserIdToken = useCallback(async (user: User) => {
-		return await getIdToken(user);
-	}, []);
-
-	const resolveAuthError = useCallback((error: AuthError) => {
-		switch (error.code) {
-			case AuthErrorCodes.EMAIL_EXISTS:
-				setError(FirebaseAuthError.EMAIL_EXISTS);
-				break;
-			case AuthErrorCodes.INVALID_EMAIL:
-				setError(FirebaseAuthError.INVALID_EMAIL);
-				break;
-			case AuthErrorCodes.INVALID_PASSWORD:
-				setError(FirebaseAuthError.INVALID_PASSWORD);
-				break;
-			case AuthErrorCodes.WEAK_PASSWORD:
-				setError(FirebaseAuthError.WEAK_PASSWORD);
-				break;
-		}
-	}, []);
-
-	const resolveAuthState = useCallback(
-		async (user?: User) => {
-			if (user) {
-				const token = await getUserIdToken(user);
-				setToken(token);
-				setUser(user);
-				setIsAuthenticated(true);
-				Sentry.setUser({ id: user.uid, email: user.email || "" });
+	// Listen for auth and token changes.
+	useEffect(() => {
+		// This handler is used by both onAuthStateChanged and onIdTokenChanged.
+		const handleAuthChange = async (currentUser: User | null) => {
+			setIsLoading(true);
+			if (currentUser) {
+				try {
+					const currentToken = await getIdToken(currentUser, true);
+					// Save the token and check if the user has sufficient permissions.
+					if (getRole(currentToken) < MINIMUM_ROLE) {
+						// Insufficient permissions: sign out and show an error.
+						await signOut(auth);
+						setError(
+							"You do not have the required permissions to access this app."
+						);
+						setUser(null);
+						setToken("");
+					} else {
+						setToken(currentToken);
+						setUser(currentUser);
+						setError("");
+					}
+				} catch (err) {
+					console.error("Failed to retrieve ID token:", err);
+					setError("Failed to retrieve authentication token.");
+					setUser(null);
+					setToken("");
+				}
 			} else {
-				setUser(undefined);
-				setIsAuthenticated(false);
-				setError(FirebaseAuthError.NONE);
-				Sentry.setUser(null);
-			}
-			setUserDataLoaded(true);
-		},
-		[getUserIdToken]
-	);
-
-	const signUpWithEmailAndPassword: FirebaseProviderHooks["signUpWithEmailAndPassword"] =
-		useCallback(
-			async (email: string, password: string): Promise<SignUpResponse> => {
-				setError(FirebaseAuthError.NONE);
-				try {
-					const userCredential = await createUserWithEmailAndPassword(
-						auth,
-						email,
-						password
-					);
-					if (userCredential.user) {
-						await resolveAuthState(userCredential.user);
-						return { success: true };
-					} else {
-						return { success: false, error: "User not created" };
-					}
-				} catch (e) {
-					resolveAuthError(e as AuthError);
-					return { success: false, error: e?.toString() ?? "Sign-up failed" };
-				}
-			},
-			[auth, resolveAuthError, resolveAuthState]
-		);
-
-	const loginWithEmailAndPassword: FirebaseProviderHooks["loginWithEmailAndPassword"] =
-		useCallback(
-			async (email, password): Promise<LoginResponse> => {
-				setError(FirebaseAuthError.NONE);
-				try {
-					const userCredential = await signInWithEmailAndPassword(
-						auth,
-						email,
-						password
-					);
-					if (userCredential.user) {
-						await resolveAuthState(userCredential.user);
-						return { success: true };
-					} else {
-						return { success: false, error: "User not found" };
-					}
-				} catch (e) {
-					resolveAuthError(e as AuthError);
-					return { success: false, error: e?.toString() ?? "Login failed" };
-				}
-			},
-			[auth, resolveAuthError, resolveAuthState]
-		);
-
-	const signInWithGoogle: FirebaseProviderHooks["signInWithGoogle"] =
-		useCallback(async (): Promise<LoginResponse> => {
-			setError(FirebaseAuthError.NONE);
-			try {
-				const provider = new GoogleAuthProvider();
-				const userCredential = await signInWithPopup(auth, provider);
-				if (userCredential.user) {
-					await resolveAuthState(userCredential.user);
-					return { success: true };
-				} else {
-					return { success: false, error: "Google sign-in failed" };
-				}
-			} catch (e) {
-				resolveAuthError(e as AuthError);
-				return {
-					success: false,
-					error: e?.toString() ?? "Google sign-in failed",
-				};
-			}
-		}, [auth, resolveAuthError, resolveAuthState]);
-
-	const signInWithGithub: FirebaseProviderHooks["signInWithGithub"] =
-		useCallback(async (): Promise<LoginResponse> => {
-			setError(FirebaseAuthError.NONE);
-			try {
-				const provider = new GithubAuthProvider();
-				const userCredential = await signInWithPopup(auth, provider);
-				if (userCredential.user) {
-					await resolveAuthState(userCredential.user);
-					return { success: true };
-				} else {
-					return { success: false, error: "Github sign-in failed" };
-				}
-			} catch (e) {
-				resolveAuthError(e as AuthError);
-				return {
-					success: false,
-					error: e?.toString() ?? "Github sign-in failed",
-				};
-			}
-		}, [auth, resolveAuthError, resolveAuthState]);
-
-	const logout: FirebaseProviderHooks["logout"] = useCallback(
-		async (next) => {
-			try {
-				await signOut(auth);
+				// User signed out.
+				setUser(null);
 				setToken("");
-				setIsAuthenticated(false);
-				setUserDataLoaded(false);
-				await next?.();
-			} catch (e) {}
+				setError("");
+			}
+			setIsLoading(false);
+		};
+
+		const unsubscribeAuth = onAuthStateChanged(auth, handleAuthChange);
+		const unsubscribeToken = onIdTokenChanged(auth, handleAuthChange);
+
+		return () => {
+			unsubscribeAuth();
+			unsubscribeToken();
+		};
+	}, [auth]);
+
+	// Login using email and password.
+	const loginWithEmailAndPassword = useCallback(
+		async (email: string, password: string) => {
+			setError("");
+			setIsLoading(true);
+			try {
+				const userCredential = await signInWithEmailAndPassword(
+					auth,
+					email,
+					password
+				);
+				const currentToken = await getIdToken(userCredential.user);
+				if (getRole(currentToken) < MINIMUM_ROLE) {
+					await signOut(auth);
+					setError(
+						"You do not have the required permissions to access this app."
+					);
+					return;
+				}
+				// The auth state listener will update the state.
+			} catch (err: any) {
+				setError(err.message || "Login failed");
+				throw err;
+			} finally {
+				setIsLoading(false);
+			}
 		},
 		[auth]
 	);
 
-	const resetPassword: FirebaseProviderHooks["resetPassword"] = useCallback(
-		async (email: string): Promise<{ success: boolean; error?: string }> => {
+	// Sign up a new user.
+	const signUpWithEmailAndPassword = useCallback(
+		async (email: string, password: string) => {
+			setError("");
+			setIsLoading(true);
+			try {
+				const userCredential = await createUserWithEmailAndPassword(
+					auth,
+					email,
+					password
+				);
+				const currentToken = await getIdToken(userCredential.user);
+				if (getRole(currentToken) < MINIMUM_ROLE) {
+					await signOut(auth);
+					setError(
+						"You do not have the required permissions to access this app."
+					);
+					return;
+				}
+				// The auth state listener will update the state.
+			} catch (err: any) {
+				setError(err.message || "Sign-up failed");
+				throw err;
+			} finally {
+				setIsLoading(false);
+			}
+		},
+		[auth]
+	);
+
+	// Sign in with Google.
+	const signInWithGoogle = useCallback(async () => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const provider = new GoogleAuthProvider();
+			const userCredential = await signInWithPopup(auth, provider);
+			const currentToken = await getIdToken(userCredential.user);
+			if (getRole(currentToken) < MINIMUM_ROLE) {
+				await signOut(auth);
+				setError(
+					"You do not have the required permissions to access this app."
+				);
+				return;
+			}
+			// The auth state listener will update the state.
+		} catch (err: any) {
+			setError(err.message || "Google sign-in failed");
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [auth]);
+
+	// Sign in with GitHub.
+	const signInWithGithub = useCallback(async () => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const provider = new GithubAuthProvider();
+			const userCredential = await signInWithPopup(auth, provider);
+			const currentToken = await getIdToken(userCredential.user);
+			if (getRole(currentToken) < MINIMUM_ROLE) {
+				await signOut(auth);
+				setError(
+					"You do not have the required permissions to access this app."
+				);
+				return;
+			}
+			// The auth state listener will update the state.
+		} catch (err: any) {
+			setError(err.message || "GitHub sign-in failed");
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [auth]);
+
+	// Send a password reset email.
+	const resetPassword = useCallback(
+		async (email: string) => {
+			setError("");
 			try {
 				await sendPasswordResetEmail(auth, email);
-				return { success: true };
-			} catch (e) {
-				return {
-					success: false,
-					error: e?.toString() ?? "Password reset failed",
-				};
+			} catch (err: any) {
+				setError(err.message || "Password reset failed");
+				throw err;
 			}
 		},
 		[auth]
 	);
 
-	useEffect(() => {
-		return onAuthStateChanged(auth, async (user) => {
-			await resolveAuthState(user ?? undefined);
-		});
-	}, [auth, resolveAuthState]);
-
-	useEffect(() => {
-		return onIdTokenChanged(auth, async (user) => {
-			// initialize api if user exists
-
-			if (user) {
-				await initApi(user);
-			} else {
-				resetApi();
-			}
-		});
+	// Log out.
+	const logout = useCallback(async () => {
+		setError("");
+		setIsLoading(true);
+		try {
+			await signOut(auth);
+			// The auth state listener will update the state.
+		} catch (err: any) {
+			setError(err.message || "Logout failed");
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
 	}, [auth]);
 
 	const value = useMemo(
 		() => ({
-			isAuthenticated,
-			user,
-			error,
+			isLoading,
+			isAuthenticated: !!user && !error,
+			user: user || undefined,
 			token,
-			signUpWithEmailAndPassword,
+			error,
 			loginWithEmailAndPassword,
+			signUpWithEmailAndPassword,
 			signInWithGoogle,
 			signInWithGithub,
-			logout,
-			userDataLoaded,
 			resetPassword,
+			logout,
 		}),
 		[
-			isAuthenticated,
+			isLoading,
 			user,
-			error,
 			token,
-			signUpWithEmailAndPassword,
+			error,
 			loginWithEmailAndPassword,
+			signUpWithEmailAndPassword,
 			signInWithGoogle,
 			signInWithGithub,
-			logout,
 			resetPassword,
-			userDataLoaded,
+			logout,
 		]
 	);
 
@@ -294,5 +299,12 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	);
 };
 
-export const useFirebase = () => useContext(FirebaseContext);
+export const useFirebase = () => {
+	const context = useContext(FirebaseContext);
+	if (!context) {
+		throw new Error("useFirebase must be used within a FirebaseProvider");
+	}
+	return context;
+};
+
 export default FirebaseProvider;
