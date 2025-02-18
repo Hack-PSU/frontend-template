@@ -9,6 +9,7 @@ import Image from "next/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import googleWalletImg from "../../../public/google_wallet.svg"; // <-- import your SVG
 import QRCode from "react-qr-code";
+import Link from "next/link";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
@@ -61,6 +62,15 @@ export default function Profile() {
 			alert("An error occurred while trying to sign out.");
 		}
 	};
+
+	const handleReimbursement = async () => { 
+		if (user) {
+			router.push("/reimbursements")
+		} else {
+			router.push("/signin")
+			alert("Must be logged in to submit reimbursement form")
+		}
+	}
 
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
@@ -143,6 +153,16 @@ export default function Profile() {
 							height={50}
 							priority
 						/>
+					</button>
+				</div>
+
+				<div className="mt-8">
+					<button
+						type="button"
+						className="w-full text-sm sm:text-base px-4 py-2 font-light rounded-md border-2 border-blue-500 text-white hover:bg-blue-500 transition-colors duration-300"
+						onClick={handleReimbursement}
+					>
+						Submit Reimbursement Form
 					</button>
 				</div>
 
