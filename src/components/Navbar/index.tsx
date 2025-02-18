@@ -7,7 +7,6 @@ import Logo from "../../../public/logo.png";
 import blankButton from "../../../public/button-blank.png";
 import HomeIcon from "@mui/icons-material/Home";
 import { useRouter } from "next/navigation";
-
 import "./navbar.css";
 
 interface NavbarButtonProps {

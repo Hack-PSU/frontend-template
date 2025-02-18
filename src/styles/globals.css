@@ -117,6 +117,16 @@
 	src: url("../../public/fonts/Cornerstone.ttf");
 }
 
+@font-face {
+	font-family: "rye";
+	src: url("../../public/fonts/Rye.ttf");
+}
+
+@font-face {
+    font-family: 'tiltneon';
+    src: url('../../public/fonts/TiltNeon.ttf');
+}
+
 a {
 	color: var(--link-color);
 	text-decoration: underline;
