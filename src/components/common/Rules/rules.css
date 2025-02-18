@@ -9,8 +9,7 @@
 	font-family: "cornerstone", sans-serif; /* Use the font-family defined earlier */
 }
 
-.rules-border {
-	/* Add additional styles or overrides for your .rules-border class */
+/* .rules-border {
 	--border-width: 8px;
 
 	position: relative;
@@ -22,5 +21,5 @@
 	border-radius: var(--border-width);
 
 	border: 4px solid green;
-}
+} */
 
