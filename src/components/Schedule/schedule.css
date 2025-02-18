@@ -25,22 +25,22 @@
 }
 
 .tab {
-	padding: 16px 32px;
-	cursor: pointer;
-	border-radius: 10px 10px 0 0;
-	background: white;
-	font-size: 1.25rem;
-	transition: background-color 0.3s ease;
-	margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
-	color: black;
+    padding: 16px 32px;
+    cursor: pointer;
+    border-radius: 10px 10px 0 0;
+    background: #EDECD8;
+    font-size: 1.25rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
+    color: black;
+    border: 6px solid #A20021; /* Default red border */
 }
 
 
 .tab[aria-selected="true"] {
-	background: url('/Text Box.svg') no-repeat center center;
-	background-size: cover;
-	background-color: transparent;
-	color: black;
+    background: EDECD8;
+    border: 6px solid #EFA00B; /* Gold border when selected */
+    color: black;
 }
 
 /* Content panels */
