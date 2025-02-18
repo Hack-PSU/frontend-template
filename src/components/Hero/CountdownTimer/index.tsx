@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { getActiveHackathon } from "@/lib/common";
 
@@ -49,9 +49,12 @@ const CountdownTimer: React.FC = () => {
 	};
 
 	const secondsControls = useAnimation();
-	const endDate = new Date(hackathon?.endTime || new Date());
 
-	const updateCountdown = () => {
+	const endDate = useMemo(() => {
+		return new Date(hackathon?.endTime || new Date());
+	}, [hackathon?.endTime]);
+
+	const updateCountdown = useCallback(() => {
 		if (!hackathon) return;
 
 		const now = new Date();
@@ -95,7 +98,7 @@ const CountdownTimer: React.FC = () => {
 				secondsControls.start({ scaleY: 0 });
 			}, 500);
 		}
-	};
+	}, [hackathon, targetDate, endDate, state, secondsControls]);
 
 	useEffect(() => {
 		const interval = setInterval(updateCountdown, 1000);
@@ -113,38 +116,44 @@ const CountdownTimer: React.FC = () => {
 		<div className="text-center  border-black rounded-sm px-6 py-2">
 			{state !== 2 ? (
 				<motion.div
-					className="flex space-x-2 text-6xl font-bold text-white justify-between"
+					className="flex space-x-4 text-4xl font-bold text-white justify-between"
 					initial={{ scaleY: 0 }}
 					animate={{ scaleY: 1 }}
 				>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="w-1/2">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(days)}
 						</motion.div>
-						<div className="text-base">{days === 1 ? "Day" : "Days"}</div>
+						<div className="limelight-regular text-base">
+							{days === 1 ? "Day" : "Days"}
+						</div>
 					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="w-1/6">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(hours)}
 						</motion.div>
-						<div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
+						<div className="limelight-regular text-base">
+							{hours === 1 ? "Hour" : "Hours"}
+						</div>
 					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="limelight-regular mb-4">:</div>{" "}
+					<div className="w-1/6">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(minutes)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{minutes === 1 ? "Minute" : "Minutes"}
 						</div>
 					</div>
-					<div className="w-1/4">
+					<div className="limelight-regular mb-4">:</div>
+					<div className="w-1/6">
 						<motion.div
-							className="cyberspace-front-font mb-4"
+							className="limelight-regular mb-4"
 							animate={secondsControls}
 						>
 							{renderTime(seconds)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{seconds === 1 ? "Second" : "Seconds"}
 						</div>
 					</div>
@@ -152,7 +161,7 @@ const CountdownTimer: React.FC = () => {
 			) : (
 				<></>
 			)}
-			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 ">
+			<div className="limelight-regular sm:text-2xl md:text-3xl font-bold cornerstone-font mt-3 ">
 				{bannerMessage}
 			</div>
 		</div>
