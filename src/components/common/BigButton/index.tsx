@@ -25,7 +25,11 @@ const BigButton = ({
 			whileTap={{ scale: 0.9 }}
 		>
 			{background ? (
-				<img src={background.src} className={`w-full ${className || ""}`} />
+				<img
+					src={background.src}
+					className={`w-full ${className || ""}`}
+					alt="big-button"
+				/>
 			) : (
 				<></>
 			)}

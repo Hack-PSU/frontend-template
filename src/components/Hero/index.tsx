@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 
 const Hero = () => {
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
 
 	return (

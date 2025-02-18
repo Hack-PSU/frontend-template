@@ -39,14 +39,15 @@
 	}
 
 	body {
-		font-family: LimeLight, Lato, Georgia, sans-serif;
+		font-family: "Lato", "Georgia", sans-serif;
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-color: #588157;
-		background-image: url("../../public/website-background.png");
+		background-image: linear-gradient(to top, #d7f6ff, #0e1e25 80%);
 		background-size: cover;
 		background-position: top center;
+		min-height: 100vh;
+		margin: 0;
 	}
 }
 
