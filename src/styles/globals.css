@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
-@import url("https://fonts.googleapis.com/css2?family=Limelight&display=swap");
+
 @layer base {
 	:root {
 		--background: hsl(0 0% 100%);
