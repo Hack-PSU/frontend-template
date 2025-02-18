@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+
+
 #schedule {
-	font-family: "Cornerstone", "Lato", sans-serif;
+	font-family: "Rye", "Cornerstone", "Lato", sans-serif;
 	color: #000000;
 }
+
+.rye-regular {
+	font-family: "Rye";
+	color: whitesmoke;
+	font-weight: 100;
+}
+
 
 /* Headless UI Tabs overrides */
 .tab-list {
@@ -25,9 +35,6 @@
 	color: black;
 }
 
-.tab:hover {
-	background-color: rgba(0, 0, 0, 0.22);
-}
 
 .tab[aria-selected="true"] {
 	background: url('/Text Box.svg') no-repeat center center;
@@ -53,9 +60,6 @@
 	font-size: 1.25rem;
 }
 
-.tab-panel li:hover {
-	background-color: transparent;
-}
 
 .center {
 	text-align: center;
