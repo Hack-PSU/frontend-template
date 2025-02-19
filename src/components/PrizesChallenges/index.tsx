@@ -114,23 +114,23 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 				src={awardBoxBg}
 				alt="Award Box Background"
 				fill
-				className="z-[-1] object-fill" 
+				className="z-[-1] object-cover"
 				priority
 			/>
 
 			{/* Award Box Content */}
 			<div className="relative z-10 mx-10 py-[60px] px-10">
-				<h2 className="text-3xl md:text-4xl font-bold text-center mb-2 text-grey">
+				<h2 className="text-4xl md:text-5xl font-bold text-center mb-3 text-grey">
 					{title}
 				</h2>
-				<p className="text-base md:text-lg text-grey mb-2">{description}</p>
+				<p className="text-lg md:text-xl text-grey mb-3">{description}</p>
 				{prizes.length > 0 && (
 					<table className="table-auto mt-2 text-grey mx-auto">
 						<tbody>
 							{prizes.map((prize, index) => (
 								<tr key={index}>
-									<td className="text-base md:text-lg px-4">{prize.place}:</td>
-									<td className="text-base md:text-lg text-left">
+									<td className="text-lg md:text-xl px-4">{prize.place}:</td>
+									<td className="text-lg md:text-xl text-left">
 										{prize.amount}
 									</td>
 								</tr>
@@ -139,11 +139,12 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 					</table>
 				)}
 				{extra && (
-					<div className="text-base md:text-lg text-grey mt-2">{extra}</div>
+					<div className="text-lg md:text-xl text-grey mt-3">{extra}</div>
 				)}
 			</div>
 		</div>
 	);
 };
+
 
 export default PrizesChallenges;
