@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import countryData from "./assets/countries.json";
 import majorData from "./assets/majors.json";
@@ -10,14 +10,23 @@ interface Props {
 	data: "country" | "major" | "referral" | "university";
 	onSelectionChange: (name: string, selection: string) => void;
 	searchTermMin?: number;
+	defaultValue?: string;
 }
 
 const Autocomplete: React.FC<Props> = ({
 	data,
 	onSelectionChange,
 	searchTermMin = 2,
+	defaultValue = "",
 }) => {
-	const [query, setQuery] = useState("");
+	const [query, setQuery] = useState(defaultValue);
+
+	useEffect(() => {
+		if (defaultValue) {
+			setQuery(defaultValue);
+			onSelectionChange(data, defaultValue);
+		}
+	}, [defaultValue, data, onSelectionChange]);
 
 	const getData = (data: string): object => {
 		switch (data) {
@@ -69,8 +78,6 @@ const Autocomplete: React.FC<Props> = ({
 								key={idx}
 								value={country}
 								as="li"
-
-								// Use Headless UI's className as a function syntax
 								className={({ active }) =>
 									active ? "option-hovered" : "option-item"
 								}

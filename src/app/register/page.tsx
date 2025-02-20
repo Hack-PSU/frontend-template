@@ -68,7 +68,7 @@ const Registration: React.FC = () => {
 		veteran: "",
 		age: 0,
 		shirtSize: "",
-		country: "",
+		country: "United States of America",
 		driving: false,
 		firstHackathon: false,
 		hasDietaryRestrictionsOrAllegies: false,
@@ -88,6 +88,8 @@ const Registration: React.FC = () => {
 		project: "",
 		expectations: "",
 	} as RegistrationData);
+
+	// registrationData.country = "United States of America"
 	const [componentMounted, setComponentMounted] = useState(false); // Handles hydration error
 
 	const [hackathon, setHackathon] = useState<any>(null);
