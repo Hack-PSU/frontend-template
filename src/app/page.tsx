@@ -7,7 +7,6 @@ import Schedule from "@/components/Schedule";
 import FAQRules from "@/components/FAQRules";
 import Rules from "@/components/common/Rules/index";
 import FAQ from "@/components/common/FAQ";
-import MobileApp from "@/components/MobileApp";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
@@ -98,7 +97,6 @@ export default function Home() {
 						Schedule,
 						Rules,
 						FAQ,
-						MobileApp,
 						PrizesChallenges,
 						Sponsors,
 						Footer,
@@ -149,7 +147,6 @@ export default function Home() {
 						<Hero />
 						<Schedule />
 						<FAQRules />
-						<MobileApp />
 						<PrizesChallenges />
 						<Submissions />
 						<Sponsors />
