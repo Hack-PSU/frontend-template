@@ -45,7 +45,8 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 
 export default function Navbar() {
 	const scrolled = useScroll(50);
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const { logout, isAuthenticated, isLoading, user } = useFirebase();
+
 	const pathname = usePathname();
 	const router = useRouter();
 	const isHome = pathname === "/";
@@ -82,19 +83,19 @@ export default function Navbar() {
 			isExternal: false,
 		},
 		{
-			href: "/profile",
-			alt: "profile",
-			text: "profile",
+			href: "/signin",
+			alt: "register",
+			text: "register",
 			isExternal: false,
 		},
 	];
 
-	// If the user is not authenticated, show the registration button.
-	if (!userDataLoaded || !isAuthenticated) {
-		buttonImages.splice(3, 1, {
-			href: "/signin",
-			alt: "register",
-			text: "register",
+	// Uncomment this to enable registration on Navbar
+	if (!isLoading && isAuthenticated) {
+		buttonImages.splice(5, 1, {
+			href: "/profile",
+			alt: "profile",
+			text: "profile",
 			isExternal: false,
 		});
 	}

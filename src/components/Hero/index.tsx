@@ -10,7 +10,7 @@ import BigButton from "@/components/common/BigButton";
 import { useRouter } from "next/navigation";
 
 const Hero = () => {
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
 
 	return (

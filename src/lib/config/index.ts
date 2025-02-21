@@ -1,2 +1,2 @@
-export * from "./firebase-config";
-export * from "./api-config";
+export * from "./environment";
+export * from "./firebase";
