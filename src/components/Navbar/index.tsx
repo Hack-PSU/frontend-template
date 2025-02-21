@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import HomeIcon from "@mui/icons-material/Home";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavbarButtonProps {
 	href: string;
@@ -27,26 +29,28 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			target={isExternal ? "_blank" : "_self"}
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
-			className="relative bottom-2 transition-all duration-150 ease-[cubic-bezier(0.4, 0, 0.2, 1)] hover:scale-[1.2] hover:-translate-y-1.5"
+			className="relative transition-all duration-150 ease-in-out hover:scale-105"
 		>
-			<Image
-				src="/Navbar.svg"
-				alt={alt}
-				className="rounded-md w-40 h-auto"
-				width={160}
-				height={100}
-			/>
-			<span className="absolute inset-0 bottom-1/2 mt-5 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
-				{children.toUpperCase()}
-			</span>
+			<div className="relative w-40 h-24">
+				{/* Using Next.js 13 "fill" prop to cover the container */}
+				<Image
+					src="/Navbar.svg"
+					alt={alt}
+					fill
+					className="rounded-md object-cover"
+				/>
+				<span className="absolute inset-0 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
+					{children.toUpperCase()}
+				</span>
+			</div>
 		</a>
 	);
 };
 
 export default function Navbar() {
+	const [menuOpen, setMenuOpen] = useState(false);
 	const scrolled = useScroll(50);
 	const { logout, isAuthenticated, isLoading, user } = useFirebase();
-
 	const pathname = usePathname();
 	const router = useRouter();
 	const isHome = pathname === "/";
@@ -90,7 +94,7 @@ export default function Navbar() {
 		},
 	];
 
-	// Uncomment this to enable registration on Navbar
+	// Replace "register" with "profile" for authenticated users.
 	if (!isLoading && isAuthenticated) {
 		buttonImages.splice(5, 1, {
 			href: "/profile",
@@ -102,62 +106,84 @@ export default function Navbar() {
 
 	return (
 		<nav
-			className={`navbar sticky top-0 w-full p-2 justify-evenly md:h-24 md:block bg-customRed border-b-4 border-customYellow z-30 transition-all ${
+			className={`sticky top-0 w-full bg-customRed border-b-4 border-customYellow z-30 transition-all ${
 				scrolled ? "shadow-md" : ""
 			}`}
 		>
-			<div className="md:hidden flex justify-end w-full">
+			{/* Mobile Navbar */}
+			<div className="md:hidden flex items-center justify-between h-16 px-4">
 				<button
-					className="text-white"
 					onClick={() => router.push("/")}
+					className="text-white"
 					aria-label="Go Home"
 				>
 					<HomeIcon fontSize="large" />
 				</button>
+				<button
+					onClick={() => setMenuOpen(!menuOpen)}
+					className="text-white"
+					aria-label="Toggle Menu"
+				>
+					<MenuIcon fontSize="large" />
+				</button>
 			</div>
-
-			<div className="hidden md:flex flex-row justify-center mr-8">
-				<div className="flex flex-row space-x-6">
-					{buttonImages
-						.slice(0, 3)
-						.map(({ href, alt, text, isExternal }, index) => (
+			{menuOpen && (
+				<div className="md:hidden bg-customRed border-t border-customYellow">
+					<div className="flex flex-col items-center space-y-2 p-2">
+						{buttonImages.map(({ href, alt, text, isExternal }, idx) => (
 							<NavbarButton
-								key={index}
+								key={idx}
 								href={href}
 								alt={alt}
 								isExternal={isExternal}
+								onClick={() => setMenuOpen(false)}
 							>
 								{text}
 							</NavbarButton>
 						))}
+					</div>
 				</div>
+			)}
 
-				<a href="/" className="flex items-center justify-center">
+			{/* Desktop Navbar */}
+			<div className="hidden md:flex items-center justify-center relative h-16">
+				<div className="flex flex-row space-x-1 items-center">
+					{buttonImages.slice(0, 3).map(({ href, alt, text, isExternal }, index) => (
+						<NavbarButton
+							key={index}
+							href={href}
+							alt={alt}
+							isExternal={isExternal}
+						>
+							{text}
+						</NavbarButton>
+					))}
+				</div>
+				<a href="/" className="mx-8">
 					<Image
 						src="/logo.png"
 						alt="Logo Background"
-						className="h-40 w-auto"
-						width={160}
-						height={160}
+						width={140}
+						height={140}
+						className="w-auto pt-20"
 					/>
 				</a>
-
-				<div className="flex flex-row space-x-6">
-					{buttonImages
-						.slice(3)
-						.map(({ href, alt, text, isExternal }, index) => (
-							<NavbarButton
-								key={index + 3}
-								href={href}
-								alt={alt}
-								isExternal={isExternal}
-							>
-								{text}
-							</NavbarButton>
-						))}
+				<div className="flex flex-row space-x-1 items-center">
+					{buttonImages.slice(3).map(({ href, alt, text, isExternal }, index) => (
+						<NavbarButton
+							key={index + 3}
+							href={href}
+							alt={alt}
+							isExternal={isExternal}
+						>
+							{text}
+						</NavbarButton>
+					))}
 				</div>
-
-				<MLHBadge />
+				{/* Positioned at the right */}
+				<div className="absolute right-4">
+					<MLHBadge />
+				</div>
 			</div>
 		</nav>
 	);
