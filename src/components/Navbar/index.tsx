@@ -148,16 +148,18 @@ export default function Navbar() {
 			{/* Desktop Navbar */}
 			<div className="hidden md:flex items-center justify-center relative h-16">
 				<div className="flex flex-row space-x-1 items-center">
-					{buttonImages.slice(0, 3).map(({ href, alt, text, isExternal }, index) => (
-						<NavbarButton
-							key={index}
-							href={href}
-							alt={alt}
-							isExternal={isExternal}
-						>
-							{text}
-						</NavbarButton>
-					))}
+					{buttonImages
+						.slice(0, 3)
+						.map(({ href, alt, text, isExternal }, index) => (
+							<NavbarButton
+								key={index}
+								href={href}
+								alt={alt}
+								isExternal={isExternal}
+							>
+								{text}
+							</NavbarButton>
+						))}
 				</div>
 				<a href="/" className="mx-8">
 					<Image
@@ -169,16 +171,18 @@ export default function Navbar() {
 					/>
 				</a>
 				<div className="flex flex-row space-x-1 items-center">
-					{buttonImages.slice(3).map(({ href, alt, text, isExternal }, index) => (
-						<NavbarButton
-							key={index + 3}
-							href={href}
-							alt={alt}
-							isExternal={isExternal}
-						>
-							{text}
-						</NavbarButton>
-					))}
+					{buttonImages
+						.slice(3)
+						.map(({ href, alt, text, isExternal }, index) => (
+							<NavbarButton
+								key={index + 3}
+								href={href}
+								alt={alt}
+								isExternal={isExternal}
+							>
+								{text}
+							</NavbarButton>
+						))}
 				</div>
 				{/* Positioned at the right */}
 				<div className="absolute right-4">
