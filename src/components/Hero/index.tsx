@@ -17,7 +17,7 @@ const Hero = () => {
 	return (
 		<section
 			id="hero"
-			className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-[15rem] mb-8"
+			className="flex flex-col items-center justify-center w-3/5 h-[35rem] mt-[12rem] mb-8"
 		>
 			{/* Countdown Asset with Timer */}
 			<div className="relative flex flex-col items-center">
