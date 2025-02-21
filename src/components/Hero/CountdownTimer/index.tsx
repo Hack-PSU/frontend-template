@@ -47,8 +47,6 @@ const CountdownTimer: React.FC = () => {
 		setState(initialState);
 	}, []);
 
-	const secondsControls = useAnimation();
-
 	const endDate = useMemo(() => {
 		return new Date(hackathon?.endTime || new Date());
 	}, [hackathon?.endTime]);
@@ -58,9 +56,6 @@ const CountdownTimer: React.FC = () => {
 			initializeFields(hackathon);
 		}
 	}, [hackathon, initializeFields]);
-
-	// Define the hackathon end date for later use.
-	const endDate = hackathon ? new Date(hackathon.endTime) : new Date();
 
 	// The countdown updater recalculates days/hours/minutes/seconds.
 	const updateCountdown = useCallback(() => {
