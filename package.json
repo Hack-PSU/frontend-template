@@ -10,10 +10,12 @@
 		"fmt": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
 	},
 	"dependencies": {
-		"@headlessui/react": "^1.7.17",
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
+		"@headlessui/react": "^2.1.0",
 		"@heroicons/react": "^2.0.18",
 		"@mui/icons-material": "^5.14.14",
-		"@mui/material": "^5.14.13",
+		"@mui/material": "^6.4.5",
 		"@radix-ui/react-switch": "^1.1.0",
 		"@sentry/nextjs": "^8",
 		"@svgr/webpack": "^8.1.0",
@@ -35,6 +37,7 @@
 		"next": "15.2.0-canary.56",
 		"prettier": "^3.3.3",
 		"react": "^18.2.0",
+		"react-card-flip": "^1.2.3",
 		"react-dom": "^18.2.0",
 		"react-icons": "^4.8.0",
 		"react-phone-input-2": "^2.15.1",
