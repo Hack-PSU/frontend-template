@@ -63,14 +63,14 @@ export default function Profile() {
 		}
 	};
 
-	const handleReimbursement = async () => { 
+	const handleReimbursement = async () => {
 		if (user) {
-			router.push("/reimbursements")
+			router.push("/reimbursements");
 		} else {
-			router.push("/signin")
-			alert("Must be logged in to submit reimbursement form")
+			router.push("/signin");
+			alert("Must be logged in to submit reimbursement form");
 		}
-	}
+	};
 
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
