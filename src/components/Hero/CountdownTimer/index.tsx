@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 
@@ -47,15 +47,15 @@ const CountdownTimer: React.FC = () => {
 		setState(initialState);
 	}, []);
 
-	// When hackathon data is available, initialize the countdown.
+	const endDate = useMemo(() => {
+		return new Date(hackathon?.endTime || new Date());
+	}, [hackathon?.endTime]);
+
 	useEffect(() => {
 		if (hackathon) {
 			initializeFields(hackathon);
 		}
 	}, [hackathon, initializeFields]);
-
-	// Define the hackathon end date for later use.
-	const endDate = hackathon ? new Date(hackathon.endTime) : new Date();
 
 	// The countdown updater recalculates days/hours/minutes/seconds.
 	const updateCountdown = useCallback(() => {
@@ -103,7 +103,7 @@ const CountdownTimer: React.FC = () => {
 				secondsControls.start({ scaleY: 0 });
 			}, 500);
 		}
-	}, [hackathon, targetDate, state, endDate, secondsControls]);
+	}, [hackathon, targetDate, endDate, state, secondsControls]);
 
 	// Run the countdown updater every second.
 	useEffect(() => {
@@ -129,44 +129,50 @@ const CountdownTimer: React.FC = () => {
 		<div className="text-center border-black rounded-sm px-6 py-2">
 			{state !== 2 ? (
 				<motion.div
-					className="flex space-x-2 text-6xl font-bold text-white justify-between"
+					className="flex space-x-4 text-4xl font-bold text-white justify-between"
 					initial={{ scaleY: 0 }}
 					animate={{ scaleY: 1 }}
 				>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="w-1/2">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(days)}
 						</motion.div>
-						<div className="text-base">{days === 1 ? "Day" : "Days"}</div>
+						<div className="limelight-regular text-base">
+							{days === 1 ? "Day" : "Days"}
+						</div>
 					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="w-1/6">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(hours)}
 						</motion.div>
-						<div className="text-base">{hours === 1 ? "Hour" : "Hours"}</div>
+						<div className="limelight-regular text-base">
+							{hours === 1 ? "Hour" : "Hours"}
+						</div>
 					</div>
-					<div className="w-1/4">
-						<motion.div className="cyberspace-front-font mb-4">
+					<div className="limelight-regular mb-4">:</div>
+					<div className="w-1/6">
+						<motion.div className="limelight-regular mb-4">
 							{renderTime(minutes)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{minutes === 1 ? "Minute" : "Minutes"}
 						</div>
 					</div>
-					<div className="w-1/4">
+					<div className="limelight-regular mb-4">:</div>
+					<div className="w-1/6">
 						<motion.div
-							className="cyberspace-front-font mb-4"
+							className="limelight-regular mb-4"
 							animate={secondsControls}
 						>
 							{renderTime(seconds)}
 						</motion.div>
-						<div className="text-base">
+						<div className="limelight-regular text-base">
 							{seconds === 1 ? "Second" : "Seconds"}
 						</div>
 					</div>
 				</motion.div>
 			) : null}
-			<div className="sm:text-2xl md:text-3xl font-bold text-white cornerstone-font mt-3 ">
+			<div className="sm:text-2xl md:text-3xl font-bold text-[darkred] cornerstone-font mt-3 ">
 				{bannerMessage}
 			</div>
 		</div>
