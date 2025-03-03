@@ -1,55 +1,51 @@
 import Image from "next/image";
 import Logo from "../../../public/logo.png";
-import Register from "@/../public/textbox-register.png";
-import Discord from "@/../public/textbox-discord.png";
+import Register from "./EXPORT - register.png";
+import Discord from "./EXPORT - discord.png";
 
 import settings from "@/lib/config/settings.json";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import countdown from "./HACKPSU Countdown.svg";
 import CountdownTimer from "./CountdownTimer";
 import BigButton from "@/components/common/BigButton";
 import { useRouter } from "next/navigation";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
 
 const Hero = () => {
-	const { isAuthenticated, userDataLoaded } = useFirebase();
+	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
 
 	return (
 		<section
 			id="hero"
-			className="flex flex-col items-center justify-center w-4/5 h-[35rem] mt-[6rem] mb-8"
+			className="flex flex-col items-center justify-center w-3/5 h-[35rem] mt-[12rem] mb-8"
 		>
-			<div className="flex p-8 bg-[#00000080] border-4 border-[green] rounded-lg">
-				<div className="hidden md:block ">
-					<Image src={Logo} width={500} height={500} alt="logo" />
+			{/* Countdown Asset with Timer */}
+			<div className="relative flex flex-col items-center">
+				<Image src={countdown} width={1000} height={600} alt="Countdown" />
+
+				{/* Position the Countdown Timer inside the countdown image */}
+				<div className="absolute top-[65%] left-1/2 transform -translate-x-1/2 -translate-y-1/4">
+					<div style={{ scale: 1.3 }}>
+						<CountdownTimer />
+					</div>
 				</div>
-				<div className="flex flex-col gap-4">
-					<CountdownTimer />
+			</div>
 
-					<div className="bg-[rgba(0,113,188,255)] opacity-90 rounded-md p-2">
-						<h2 className="font-bold text-2xl text-center cornerstone-font">
-							Penn State University • Business Building •{" "}
-							{settings.hackathonDateRepr}
-						</h2>
-						{settings.isLive && <h2>12 Hours Left</h2>}
-					</div>
-
-					<div className="flex flex-col items-center justify-center">
-						<div className="sm:w-3/5 p-4 flex flex-wrap justify-center">
-							<BigButton
-								background={Register}
-								onClick={() => router.push("/signin")}
-								className="mb-4 w-full"
-							/>
-
-							<BigButton
-								background={Discord}
-								onClick={() => {
-									window.open("http://discord.hackpsu.org", "_blank");
-								}}
-								className="mb-4 w-full"
-							/>
-						</div>
-					</div>
+			{/* Register & Discord Buttons Positioned Below */}
+			<div className="flex justify-center gap-12 mt-6 mb-12">
+				<div className="w-50 h-40 mb-12">
+					<BigButton
+						background={Register}
+						onClick={() => router.push("/signin")}
+						className="w-full h-full"
+					/>
+				</div>
+				<div className="w-50 h-40">
+					<BigButton
+						background={Discord}
+						onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
+						className="w-full h-full"
+					/>
 				</div>
 			</div>
 		</section>
