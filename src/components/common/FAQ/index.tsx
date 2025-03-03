@@ -1,5 +1,8 @@
 import React from "react";
 import Card from "../Card";
+import { useMediaQuery } from "react-responsive";
+import CustomCollapsible from "../CustomCollapsible";
+import Divider from "../Divider";
 import "./index.css";
 // FAQ text
 const faqs = [
@@ -62,12 +65,38 @@ const faqs = [
 ];
 
 const FAQ = () => {
+    const isMobile = useMediaQuery({ query: '(max-width: 1300px)' });
+    if (isMobile) {
+        return (
+            <section className="faq-section mt-4 mb-20 md:mb-0">
+			<div className="faq-header">
+				<h1 className="font-rye text-white text-7xl mb-5">FAQ</h1>
+				<Divider />
+				<dl className="faq-list">
+					{faqs.map((faq, index) => (
+						<React.Fragment key={index}>
+							<div className="faq-button-container font-tiltneon text-black">
+								<CustomCollapsible
+									question={faq.question}
+									answer={faq.answer}
+									link={faq.link}
+								/>
+							</div>
+						</React.Fragment>
+					))}
+				</dl>
+			</div>
+		</section>
+        );
+    }
+
     return (
         <div className="faq-container flex flex-col items-center min-h-screen px-4 md:px-8 lg:px-16">
             <h1 className="text-center text-7xl text-white font-rye mb-8">FAQ</h1>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <Divider />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mt-8">
                 {faqs.map((faq, index) => (
-                    <div key={index} className="col-span-1">
+                    <div key={index} className="col-span-1 w-full">
                         <Card question={faq.question} answer={faq.answer} link={faq.link} />
                     </div>
                 ))}
