@@ -19,12 +19,12 @@ const Rules = () => (
 			<h1 className="section-header-text">Rules</h1>
 			<Divider />
 		</div>
-		{/* Increased Image Size */}
+
 		<div className="w-full md:w-full lg:w-2/3 mx-auto relative">
 			<img src="Text Box.svg" alt="rules-asset" className="w-full h-auto" />
 			{/* Center the Rules List */}
-			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto max-h-[80%] overflow-y-auto p-4 flex justify-center">
-				<ul className="list-inside list-disc text-black font-tilt-neon text-md md:text-lg text-left space-y-4">
+			<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto max-h-[80%] overflow-y-auto p-4">
+				<ul className="list-inside list-disc text-black font-tilt-neon md:text-lg text-left space-y-auto">
 					{rules.map((rule, index) => (
 						<li key={index} dangerouslySetInnerHTML={{ __html: rule }} />
 					))}
