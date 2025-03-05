@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
-@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
 
 @layer base {
 	:root {
@@ -44,7 +44,7 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-image: linear-gradient(to top, #d7f6ff, #0e1e25 80%);
+		background-image: linear-gradient(to top, #0e1e25, #d7f6ff 80%);
 		background-size: cover;
 		background-position: top center;
 		min-height: 100vh;
@@ -113,7 +113,6 @@
 		color: #a20021;
 	}
 }
-
 
 @font-face {
 	font-family: "limelight-regular";
