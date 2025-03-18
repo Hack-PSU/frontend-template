@@ -12,6 +12,7 @@ import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
 import Submissions from "@/components/common/Submissions";
 import { Fireworks } from "@fireworks-js/react";
+import FerrisWheel from "@/components/FerrisWheel";
 
 export default function Home() {
 	const [isMobile, setIsMobile] = useState(false);
@@ -168,6 +169,7 @@ export default function Home() {
 						<Submissions />
 						<Sponsors />
 						<Footer />
+						<FerrisWheel />
 					</main>
 				</>
 			)}
