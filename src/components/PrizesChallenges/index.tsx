@@ -146,5 +146,4 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 	);
 };
 
-
 export default PrizesChallenges;
