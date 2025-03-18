@@ -1,11 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import {
-	motion,
-	useMotionValueEvent,
-	useScroll,
-	useTransform,
-} from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import Hero from "@/components/Hero";
 import MobileHero from "@/components/Hero/Mobile";
 import Schedule from "@/components/Schedule";
@@ -63,50 +58,52 @@ export default function Home() {
 	});
 
 	const [showFireworks, setShowFireworks] = useState(false);
+	const disableSunMoon = true;
 
 	useEffect(() => {
 		const unsubscribe = scrollYProgress.on("change", (latest) => {
-			if (latest * window.innerHeight > 300) {
+			if (latest >= 0.7) {
 				setShowFireworks(true);
 			} else {
 				setShowFireworks(false);
 			}
 		});
-
 		return () => unsubscribe();
 	}, [scrollYProgress]);
 
 	return (
 		<>
-			<div
-				style={{
-					position: "fixed",
-					top: 0,
-					left: 0,
-					width: "100vw",
-					height: "100vh",
-					zIndex: -1,
-				}}
-			>
-				<motion.div
+			{!disableSunMoon && (
+				<div
 					style={{
-						position: "absolute",
-						top: sunTop,
-						left: sunLeft,
+						position: "fixed",
+						top: 0,
+						left: 0,
+						width: "100vw",
+						height: "100vh",
+						zIndex: -1,
 					}}
 				>
-					<img src="/sun.png" alt="Sun" width={250} height={250} />
-				</motion.div>
-				<motion.div
-					style={{
-						position: "absolute",
-						top: moonTop,
-						left: moonLeft,
-					}}
-				>
-					<img src="/moon.svg" alt="Moon" width={250} height={250} />
-				</motion.div>
-			</div>
+					<motion.div
+						style={{
+							position: "absolute",
+							top: sunTop,
+							left: sunLeft,
+						}}
+					>
+						<img src="/sun.png" alt="Sun" width={250} height={250} />
+					</motion.div>
+					<motion.div
+						style={{
+							position: "absolute",
+							top: moonTop,
+							left: moonLeft,
+						}}
+					>
+						<img src="/moon.svg" alt="Moon" width={250} height={250} />
+					</motion.div>
+				</div>
+			)}
 
 			{isMobile ? (
 				<main className="mobile-container">
