@@ -122,7 +122,7 @@ const Schedule: React.FC = () => {
 	);
 
 	return (
-		<div className="w-full max-w-5xl mx-auto px-4 pt-12 rounded-2xl">
+		<div className="w-full max-w-5xl mx-auto px-4 pt-12 rounded-2xl" id="schedule">
 			<div className="text-center mb-8">
 				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021]">
 					Schedule
