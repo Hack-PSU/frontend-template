@@ -6,7 +6,6 @@ import { useState } from "react";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import HomeIcon from "@mui/icons-material/Home";
-import "./navbar.css";
 import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavbarButtonProps {
