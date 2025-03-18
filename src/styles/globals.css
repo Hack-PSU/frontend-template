@@ -126,7 +126,12 @@
 
 @font-face {
 	font-family: "rye";
-	src: url("../../public/fonts/Rye-Regular.ttf");
+	src: url("../../public/fonts/Rye.ttf");
+}
+
+@font-face {
+    font-family: 'tiltneon';
+    src: url('../../public/fonts/TiltNeon.ttf');
 }
 
 a {

@@ -34,6 +34,4 @@ const Rules = () => (
 	</section>
 );
 
-
-
 export default Rules;
