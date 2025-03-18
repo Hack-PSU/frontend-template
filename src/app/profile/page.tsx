@@ -74,7 +74,7 @@ export default function Profile() {
 
 	return (
 		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
-			<div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-xl bg-gradient-to-r from-[#00000080] to-[#000000f1] border-red-500 border-4 rounded-lg px-6 py-10 shadow-lg sm:px-12"> {/* Added red border to surround the profile card */}
+			<div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-xl bg-gradient-to-r from-[#00000080] to-[#000000f1] border-red-500 border-4 rounded-lg px-6 py-10 shadow-lg sm:px-12">
 				{/* Profile header */}
 				<div className="text-center">
 					<div className="flex justify-center mb-4">
