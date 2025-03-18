@@ -1,4 +1,5 @@
 "use client";
+import AuthGuard from "./AuthGuard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import FirebaseProvider from "./FirebaseProvider";
 import { auth } from "@/lib/config/firebase";
@@ -21,7 +22,7 @@ export default function LayoutProvider({
 		<>
 			<FirebaseProvider auth={auth}>
 				<QueryClientProvider client={queryClient}>
-					{children}
+					<AuthGuard>{children}</AuthGuard>
 				</QueryClientProvider>
 			</FirebaseProvider>
 		</>

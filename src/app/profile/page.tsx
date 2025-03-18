@@ -41,18 +41,6 @@ export default function Profile() {
 		}
 	};
 
-	useEffect(() => {
-		// If auth is resolved and we're not authenticated, redirect
-		if (!isLoading && !isAuthenticated) {
-			router.push("/signin");
-		} else if (user && userData) {
-			// If user is logged in but missing registration info, redirect
-			if (!userData.registration) {
-				router.push("/register");
-			}
-		}
-	}, [isAuthenticated, user, userData, router, isLoading]);
-
 	const handleSignOut = async () => {
 		try {
 			await logout();
