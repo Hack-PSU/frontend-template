@@ -93,8 +93,6 @@ export default function Profile() {
 					<h2 className="text-xl sm:text-2xl font-bold text-white">Profile</h2>
 				</div>
 
-				
-
 				{/* Basic info */}
 				<dl className="mt-6 space-y-4 divide-y divide-white text-white text-base sm:text-lg">
 					<div className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:items-center">

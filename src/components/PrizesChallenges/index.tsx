@@ -26,7 +26,9 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 					{title}
 				</h2>
 				{description && (
-					<p className="text-base md:text-lg text-gray-800 mb-3">{description}</p>
+					<p className="text-base md:text-lg text-gray-800 mb-3">
+						{description}
+					</p>
 				)}
 				{prizes.length > 0 && (
 					<table className="table-auto mt-4 w-full">
@@ -56,7 +58,10 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 
 const PrizesChallenges: React.FC = () => {
 	return (
-		<section id="prizes" className="flex flex-col items-center w-full mt-20 px-4">
+		<section
+			id="prizes"
+			className="flex flex-col items-center w-full mt-20 px-4"
+		>
 			<div className="w-full max-w-6xl flex flex-col items-center">
 				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021]">
 					Prizes & Challenges
