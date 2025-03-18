@@ -14,12 +14,11 @@ const rules = [
 ];
 
 const Rules = () => (
-	<section className="flex flex-col items-center w-full gap-8 my-8">
+	<section className="flex flex-col items-center w-full gap-8 mb-8">
 		<div className="w-11/12 md:w-3/4 flex flex-col items-center">
-			<h1 className="section-header-text">Rules</h1>
+			<h1 className="font-['rye'] text-[#A20021] text-[4rem]">Rules</h1>
 			<Divider />
 		</div>
-		{/* Increased Image Size */}
 		<div className="w-full md:w-full lg:w-2/3 mx-auto relative">
 			<img src="Text Box.svg" alt="rules-asset" className="w-full h-auto" />
 			{/* Center the Rules List */}
