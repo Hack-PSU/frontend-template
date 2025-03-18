@@ -1,6 +1,6 @@
 @font-face {
 	font-family: "rye";
-	src: url("../../../../public/fonts/Rye.ttf");
+	src: url("/fonts/Rye.ttf");
 }
 .faq-section {
 	display: flex;
