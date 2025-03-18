@@ -23,7 +23,7 @@ const Rules = () => (
 			<img src="Text Box.svg" alt="rules-asset" className="w-full h-auto" />
 			{/* Center the Rules List */}
 			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto max-h-[80%] overflow-y-auto p-4 flex justify-center">
-				<ul className="list-inside list-disc text-black font-tilt-neon text-md md:text-lg text-left space-y-4">
+				<ul className="list-inside list-disc text-black font-tilt-neon text-md md:text-lg text-left space-y-1">
 					{rules.map((rule, index) => (
 						<li key={index} dangerouslySetInnerHTML={{ __html: rule }} />
 					))}
