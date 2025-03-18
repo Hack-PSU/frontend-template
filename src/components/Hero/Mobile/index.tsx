@@ -1,6 +1,6 @@
 "use client";
-import Register from "@/public/textbox-register.png";
-import Discord from "@/public/textbox-discord.png";
+import Register from "@/../public/textbox-register.png";
+import Discord from "@/../public/textbox-discord.png";
 
 import settings from "@/lib/config/settings.json";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";

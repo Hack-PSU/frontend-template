@@ -65,7 +65,7 @@
 	}
 
 	.frame {
-		background-image: url("/screen.png");
+		background-image: url("../../public/screen.png");
 		background-size: 100% auto;
 		background-repeat: no-repeat;
 		background-position: center center;
@@ -116,22 +116,22 @@
 
 @font-face {
 	font-family: "limelight-regular";
-	src: url("/fonts/Limelight-Regular.ttf");
+	src: url("../../public/fonts/Limelight-Regular.ttf");
 }
 
 @font-face {
 	font-family: "cornerstone";
-	src: url("/fonts/Cornerstone.ttf");
+	src: url("../../public/fonts/Cornerstone.ttf");
 }
 
 @font-face {
 	font-family: "rye";
-	src: url("/fonts/Rye.ttf");
+	src: url("../../public/fonts/Rye.ttf");
 }
 
 @font-face {
     font-family: 'tiltneon';
-    src: url('/fonts/TiltNeon.ttf');
+    src: url('../../public/fonts/TiltNeon.ttf');
 }
 
 a {

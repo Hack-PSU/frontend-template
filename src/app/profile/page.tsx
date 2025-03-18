@@ -7,7 +7,7 @@ import { useUserInfoMe } from "@/lib/api/user/hook"; // or wherever it's located
 import { useCreateWalletPass } from "@/lib/api/wallet/hook"; // your custom hook
 import Image from "next/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import googleWalletImg from "@/public/google_wallet.svg";
+import googleWalletImg from "../../../public/google_wallet.svg"; // <-- import your SVG
 import QRCode from "react-qr-code";
 import Link from "next/link";
 

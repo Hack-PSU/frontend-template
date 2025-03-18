@@ -1,9 +1,9 @@
 @font-face {
 	font-family: 'Noto Serif';
-	src: url('/fonts/NotoSerif.ttf');
+	src: url('../../../../public/fonts/NotoSerif.ttf');
 }
 
 @font-face{
 	font-family: "tiltneon";
-	src: url('/fonts/TiltNeon.ttf');
+	src: url('../../../../public/fonts/TiltNeon.ttf');
 }
