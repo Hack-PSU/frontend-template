@@ -6,14 +6,14 @@ import Image from "next/image";
 // Wheel SVG with visible spokes.
 function WheelSVG() {
   return (
-	<Image src="/wheel.svg" alt="Ferris Wheel" width={500} height={500} />
+	<Image src="/wheel.svg" alt="Ferris Wheel" width={500} height={500} unoptimized={true} />
   );
 }
 
 // Base SVG for the Ferris Wheel.
 function BaseSVG() {
   return (
-	<Image src="/base.svg" alt="Ferris Wheel Base" width={300} height={300} />
+	<Image src="/base.svg" alt="Ferris Wheel Base" width={300} height={300} unoptimized={true} />
   );
 }
 
