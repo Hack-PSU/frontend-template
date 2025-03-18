@@ -32,7 +32,7 @@ export default function Card({ question, answer, link }: Props) {
             <div onClick={handleClick} className="card-back w-full h-110 relative">
                 <img src="/FAQ_Front.png" alt="Back" className="w-full h-full object-cover rounded-md" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center px-20">
-                    <p className="text-center text-xxs text-black font-tiltneon">{answer}</p>
+                    <p className="text-left text-[13px] text-black font-tiltneon ">{answer}</p>
                     {link && (
                         <a href={link.target} target="_blank" rel="noopener noreferrer" className="text-blue-500 text-xs underline mt-2 font-tiltneon">
                             {link.text || 'Learn more'}

@@ -24,7 +24,7 @@ const faqs = [
     {
         question: "Can I be reimbursed for travel?",
         answer:
-            "Travel reimbursements will be handled at the registration table Saturday after 3pm and Sunday from 11am-1pm. Please come to the table with everyone that you traveled with, and the receipts for your transportation costs. If you spoke with us directly about special consideration, please have any emails/messages shared open and ready! For more information, please refer to our Travel Reimbursement Policy.",
+            "Travel reimbursements will be handled at the registration table Saturday after 3pm and Sunday from 11am-1pm. Please submit your reimbursements via the profile page on the website. For more information, please refer to our Travel Reimbursement Policy.",
         link: {
             target: "/travel",
             text: "Travel Reimbursement Policy",
@@ -38,7 +38,7 @@ const faqs = [
     {
         question: "How should I submit a project?",
         answer:
-            "All projects will be submitted through the HackPSU Devpost by Sunday 12:00pm (even if unfinished), then you can edit your Devpost submission until 1:45pm. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed. View more requirements when submitting a project in the Devpost Rules.",
+            "All projects will be submitted through the HackPSU Devpost. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
         link: {
             target: "http://devpost.hackpsu.org/",
             text: "devpost.hackpsu.org",
