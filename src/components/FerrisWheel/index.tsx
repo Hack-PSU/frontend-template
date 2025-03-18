@@ -1,19 +1,21 @@
 "use client";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import wheel from "../../../public/wheel.svg";
+import base from "../../../public/base.svg";
 import Image from "next/image";
 
 // Wheel SVG with visible spokes.
 function WheelSVG() {
   return (
-	<img src="/wheel.svg" alt="Ferris Wheel" width={500} height={500}  />
+	<Image src="/wheel.svg" alt="Ferris Wheel" width={500} height={500}  />
   );
 }
 
 // Base SVG for the Ferris Wheel.
 function BaseSVG() {
   return (
-	<img src="/base.svg" alt="Ferris Wheel Base" width={300} height={300} />
+	<Image src="/base.svg" alt="Ferris Wheel Base" width={300} height={300} />
   );
 }
 
