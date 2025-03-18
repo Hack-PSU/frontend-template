@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Rye&display=swap');
+
+
 #schedule {
-	font-family: "Cornerstone", "Lato", sans-serif;
+	font-family: "Rye", "Cornerstone", "Lato", sans-serif;
 	color: #000000;
 }
+
+.rye-regular {
+	font-family: "Rye";
+	color: whitesmoke;
+	font-weight: 100;
+}
+
 
 /* Headless UI Tabs overrides */
 .tab-list {
@@ -10,46 +20,46 @@
 	list-style-type: none;
 	padding: 0;
 	background: transparent;
+	margin-bottom: 0;
+	padding-bottom: 0;
 }
 
 .tab {
-	padding: 16px 32px;
-	cursor: pointer;
-	border-radius: 10px 10px 0 0;
-	background: rgba(0, 0, 0, 0.75);
-	font-size: 1.25rem;
-	transition: background-color 0.3s ease;
-	margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
-	color: white;
+    padding: 16px 32px;
+    cursor: pointer;
+    border-radius: 10px 10px 0 0;
+    background: #EDECD8;
+    font-size: 1.25rem;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-bottom: 4px; /* Ensure spacing between wrapped tabs */
+    color: black;
+    border: 6px solid #A20021; /* Default red border */
 }
 
-.tab:hover {
-	background-color: rgba(0, 0, 0, 0.22);
-}
 
 .tab[aria-selected="true"] {
-	background-color: rgba(245, 245, 220, 0.75);
-	border-bottom: 4px solid black;
-	color: black;
+    background: EDECD8;
+    border: 6px solid #EFA00B; /* Gold border when selected */
+    color: black;
 }
 
 /* Content panels */
 .tab-panel {
 	border-radius: 1em;
-	border: 4px solid green;
-	background-color: #00000080;
+	background: url('/Text Box.svg') no-repeat center center;
+	background-color: transparent;
 	background-size: cover;
 	background-position: center;
 	padding: 32px;
+	height: auto;
+	min-height: 600px;
 	max-width: 1000px;
 	margin: 0.5rem auto;
-	color: white;
-	font-size: 1.125rem;
+	margin-top: 0;
+	color: black;
+	font-size: 1.25rem;
 }
 
-.tab-panel li:hover {
-	background-color: transparent;
-}
 
 .center {
 	text-align: center;

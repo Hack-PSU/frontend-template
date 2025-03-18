@@ -1,26 +1,24 @@
 "use client";
+
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import useScroll from "@/lib/hooks/use-scroll";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import Logo from "../../../public/logo.png";
-import blankButton from "../../../public/button-blank.png";
 import HomeIcon from "@mui/icons-material/Home";
-import { useRouter } from "next/navigation";
 import "./navbar.css";
+import MenuIcon from "@mui/icons-material/Menu";
 
 interface NavbarButtonProps {
 	href: string;
 	alt: string;
-	src?: any;
 	isExternal?: boolean;
-	children?: React.ReactNode;
+	children: string;
 	onClick?: () => void;
 }
 
 const NavbarButton: React.FC<NavbarButtonProps> = ({
 	href,
-	src = blankButton,
 	alt,
 	isExternal = false,
 	children,
@@ -32,34 +30,31 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 			target={isExternal ? "_blank" : "_self"}
 			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
+			className="relative transition-all duration-150 ease-in-out hover:scale-105"
 		>
-			<button className="relative transition-transform duration-300 hover:scale-110 hover:-translate-y-1.5">
+			<div className="relative w-40 h-24">
+				{/* Using Next.js 13 "fill" prop to cover the container */}
 				<Image
-					src={src}
-					width={150}
-					height={50}
+					src="/Navbar.svg"
 					alt={alt}
-					className="navbar-button w-full h-full"
+					fill
+					className="rounded-md object-cover"
 				/>
-				<span
-					className="absolute inset-0 transform -translate-y-2.5 flex items-center justify-center cornerstone-font font-bold text-xs md:text-sm xl:text-lg transition-transform duration-300 hover:scale-110 hover:-translate-y-2.5"
-					style={{ color: "#2d82a1" }}
-				>
-					{(children as string).toUpperCase()}
+				<span className="absolute inset-0 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
+					{children.toUpperCase()}
 				</span>
-			</button>
+			</div>
 		</a>
 	);
 };
 
 export default function Navbar() {
+	const [menuOpen, setMenuOpen] = useState(false);
 	const scrolled = useScroll(50);
-	const { logout, isAuthenticated, userDataLoaded } = useFirebase();
-
+	const { logout, isAuthenticated, isLoading, user } = useFirebase();
 	const pathname = usePathname();
-	const isHome: boolean = pathname === "/";
-
 	const router = useRouter();
+	const isHome = pathname === "/";
 
 	const buttonImages = [
 		{
@@ -92,61 +87,106 @@ export default function Navbar() {
 			text: "workshops",
 			isExternal: false,
 		},
-	];
-
-	// Uncomment this to enable registration on Navbar
-	if (userDataLoaded && isAuthenticated) {
-		buttonImages.push({
-			href: "/profile",
-			alt: "profile",
-			text: "profile",
-			isExternal: false,
-		});
-	} else {
-		buttonImages.push({
+		{
 			href: "/signin",
 			alt: "register",
 			text: "register",
+			isExternal: false,
+		},
+	];
+
+	// Replace "register" with "profile" for authenticated users.
+	if (!isLoading && isAuthenticated) {
+		buttonImages.splice(5, 1, {
+			href: "/profile",
+			alt: "profile",
+			text: "profile",
 			isExternal: false,
 		});
 	}
 
 	return (
 		<nav
-			className={`navbar ${
-				scrolled ? "navbar-scrolled" : ""
-			} sticky top-0 w-full p-2 justify-evenly md:h-24 md:block ${
-				scrolled ? "border-b border-gray-200 backdrop-blur-xl" : "bg-white/0"
-			} z-30 transition-all`}
+			className={`sticky top-0 w-full bg-customRed border-b-4 border-customYellow z-30 transition-all ${
+				scrolled ? "shadow-md" : ""
+			}`}
 		>
-			<div className="flex flex-row md:justify-evenly md:mr-[150px] md:px-0">
-				<a href="/">
-					<Image src={Logo} width={90} height={90} alt="logo" />
-				</a>
-
-				{/* Home button for mobile */}
-				<div className="md:hidden flex justify-end w-full">
-					<button
-						className="text-white"
-						onClick={() => router.push("/")}
-						aria-label="Toggle Menu"
-					>
-						<HomeIcon fontSize="large" />
-					</button>
+			{/* Mobile Navbar */}
+			<div className="md:hidden flex items-center justify-between h-16 px-4">
+				<button
+					onClick={() => router.push("/")}
+					className="text-white"
+					aria-label="Go Home"
+				>
+					<HomeIcon fontSize="large" />
+				</button>
+				<button
+					onClick={() => setMenuOpen(!menuOpen)}
+					className="text-white"
+					aria-label="Toggle Menu"
+				>
+					<MenuIcon fontSize="large" />
+				</button>
+			</div>
+			{menuOpen && (
+				<div className="md:hidden bg-customRed border-t border-customYellow">
+					<div className="flex flex-col items-center space-y-2 p-2">
+						{buttonImages.map(({ href, alt, text, isExternal }, idx) => (
+							<NavbarButton
+								key={idx}
+								href={href}
+								alt={alt}
+								isExternal={isExternal}
+								onClick={() => setMenuOpen(false)}
+							>
+								{text}
+							</NavbarButton>
+						))}
+					</div>
 				</div>
+			)}
 
-				<div className="hidden md:flex md:items-center md:space-x-6 lg:space-x-8">
-					{buttonImages.map(({ href, alt, text, isExternal }, index) => (
-						<NavbarButton
-							key={index}
-							href={href}
-							alt={alt}
-							isExternal={isExternal}
-							onClick={text === "signout" ? logout : undefined}
-						>
-							{text}
-						</NavbarButton>
-					))}
+			{/* Desktop Navbar */}
+			<div className="hidden md:flex items-center justify-center relative h-16">
+				<div className="flex flex-row space-x-1 items-center">
+					{buttonImages
+						.slice(0, 3)
+						.map(({ href, alt, text, isExternal }, index) => (
+							<NavbarButton
+								key={index}
+								href={href}
+								alt={alt}
+								isExternal={isExternal}
+							>
+								{text}
+							</NavbarButton>
+						))}
+				</div>
+				<a href="/" className="mx-8">
+					<Image
+						src="/logo.png"
+						alt="Logo Background"
+						width={140}
+						height={140}
+						className="w-auto pt-20"
+					/>
+				</a>
+				<div className="flex flex-row space-x-1 items-center">
+					{buttonImages
+						.slice(3)
+						.map(({ href, alt, text, isExternal }, index) => (
+							<NavbarButton
+								key={index + 3}
+								href={href}
+								alt={alt}
+								isExternal={isExternal}
+							>
+								{text}
+							</NavbarButton>
+						))}
+				</div>
+				{/* Positioned at the right */}
+				<div className="absolute right-4">
 					<MLHBadge />
 				</div>
 			</div>
