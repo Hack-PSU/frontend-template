@@ -1,10 +1,10 @@
 .sponsor-container {
-	background-image: url("../../../public/sponsor-background.png");
+	background-image: url("/Text Box.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
 	border: 5px;
-	padding: 16% 24% 24% 24%;
+	padding: 12% 16% 16% 16%;
 	margin: auto;
 }
 
