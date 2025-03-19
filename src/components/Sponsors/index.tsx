@@ -26,7 +26,7 @@ export default function Sponsors() {
 				<Divider />
 			</div>
 			<div className="bg-transparent mt-8">
-				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-5 items-center">
+				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-10 items-center">
 					{sortedSponsors.map((sponsor) => (
 						<div key={sponsor.id} className="sponsor-container">
 							<a
@@ -37,7 +37,7 @@ export default function Sponsors() {
 							>
 								<div className="sponsor-card">
 									<Image
-										className="max-h-[94px] object-contain"
+										className="object-contain"
 										src={sponsor.darkLogo || ""}
 										alt={sponsor.name}
 										width={458}
