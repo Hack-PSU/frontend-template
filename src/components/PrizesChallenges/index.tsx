@@ -63,7 +63,7 @@ const PrizesChallenges: React.FC = () => {
 			className="flex flex-col items-center w-full mt-20 px-4"
 		>
 			<div className="w-full max-w-6xl flex flex-col items-center">
-				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021]">
+				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021] mb-3">
 					Prizes & Challenges
 				</h1>
 				<Divider />

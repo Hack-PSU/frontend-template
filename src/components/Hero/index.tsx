@@ -25,7 +25,7 @@ const Hero = () => {
 
 				{/* Position the Countdown Timer inside the countdown image */}
 				<div className="absolute top-[65%] left-1/2 transform -translate-x-1/2 -translate-y-1/4">
-					<div style={{ scale: 1.3 }}>
+					<div className="xl:scale-[1.3] mt-[-1rem]">
 						<CountdownTimer />
 					</div>
 				</div>
