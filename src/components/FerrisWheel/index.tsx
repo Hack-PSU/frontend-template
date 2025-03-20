@@ -47,6 +47,9 @@ const FerrisWheel = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100%",
+          position: "relative",
+          translateY: "50%",
+          bottom: "380px",
         }}
       >
         <WheelSVG />
