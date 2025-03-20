@@ -81,14 +81,6 @@
 		border-radius: var(--border-width);
 	}
 
-	.cyberspace-front-font {
-		font-family: "cyperspace-front";
-		font-size: 20px;
-		@media (min-width: 768px) {
-			font-size: 36px;
-		}
-	}
-
 	.cornerstone-font {
 		font-family: "cornerstone";
 		font-size: 18px;
@@ -101,7 +93,10 @@
 		color: white;
 		font-family: "cornerstone";
 		font-size: 4rem;
-		text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
+		text-shadow:
+			-2px -2px 0 black,
+			2px -2px 0 black,
+			-2px 2px 0 black,
 			2px 2px 0 black;
 		font-weight: bold;
 		line-height: 1;
@@ -111,11 +106,19 @@
 	.font-lato {
 		font-family: Lato, sans-serif;
 	}
+
+	.limelight-regular {
+		font-family: "limelight-regular";
+		@media (min-width: 768px) {
+			font-size: 36px;
+		}
+		color: #a20021;
+	}
 }
 
 @font-face {
-	font-family: "cyperspace-front";
-	src: url("../../public/fonts/CyberspaceRacewayFront.otf");
+	font-family: "limelight-regular";
+	src: url("../../public/fonts/Limelight-Regular.ttf");
 }
 
 @font-face {
