@@ -70,7 +70,7 @@ const FAQ = () => {
 		return (
 			<section className="faq-section mt-4 mb-20 md:mb-0">
 				<div className="faq-header">
-					<h1 className="font-rye text-white text-7xl mb-5">FAQ</h1>
+					<h1 className="font-rye text-[#A20021] text-7xl mb-5">FAQ</h1>
 					<Divider />
 					<dl className="faq-list">
 						{faqs.map((faq, index) => (
