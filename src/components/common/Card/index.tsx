@@ -42,7 +42,7 @@ export default function Card({ question, answer, link }: Props) {
 					className="w-full h-full object-cover rounded-md"
 				/>
 				<div className="absolute inset-0 flex flex-col justify-center items-center px-20">
-					<p className="text-left text-[13px] text-black font-tiltneon ">
+					<p className="text-left text-[11.5px] text-black font-tiltneon ">
 						{answer}
 					</p>
 					{link && (
