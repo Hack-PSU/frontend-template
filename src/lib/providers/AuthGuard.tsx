@@ -26,15 +26,13 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 					router.push("/register");
 				}
 			}
-		}
-		else if (pathname === "/register") {
+		} else if (pathname === "/register") {
 			if (!isAuthenticated) {
 				router.push("/signin");
 			} else if (userData && userData.registration) {
 				router.push("/profile");
 			}
-		}
-		else if (pathname === "/profile" || pathname === "/reimbursements") {
+		} else if (pathname === "/profile" || pathname === "/reimbursements") {
 			if (!isAuthenticated) {
 				router.push("/signin");
 			} else if (userData && !userData.registration) {
