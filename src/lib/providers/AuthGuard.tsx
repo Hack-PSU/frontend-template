@@ -51,7 +51,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 		);
 	}
 
-	return <>{children}</>;
+	return <><FullScreenLoading /></>;
 };
 
 export default AuthGuard;
