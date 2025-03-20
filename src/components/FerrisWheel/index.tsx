@@ -36,8 +36,8 @@ const FerrisWheel = () => {
 
 	// Handle scroll wheel events to update the rotation.
 	const handleWheel = (e: React.WheelEvent) => {
-		e.preventDefault();
-		setWheelRotation((prev) => prev + e.deltaY);
+		const rotationSpeed = 0.5;
+		setWheelRotation((prev) => prev + e.deltaY * rotationSpeed);
 	};
 
 	return (
