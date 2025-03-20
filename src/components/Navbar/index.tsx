@@ -185,7 +185,7 @@ export default function Navbar() {
 						))}
 				</div>
 				{/* Positioned at the right */}
-				<div className="absolute right-4">
+				<div className="absolute right-4 max-xl:hidden">
 					<MLHBadge />
 				</div>
 			</div>
