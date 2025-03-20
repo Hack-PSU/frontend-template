@@ -7,7 +7,7 @@ import Image from "next/image";
 const WheelSVG: React.FC = () => {
 	return (
 		<Image
-			src="/wheel.png"
+			src="/wheel_new.png"
 			alt="Ferris Wheel"
 			width={500}
 			height={500}
@@ -20,7 +20,7 @@ const WheelSVG: React.FC = () => {
 const BaseSVG: React.FC = () => {
 	return (
 		<Image
-			src="/base.png"
+			src="/base_new.png"
 			alt="Ferris Wheel Base"
 			width={300}
 			height={300}
