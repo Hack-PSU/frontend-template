@@ -1,15 +1,16 @@
 .sponsor-container {
-	background-image: url("../../../public/sponsor-background.png");
+	background-image: url("/Text Box.svg");
 	background-repeat: no-repeat;
 	background-position: center;
 	background-size: contain;
 	border: 5px;
-	padding: 16% 24% 24% 24%;
+	padding: 24% 24% 24% 24%;
 	margin: auto;
 }
 
 .sponsor-card {
 	background-color: transparent;
-	max-width: 80%;
+	max-width: max-content;
+	max-height: max-content;
 	margin: auto;
 }

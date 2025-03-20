@@ -1,29 +1,24 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import { Tab } from "@headlessui/react";
-import "./schedule.css";
-import { EventModel } from "@/interfaces";
+import clsx from "clsx";
+import { useAllEvents } from "@/lib/api/event/hook";
+import { EventEntityResponse } from "@/lib/api/event/entity";
 
-const Divider = () => <hr className="my-4 border-white border-[1px]" />;
-
-interface DayIndicatorProps {
-	day: string;
-}
-
-const DayIndicator: React.FC<DayIndicatorProps> = ({ day }) => (
-	<div className="text-center py-4">
-		<h2 className="text-xl font-bold">{day}</h2>
+const DayIndicator: React.FC<{ day: string }> = ({ day }) => (
+	<div className="my-4">
+		<h2 className="text-2xl font-bold bg-[#EFA00B] text-[#A20021] inline-block px-4 py-1 rounded-md border border-[#A20021]">
+			{day}
+		</h2>
 	</div>
 );
 
-interface EventItemProps {
-	name: string;
-	time: string;
-}
-
-const EventItem: React.FC<EventItemProps> = ({ name, time }) => (
-	<li className="flex justify-between">
-		<span className="text-xl">{name}</span>
-		<span className="text-xl">{time}</span>
+const EventItem: React.FC<{ name: string; time: string }> = ({
+	name,
+	time,
+}) => (
+	<li className="flex justify-between items-center py-2 border-b border-gray-300">
+		<span className="text-lg font-medium">{name}</span>
+		<span className="text-lg font-medium">{time}</span>
 	</li>
 );
 
@@ -38,80 +33,15 @@ interface ScheduleByCategory {
 	[category: string]: ScheduleEventDetails[];
 }
 
-const Schedule: React.FC = () => {
-	const [schedule, setSchedule] = useState<ScheduleByCategory>({});
-
-	useEffect(() => {
-		const fetchEvents = async (): Promise<EventModel[]> => {
-			const apiEndpoint = `${process.env.NEXT_PUBLIC_BASE_URL_V3}/events`;
-			try {
-				const response = await fetch(apiEndpoint);
-				if (!response.ok) {
-					throw new Error(`Network response was not ok: ${response.status}`);
-				}
-				return await response.json();
-			} catch (error) {
-				console.error("Error fetching events:", error);
-				return [];
-			}
-		};
-
-		const loadEvents = async () => {
-			const events = await fetchEvents();
-			setSchedule(convertEventsToSchedule(events));
-		};
-
-		loadEvents();
-	}, []);
-
-	return (
-		<div className="w-full max-w-5xl px-8 py-20 sm:px-0" id="schedule">
-			<div className="text-center">
-				<h1 className="section-header-text">Schedule</h1>
-				<Divider />
-			</div>
-			<Tab.Group as="div">
-				<Tab.List as="div" className="tab-list flex space-x-2 rounded-xl p-2">
-					{Object.keys(schedule)
-						.filter((category) => category !== "CheckIn")
-						.map((category) => (
-							<Tab as="div"
-								key={category}
-								className={({ selected }) =>
-									`tab w-full rounded-lg py-4 text-lg font-medium leading-6 focus:outline-none ${
-										selected ? "bg-[#ffffff]" : "hover:bg-white/[0.12]"
-									}`
-								}
-							>
-								{category}
-							</Tab>
-						))}
-				</Tab.List>
-
-				<Tab.Panels as="div" className="mt-4 tab-panel">
-					{Object.entries(schedule)
-						.filter(([category]) => category !== "CheckIn")
-						.map(([category, items], idx) => (
-							<Tab.Panel key={idx} as="div" className="rounded-xl p-4">
-								{items.map((item, itemIdx, arr) => (
-									<React.Fragment key={itemIdx}>
-										{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
-											<DayIndicator day={item.day} />
-										)}
-										<EventItem name={item.name} time={item.time} />
-									</React.Fragment>
-								))}
-							</Tab.Panel>
-						))}
-				</Tab.Panels>
-			</Tab.Group>
-		</div>
-	);
-};
-
-const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
+/**
+ * Converts an array of events into an object keyed by event type (category)
+ * with each value being an array of event details sorted by start time.
+ */
+const convertEventsToSchedule = (
+	events: EventEntityResponse[]
+): ScheduleByCategory => {
 	const schedule = events.reduce(
-		(acc: ScheduleByCategory, event: EventModel) => {
+		(acc: ScheduleByCategory, event: EventEntityResponse) => {
 			const startTime = new Date(event.startTime);
 			const day = startTime.toLocaleDateString("en-US", {
 				weekday: "long",
@@ -129,6 +59,7 @@ const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 				minute: "2-digit",
 			});
 
+			// Capitalize the first letter of the event type.
 			const eventType =
 				event.type.charAt(0).toUpperCase() + event.type.slice(1);
 			const eventName = event.name;
@@ -152,13 +83,92 @@ const convertEventsToSchedule = (events: EventModel[]): ScheduleByCategory => {
 		{}
 	);
 
-	Object.keys(schedule).forEach((category: string) => {
+	// Sort each category’s events by start time.
+	Object.keys(schedule).forEach((category) => {
 		schedule[category].sort(
 			(a, b) => a.sortKey.getTime() - b.sortKey.getTime()
 		);
 	});
 
 	return schedule;
+};
+
+const Schedule: React.FC = () => {
+	const { data: events, isLoading, error } = useAllEvents();
+
+	const schedule = useMemo(
+		() => (events ? convertEventsToSchedule(events) : {}),
+		[events]
+	);
+
+	if (isLoading) {
+		return (
+			<div className="w-full flex justify-center items-center py-20">
+				<p className="text-xl text-white">Loading events...</p>
+			</div>
+		);
+	}
+
+	if (error || !events) {
+		return (
+			<div className="w-full flex justify-center items-center py-20">
+				<p className="text-xl text-red-500">Error loading events.</p>
+			</div>
+		);
+	}
+
+	const categories = Object.keys(schedule).filter(
+		(category) => category !== "CheckIn"
+	);
+
+	return (
+		<div
+			className="w-full max-w-5xl mx-auto px-4 pt-12 rounded-2xl"
+			id="schedule"
+		>
+			<div className="text-center mb-8">
+				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021]">
+					Schedule
+				</h1>
+			</div>
+			<Tab.Group>
+				<Tab.List className="flex justify-center items-center mx-auto space-x-1 md:space-x-2 w-full max-w-md pb-2 border-b border-gray-300">
+					{categories.map((category) => (
+						<Tab
+							key={category}
+							className={({ selected }) =>
+								clsx(
+									"whitespace-nowrap px-4 py-2 md:px-8 md:py-4 rounded-t-lg font-semibold text-base md:text-xl transition-colors duration-300",
+									selected
+										? "bg-[#A20021] text-white border-b-4 border-[#EFA00B]"
+										: "bg-white/80 text-[#A20021] border border-[#A20021]"
+								)
+							}
+						>
+							{category}
+						</Tab>
+					))}
+				</Tab.List>
+				<Tab.Panels className="mt-4">
+					{categories.map((category, idx) => (
+						<Tab.Panel
+							key={idx}
+							className="bg-white/25 backdrop-blur-sm p-6 rounded-xl shadow-md border-2 border-[#EFA00B]"
+						>
+							{schedule[category].map((item, itemIdx, arr) => (
+								<React.Fragment key={itemIdx}>
+									{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
+										<DayIndicator day={item.day} />
+									)}
+									<EventItem name={item.name} time={item.time} />
+								</React.Fragment>
+							))}
+						</Tab.Panel>
+					))}
+				</Tab.Panels>
+			</Tab.Group>
+		</div>
+	);
 };
 
 export default Schedule;

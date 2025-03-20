@@ -14,14 +14,16 @@ const rules = [
 ];
 
 const Rules = () => (
-	<section className="flex flex-col items-center w-full gap-8 my-4">
-		<div className="w-11/12 md:w-5/12 flex flex-col items-center">
-			<h1 className="section-header-text">Rules</h1>
+	<section className="flex flex-col items-center w-full gap-8 mb-8">
+		<div className="w-11/12 md:w-3/4 flex flex-col items-center">
+			<h1 className="font-['rye'] text-[#A20021] text-[4rem]">Rules</h1>
 			<Divider />
 		</div>
-		<div className="w-10/12">
-			<div className="rules-border rounded-lg shadow-lg bg-cover bg-center p-4 bg-[#00000080]">
-				<ul className="list-inside list-disc text-white font-lato text-md md:text-lg ">
+		<div className="w-full md:w-full lg:w-2/3 mx-auto relative">
+			<img src="Text Box.svg" alt="rules-asset" className="w-full h-auto" />
+			{/* Center the Rules List */}
+			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto max-h-[80%] overflow-y-auto p-4 flex justify-center">
+				<ul className="list-inside list-disc text-black font-tilt-neon text-md md:text-lg text-left space-y-1">
 					{rules.map((rule, index) => (
 						<li key={index} dangerouslySetInnerHTML={{ __html: rule }} />
 					))}

@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
+@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
 
 @layer base {
 	:root {
@@ -33,18 +34,23 @@
 		--button-hover: #0056b3;
 	}
 
+
 	/* Account for fixed size of the Navbar upon jumping to links. */
 	:target {
 		scroll-margin-top: 130px;
 	}
 
 	body {
-		font-family: Lato, Georgia, sans-serif;
-		font-feature-settings: "rlig" 1, "calt" 1;
-		background-color: #588157;
-		background-image: url("../../public/website-background.png");
+		font-family: "Lato", "Georgia", sans-serif;
+		font-feature-settings:
+			"rlig" 1,
+			"calt" 1;
+		background-image: linear-gradient(to top, #0e1e25, #d7f6ff 80%);
 		background-size: cover;
 		background-position: top center;
+		min-height: 100vh;
+		margin: 0;
+		overscroll-behavior: none;
 	}
 }
 
@@ -75,14 +81,6 @@
 		border-radius: var(--border-width);
 	}
 
-	.cyberspace-front-font {
-		font-family: "cyperspace-front";
-		font-size: 20px;
-		@media (min-width: 768px) {
-			font-size: 36px;
-		}
-	}
-
 	.cornerstone-font {
 		font-family: "cornerstone";
 		font-size: 18px;
@@ -95,7 +93,10 @@
 		color: white;
 		font-family: "cornerstone";
 		font-size: 4rem;
-		text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black,
+		text-shadow:
+			-2px -2px 0 black,
+			2px -2px 0 black,
+			-2px 2px 0 black,
 			2px 2px 0 black;
 		font-weight: bold;
 		line-height: 1;
@@ -105,16 +106,34 @@
 	.font-lato {
 		font-family: Lato, sans-serif;
 	}
+
+	.limelight-regular {
+		font-family: "limelight-regular";
+		@media (min-width: 768px) {
+			font-size: 36px;
+		}
+		color: #a20021;
+	}
 }
 
 @font-face {
-	font-family: "cyperspace-front";
-	src: url("../../public/fonts/CyberspaceRacewayFront.otf");
+	font-family: "limelight-regular";
+	src: url("../../public/fonts/Limelight-Regular.ttf");
 }
 
 @font-face {
 	font-family: "cornerstone";
 	src: url("../../public/fonts/Cornerstone.ttf");
+}
+
+@font-face {
+	font-family: "rye";
+	src: url("../../public/fonts/Rye.ttf");
+}
+
+@font-face {
+    font-family: 'tiltneon';
+    src: url('../../public/fonts/TiltNeon.ttf');
 }
 
 a {

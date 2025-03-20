@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	images: {
-		dangerouslyAllowSVG: true, // Apple App Store badge is SVG.
+		dangerouslyAllowSVG: true,
 		remotePatterns: [
 			{
 				protocol: "https",
@@ -34,6 +34,9 @@ const nextConfig = {
 			},
 			{
 				hostname: "avatars.githubusercontent.com",
+			},
+			{
+				hostname: "*.vercel.app",
 			},
 		],
 	},
