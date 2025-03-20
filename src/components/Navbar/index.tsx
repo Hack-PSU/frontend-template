@@ -81,7 +81,7 @@ export default function Navbar() {
 			isExternal: false,
 		},
 		{
-			href: isHome ? "#workshops" : "/#workshops",
+			href: isHome ? "#workshops" : "/#schedule",
 			alt: "workshops",
 			text: "workshops",
 			isExternal: false,
