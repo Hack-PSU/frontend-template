@@ -20,9 +20,9 @@ export default function Sponsors() {
 	const sortedSponsors = sponsors.sort((a, b) => a.order - b.order);
 
 	return (
-		<section id="sponsors" className="flex flex-col items-center w-full mt-20">
+		<section id="sponsors" className="flex flex-col items-center w-full mt-20 font-['rye'] text-[#A20021] text-[4rem]">
 			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
-				<h1 className="section-header-text">Sponsors</h1>
+				<p >Sponsors</p>
 				<Divider />
 			</div>
 			<div className="bg-transparent mt-8">
