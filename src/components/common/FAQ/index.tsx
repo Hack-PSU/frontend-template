@@ -92,7 +92,9 @@ const FAQ = () => {
 
 	return (
 		<div className="faq-container flex flex-col items-center min-h-screen px-4 md:px-8 lg:px-16">
-			<h1 className="text-center text-7xl text-[#A20021] font-rye  mb-8">FAQ</h1>
+			<h1 className="text-center text-7xl text-[#A20021] font-rye  mb-8">
+				FAQ
+			</h1>
 			<Divider />
 			<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full mt-8">
 				{faqs.map((faq, index) => (
