@@ -8,6 +8,7 @@ import {
 	GitHub as GithubIcon,
 } from "@mui/icons-material";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import { track } from "@vercel/analytics";
 
 const AuthPage: React.FC = () => {
 	const {
@@ -40,6 +41,10 @@ const AuthPage: React.FC = () => {
 		e.preventDefault();
 		try {
 			try {
+				track("login", {
+					method: "email",
+					email: authData.email,
+				});
 				await loginWithEmailAndPassword(authData.email, authData.password);
 				router.push("/profile");
 			} catch (err: any) {
@@ -54,6 +59,9 @@ const AuthPage: React.FC = () => {
 
 	const handleGoogleSignIn = async () => {
 		try {
+			track("login", {
+				method: "google",
+			});
 			await signInWithGoogle();
 			router.push("/profile");
 		} catch (err: any) {
@@ -64,6 +72,9 @@ const AuthPage: React.FC = () => {
 
 	const handleGithubSignIn = async () => {
 		try {
+			track("login", {
+				method: "github",
+			});
 			await signInWithGithub();
 			router.push("/profile");
 		} catch (err: any) {

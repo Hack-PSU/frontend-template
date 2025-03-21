@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import LayoutProvider from "@/lib/providers/LayoutProvider";
 import "@/styles/globals.css";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
 					<Navbar />
 					{children}
 				</LayoutProvider>
+				<Analytics />
 			</body>
 		</html>
 	);
