@@ -29,47 +29,16 @@ const VenueMap: React.FC = () => {
 					color: "#eaeaea",
 					position: [200, 200],
 				},
-				{
-					id: "atrium",
-					name: "Atrium",
-					description:
-						"The central space where hackers gather, socialize, and connect.",
-					path: "M240,270 L440,270 L510,270 L550,340 L680,340 L680,450 L830,450 L830,550 L680,550 L680,610 L580,610 L580,720 L480,720 L480,850 L330,850 L330,720 L240,720 L240,610 L180,610 L180,340 Z",
-					type: "public",
-					color: "#eaeaea",
-					position: [490, 520],
-				},
-				{
-					id: "room-102",
-					name: "Hacking Space",
-					roomNumber: "102",
-					description: "Collaborative hacking space for teams of 4-6 people.",
-					path: "M330,720 L480,720 L480,770 L330,770 Z",
-					type: "hacking",
-					color: roomColors.hacking,
-					position: [410, 745],
-				},
-				{
-					id: "room-103",
-					name: "Hacking Space",
-					roomNumber: "103",
-					// No description—tooltip will not be shown.
-					path: "M330,770 L480,770 L480,820 L330,820 Z",
-					type: "hacking",
-					color: roomColors.hacking,
-					position: [410, 795],
-				},
-				{
-					id: "room-106",
-					name: "Workshop Room",
-					roomNumber: "106",
-					description:
-						"Workshop space for beginner-level coding sessions and tutorials.",
-					path: "M580,770 L680,770 L680,720 L580,720 Z",
-					type: "workshop",
-					color: roomColors.workshop,
-					position: [630, 745],
-				},
+        {
+          id: "room-124",
+          name: "Room 124",
+          roomNumber: "124",
+          description: "Hacking space",
+          path: "M229.458 316.152 242.171 248.82 333.517 268.596 320.804 336.87Z",
+          type: "hacking",
+          color: roomColors.hacking,
+          position: [280, 300],
+        },
 			],
 		},
 		{
@@ -111,7 +80,7 @@ const VenueMap: React.FC = () => {
 					style={{ fontFamily: "TiltNeon, sans-serif" }}
 				>
 					Explore the venue layout. Click on different areas to learn more about
-					the spaces where you'll be hacking, learning, and networking!
+					the spaces where you&apos;ll be hacking, learning, and networking!
 				</p>
 			</div>
 			<FloorSwitcher
