@@ -161,13 +161,13 @@ export default function Navbar() {
 							</NavbarButton>
 						))}
 				</div>
-				<a href="/" className="mx-8">
+				<a href="/" className="mx-0 max-[1100]:hidden">
 					<Image
 						src="/logo.png"
 						alt="Logo Background"
-						width={140}
-						height={140}
-						className="w-auto pt-20"
+						width={120}
+						height={120}
+						className="w-auto pt-10"
 					/>
 				</a>
 				<div className="flex flex-row space-x-1 items-center">

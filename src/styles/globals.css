@@ -45,7 +45,7 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-image: url("../../public/Website\ background.png");
+		background-image: url("../../public/Website\ Background\ \(Updated\).jpg");
 		background-size: cover;
 		background-position: top center;
 		min-height: 100vh;
@@ -60,10 +60,10 @@
 		max-width: 100px;
 		min-width: 60px;
 		position: fixed;
-		right: 50px;
+		right: 0px;
 		top: 0;
 		width: 10%;
-		z-index: 10000;
+		z-index: -1;
 	}
 
 	.frame {
