@@ -9,18 +9,3 @@
 	font-family: "cornerstone", sans-serif; /* Use the font-family defined earlier */
 }
 
-.rules-border {
-	/* Add additional styles or overrides for your .rules-border class */
-	--border-width: 8px;
-
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-  	padding: 1rem;
-
-	border-radius: var(--border-width);
-
-	border: 4px solid green;
-}
-

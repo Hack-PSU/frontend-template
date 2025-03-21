@@ -16,11 +16,11 @@ const Hero = () => {
 			id="hero"
 			className="flex flex-col items-center justify-center w-4/5 mt-8 mb-8"
 		>
-			<div className=" flex p-8 bg-[#00000040] border-4 border-[green] rounded-lg">
+			<div className=" flex p-8 bg-[#00000040] border-4 border-[darkred] rounded-lg">
 				<div className="flex flex-col gap-2">
 					<CountdownTimer />
 
-					<div className="bg-sky-500 opacity-90 rounded-md p-2">
+					<div className="bg-[darkred] opacity-90 rounded-md p-2">
 						<h2 className="font-bold text-2xl text-center cornerstone-font text-white">
 							<p className="mb-1">Penn State University</p>
 							<p className="mb-1">Business Building</p>

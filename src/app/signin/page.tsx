@@ -1,103 +1,73 @@
 "use client";
+import React, { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import Image from "next/image";
-import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import Alert from "@/components/common/Alert";
 import {
 	Google as GoogleIcon,
 	GitHub as GithubIcon,
 } from "@mui/icons-material";
+import { useFirebase } from "@/lib/providers/FirebaseProvider";
 
 const AuthPage: React.FC = () => {
 	const {
-		signUpWithEmailAndPassword,
 		loginWithEmailAndPassword,
+		signUpWithEmailAndPassword,
 		signInWithGoogle,
 		signInWithGithub,
-		isAuthenticated,
-		userDataLoaded,
 		resetPassword,
+		isAuthenticated,
 	} = useFirebase();
 	const router = useRouter();
 
-	const [authData, setAuthData] = useState<{ email: string; password: string }>(
-		{
-			email: "",
-			password: "",
-		}
-	);
-	const [isMounted, setIsMounted] = useState(false);
+	const [authData, setAuthData] = useState({ email: "", password: "" });
+	const [alertMessage, setAlertMessage] = useState("");
+	const [showAlert, setShowAlert] = useState(false);
 
-	const [showAlert, setShowAlert] = useState<boolean>(false);
-	const [alertMessage, setAlertMessage] = useState<string>("");
-
+	// Redirect authenticated users
 	useEffect(() => {
-		if (userDataLoaded && isAuthenticated) {
+		if (isAuthenticated) {
 			router.push("/profile");
 		}
-		setIsMounted(true);
-	}, [isAuthenticated, userDataLoaded, router]);
+	}, [isAuthenticated, router]);
 
-	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = event.target;
-		setAuthData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		setAuthData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = async (event: FormEvent) => {
-		event.preventDefault();
-		const { email, password } = authData;
-
-		// Attempt to sign up the user
-		const signUpRes = await signUpWithEmailAndPassword(email, password);
-		if (signUpRes.success) {
-			// Successful sign-up, proceed to register
-			await loginWithEmailAndPassword(email, password);
-			router.push("/register");
-		} else if (
-			signUpRes.error &&
-			signUpRes.error.includes("auth/email-already-in-use")
-		) {
-			// Email already in use, try signing in
-			const signInRes = await loginWithEmailAndPassword(email, password);
-			if (signInRes.success) {
-				// Successful sign-in, redirect to profile
+	const handleLogin = async (e: FormEvent) => {
+		e.preventDefault();
+		try {
+			try {
+				await loginWithEmailAndPassword(authData.email, authData.password);
 				router.push("/profile");
-			} else {
-				// Sign-in failed, show alert
-				setAlertMessage(
-					signInRes.error ? signInRes.error : "Unknown error occurred"
-				);
-				setShowAlert(true);
+			} catch (err: any) {
+				signUpWithEmailAndPassword(authData.email, authData.password);
+				router.push("/register");
 			}
-		} else {
-			// Other sign-up errors
-			setAlertMessage(
-				signUpRes.error ? signUpRes.error : "Unknown error occurred"
-			);
+		} catch (err: any) {
+			setAlertMessage(err.message || "Login failed");
 			setShowAlert(true);
 		}
 	};
 
 	const handleGoogleSignIn = async () => {
-		const res = await signInWithGoogle();
-		if (res.success) {
+		try {
+			await signInWithGoogle();
 			router.push("/profile");
-		} else {
-			setAlertMessage(res.error ? res.error : "Unknown error occurred");
+		} catch (err: any) {
+			setAlertMessage(err.message || "Google sign-in failed");
 			setShowAlert(true);
 		}
 	};
 
 	const handleGithubSignIn = async () => {
-		const res = await signInWithGithub();
-		if (res.success) {
+		try {
+			await signInWithGithub();
 			router.push("/profile");
-		} else {
-			setAlertMessage(res.error ? res.error : "Unknown error occurred");
+		} catch (err: any) {
+			setAlertMessage(err.message || "GitHub sign-in failed");
 			setShowAlert(true);
 		}
 	};
@@ -110,19 +80,17 @@ const AuthPage: React.FC = () => {
 			setShowAlert(true);
 			return;
 		}
-
-		const res = await resetPassword(authData.email);
-		if (res.success) {
+		try {
+			await resetPassword(authData.email);
 			setAlertMessage(
-				"Password reset email sent! Please check your inbox / spam folder."
+				"Password reset email sent! Please check your inbox/spam folder."
 			);
-		} else {
-			setAlertMessage(res.error ? res.error : "Error sending reset email.");
+			setShowAlert(true);
+		} catch (err: any) {
+			setAlertMessage(err.message || "Failed to send reset email");
+			setShowAlert(true);
 		}
-		setShowAlert(true);
 	};
-
-	if (!isMounted) return null;
 
 	return (
 		<>
@@ -142,7 +110,8 @@ const AuthPage: React.FC = () => {
 
 				<div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
 					<div className="bg-slate-100 px-6 py-12 shadow sm:rounded-lg sm:px-12">
-						<form className="space-y-6" onSubmit={handleSubmit}>
+						{/* Email / Password form */}
+						<form className="space-y-6" onSubmit={handleLogin}>
 							<div>
 								<label
 									htmlFor="email"
@@ -157,7 +126,7 @@ const AuthPage: React.FC = () => {
 										type="email"
 										autoComplete="email"
 										required
-										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
 										onChange={handleChange}
 									/>
 								</div>
@@ -177,23 +146,23 @@ const AuthPage: React.FC = () => {
 										type="password"
 										autoComplete="current-password"
 										required
-										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+										className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300"
 										onChange={handleChange}
 									/>
 								</div>
 							</div>
 
-							<div className="flex justify-between">
+							<div className="flex flex-col gap-3 sm:flex-row sm:items-center">
 								<button
 									type="submit"
-									className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+									className="flex-1 rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
 								>
-									Continue
+									Sign In
 								</button>
 								<button
 									type="button"
 									onClick={handleForgotPassword}
-									className="text-sm text-indigo-600 hover:text-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+									className="text-sm text-indigo-600 hover:text-indigo-500"
 								>
 									Forgot password?
 								</button>
@@ -213,7 +182,7 @@ const AuthPage: React.FC = () => {
 							<button
 								type="button"
 								onClick={handleGoogleSignIn}
-								className="flex w-full justify-center items-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								className="flex w-full items-center justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 							>
 								<GoogleIcon className="mr-2" />
 								Sign in with Google
@@ -224,7 +193,7 @@ const AuthPage: React.FC = () => {
 							<button
 								type="button"
 								onClick={handleGithubSignIn}
-								className="flex w-full justify-center items-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold leading-6 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+								className="flex w-full items-center justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
 							>
 								<GithubIcon className="mr-2" />
 								Sign in with GitHub
@@ -234,8 +203,7 @@ const AuthPage: React.FC = () => {
 
 					<div className="bg-slate-100 mt-10 p-2 shadow sm:rounded-lg sm:px-12">
 						<p className="text-center text-sm text-gray-500">
-							Already have an account? Just enter your email and password and
-							click continue.
+							Already have an account? Use the form above to sign in.
 						</p>
 					</div>
 				</div>

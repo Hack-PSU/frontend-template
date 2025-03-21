@@ -8,18 +8,26 @@ const TravelReimbursementPolicy = () => {
 			</div>
 			<div>
 				<p className="my-2">
-					HackPSU offers single travelers up to $70 in reimbursements, groups of
-					2 or 3 hackers with up to $90, and groups of 4+ hackers up to $110.
+					HackPSU offers travel reimbursements up to $110 total per participant.
 				</p>
 				<p className="my-2">
-					Participants arriving by bus or plane can be reimbursed up to $110. A
-					taxi or ride-sharing service (e.g., Lyft or Uber) can also be
-					reimbursed, but will count toward the participant&apos;s $110.
+					Those using the following methods of travel are eligible:
 				</p>
+				<ul className="list-disc ml-6 my-2">
+					<li>Bus</li>
+					<li>Plane</li>
+					<li>Ride-Sharing Service (Uber / Lyft / etc.)</li>
+					<li>Taxi</li>
+					<li>Rental Vehicle</li>
+					<li>Personal Vehicle (Gas)</li>
+				</ul>
 				<p className="my-2">
 					Original receipts must be provided at the event in order to receive
-					any reimbursement. Digital receipts are accepted for bus/plane tickets
-					and for gas on the participant&apos;s return trip only.
+					any reimbursement. Digital receipts are accepted for the participant’s
+					arrival trip only. Only the person with their name on the receipt will
+					be able to be reimbursed—receipts cannot be split among a group. For
+					all modes of travel, we require verification of your initial departure
+					point.
 				</p>
 				<p className="my-2">
 					Reimbursements may take up to 2 months. HackPSU does not reimburse

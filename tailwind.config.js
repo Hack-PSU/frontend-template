@@ -2,7 +2,13 @@
 module.exports = {
 	theme: {
 		extend: {
+			fontFamily: {
+				tiltneon: ["TiltNeon"],
+				rye: ["Rye"],
+			},
 			colors: {
+				customRed: "rgb(162,0,33)",
+				customYellow: "rgb(239,160,11)",
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
@@ -41,6 +47,27 @@ module.exports = {
 				lg: `var(--radius)`,
 				md: `calc(var(--radius) - 2px)`,
 				sm: "calc(var(--radius) - 4px)",
+			},
+			spacing: {
+				18: "4.5rem",
+				20: "5rem",
+				24: "6rem",
+				28: "7rem",
+				32: "8rem",
+				36: "9rem",
+				40: "10rem",
+				44: "11rem",
+				48: "12rem",
+				52: "13rem",
+				56: "14rem",
+				60: "15rem",
+				64: "16rem",
+				72: "18rem",
+				80: "20rem",
+				96: "24rem",
+			},
+			fontSize: {
+				xxs: "0.67rem",
 			},
 			keyframes: {
 				"accordion-down": {
