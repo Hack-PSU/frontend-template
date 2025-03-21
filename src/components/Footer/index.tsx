@@ -32,7 +32,9 @@ const Footer = () => {
 			<a href="/privacy" className="font-bold">
 				<p className="font-bold">Privacy Policy</p>
 			</a>
-			<p className="font-bold md:mb-32 text-blue-100">Made with ❤️ in Happy Valley.</p>
+			<p className="font-bold md:mb-32 text-blue-100">
+				Made with ❤️ in Happy Valley.
+			</p>
 		</section>
 	);
 };

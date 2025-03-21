@@ -21,6 +21,7 @@ import { useUpdateUser, useCreateUser, useReplaceUser } from "@/lib/api/user";
 import { useCreateRegistration } from "@/lib/api/registration";
 
 import "./register.css";
+import { track } from "@vercel/analytics/*";
 
 // Local interface for our registration form state.
 interface RegistrationData {
@@ -378,6 +379,9 @@ const Registration: React.FC = () => {
 			await createRegistrationMutation.mutateAsync({
 				userId: registrationData.id,
 				data: registration,
+			});
+			track("registration", {
+				user: registrationData.id,
 			});
 			alertFn("You are now registered for the hackathon!", "success");
 			setTimeout(() => {
