@@ -45,7 +45,7 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-image: linear-gradient(to top, #0e1e25, #d7f6ff 80%);
+		background-image: url("../../public/Website\ background.png");
 		background-size: cover;
 		background-position: top center;
 		min-height: 100vh;
