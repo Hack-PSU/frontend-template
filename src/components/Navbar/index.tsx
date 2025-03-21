@@ -111,7 +111,7 @@ export default function Navbar() {
 			}`}
 		>
 			{/* Mobile Navbar */}
-			<div className="md:hidden flex items-center justify-between h-16 px-4">
+			<div className="lg:hidden flex items-center justify-between h-16 px-4">
 				<button
 					onClick={() => router.push("/")}
 					className="text-white"
@@ -128,7 +128,7 @@ export default function Navbar() {
 				</button>
 			</div>
 			{menuOpen && (
-				<div className="md:hidden bg-customRed border-t border-customYellow">
+				<div className="lg:hidden bg-customRed border-t border-customYellow">
 					<div className="flex flex-col items-center space-y-2 p-2">
 						{buttonImages.map(({ href, alt, text, isExternal }, idx) => (
 							<NavbarButton
@@ -146,7 +146,7 @@ export default function Navbar() {
 			)}
 
 			{/* Desktop Navbar */}
-			<div className="hidden md:flex items-center justify-center relative h-16">
+			<div className="hidden lg:flex items-center justify-center relative h-16">
 				<div className="flex flex-row space-x-1 items-center">
 					{buttonImages
 						.slice(0, 3)
