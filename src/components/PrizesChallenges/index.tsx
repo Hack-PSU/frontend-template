@@ -80,17 +80,17 @@ const PrizesChallenges: React.FC = () => {
 					<AwardBox
 						title="Machine Learning"
 						description="Engineer an innovative, efficient, and scalable model to effectively address a real world problem."
-						prizes={[{ place: "Prize", amount: "$100 in cash" }]}
+						prizes={[{ place: "Prize", amount: "$100 in cash, won by the tea and split among the members" }]}
 					/>
 					<AwardBox
 						title="Entrepreneurship"
 						description="From hackathon to startup? Develop a technical solution with a robust and viable business strategy."
-						prizes={[{ place: "Prize", amount: "$100 in cash" }]}
+						prizes={[{ place: "Prize", amount: "$100 in cash, won by the tea and split among the members" }]}
 					/>
 					<AwardBox
 						title="10th Anniversary: Timeless Tech"
 						description="Draw inspiration from groundbreaking tech, media, and trends of the past and transform them into something entirely new, pushing boundaries beyond imitation."
-						prizes={[{ place: "Prize", amount: "$100 in cash" }]}
+						prizes={[{ place: "Prize", amount: "$100 in cash, won by the tea and split among the members" }]}
 					/>
 					<AwardBox
 						title="ICDS Challenge - Classification of LIDAR Data for Digital Twin/Immersive Creation"
