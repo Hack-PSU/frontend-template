@@ -21,7 +21,7 @@ import { useUpdateUser, useCreateUser, useReplaceUser } from "@/lib/api/user";
 import { useCreateRegistration } from "@/lib/api/registration";
 
 import "./register.css";
-import { track } from "@vercel/analytics/*";
+import { track } from "@vercel/analytics";
 
 // Local interface for our registration form state.
 interface RegistrationData {
