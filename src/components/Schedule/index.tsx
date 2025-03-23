@@ -117,9 +117,14 @@ const Schedule: React.FC = () => {
 		);
 	}
 
-	const categories = Object.keys(schedule).filter(
-		(category) => category !== "CheckIn"
-	);
+	// Filter out "CheckIn" and sort categories with "Food" first.
+	const categories = Object.keys(schedule)
+		.filter((category) => category !== "CheckIn")
+		.sort((a, b) => {
+			if (a === "Food") return -1;
+			if (b === "Food") return 1;
+			return a.localeCompare(b);
+		});
 
 	return (
 		<div
@@ -145,7 +150,7 @@ const Schedule: React.FC = () => {
 								)
 							}
 						>
-							{category}
+							{category === "Food" ? "General" : category}
 						</Tab>
 					))}
 				</Tab.List>
