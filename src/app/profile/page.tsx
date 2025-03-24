@@ -56,6 +56,7 @@ export default function Profile() {
 			const link = document.createElement("a");
 			link.href = blobUrl;
 			link.download = "hackpsu_pass.pkpass";
+			link.type = "application/vnd.apple.pkpass";
 			link.click();
 
 			// Clean up
