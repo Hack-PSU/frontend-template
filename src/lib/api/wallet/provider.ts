@@ -8,3 +8,12 @@ export async function createWalletPass(
 		method: "POST",
 	});
 }
+
+export async function createAppleWalletPass(userId: string): Promise<Blob> {
+	const response = await apiFetch<Blob>(`/wallet/apple/${userId}/pass`, {
+		method: "POST",
+		responseType: "blob",
+	});
+
+	return response;
+}

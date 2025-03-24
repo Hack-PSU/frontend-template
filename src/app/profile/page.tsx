@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe } from "@/lib/api/user/hook"; // or wherever it's located
-import { useCreateWalletPass } from "@/lib/api/wallet/hook"; // your custom hook
+import { useUserInfoMe } from "@/lib/api/user/hook";
+import {
+	useCreateWalletPass,
+	useCreateAppleWalletPass,
+} from "@/lib/api/wallet/hook";
 import Image from "next/image";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import googleWalletImg from "../../../public/google_wallet.svg"; // <-- import your SVG
+import googleWalletImg from "../../../public/google_wallet.svg";
+import appleWalletImg from "../../../public/apple_wallet.svg";
 import QRCode from "react-qr-code";
 import Link from "next/link";
 
@@ -16,20 +20,20 @@ export default function Profile() {
 	const router = useRouter();
 	const { data: userData } = useUserInfoMe();
 
-	// Prepare the createWalletPass mutation
+	// Mutation for Google Wallet
 	const { mutateAsync: createWalletPass } = useCreateWalletPass();
+
+	// Mutation for Apple Wallet
+	const { mutateAsync: createAppleWalletPass } = useCreateAppleWalletPass();
 
 	const [showQRCode, setShowQRCode] = useState(true);
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
-	// Handle add-to-wallet click
+	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
 		try {
-			if (!user) return; // Just a safeguard
-			// Call the mutation, passing the user’s UID (or whichever ID your backend needs)
+			if (!user) return; // Safeguard for unauthenticated users
 			const response = await createWalletPass(user.uid);
-
-			// Assuming the response has a `link` property with the URL
 			if (response?.walletLink) {
 				window.open(response.walletLink, "_blank");
 			} else {
@@ -38,6 +42,27 @@ export default function Profile() {
 		} catch (error) {
 			console.error("Error creating wallet pass:", error);
 			alert("Failed to create Google Wallet pass.");
+		}
+	};
+
+	// Handle add-to-Apple Wallet click
+	const handleAddToAppleWallet = async () => {
+		try {
+			if (!user) return;
+			const response = await createAppleWalletPass(user.uid);
+			console.log("Apple Wallet pass response:", response);
+			// open the pass in a new tab
+			const blobUrl = URL.createObjectURL(response);
+			const link = document.createElement("a");
+			link.href = blobUrl;
+			link.download = "hackpsu_pass.pkpass";
+			link.click();
+
+			// Clean up
+			URL.revokeObjectURL(blobUrl);
+		} catch (error) {
+			console.error("Error creating Apple Wallet pass:", error);
+			alert("Failed to create Apple Wallet pass.");
 		}
 	};
 
@@ -88,7 +113,7 @@ export default function Profile() {
 						<div className="mt-1 sm:mt-0 sm:flex-auto">
 							{isLoading
 								? "Loading..."
-								: userData?.firstName + " " + userData?.lastName}
+								: `${userData?.firstName} ${userData?.lastName}`}
 						</div>
 					</div>
 					<div className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:items-center">
@@ -127,8 +152,8 @@ export default function Profile() {
 					)}
 				</div>
 
-				{/* ADD TO GOOGLE WALLET BUTTON */}
-				<div className="mt-8 flex flex-col items-center">
+				{/* ADD TO WALLET BUTTONS */}
+				<div className="mt-8 flex flex-col items-center space-y-4">
 					<button
 						type="button"
 						onClick={handleAddToGoogleWallet}
@@ -137,6 +162,19 @@ export default function Profile() {
 						<Image
 							src={googleWalletImg}
 							alt="Add to Google Wallet"
+							width={200}
+							height={50}
+							priority
+						/>
+					</button>
+					<button
+						type="button"
+						onClick={handleAddToAppleWallet}
+						className="hover:opacity-80 transition-opacity duration-200"
+					>
+						<Image
+							src={appleWalletImg}
+							alt="Add to Apple Wallet"
 							width={200}
 							height={50}
 							priority
