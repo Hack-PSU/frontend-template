@@ -11,12 +11,6 @@ const nextConfig = {
 				protocol: "https",
 				hostname: "storage.googleapis.com",
 			},
-			// TODO: Set up Next.js SVG handling.
-			// {
-			//   protocol: "https",
-			//   hostname: "tools.applemediaservices.com",
-			//   pathname: "/api/badges/download-on-the-app-store/**"
-			// },
 			{
 				protocol: "https",
 				hostname: "play.google.com",
