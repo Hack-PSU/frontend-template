@@ -111,8 +111,8 @@ const PrizesChallenges: React.FC = () => {
 						]}
 					/>
 					<AwardBox
-						title="ICDS Challenge - Classification of LIDAR Data for Digital Twin/Immersive Creation"
-						description=""
+						title="ICDS Challenge - Classification of LIDAR Data for Digital Twin Creation and 3D Modeling of Spaces on Campus."
+						description="Utilizing the point cloud provided by the ICDS for the Center for Immersive Experience lab, create a script to automatically classify distinct objects within the space."
 						extra={`ICDS developed press release on winning team’s submission from HackPSU weekend to be published on ICDS website and other Penn State media channels.\n
 							Social media promotion on ICDS branded channels for winning team’s submission.\n
 							LinkedIn endorsement referencing winning team’s submission.\n
