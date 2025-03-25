@@ -11,7 +11,7 @@
     "renovate"
   ],
   "schedule": [
-    "every day"
+    "0 22 * * *"
   ],
   "lockFileMaintenance": {
     "enabled": true,
