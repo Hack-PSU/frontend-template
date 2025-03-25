@@ -1,0 +1,57 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "branchPrefix": "renovate/",
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 10,
+  "labels": [
+    "dependencies",
+    "renovate"
+  ],
+  "schedule": [
+    "every day"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "on Sunday"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": "Group Next.js and React related updates",
+      "matchPackageNames": [
+        "next",
+        "react",
+        "react-dom"
+      ],
+      "groupName": "Next/React updates"
+    },
+    {
+      "description": "Group MUI packages updates",
+      "matchPackagePatterns": [
+        "^@mui/"
+      ],
+      "groupName": "MUI updates"
+    },
+    {
+      "description": "Group Tailwind CSS updates",
+      "matchPackagePatterns": [
+        "^tailwind",
+        "^@tailwind"
+      ],
+      "groupName": "Tailwind updates"
+    },
+    {
+      "description": "Label major upgrades",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "major"
+      ]
+    }
+  ]
+}
