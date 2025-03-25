@@ -1,4 +1,6 @@
-import { FaEnvelope, FaInstagram, FaLinkedin } from "react-icons/fa";
+import EmailIcon from "@mui/icons-material/Email";
+import InstagramIcon from "@mui/icons-material/Instagram";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 const Footer = () => {
 	const social_size = 40;
@@ -11,24 +13,24 @@ const Footer = () => {
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<FaInstagram size={social_size} />
+					<InstagramIcon style={{ fontSize: social_size }} />
 				</a>
 				<a
 					href="https://www.linkedin.com/company/hackpsuofficial/"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<FaLinkedin size={social_size} />
+					<LinkedInIcon style={{ fontSize: social_size }} />
 				</a>
 				<a
 					href="mailto:team@hackpsu.org"
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					<FaEnvelope size={social_size} />
+					<EmailIcon style={{ fontSize: social_size }} />
 				</a>
 			</div>
-			{/* privacy policy*/}
+			{/* privacy policy */}
 			<a href="/privacy" className="font-bold">
 				<p className="font-bold">Privacy Policy</p>
 			</a>

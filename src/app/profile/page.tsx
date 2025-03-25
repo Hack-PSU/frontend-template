@@ -26,7 +26,7 @@ export default function Profile() {
 	// Mutation for Apple Wallet
 	const { mutateAsync: createAppleWalletPass } = useCreateAppleWalletPass();
 
-	const [showQRCode, setShowQRCode] = useState(true);
+	const [showQRCode, setShowQRCode] = useState(false);
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	// Handle add-to-Google Wallet click

@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 type BigButtonProps = {
 	children?: React.ReactNode;
@@ -25,10 +26,11 @@ const BigButton = ({
 			whileTap={{ scale: 0.9 }}
 		>
 			{background ? (
-				<img
+				<Image
 					src={background.src}
-					className={`w-full ${className || ""}`}
 					alt="big-button"
+					width={background.width}
+					height={background.height}
 				/>
 			) : (
 				<></>
