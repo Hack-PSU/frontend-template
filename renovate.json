@@ -10,6 +10,9 @@
     "dependencies",
     "renovate"
   ],
+  "schedule": [
+    "every day"
+  ],
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": [
