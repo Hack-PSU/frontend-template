@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import useScroll from "@/lib/hooks/use-scroll";
@@ -23,27 +24,43 @@ const NavbarButton: React.FC<NavbarButtonProps> = ({
 	children,
 	onClick,
 }) => {
+	const content = (
+		<div className="relative w-40 h-24">
+			{/* Using Next.js 13 "fill" prop to cover the container */}
+			<Image
+				src="/Navbar.svg"
+				alt={alt}
+				fill
+				className="rounded-md object-cover"
+			/>
+			<span className="absolute inset-0 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
+				{children.toUpperCase()}
+			</span>
+		</div>
+	);
+
+	if (isExternal) {
+		return (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				onClick={onClick}
+				className="relative transition-all duration-150 ease-in-out hover:scale-105"
+			>
+				{content}
+			</a>
+		);
+	}
+
 	return (
-		<a
+		<Link
 			href={href}
-			target={isExternal ? "_blank" : "_self"}
-			rel={isExternal ? "noopener noreferrer" : undefined}
 			onClick={onClick}
 			className="relative transition-all duration-150 ease-in-out hover:scale-105"
 		>
-			<div className="relative w-40 h-24">
-				{/* Using Next.js 13 "fill" prop to cover the container */}
-				<Image
-					src="/Navbar.svg"
-					alt={alt}
-					fill
-					className="rounded-md object-cover"
-				/>
-				<span className="absolute inset-0 flex items-center justify-center font-rye text-[10px] md:text-[10px] xl:text-[12px] text-black">
-					{children.toUpperCase()}
-				</span>
-			</div>
-		</a>
+			{content}
+		</Link>
 	);
 };
 
@@ -81,7 +98,7 @@ export default function Navbar() {
 			isExternal: false,
 		},
 		{
-			href: isHome ? "#workshops" : "/#schedule",
+			href: isHome ? "#schedule" : "/#schedule",
 			alt: "workshops",
 			text: "workshops",
 			isExternal: false,
@@ -161,7 +178,7 @@ export default function Navbar() {
 							</NavbarButton>
 						))}
 				</div>
-				<a href="/" className="mx-0 max-[1100]:hidden">
+				<Link href="/" className="mx-0 max-[1100]:hidden">
 					<Image
 						src="/logo.png"
 						alt="Logo Background"
@@ -169,7 +186,7 @@ export default function Navbar() {
 						height={120}
 						className="w-auto pt-10"
 					/>
-				</a>
+				</Link>
 				<div className="flex flex-row space-x-1 items-center">
 					{buttonImages
 						.slice(3)
