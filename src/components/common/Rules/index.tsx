@@ -1,6 +1,7 @@
 import React from "react";
 import Divider from "../Divider";
 import "./rules.css";
+import Image from "next/image";
 
 const rules = [
 	"All participants must be at least 18 years old and a student of some university (or a recent PSU graduate within less than one year). All participants must bring a valid form of identification.",
@@ -20,7 +21,7 @@ const Rules = () => (
 			<Divider />
 		</div>
 		<div className="w-full md:w-full lg:w-2/3 mx-auto relative">
-			<img src="Text Box.svg" alt="rules-asset" className="w-full h-auto" />
+			<Image src="/Text Box.svg" alt="rules-asset" width={1000} height={1000} />
 			{/* Center the Rules List */}
 			<div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[85%] h-auto max-h-[80%] overflow-y-auto p-4 flex justify-center">
 				<ul className="list-inside list-disc text-black font-tilt-neon text-md md:text-lg text-left space-y-1">
