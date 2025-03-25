@@ -1,6 +1,7 @@
 import ReactCardFlip from "react-card-flip";
 import React, { useState } from "react";
 import "./index.css";
+import Image from "next/image";
 
 interface Props {
 	question: string;
@@ -22,9 +23,11 @@ export default function Card({ question, answer, link }: Props) {
 		<ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
 			{/* Front Side */}
 			<div onClick={handleClick} className="card-front w-full h-110 relative">
-				<img
+				<Image
 					src="/FAQ_Back.png"
 					alt="Front"
+					width={1000}
+					height={1000}
 					className="w-full h-full object-cover rounded-md"
 				/>
 				<div className="absolute inset-0 flex flex-col justify-center items-center px-20">
@@ -36,9 +39,11 @@ export default function Card({ question, answer, link }: Props) {
 
 			{/* Back Side */}
 			<div onClick={handleClick} className="card-back w-full h-110 relative">
-				<img
+				<Image
 					src="/FAQ_Front.png"
 					alt="Back"
+					width={1000}
+					height={1000}
 					className="w-full h-full object-cover rounded-md"
 				/>
 				<div className="absolute inset-0 flex flex-col justify-center items-center px-20">
