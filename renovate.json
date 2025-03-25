@@ -4,8 +4,8 @@
     "config:recommended"
   ],
   "branchPrefix": "renovate/",
-  "prConcurrentLimit": 5,
-  "prHourlyLimit": 2,
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 10,
   "labels": [
     "dependencies",
     "renovate"
