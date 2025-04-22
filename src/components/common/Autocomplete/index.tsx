@@ -18,6 +18,7 @@ const Autocomplete: React.FC<Props> = ({
 	searchTermMin = 2,
 }) => {
 	const [query, setQuery] = useState("");
+	const [selected, setSelected] = useState("");
 
 	const getData = (data: string): object => {
 		switch (data) {
@@ -36,27 +37,29 @@ const Autocomplete: React.FC<Props> = ({
 
 	const options = Object.keys(getData(data));
 
+	const safeQuery = query ?? "";
 	const filteredData =
-		query.length >= searchTermMin
+		safeQuery.length >= searchTermMin
 			? options.filter((item) =>
-					item.toLowerCase().includes(query.toLowerCase())
+					item.toLowerCase().includes(safeQuery.toLowerCase())
 				)
 			: [];
 
 	const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value;
 		onSelectionChange(data, value);
-		setQuery(value);
+		setQuery(value ?? "");
 	};
 
 	const handleSelectionChange = (selection: string) => {
 		onSelectionChange(data, selection);
-		setQuery(selection);
+		setSelected(selection);
+		setQuery(selection ?? "");
 	};
 
 	return (
 		<div className="combobox" id={`${data}-autocomplete`}>
-			<Combobox value={query} onChange={handleSelectionChange} as="ul">
+			<Combobox value={selected} onChange={handleSelectionChange} as="ul">
 				<Combobox.Input
 					className="combobox-input"
 					onChange={handleTextChange}
