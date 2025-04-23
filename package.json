@@ -7,8 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
-		"fmt": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\"",
-		"prepare": "husky"
+		"fmt": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
