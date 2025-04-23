@@ -5,7 +5,7 @@ if ! yarn lint; then
   failures="${failures}lint "
 fi
 
-if ! yarn format; then
+if ! yarn fmt; then
   failures="${failures}format "
 fi
 
