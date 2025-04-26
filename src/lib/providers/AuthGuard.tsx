@@ -42,11 +42,7 @@ const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
 	}, [isLoading, isAuthenticated, pathname, router, userData]);
 
 	if (isLoading) {
-		return (
-			<>
-				<FullScreenLoading />
-			</>
-		);
+		return <></>;
 	}
 
 	return <>{children}</>;
