@@ -4,14 +4,14 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
-import Image from "next/image";
 
+// --- Section type & data ---
 type Section = {
 	id: string;
 	label: string;
 	content: string;
-	color: string; // brand color with opacity
-	textColor: string; // for contrast
+	color: string; // brand color (hex or rgba)
+	textColor: string; // text contrast color
 };
 
 const SECTIONS: Section[] = [
@@ -19,24 +19,24 @@ const SECTIONS: Section[] = [
 		id: "about",
 		label: "About",
 		content:
-			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators.",
-		color: "rgba(242, 92, 84, 0.8)", // #F25C54 + 80% opacity
-		textColor: "#ffffff",
+			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows.",
+		color: "#ffffff",
+		textColor: "#000000",
 	},
 	{
 		id: "rules",
 		label: "Rules",
 		content:
 			"All code must be written during the 48-hour hackathon window. No pre-built assets except open-source libraries.",
-		color: "rgba(24, 56, 92, 0.8)", // #18385C + 80% opacity
-		textColor: "#ffffff",
+		color: "#ffffff",
+		textColor: "#000000",
 	},
 	{
 		id: "prepare",
 		label: "How to Prepare",
 		content:
 			"Form a team, brush up on your stack, check out prior projects, and come with an open mind to learn and build!",
-		color: "rgba(218, 183, 133, 0.8)", // #DAB785 + 80% opacity
+		color: "#ffffff",
 		textColor: "#000000",
 	},
 ];
@@ -48,16 +48,15 @@ const STATS = [
 	{ label: "Hours", value: 48 },
 ];
 
-// inverted-triangle slots on a 3-column grid
-const SLOT_CLASSES = [
-	"col-start-1 row-start-1 justify-self-center", // top-left
-	"col-start-3 row-start-1 justify-self-center", // top-right
-	"col-start-2 row-start-2 justify-self-center", // bottom-center
+// responsive absolute positions via Tailwind classes
+const SLOT_CLASSES: string[] = [
+	// slot 0: top-left
+	"absolute top-0 left-4 sm:left-8 md:left-12 lg:left-[25%] xl:left-[25%]",
+	// slot 1: top-right
+	"absolute top-0 right-4 sm:right-8 md:right-12 lg:-right-[67%] lg:-top-[17%] xl:-right-[58%] xl:-top-[17%]",
+	// slot 2: bottom-center
+	"absolute bottom-0 left-1/2 sm:bottom-4 md:bottom-8 lg:bottom-[31%] lg:left-[25%] xl:bottom-[35%] xl:left-[25%]",
 ];
-
-// hexagon clip-path
-const HEX_CLIP =
-	"polygon(25% 6.7%,75% 6.7%,100% 50%,75% 93.3%,25% 93.3%,0% 50%)";
 
 export const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
@@ -76,11 +75,12 @@ export const InfoSections: React.FC = () => {
 	}
 
 	return (
-		<div className="max-w-7xl mx-auto px-6 py-12 space-y-16">
-			{/* top: hex ring + info box */}
-			<div className="flex items-center justify-between">
-				<div className="relative w-1/2 h-[350px]">
-					<div className="absolute inset-0 grid grid-cols-3 grid-rows-2 gap-2">
+		<div className="bg-[#D8FFFC]">
+			<div className="max-w-7xl mx-auto px-6 py-12 space-y-16 bg-[#D8FFFC]">
+				{/* top: hex ring + info box */}
+				<div className="flex flex-col md:flex-row items-center justify-between">
+					{/* hexagon container (relative) */}
+					<div className="relative w-full md:w-1/2 h-64 md:h-[450px]">
 						{order.map((section, idx) => (
 							<Hex
 								key={section.id}
@@ -90,55 +90,54 @@ export const InfoSections: React.FC = () => {
 							/>
 						))}
 					</div>
+
+					{/* info panel shows whichever is in slot 0 */}
+					<motion.div
+						key={order[0].id}
+						initial={{ opacity: 0, x: 20 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: 20 }}
+						className="w-full md:w-1/3 rounded-xl shadow-lg p-6 bg-white/90 backdrop-blur-sm mt-8 md:mt-0"
+						style={{ borderLeft: `6px solid #86CFFC` }}
+					>
+						<h3 className="text-2xl font-semibold mb-2">{order[0].label}</h3>
+						<p className="text-gray-700">{order[0].content}</p>
+					</motion.div>
 				</div>
 
-				{/* info panel shows whichever is in slot 0 */}
-				<motion.div
-					key={order[0].id}
-					initial={{ opacity: 0, x: 20 }}
-					animate={{ opacity: 1, x: 0 }}
-					exit={{ opacity: 0, x: 20 }}
-					className="w-1/3 rounded-xl shadow-lg p-6 bg-white/90 backdrop-blur-sm"
-					style={{ borderLeft: `4px solid ${order[0].color}` }}
-				>
-					<h3 className="text-xl font-semibold mb-2">{order[0].label}</h3>
-					<p className="text-gray-700">{order[0].content}</p>
-				</motion.div>
-			</div>
-
-			{/* bottom stats */}
-			<div className="flex justify-center space-x-12">
-				{STATS.map((s, i) => {
-					// alternate two remaining brand colors for stats
-					const colors = ["#B9E6FF", "#048A81"];
-					return (
-						<div key={s.label} className="text-center">
-							<span
-								className="text-4xl font-bold"
-								style={{ color: colors[i % colors.length] }}
-							>
-								{s.value}
-							</span>
-							<p className="text-sm uppercase mt-1 text-gray-600">{s.label}</p>
-						</div>
-					);
-				})}
+				{/* bottom stats */}
+				<div className="flex flex-wrap justify-center gap-x-12 gap-y-6">
+					{STATS.map((s, i) => {
+						const colors = ["#86CFFC", "#048A81"];
+						return (
+							<div key={s.label} className="text-center w-1/2 sm:w-auto">
+								<span
+									className="text-3xl sm:text-4xl font-bold comic-relief"
+									style={{ color: colors[i % colors.length] }}
+								>
+									{s.value}
+								</span>
+								<p className="text-sm uppercase mt-1 text-gray-600">
+									{s.label}
+								</p>
+							</div>
+						);
+					})}
+				</div>
 			</div>
 		</div>
 	);
 };
 
-function Hex({
-	section,
-	slot,
-	onClick,
-}: {
+// Hexagon component with absolute positioning and responsive classes
+interface HexProps {
 	section: Section;
 	slot: number;
 	onClick: () => void;
-}) {
-	// scale up the selected (slot 0) hex
-	const scale = slot === 0 ? 1.8 : 1;
+}
+
+function Hex({ section, slot, onClick }: HexProps) {
+	const scale = slot === 0 ? 1.6 : 1;
 
 	return (
 		<motion.div
@@ -148,15 +147,20 @@ function Hex({
 			onClick={onClick}
 			className={clsx(
 				SLOT_CLASSES[slot],
-				"cursor-pointer shadow-md w-36 h-36 flex items-center justify-center"
+				"cursor-pointer w-24 h-24 sm:w-48 sm:h-48 flex items-center justify-center relative"
 			)}
-			style={{
-				clipPath: HEX_CLIP,
-				backgroundColor: section.color,
-			}}
 		>
+			<svg viewBox="0 0 120 100" className="absolute inset-0 w-full h-full">
+				<path
+					d="M38,2 L82,2 A12,12 0 0,1 94,10 L112,44 A12,12 0 0,1 112,56 L94,90 A12,12 0 0,1 82,98 L38,98 A12,12 0 0,1 26,90 L8,56 A12,12 0 0,1 8,44 L26,10 A12,12 0 0,1 38,2"
+					fill={section.color}
+					fillOpacity={0.1}
+					stroke="#86CFFC"
+					strokeWidth={7}
+				/>
+			</svg>
 			<span
-				className="text-center px-2 font-medium"
+				className="relative z-10 px-2 font-medium text-center text-sm sm:text-xl"
 				style={{ color: section.textColor }}
 			>
 				{section.label}

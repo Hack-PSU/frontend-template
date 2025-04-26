@@ -5,7 +5,15 @@ module.exports = {
 			fontFamily: {
 				tiltneon: ["TiltNeon"],
 				rye: ["Rye"],
+				"comic-relief": ["Comic Relief"],
 			},
+			screens: {
+				sm: '640px',   // small
+				md: '768px',   // medium
+				lg: '1024px',  // large
+				xl: '1280px',  // extra-large
+				'2xl': '1536px',
+			  },
 			colors: {
 				customRed: "rgb(162,0,33)",
 				customYellow: "rgb(239,160,11)",
