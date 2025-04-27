@@ -5,6 +5,7 @@ import LayoutProvider from "@/lib/providers/LayoutProvider";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import {GoogleAnalytics} from "@next/third-parties/google"
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			<GoogleAnalytics gaId="G-C6W09RB27P" />
 			<body className={inter.className}>
 				<LayoutProvider>
 					<Navbar />
