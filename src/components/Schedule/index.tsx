@@ -99,7 +99,7 @@ function HexButton({
 
 export default function ScheduleClient({
 	hackathonId,
-	ignoreList = ["45"],
+	ignoreList = ["70"],
 }: {
 	hackathonId?: string;
 	ignoreList?: string[];

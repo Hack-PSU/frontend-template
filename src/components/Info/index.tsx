@@ -4,6 +4,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
+import Image from "next/image";
 
 // --- Section type & data ---
 type Section = {
@@ -76,6 +77,70 @@ export const InfoSections: React.FC = () => {
 
 	return (
 		<div className="bg-[#D8FFFC]">
+			<motion.div
+				className="absolute sm:bottom-0 sm:left-0 md:bottom-0 md:left-0 lg:bottom-[0%] lg:left-[0%] xl:bottom-[0%] xl:left-[0%]"
+				animate={{
+					rotate: [0, 15, 0],
+					x: ["0"],
+					y: ["0px", "75px", "0px"],
+				}}
+				transition={{
+					duration: 6,
+					repeat: Infinity,
+					ease: "linear",
+				}}
+			>
+				<Image
+					src="/duck.png"
+					alt="Ball"
+					width={200}
+					height={200}
+					className=""
+				/>
+			</motion.div>
+			<motion.div
+				className="absolute sm:bottom-0 sm:right-0 md:bottom-0 md:right-0 lg:bottom-[0%] lg:right-[0%] xl:bottom-[-3%] xl:right-[20%]"
+				animate={{
+					rotate: [0, -30, 0],
+					x: ["0"],
+					y: ["0px", "0px", "0px"],
+				}}
+				transition={{
+					duration: 6,
+					repeat: Infinity,
+					ease: "linear",
+				}}
+			>
+				<Image
+					src="/donut.png"
+					alt="Ball"
+					width={200}
+					height={200}
+					className=""
+				/>
+			</motion.div>
+			<motion.div
+				className="absolute sm:bottom-0 sm:right-0 md:bottom-0 md:right-0 lg:bottom-[0%] lg:right-[0%] xl:bottom-[-10%] xl:right-[3%]"
+				animate={{
+					rotate: [180, 210, 180],
+					x: ["0"],
+					y: ["0px", "0px", "0px"],
+				}}
+				transition={{
+					duration: 6,
+					repeat: Infinity,
+					ease: "linear",
+				}}
+			>
+				<Image
+					src="/flamingo.png"
+					alt="Ball"
+					width={200}
+					height={200}
+					className=""
+				/>
+			</motion.div>
+
 			<div className="max-w-7xl mx-auto px-6 py-12 space-y-16 bg-[#D8FFFC]">
 				{/* top: hex ring + info box */}
 				<div className="flex flex-col md:flex-row items-center justify-between">

@@ -1,57 +1,110 @@
-import Image from "next/image";
+"use client";
+
 import React from "react";
-import Divider from "../common/Divider";
-import "./sponsors.css";
 import { useAllSponsors } from "@/lib/api/sponsor/hook";
+import { SponsorEntity } from "@/lib/api/sponsor/entity";
 
-export default function Sponsors() {
-	// Use the React Query hook to fetch sponsors.
-	const { data: sponsors, isLoading, error } = useAllSponsors();
+type Level = "gold" | "silver" | "bronze";
+const LEVELS: Level[] = ["gold", "silver", "bronze"];
 
+const MAX_COLS: Record<Level, number> = {
+	gold: 3,
+	silver: 4,
+	bronze: 6,
+};
+
+const LOGO_SIZES: Record<Level, string> = {
+	gold: "h-24",
+	silver: "h-20",
+	bronze: "h-16",
+};
+
+export default function Sponsors({ hackathonId }: { hackathonId?: string }) {
+	const { data: sponsors = [], isLoading } = useAllSponsors(hackathonId);
 	if (isLoading) {
-		return <div>Loading sponsors...</div>;
+		return (
+			<div className="py-12 text-center text-white">Loading sponsors…</div>
+		);
 	}
 
-	if (error || !sponsors) {
-		return <div>Error loading sponsors.</div>;
-	}
-
-	// Sort sponsors by the 'order' property.
-	const sortedSponsors = sponsors.sort((a, b) => a.order - b.order);
+	// group & sort
+	const grouped: Record<Level | "others", SponsorEntity[]> = {
+		gold: [],
+		silver: [],
+		bronze: [],
+		others: [],
+	};
+	sponsors.forEach((s) => {
+		const lvl = (s.level || "").toLowerCase() as Level;
+		if (LEVELS.includes(lvl)) grouped[lvl].push(s);
+		else grouped.others.push(s);
+	});
+	(Object.keys(grouped) as Array<Level | "others">).forEach((lvl) => {
+		grouped[lvl].sort((a, b) => a.order - b.order);
+	});
 
 	return (
-		<section
-			id="sponsors"
-			className="flex flex-col items-center w-full mt-20 font-['rye'] text-[#A20021] text-[4rem]"
-		>
-			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
-				<p>Sponsors</p>
-				<Divider />
-			</div>
-			<div className="bg-transparent mt-8">
-				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-10 items-center">
-					{sortedSponsors.map((sponsor) => (
-						<div key={sponsor.id} className="sponsor-container">
-							<a
-								href={sponsor.link}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="cursor-pointer"
-							>
-								<div className="sponsor-card">
-									<Image
-										className="object-contain"
-										src={sponsor.darkLogo || ""}
-										alt={sponsor.name}
-										width={458}
-										height={48}
-									/>
-								</div>
-							</a>
-						</div>
-					))}
-				</div>
+		<section className="py-12 bg-[#3689CB] px-6">
+			<div className="max-w-6xl mx-auto space-y-12">
+				{LEVELS.map(
+					(level) =>
+						grouped[level].length > 0 && (
+							<LogoGrid key={level} level={level} items={grouped[level]} />
+						)
+				)}
+
+				{grouped.others.length > 0 && (
+					<LogoGrid level="others" items={grouped.others} />
+				)}
 			</div>
 		</section>
+	);
+}
+
+function LogoGrid({
+	level,
+	items,
+}: {
+	level: Level | "others";
+	items: SponsorEntity[];
+}) {
+	const isTier = level !== "others";
+	const maxCols = isTier ? MAX_COLS[level as Level] : 6;
+	const sizeClass = isTier ? LOGO_SIZES[level as Level] : "h-16";
+
+	// break items into rows of maxCols
+	const rows: SponsorEntity[][] = [];
+	for (let i = 0; i < items.length; i += maxCols) {
+		rows.push(items.slice(i, i + maxCols));
+	}
+
+	return (
+		<div className="space-y-8">
+			{rows.map((row, idx) => (
+				<div
+					key={idx}
+					className="grid gap-8 justify-items-center"
+					style={{
+						gridTemplateColumns: `repeat(${row.length}, minmax(0, 1fr))`,
+					}}
+				>
+					{row.map((s) => (
+						<a
+							key={s.id}
+							href={s.link}
+							target="_blank"
+							rel="noopener noreferrer"
+							className="bg-white rounded-lg p-4 shadow hover:shadow-lg transition"
+						>
+							<img
+								src={s.darkLogo || s.lightLogo}
+								alt={s.name}
+								className={`${sizeClass} object-contain mx-auto`}
+							/>
+						</a>
+					))}
+				</div>
+			))}
+		</div>
 	);
 }
