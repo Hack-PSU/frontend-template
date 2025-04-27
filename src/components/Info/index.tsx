@@ -233,5 +233,3 @@ function Hex({ section, slot, onClick }: HexProps) {
 		</motion.div>
 	);
 }
-
-export default InfoSections;

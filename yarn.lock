@@ -1462,13 +1462,6 @@
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-1.0.3.tgz#a73bab8eb491d7b8b7be2f0e6c310647835afe83"
   integrity sha512-2xCRM9q9FlzGZCdgDMJwc0gyUkWFtkosy7Xxr6sFgQwn+wMNIWd7xIvYNauU1r64B5L5rsGKy/n9TKJ0aAFeqQ==
 
-"@fireworks-js/react@^2.10.8":
-  version "2.10.8"
-  resolved "https://registry.yarnpkg.com/@fireworks-js/react/-/react-2.10.8.tgz#3667d6715a1fd8c30bf526b0f42ed0d3f9006e68"
-  integrity sha512-Qy/HSiTnph2IT2LHVzo9Ov+zifGQboTICjVLyrp/sWMHZoaodZiW0xrFxN1RfYI3R7j5bNZmf6S9EzqOWPfFWA==
-  dependencies:
-    fireworks-js "2.10.8"
-
 "@floating-ui/core@^1.6.0":
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-1.6.9.tgz#64d1da251433019dafa091de9b2886ff35ec14e6"
@@ -4430,11 +4423,6 @@ firebase@^11.0.0:
     "@firebase/util" "1.11.0"
     "@firebase/vertexai" "1.2.0"
 
-fireworks-js@2.10.8:
-  version "2.10.8"
-  resolved "https://registry.yarnpkg.com/fireworks-js/-/fireworks-js-2.10.8.tgz#b161c9f905ac96f9cbb1635603eda9dbe1d99d22"
-  integrity sha512-UZNxeJvRmQzLisN4iriWXqKojG9TDJqc0dPmkUw0/+AEQQ3w8z1Jx2YdFSiBGSVb/u4dPTQXU109GMVblzhfpg==
-
 flat-cache@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/flat-cache/-/flat-cache-4.0.1.tgz#0ece39fcb14ee012f4b0410bd33dd9c1f011127c"
@@ -5898,11 +5886,6 @@ queue-microtask@^1.2.2:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/queue-microtask/-/queue-microtask-1.2.3.tgz#4929228bbc724dfac43e0efb058caf7b6cfb6243"
   integrity sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==
-
-react-card-flip@^1.2.3:
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/react-card-flip/-/react-card-flip-1.2.3.tgz#befca5fa41fcaa7c62ca6035a69b3dc3ded1bc3c"
-  integrity sha512-yb8+yyeTf5UVlZ/FC78XDgxYeWhgA0W28OXNB31LjiFeY1Y2kFhLP7bFiED4KNaRWKjaafT74G38XU53a6eIuw==
 
 react-dom@^19.0.0:
   version "19.0.0"
