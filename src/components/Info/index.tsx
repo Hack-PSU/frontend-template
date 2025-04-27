@@ -59,7 +59,7 @@ const SLOT_CLASSES: string[] = [
 	"absolute bottom-0 left-1/2 sm:bottom-4 md:bottom-8 lg:bottom-[31%] lg:left-[25%] xl:bottom-[35%] xl:left-[25%]",
 ];
 
-export const InfoSections: React.FC = () => {
+const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
 
 	// rotate array left by `steps`
@@ -233,3 +233,5 @@ function Hex({ section, slot, onClick }: HexProps) {
 		</motion.div>
 	);
 }
+
+export default InfoSections;
