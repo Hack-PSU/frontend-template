@@ -23,7 +23,7 @@ const Hero = () => {
 					<div className="bg-[darkred] opacity-90 rounded-md p-2">
 						<h2 className="font-bold text-2xl text-center cornerstone-font text-white">
 							<p className="mb-1">Penn State University</p>
-							<p className="mb-1">Business Building</p>
+							<p className="mb-1">ECoRE Building</p>
 							<p className="mb-1">{settings.hackathonDateRepr}</p>
 						</h2>
 						{settings.isLive ? <h2>12 Hours Left</h2> : <></>}
