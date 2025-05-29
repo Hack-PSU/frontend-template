@@ -9,7 +9,7 @@ const faqs = [
 	{
 		question: "Where can I go to get help?",
 		answer:
-			"We have an info booth in the Business Building lobby! You can also see any member of the HackPSU organizing team at the event.",
+			"We have an info booth in the ECoRE Building lobby! You can also see any member of the HackPSU organizing team at the event.",
 	},
 	{
 		question: "Do I need to stay at the event the whole time?",
