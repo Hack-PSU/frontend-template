@@ -20,91 +20,103 @@ const MLHForm: React.FC<MLHFormProps> = ({
   mlhDcp, onMlhDcpChange, mlhDcpError,
   shareEmailMlh, onShareEmailMlhChange,
 }) => {
+  // Helper for styling error messages
+  const errorLabelClass = "text-[var(--destructive)] text-sm font-medium mt-1 block"; // Added mt-1 and block
+  // Helper for info text
+  const infoTextClass = "text-xs text-slate-500 mt-1"; // Mapped from .info
+
   return (
     <>
       {/* MLH Code of Conduct */}
-      <div className="card" id="mlhCoc-section"> {/* Changed ID */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="mlhCoc-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           Do you agree to the MLH Code of Conduct?
         </div>
-        <span>
-          <p className="inline">I have read and agree to the&nbsp;</p>
-          <a
-            href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline" // Basic link styling
-          >
-            MLH Code of Conduct
-          </a>
-          <p className="info">
+        <div className="text-center mb-3"> {/* Centered text and toggle */}
+          <span className="text-sm text-gray-700"> {/* Standard label class styling */}
+            I have read and agree to the&nbsp;
+            <a
+              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              MLH Code of Conduct
+            </a>
+          </span>
+          <p className={infoTextClass}>
             To participate at HackPSU, you must agree to this policy.
           </p>
-        </span>
-        <ToggleSwitch
-          name="mlhCoc"
-          on="Yes"
-          off="No"
-          checked={mlhCoc}
-          onChange={onMlhCocChange}
-        />
-        {mlhCocError && <label className="data-error">{mlhCocError}</label>}
-        {!mlhCoc && !mlhCocError && <label className="data-error">Required (must be Yes)</label>}
+        </div>
+        <div className="flex justify-center mb-2">
+          <ToggleSwitch
+            name="mlhCoc"
+            on="Yes"
+            off="No"
+            checked={mlhCoc}
+            onChange={onMlhCocChange}
+          />
+        </div>
+        {mlhCocError && <label className={errorLabelClass}>{mlhCocError}</label>}
+        {!mlhCoc && !mlhCocError && <label className={errorLabelClass}>Required (must be Yes)</label>}
       </div>
 
       {/* MLH Data Sharing */}
-      <div className="card" id="mlhDcp-section"> {/* Changed ID */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="mlhDcp-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           Do you agree to the MLH Data Sharing?
         </div>
-        <span>
-          By agreeing, you authorize MLH to share your registration
-          information with event sponsors and MLH as outlined in the{" "}
-          <a
-            href="https://mlh.io/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 hover:underline" // Basic link styling
-          >
-            MLH Privacy Policy
-          </a>
-          .
-          <p className="info">
+        <div className="text-center mb-3"> {/* Centered text and toggle */}
+          <span className="text-sm text-gray-700">
+            By agreeing, you authorize MLH to share your registration
+            information with event sponsors and MLH as outlined in the&nbsp;
+            <a
+              href="https://mlh.io/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-600 hover:underline"
+            >
+              MLH Privacy Policy
+            </a>.
+          </span>
+          <p className={infoTextClass}>
             To participate at HackPSU, you must agree to this policy.
           </p>
-        </span>
-        <ToggleSwitch
-          name="mlhDcp"
-          on="Yes"
-          off="No"
-          checked={mlhDcp}
-          onChange={onMlhDcpChange}
-        />
-        {mlhDcpError && <label className="data-error">{mlhDcpError}</label>}
-        {!mlhDcp && !mlhDcpError && <label className="data-error">Required (must be Yes)</label>}
+        </div>
+        <div className="flex justify-center mb-2">
+          <ToggleSwitch
+            name="mlhDcp"
+            on="Yes"
+            off="No"
+            checked={mlhDcp}
+            onChange={onMlhDcpChange}
+          />
+        </div>
+        {mlhDcpError && <label className={errorLabelClass}>{mlhDcpError}</label>}
+        {!mlhDcp && !mlhDcpError && <label className={errorLabelClass}>Required (must be Yes)</label>}
       </div>
 
       {/* Share Email with MLH */}
-      <div className="card" id="shareEmailMlh-section"> {/* Changed ID */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="shareEmailMlh-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           Do you want to opt into further communications from MLH?
         </div>
-        <span>
-          <p className="inline">
+        <div className="text-center mb-3"> {/* Centered text and toggle */}
+          <span className="text-sm text-gray-700">
             I authorize MLH to send me occasional emails about
             relevant events and opportunities.
-          </p>
-          <br />
-          <br />
-          <p className="info">This is entirely optional.</p>
-        </span>
-        <ToggleSwitch
-          name="shareEmailMlh"
-          on="Yes"
-          off="No"
-          checked={shareEmailMlh}
-          onChange={onShareEmailMlhChange}
-        />
+          </span>
+          <p className={`${infoTextClass} mt-2`}>This is entirely optional.</p>
+        </div>
+        <div className="flex justify-center">
+          <ToggleSwitch
+            name="shareEmailMlh"
+            on="Yes"
+            off="No"
+            checked={shareEmailMlh}
+            onChange={onShareEmailMlhChange}
+          />
+        </div>
         {/* No error display for this optional field */}
       </div>
     </>

@@ -90,13 +90,18 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
   // Helper to check if a race option is selected
   const isRaceSelected = (value: string) => race.split(',').includes(value);
 
+  // Helper for styling error messages
+  const errorLabelClass = "text-[var(--destructive)] text-sm font-medium";
+  // Helper for standard labels
+  const standardLabelClass = "text-sm font-medium text-gray-700"; // Assuming #2d3748 maps to gray-700
+
   return (
     <>
       {/* Name */}
-      <div className="card" id="name">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="name">
         <div>
-          <div className="card-header">What is your name?</div>
-          <label htmlFor="firstName" className="label">
+          <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your name?</div>
+          <label htmlFor="firstName" className={standardLabelClass}>
             First Name
           </label>
           <div className="my-2">
@@ -105,11 +110,11 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
               name="firstName"
               value={firstName}
               onChange={(e) => onFirstNameChange(e.target.value)}
-              className={firstNameError ? "input-error" : ""} // Basic error styling
+              // className={firstNameError ? "input-error" : ""} // Assuming input base styles handle error states from CSS
             />
           </div>
-          {firstNameError && <label className="data-error">{firstNameError}</label>}
-          <label htmlFor="lastName" className="label">
+          {firstNameError && <label className={errorLabelClass}>{firstNameError}</label>}
+          <label htmlFor="lastName" className={`${standardLabelClass} mt-4 block`}>
             Last Name
           </label>
           <div className="my-2">
@@ -118,86 +123,85 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
               name="lastName"
               value={lastName}
               onChange={(e) => onLastNameChange(e.target.value)}
-              className={lastNameError ? "input-error" : ""}
+              // className={lastNameError ? "input-error" : ""}
             />
           </div>
-          {lastNameError && <label className="data-error">{lastNameError}</label>}
+          {lastNameError && <label className={errorLabelClass}>{lastNameError}</label>}
           {(!firstName || !lastName) && (!firstNameError && !lastNameError) && (
-            <label className="data-error">Required</label>
+            <label className={errorLabelClass}>Required</label>
           )}
         </div>
       </div>
 
       {/* Gender */}
-      <div className="card" id="gender-section"> {/* Changed id to avoid conflict with input name */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="gender-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           Which gender do you identify with?
         </div>
         <div className="my-2">
           {genderOptions.map((option) => (
-            <React.Fragment key={option.value}>
+            <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
                 name="gender"
                 value={option.value}
-                id={`gender-${option.value}`} // Ensure unique id for label linking
+                id={`gender-${option.value}`}
                 checked={gender === option.value}
                 onChange={(e) => onGenderChange(e.target.value)}
               />
-              <label htmlFor={`gender-${option.value}`}>{option.label}</label>
-              <br />
-            </React.Fragment>
+              <label htmlFor={`gender-${option.value}`} className={`${standardLabelClass} ml-2`}>{option.label}</label>
+            </div>
           ))}
-          {genderError && <label className="data-error">{genderError}</label>}
-          {!gender && !genderError && <label className="data-error">Required</label>}
+          {genderError && <label className={errorLabelClass}>{genderError}</label>}
+          {!gender && !genderError && <label className={errorLabelClass}>Required</label>}
         </div>
       </div>
 
       {/* Phone Number */}
-      <div className="card" id="phoneNumber-section"> {/* Changed id */}
-        <div className="card-header">What is your phone number?</div>
-        <div className="info">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="phoneNumber-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your phone number?</div>
+        <p className="text-xs text-slate-500 text-center mb-2"> {/* text-center added and mb-2 */}
           This information is required by MLH. We won’t spam your phone.
-        </div>
+        </p>
         <div className="my-2">
           <TelephoneFormatter
             name="phoneNumber"
-            value={phoneNumber} // Pass value to TelephoneFormatter
+            value={phoneNumber}
             onChange={onPhoneNumberChange}
           />
         </div>
-        {phoneNumberError && <label className="data-error">{phoneNumberError}</label>}
-        {!phoneNumber && !phoneNumberError && <label className="data-error">Required</label>}
+        {phoneNumberError && <label className={errorLabelClass}>{phoneNumberError}</label>}
+        {!phoneNumber && !phoneNumberError && <label className={errorLabelClass}>Required</label>}
       </div>
 
       {/* Race/Ethnicity */}
-      <div className="card" id="raceEthnicity-section"> {/* Changed id */}
-        <div className="card-header">What is your race/ethnicity?</div>
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="raceEthnicity-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your race/ethnicity?</div>
         <div className="my-2">
           {raceOptions.map((option) => (
-            <React.Fragment key={option.value}>
+            <div key={option.value} className="flex items-center my-1">
               <input
                 type="checkbox"
                 id={`race-${option.value}`}
-                name="race" // Name is same for all checkboxes in a group
+                name="race"
                 value={option.value}
                 checked={isRaceSelected(option.value)}
-                onChange={onRaceChange} // This handler needs to manage multiple selections
+                onChange={onRaceChange}
               />
-              <label htmlFor={`race-${option.value}`}>{option.label}</label>
-              <br />
-            </React.Fragment>
+              <label htmlFor={`race-${option.value}`} className={`${standardLabelClass} ml-2`}>{option.label}</label>
+            </div>
           ))}
-          {raceError && <label className="data-error">{raceError}</label>}
+          {raceError && <label className={errorLabelClass}>{raceError}</label>}
+           {/* Removed default "Required" for race as per original form didn't have it explicitly always visible */}
         </div>
       </div>
 
       {/* Veteran */}
-      <div className="card" id="veteran-section"> {/* Changed id */}
-        <div className="card-header">Are you a veteran?</div>
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="veteran-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">Are you a veteran?</div>
         <div className="my-2">
           {veteranOptions.map((option) => (
-            <React.Fragment key={option.value}>
+            <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
                 name="veteran"
@@ -206,28 +210,27 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
                 checked={veteran === option.value}
                 onChange={(e) => onVeteranChange(e.target.value)}
               />
-              <label htmlFor={`veteran-${option.value}`}>{option.label}</label>
-              <br />
-            </React.Fragment>
+              <label htmlFor={`veteran-${option.value}`} className={`${standardLabelClass} ml-2`}>{option.label}</label>
+            </div>
           ))}
-          {veteranError && <label className="data-error">{veteranError}</label>}
-          {!veteran && !veteranError && <label className="data-error">Required</label>}
+          {veteranError && <label className={errorLabelClass}>{veteranError}</label>}
+          {!veteran && !veteranError && <label className={errorLabelClass}>Required</label>}
         </div>
       </div>
 
       {/* Age */}
-      <div className="card" id="age-section"> {/* Changed id */}
-        <div className="card-header">
-          What will your age be on the event date? {/* Simplified header for now */}
-          <p className="info">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="age-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
+          What will your age be on the event date?
+          <p className="text-xs text-slate-500 text-center mt-1"> {/* text-center added and mt-1 */}
             You must be 18 years or older to participate.
           </p>
         </div>
         <select
           name="age"
           onChange={(e) => onAgeChange(e.target.value)}
-          value={age === 0 ? "" : age.toString()} // Handle initial 0 value
-          className={ageError ? "input-error" : ""}
+          value={age === 0 ? "" : age.toString()}
+          // className={ageError ? "input-error" : ""} // Base select styles from CSS
         >
           <option value="">Select age</option>
           {Array.from({ length: 89 }, (_, i) => (
@@ -236,17 +239,16 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
             </option>
           ))}
         </select>
-        <br />
-        {ageError && <label className="data-error">{ageError}</label>}
-        {age === 0 && !ageError && <label className="data-error">Required</label>}
+        {ageError && <label className={`${errorLabelClass} block mt-1`}>{ageError}</label>}
+        {age === 0 && !ageError && <label className={`${errorLabelClass} block mt-1`}>Required</label>}
       </div>
 
       {/* Shirt Size */}
-      <div className="card" id="shirtSize-section"> {/* Changed id */}
-        <div className="card-header">What is your shirt size?</div>
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="shirtSize-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your shirt size?</div>
         <div className="my-2">
           {shirtSizeOptions.map((option) => (
-            <React.Fragment key={option.value}>
+            <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
                 name="shirtSize"

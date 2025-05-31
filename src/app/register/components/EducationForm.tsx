@@ -48,46 +48,51 @@ const EducationForm: React.FC<EducationFormProps> = ({
   academicYear, onAcademicYearChange, academicYearError,
   educationalInstitutionType, onEducationalInstitutionTypeChange, educationalInstitutionTypeError,
 }) => {
+  // Helper for styling error messages
+  const errorLabelClass = "text-[var(--destructive)] text-sm font-medium";
+  // Helper for standard labels
+  const standardLabelClass = "text-sm font-medium text-gray-700";
+
   return (
     <>
       {/* Major */}
-      <div className="card" id="major-section"> {/* Changed ID to avoid conflict */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="major-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           What is your (intended) major?
         </div>
         <div className="my-2">
           <Autocomplete
-            data="major" // This prop tells the component what list to fetch/display
-            value={major}
-            onSelectionChange={onMajorChange} // Passes (name, value)
-            name="major" // Ensure name is passed for handler
+            data="major"
+            onSelectionChange={onMajorChange}
+            name="major"
+            // value prop was confirmed to be an issue for referral, assuming same for others
           />
         </div>
-        {majorError && <label className="data-error">{majorError}</label>}
-        {!major && !majorError && <label className="data-error">Required</label>}
+        {majorError && <label className={errorLabelClass}>{majorError}</label>}
+        {!major && !majorError && <label className={errorLabelClass}>Required</label>}
       </div>
 
       {/* University */}
-      <div className="card" id="university-section"> {/* Changed ID */}
-        <div className="card-header">What school do you attend?</div>
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="university-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What school do you attend?</div>
         <div className="my-2">
           <Autocomplete
             data="university"
-            value={university}
             onSelectionChange={onUniversityChange}
-            name="university" // Ensure name is passed for handler
+            name="university"
+             // value prop was confirmed to be an issue for referral, assuming same for others
           />
         </div>
-        {universityError && <label className="data-error">{universityError}</label>}
-        {!university && !universityError && <label className="data-error">Required</label>}
+        {universityError && <label className={errorLabelClass}>{universityError}</label>}
+        {!university && !universityError && <label className={errorLabelClass}>Required</label>}
       </div>
 
       {/* Academic Year */}
-      <div className="card" id="academicYear-section"> {/* Changed ID */}
-        <div className="card-header">What is your academic year?</div>
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="academicYear-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your academic year?</div>
         <div className="my-2">
           {academicYearOptions.map((option) => (
-            <React.Fragment key={option.value}>
+            <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
                 name="academicYear"
@@ -96,23 +101,22 @@ const EducationForm: React.FC<EducationFormProps> = ({
                 checked={academicYear === option.value}
                 onChange={onAcademicYearChange}
               />
-              <label htmlFor={`academicYear-${option.value}`}>{option.label}</label>
-              <br />
-            </React.Fragment>
+              <label htmlFor={`academicYear-${option.value}`} className={`${standardLabelClass} ml-2`}>{option.label}</label>
+            </div>
           ))}
         </div>
-        {academicYearError && <label className="data-error">{academicYearError}</label>}
-        {!academicYear && !academicYearError && <label className="data-error">Required</label>}
+        {academicYearError && <label className={errorLabelClass}>{academicYearError}</label>}
+        {!academicYear && !academicYearError && <label className={errorLabelClass}>Required</label>}
       </div>
 
       {/* Educational Institution Type */}
-      <div className="card" id="educationalInstitutionType-section"> {/* Changed ID */}
-        <div className="card-header">
+      <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="educationalInstitutionType-section">
+        <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
           What type of educational institution are you enrolled in?
         </div>
         <div className="my-2">
           {institutionTypeOptions.map((option) => (
-            <React.Fragment key={option.value}>
+             <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
                 name="educationalInstitutionType"
@@ -121,13 +125,12 @@ const EducationForm: React.FC<EducationFormProps> = ({
                 checked={educationalInstitutionType === option.value}
                 onChange={onEducationalInstitutionTypeChange}
               />
-              <label htmlFor={`institution-${option.value}`}>{option.label}</label>
-              <br />
-            </React.Fragment>
+              <label htmlFor={`institution-${option.value}`} className={`${standardLabelClass} ml-2`}>{option.label}</label>
+            </div>
           ))}
         </div>
-        {educationalInstitutionTypeError && <label className="data-error">{educationalInstitutionTypeError}</label>}
-        {!educationalInstitutionType && !educationalInstitutionTypeError && <label className="data-error">Required</label>}
+        {educationalInstitutionTypeError && <label className={errorLabelClass}>{educationalInstitutionTypeError}</label>}
+        {!educationalInstitutionType && !educationalInstitutionTypeError && <label className={errorLabelClass}>Required</label>}
       </div>
     </>
   );

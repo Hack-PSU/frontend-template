@@ -20,42 +20,47 @@ const DietaryForm: React.FC<DietaryFormProps> = ({
   allergies,
   onAllergiesChange,
 }) => {
+  // Helper for standard labels - consistent with PersonalInfoForm
+  const standardLabelClass = "text-sm font-medium text-gray-700";
+
   return (
-    <div className="card" id="dietaryAllergies">
-      <div className="card-header">
+    <div className="card p-4 sm:px-12 my-8 shadow-md rounded-md sm:rounded-lg" id="dietaryAllergies">
+      <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">
         Do you have any dietary restrictions or allergies?
       </div>
-      <ToggleSwitch
-        name="hasDietaryRestrictionsOrAllegies"
-        on="Yes"
-        off="No"
-        checked={hasDietaryRestrictionsOrAllegies} // Pass the checked state
-        onChange={(name, isChecked) => onHasDietaryRestrictionsOrAllegiesChange(name, isChecked)}
-      />
+      <div className="flex justify-center mb-4"> {/* Centering the toggle switch */}
+        <ToggleSwitch
+          name="hasDietaryRestrictionsOrAllegies"
+          on="Yes"
+          off="No"
+          checked={hasDietaryRestrictionsOrAllegies}
+          onChange={(name, isChecked) => onHasDietaryRestrictionsOrAllegiesChange(name, isChecked)}
+        />
+      </div>
       {hasDietaryRestrictionsOrAllegies && (
         <>
-          <label htmlFor="dietaryRestrictions" className="label mt-4 block"> {/* Added margin for spacing */}
+          <label htmlFor="dietaryRestrictions" className={`${standardLabelClass} mt-4 block`}>
             Dietary Restrictions
           </label>
           <div className="my-2">
             <input
               id="dietaryRestrictions"
               name="dietaryRestrictions"
-              value={dietaryRestrictions || ''} // Handle null value
+              value={dietaryRestrictions || ''}
               onChange={onDietaryRestrictionsChange}
-              className="w-full p-2 border rounded" // Basic input styling
+              // Using base input styles from register.css
             />
           </div>
-          <label htmlFor="allergies" className="label mt-4 block"> {/* Added margin for spacing */}
+          <label htmlFor="allergies" className={`${standardLabelClass} mt-4 block`}>
             Allergies
           </label>
           <div className="my-2">
             <input
               id="allergies"
               name="allergies"
-              value={allergies || ''} // Handle null value
+              value={allergies || ''}
               onChange={onAllergiesChange}
-              className="w-full p-2 border rounded" // Basic input styling
+              // Using base input styles from register.css
             />
           </div>
         </>

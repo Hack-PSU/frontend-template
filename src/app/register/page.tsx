@@ -423,13 +423,19 @@ const Registration: React.FC = () => {
 				phone: registrationData.phoneNumber,
 				country: registrationData.country,
 				race: registrationData.race ?? "",
-				// veteran status is missing in this user object, but present in registration object. Check if needed here.
+				veteran: registrationData.veteran, // Added veteran status
 			};
 
-			await updateUserMutation.mutateAsync({
-				id: registrationData.id,
-				data: newUser,
-			});
+			try {
+				await updateUserMutation.mutateAsync({
+					id: registrationData.id,
+					data: newUser,
+				});
+			} catch (err) {
+				console.error("Error updating user profile:", err);
+				alertFn("There was an error updating your profile. Please try again.", "error");
+				return; // Stop further execution
+			}
 
 			// Build the registration object
 			const registrationPayload = {
@@ -448,27 +454,38 @@ const Registration: React.FC = () => {
 				shareEmailMlh: registrationData.shareEmailMlh,
 				veteran: registrationData.veteran,
 				time: Date.now(),
-				// hackathonId: hackathon?.id, // Associate with the active hackathon
+				hackathonId: hackathon?.id, // Ensure hackathonId is included
 			};
 
-			await createRegistrationMutation.mutateAsync({
-				userId: registrationData.id,
-				// hackathonId: hackathon?.id, // Pass hackathonId if your mutation requires it
-				data: registrationPayload,
-			});
+			// Create the registration entry.
+			// This try...catch is now specifically for createRegistrationMutation
+			try {
+				await createRegistrationMutation.mutateAsync({
+					userId: registrationData.id,
+					// hackathonId is now part of registrationPayload if your API expects it there.
+					// If the mutation hook itself needs hackathonId as a separate param, adjust accordingly.
+					data: registrationPayload,
+				});
 
-			track("registration", { user: registrationData.id });
-			alertFn("You are now registered for the hackathon!", "success");
-			setTimeout(() => router.push("/profile"), 3000);
+				track("registration", { user: registrationData.id });
+				alertFn("You are now registered for the hackathon!", "success");
+				setTimeout(() => router.push("/profile"), 3000);
+
+			} catch (err: any) {
+				console.error("Error creating registration:", err);
+				if (err.message && err.message.includes("already registered")) {
+					alertFn("You are already registered for this Hackathon!", "warning");
+				} else {
+					alertFn("An error occurred during registration. Please try again.", "error");
+				}
+			}
 
 		} catch (err: any) {
-			console.error("Error during submission process:", err);
-			// More specific error handling based on which mutation failed might be useful
-			if (err.message.includes("already registered")) { // Example check
-				alertFn("You are already registered for this Hackathon!", "warning");
-			} else {
-				alertFn("An error occurred during registration. Please try again.", "error");
-			}
+			// This outer catch block would now primarily catch errors from the initial setup
+			// or if any unhandled promise rejection occurs before the specific try/catches.
+			// Most specific errors are handled closer to their source.
+			console.error("General error during submission process:", err);
+			alertFn("An unexpected error occurred. Please try again.", "error");
 		}
 	};
 
