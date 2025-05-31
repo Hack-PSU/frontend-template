@@ -655,6 +655,7 @@ const Registration: React.FC = () => {
 										name="driving"
 										on="Yes"
 										off="No"
+										checked={registrationData.driving} // Pass checked state
 										onChange={handleToggle}
 									/>
 								</div>
@@ -667,6 +668,7 @@ const Registration: React.FC = () => {
 										name="firstHackathon"
 										on="Yes"
 										off="No"
+										checked={registrationData.firstHackathon} // Pass checked state
 										onChange={handleToggle}
 									/>
 								</div>

@@ -248,6 +248,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         <div className="text-2xl text-center p-4 text-[#001f3f] font-bold">What is your shirt size?</div>
         <div className="my-2">
           {shirtSizeOptions.map((option) => (
+            // Corrected: Each option is wrapped in a div with a key
+            // Removed incorrect React.Fragment usage
             <div key={option.value} className="flex items-center my-1">
               <input
                 type="radio"
