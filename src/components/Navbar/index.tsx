@@ -214,13 +214,13 @@ const MLHBadge = () => (
 	<a
 		id="mlh-trust-badge"
 		className="mlh-badge"
-		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2025-season&utm_content=white"
+		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
 		target="_blank"
 		rel="noopener noreferrer"
 	>
 		<Image
-			src="https://s3.amazonaws.com/logged-assets/trust-badge/2025/mlh-trust-badge-2025-white.svg"
-			alt="Major League Hacking 2024 Hackathon Season"
+			src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
+			alt="Major League Hacking 2026 Hackathon Season"
 			width={100}
 			height={100}
 		/>
