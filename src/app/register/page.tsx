@@ -931,6 +931,16 @@ const Registration: React.FC = () => {
 										/>
 									</div>
 								</div>
+								{/**MLH Disclaimer */}
+								<div className="card" id="mlhDisclaimer">
+									<div className="card-header">
+										MLH Disclaimer
+									</div>
+									<span>
+									We are currently in the process of partnering with MLH. The following 3 checkboxes are for 
+									this partnership. If we do not end up partnering with MLH, your information will not be shared.
+									</span>
+								</div>
 								{/** MLH Code of Conduct */}
 								<div className="card" id="mlhCoc">
 									<div className="card-header">
@@ -965,8 +975,8 @@ const Registration: React.FC = () => {
 										Do you agree to the MLH Data Sharing?
 									</div>
 									<span>
-										By agreeing, you authorize MLH to share your registration
-										information with event sponsors and MLH as outlined in the{" "}
+									I authorize you to share my application/registration information with Major League Hacking 
+									for event administration, ranking, and MLH administration in-line with the {" "} 
 										<a
 											href="https://mlh.io/privacy"
 											target="_blank"
@@ -974,7 +984,19 @@ const Registration: React.FC = () => {
 										>
 											MLH Privacy Policy
 										</a>
-										.
+										. I further agree to the terms of both the {" "}
+										<a
+											href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+											target="_blank"
+											rel="noopener noreferrer"
+										>
+											MLH Contest Terms and Conditions</a>
+										and the {" "}
+										<a
+											href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+											target="_blank"
+											rel="noopener noreferrer"
+										>MLH Privacy Policy</a>.
 										<p className="info">
 											To participate at HackPSU, you must agree to this policy.
 										</p>
