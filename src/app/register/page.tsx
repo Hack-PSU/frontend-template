@@ -60,6 +60,7 @@ interface RegistrationData {
 	referral: string;
 	project: string;
 	expectations: string;
+	linkedinUrl?: string;
 }
 
 const Registration: React.FC = () => {
@@ -93,6 +94,7 @@ const Registration: React.FC = () => {
 		referral: "",
 		project: "",
 		expectations: "",
+		linkedinUrl: "",
 	});
 	const [componentMounted, setComponentMounted] = useState(false);
 	const [selectedSidebarField, setSelectedSidebarField] = useState("");
@@ -342,6 +344,7 @@ const Registration: React.FC = () => {
 			phone: registrationData.phoneNumber,
 			country: registrationData.country,
 			race: registrationData.race ?? "",
+			linkedinUrl: registrationData.linkedinUrl ?? "",
 		};
 
 		// Update the user in the database.
@@ -840,6 +843,10 @@ const Registration: React.FC = () => {
 													"Graduate University (Masters, Professional, Doctoral, etc.)",
 											},
 											{
+												value: "post-doctorate",
+												label: "Post Doctorate",
+											},
+											{
 												value: "code-school-or-bootcamp",
 												label: "Code School / Bootcamp",
 											},
@@ -908,6 +915,21 @@ const Registration: React.FC = () => {
 											{(registrationData.resume as File).name}
 										</a>
 									)}
+								</div>
+								{/**Linkedin URLs */}
+								<div className="card" id="linkedinUrl">
+									<div className="card-header">
+										What is your LinkedIn profile URL?
+									</div>
+									<div className="my-2">
+										<input
+											id="linkedinUrl"
+											name="linkedinUrl"
+											placeholder="https://www.linkedin.com/in/yourprofile"
+											className="rounded-lg shadow-md"
+											onChange={handleChange}
+										/>
+									</div>
 								</div>
 								{/** MLH Code of Conduct */}
 								<div className="card" id="mlhCoc">

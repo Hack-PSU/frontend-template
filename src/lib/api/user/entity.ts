@@ -15,6 +15,7 @@ export interface UserEntity {
 	country: string;
 	race?: string;
 	resume?: string;
+	linkedinUrl?: string;
 }
 
 export interface UserInfoMe extends UserEntity {
