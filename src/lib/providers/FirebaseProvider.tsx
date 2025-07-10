@@ -55,6 +55,7 @@ function getRole(token: string): number {
 
 // Public context type – notice we are not using custom error types here.
 type FirebaseContextType = {
+	auth: Auth;
 	isLoading: boolean;
 	isAuthenticated: boolean;
 	user?: User;
@@ -235,12 +236,19 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		}
 	}, [auth]);
 
+	const actionCodeSettings = {
+		// This must be listed under "Authorized domains" in your Firebase console
+		url: "https://hackpsu.org/reset-password",
+		// Use in-app handling so Firebase gives you back the oobCode in the URL
+		handleCodeInApp: true,
+	};
+
 	// Send a password reset email.
 	const resetPassword = useCallback(
 		async (email: string) => {
 			setError("");
 			try {
-				await sendPasswordResetEmail(auth, email);
+				await sendPasswordResetEmail(auth, email, actionCodeSettings);
 			} catch (err: any) {
 				setError(err.message || "Password reset failed");
 				throw err;
@@ -266,6 +274,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 
 	const value = useMemo(
 		() => ({
+			auth,
 			isLoading,
 			isAuthenticated: !!user && !error,
 			user: user || undefined,
@@ -279,6 +288,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			logout,
 		}),
 		[
+			auth,
 			isLoading,
 			user,
 			token,
