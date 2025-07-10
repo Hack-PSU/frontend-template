@@ -1,3 +1,4 @@
+// src/common/api/user/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	getAllUsers,
@@ -9,11 +10,13 @@ import {
 	getUserResume,
 	getUserInfoMe,
 } from "./provider";
-import { UserEntity, UserInfoMe } from "./entity";
+import { UserCreateEntity, UserEntity, UserInfoMe } from "./entity";
 
 export const userQueryKeys = {
 	all: ["users"] as const,
 	detail: (id: string) => ["user", id] as const,
+	resume: (id: string) => ["user", id, "resume"] as const,
+	me: ["user", "info", "me"] as const,
 };
 
 export function useAllUsers(active?: boolean) {
@@ -32,28 +35,26 @@ export function useUser(id: string) {
 }
 
 export function useCreateUser() {
-	const queryClient = useQueryClient();
+	const qc = useQueryClient();
 	return useMutation({
-		mutationFn: (newData: Omit<UserEntity, "id">) => createUser(newData),
+		mutationFn: (newData: Omit<UserEntity, "id"> & { resume?: File }) =>
+			createUser(newData),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
+			qc.invalidateQueries({ queryKey: userQueryKeys.all });
 		},
 	});
 }
 
 export function useUpdateUser() {
-	const queryClient = useQueryClient();
+	const qc = useQueryClient();
 	return useMutation({
-		mutationFn: ({
-			id,
-			data,
-		}: {
+		mutationFn: (opts: {
 			id: string;
-			data: Partial<Omit<UserEntity, "id">>;
-		}) => updateUser(id, data),
+			data: Partial<Omit<UserEntity, "id">> & { resume?: File | null };
+		}) => updateUser(opts.id, opts.data),
 		onSuccess: (updated) => {
-			queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
-			queryClient.invalidateQueries({
+			qc.invalidateQueries({ queryKey: userQueryKeys.all });
+			qc.invalidateQueries({
 				queryKey: userQueryKeys.detail(updated.id),
 			});
 		},
@@ -61,13 +62,17 @@ export function useUpdateUser() {
 }
 
 export function useReplaceUser() {
-	const queryClient = useQueryClient();
+	const qc = useQueryClient();
 	return useMutation({
-		mutationFn: ({ id, data }: { id: string; data: Omit<UserEntity, "id"> }) =>
-			replaceUser(id, data),
+		mutationFn: (opts: {
+			id: string;
+			data: Omit<UserEntity, "id" | "resume"> & {
+				resume?: File | null | undefined;
+			};
+		}) => replaceUser(opts.id, opts.data),
 		onSuccess: (updated) => {
-			queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
-			queryClient.invalidateQueries({
+			qc.invalidateQueries({ queryKey: userQueryKeys.all });
+			qc.invalidateQueries({
 				queryKey: userQueryKeys.detail(updated.id),
 			});
 		},
@@ -75,18 +80,18 @@ export function useReplaceUser() {
 }
 
 export function useDeleteUser() {
-	const queryClient = useQueryClient();
+	const qc = useQueryClient();
 	return useMutation({
 		mutationFn: (id: string) => deleteUser(id),
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: userQueryKeys.all });
+			qc.invalidateQueries({ queryKey: userQueryKeys.all });
 		},
 	});
 }
 
 export function useUserResume(id: string) {
 	return useQuery<Blob>({
-		queryKey: ["user", id, "resume"],
+		queryKey: userQueryKeys.resume(id),
 		queryFn: () => getUserResume(id),
 		enabled: Boolean(id),
 	});
@@ -94,7 +99,7 @@ export function useUserResume(id: string) {
 
 export function useUserInfoMe() {
 	return useQuery<UserInfoMe>({
-		queryKey: ["user", "info", "me"],
+		queryKey: userQueryKeys.me,
 		queryFn: getUserInfoMe,
 		retry: 2,
 		retryDelay: 1000,

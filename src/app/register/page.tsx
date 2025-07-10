@@ -1,1143 +1,857 @@
 "use client";
 
-import React, {
-	useState,
-	ChangeEvent,
-	FormEvent,
-	useEffect,
-	useCallback,
-} from "react";
+import type * as React from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { Toaster, toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { Autocomplete } from "@/components/ui/autocomplete";
+import countries from "@/components/common/Autocomplete/assets/countries.json";
+import universities from "@/components/common/Autocomplete/assets/schools.json";
+import majors from "@/components/common/Autocomplete/assets/majors.json";
+import referrals from "@/components/common/Autocomplete/assets/referrals.json";
+import type { UserCreateEntity, UserEntity } from "@/lib/api/user/entity";
+import type {
+	RegistrationEntity,
+	RegistrationCreateEntity,
+} from "@/lib/api/registration/entity";
+import { useReplaceUser, useUserInfoMe } from "@/lib/api/user/hook";
+import { useCreateRegistration } from "@/lib/api/registration/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import ToggleSwitch from "@/components/common/ToggleSwitch";
-import BigButton from "@/components/common/BigButton";
-import TelephoneFormatter from "@/components/common/TelephoneFormatter";
-import Alert from "@/components/common/Alert";
-import Autocomplete from "@/components/common/Autocomplete";
-
-// React Query hooks for hackathon, user and registration operations:
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon";
-import { useUpdateUser, useCreateUser, useReplaceUser } from "@/lib/api/user";
-import { useCreateRegistration } from "@/lib/api/registration";
-
-import "./register.css";
 import { track } from "@vercel/analytics";
 
-// Local interface for our registration form state.
-interface RegistrationData {
-	id: string;
-	firstName: string;
-	lastName: string;
-	gender: "male" | "female" | "non-binary" | "no-disclose" | "";
-	phoneNumber: string;
-	race: string;
-	veteran: string;
-	age: number;
-	shirtSize: "XS" | "S" | "M" | "L" | "XL" | "XXL" | "";
-	country: string;
-	driving: boolean;
-	firstHackathon: boolean;
-	hasDietaryRestrictionsOrAllegies: boolean;
-	dietaryRestrictions: string | null;
-	allergies: string | null;
-	major: string;
-	university: string;
-	academicYear:
-		| "freshman"
-		| "sophomore"
-		| "junior"
-		| "senior"
-		| "graduate"
-		| "other"
-		| "";
-	educationalInstitutionType: string;
-	resume: File | null;
-	mlhCoc: boolean;
-	mlhDcp: boolean;
-	shareEmailMlh: boolean;
-	time: number;
-	codingExperience: "none" | "beginner" | "intermediate" | "advanced" | "";
-	referral: string;
-	project: string;
-	expectations: string;
-}
+type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
+	Omit<
+		RegistrationEntity,
+		| "id"
+		| "userId"
+		| "hackathonId"
+		| "time"
+		| "shareAddressSponsors"
+		| "travelReimbursement"
+		| "shareAddressMlh"
+	> & {
+		resume: File | null;
+		hasDietaryRestrictions: boolean;
+	};
 
-const Registration: React.FC = () => {
-	// Local form state.
-	const [registrationData, setRegistrationData] = useState<RegistrationData>({
-		id: "",
+export default function RegistrationPage() {
+	const router = useRouter();
+	const { user } = useFirebase();
+	const { data: userInfo, isLoading: isUserInfoLoading } = useUserInfoMe();
+	const replaceUserMutation = useReplaceUser();
+	const createRegistrationMutation = useCreateRegistration();
+	const { data: hackathon } = useActiveHackathonForStatic();
+
+	const trackPageView = () => {
+		if (user) {
+			track("registration_page_view", {
+				userId: user.uid,
+			});
+		}
+	};
+	useEffect(() => {
+		trackPageView();
+	}, [hackathon, user]);
+
+	const [formData, setFormData] = useState<FormData>({
 		firstName: "",
 		lastName: "",
 		gender: "",
-		phoneNumber: "",
-		race: "",
-		veteran: "",
-		age: 0,
 		shirtSize: "",
+		dietaryRestriction: "",
+		allergies: "",
+		university: "",
+		major: "",
+		phone: "",
 		country: "",
+		race: "",
+		age: 0,
+		educationalInstitutionType: "",
+		academicYear: "",
+		codingExperience: "",
+		expectations: "",
 		driving: false,
 		firstHackathon: false,
-		hasDietaryRestrictionsOrAllegies: false,
-		dietaryRestrictions: null,
-		allergies: null,
-		major: "",
-		university: "",
-		academicYear: "",
-		educationalInstitutionType: "",
-		resume: null,
 		mlhCoc: false,
 		mlhDcp: false,
-		shareEmailMlh: false,
-		time: 0,
-		codingExperience: "",
-		referral: "",
 		project: "",
-		expectations: "",
+		referral: "",
+		shareEmailMlh: false,
+		veteran: "",
+		resume: null,
+		hasDietaryRestrictions: false,
 	});
-	const [componentMounted, setComponentMounted] = useState(false);
-	const [selectedSidebarField, setSelectedSidebarField] = useState("");
 
-	// Alert state.
-	const [showAlert, setShowAlert] = useState<boolean>(false);
-	const [alertMessage, setAlertMessage] = useState<string>("");
-	const [alertSeverity, setAlertSeverity] = useState<
-		"error" | "warning" | "info" | "success" | ""
-	>("");
+	const [races, setRaces] = useState<string[]>([]);
 
-	// Firebase authentication.
-	const { user, isAuthenticated } = useFirebase();
-	const router = useRouter();
-
-	// Get the active hackathon via React Query.
-	const {
-		data: hackathon,
-		isLoading: hackathonLoading,
-		error: hackathonError,
-	} = useActiveHackathonForStatic();
-
-	// Sidebar fields mapping.
-	const sidebarFields: Map<string, string> = new Map<string, string>([
-		["General", "name"],
-		["Shirt Size", "shirtSize"],
-		["Dietary Restrictions", "dietaryAllergies"],
-		["Education", "educationalInstitutionType"],
-		["MLH Code of Conduct", "mlhCoc"],
-		["MLH Data Sharing", "mlhDcp"],
-		["Additional Questions", "codingExperience"],
-	]);
-
-	// Scroll handler.
-	const handleScroll = (scrollTo: string) => {
-		const element = document.getElementById(scrollTo);
-		if (!element) return;
-		const offset = 100;
-		const elementRect = element.getBoundingClientRect().top;
-		const absoluteElementTop = elementRect + window.scrollY;
-		const scrollToPosition = absoluteElementTop - offset;
-		window.scrollTo({ top: scrollToPosition, behavior: "smooth" });
-	};
-
-	// Sidebar selection handler.
-	const handleSidebarSelect = (field: string) => {
-		if (field === selectedSidebarField) {
-			setSelectedSidebarField("");
-		} else {
-			setSelectedSidebarField(field);
-			handleScroll(sidebarFields.get(field) ?? "");
-		}
-	};
-
-	// Set component mounted to avoid hydration issues.
 	useEffect(() => {
-		setComponentMounted(true);
-	}, []);
-
-	// If the user data has loaded, set the registration user ID.
-	useEffect(() => {
-		if (isAuthenticated) {
-			setRegistrationData((prevData) => ({
-				...prevData,
-				id: user?.uid ?? "",
+		if (userInfo) {
+			setFormData((prev) => ({
+				...prev,
+				firstName: userInfo.firstName || "",
+				lastName: userInfo.lastName || "",
+				gender: userInfo.gender || "",
+				shirtSize: userInfo.shirtSize || "",
+				dietaryRestriction: userInfo.dietaryRestriction || "",
+				allergies: userInfo.allergies || "",
+				university: userInfo.university || "",
+				major: userInfo.major || "",
+				phone: userInfo.phone || "",
+				country: userInfo.country || "",
+				race: userInfo.race || "",
+				hasDietaryRestrictions: !!(
+					userInfo.dietaryRestriction || userInfo.allergies
+				),
+				...(userInfo.registration && {
+					...userInfo.registration,
+					age: userInfo.registration.age || 0,
+				}),
 			}));
-		} else {
-			//alert("You must be signed in to register for HackPSU. Redirecting...");
-			router.push("/signin");
+			if (userInfo.race) {
+				setRaces(userInfo.race.split(", "));
+			}
 		}
-	}, [isAuthenticated, user, router]);
+	}, [userInfo]);
 
-	// Helper function for alerts.
-	const alertFn = (
-		message: string,
-		severity: "error" | "warning" | "info" | "success" | "" = "error"
-	) => {
-		setAlertMessage(message);
-		setAlertSeverity(severity);
-		setShowAlert(true);
-	};
-
-	// Standard change handlers.
 	const handleChange = (
-		event: ChangeEvent<
-			HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-		>
+		e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {
-		const { name, value } = event.target;
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
-		setShowAlert(false);
+		const { name, value } = e.target;
+		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleNumericSelectionChange = (
-		event: ChangeEvent<HTMLSelectElement>
-	) => {
-		const { name, value } = event.target;
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: Number(value),
-		}));
-		setShowAlert(false);
+	const handleSelectChange = (name: string, value: string | number) => {
+		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name } = event.target;
-		const checkboxes = document.querySelectorAll<HTMLInputElement>(
-			`input[name="${name}"]:checked`
-		);
-		const values = Array.from(checkboxes).map((checkbox) => checkbox.value);
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: values.join(", "),
-		}));
-		setShowAlert(false);
+	const handleSwitchChange = (name: string, checked: boolean) => {
+		setFormData((prev) => ({ ...prev, [name]: checked }));
 	};
 
-	const handlePhoneInput = (name: string, phone: string) => {
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: phone,
-		}));
-		setShowAlert(false);
-	};
-
-	const handleToggle = (name: string, isChecked: boolean) => {
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: isChecked,
-		}));
-		setShowAlert(false);
-	};
-
-	const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-		const { name, files } = event.target;
-		if (files) {
-			setRegistrationData((prevData) => ({
-				...prevData,
-				[name]: files[0],
-			}));
-		}
-		setShowAlert(false);
-	};
-
-	const handleAutocompleteChange = (name: string, value: string) => {
-		setRegistrationData((prevData) => ({
-			...prevData,
-			[name]: value,
-		}));
-		setShowAlert(false);
-	};
-
-	// Allow the user to download the resume file.
-	const downloadResume = () => {
-		const resume = registrationData.resume;
-		if (resume) {
-			const url = URL.createObjectURL(resume);
-			const a = document.createElement("a");
-			a.href = url;
-			a.download = resume.name;
-			document.body.appendChild(a);
-			a.click();
-			URL.revokeObjectURL(url);
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files) {
+			setFormData((prev) => ({ ...prev, resume: e.target.files?.[0] || null }));
 		}
 	};
 
-	// Set up React Query mutations.
-	const createRegistrationMutation = useCreateRegistration();
-	const updateUserMutation = useReplaceUser();
-	// (Optionally, you might also include useCreateUser if needed.)
+	const handleRaceChange = (checked: boolean, race: string) => {
+		setRaces((prev) => {
+			const newRaces = checked
+				? [...prev, race]
+				: prev.filter((r) => r !== race);
+			setFormData((prevData) => ({ ...prevData, race: newRaces.join(", ") }));
+			return newRaces;
+		});
+	};
 
-	// Form submission handler.
-	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
 
-		// Validate required fields.
-		const requiredFields: { [key: string]: any } = {
-			id: null,
-			firstName: null,
-			lastName: null,
-			gender: null,
-			phoneNumber: null,
-			veteran: null,
-			age: null,
-			shirtSize: null,
-			country: null,
-			driving: null,
-			firstHackathon: null,
-			major: null,
-			university: null,
-			academicYear: null,
-			educationalInstitutionType: null,
-			mlhCoc: true,
-			mlhDcp: true,
-			referral: null,
+		if (!user) {
+			toast.error("You must be logged in to register.");
+			return;
+		}
+
+		if (formData.age < 18) {
+			toast.error("You must be 18 years or older to participate.");
+			return;
+		}
+
+		if (!formData.mlhCoc || !formData.mlhDcp) {
+			toast.error(
+				"You must agree to the MLH Code of Conduct and Data Sharing Policy."
+			);
+			return;
+		}
+
+		const userData: Omit<UserEntity, "id" | "resume"> & {
+			resume?: File | null | undefined;
+		} = {
+			firstName: formData.firstName,
+			lastName: formData.lastName,
+			email: user?.email || "",
+			gender: formData.gender,
+			shirtSize: formData.shirtSize,
+			dietaryRestriction: formData.dietaryRestriction,
+			allergies: formData.allergies,
+			university: formData.university,
+			major: formData.major,
+			phone: formData.phone,
+			country: formData.country,
+			race: formData.race,
 		};
 
-		const validationData: any = registrationData;
-		for (let [key, value] of Object.entries(requiredFields)) {
-			if (key === "id") {
-				if (!validationData.id) {
-					console.error("User not logged in; no user id found.");
-					alertFn("You must be logged in to register for HackPSU.");
-					return;
-				} else {
-					continue;
-				}
-			}
-			const element = document.getElementById(key);
-			if (!element) {
-				console.error(`Element with ID ${key} not found.`);
-				continue;
-			}
-			if (validationData[key] === undefined || validationData[key] === "") {
-				// For name fields, scroll to the container.
-				if (key === "firstName" || key === "lastName") {
-					key = "name";
-				}
-				handleScroll(key);
-				alertFn("Please fill out all required fields.");
-				return;
-			} else if (value !== null && validationData[key] !== value) {
-				handleScroll(key);
-				return;
-			}
-			if (validationData.age < 18) {
-				alertFn("You must be 18 years or older to participate.");
-				handleScroll("age");
-				return;
-			}
+		if (formData.resume) {
+			userData.resume = formData.resume;
 		}
 
-		// Build the user object for the database.
-		const newUser = {
-			firstName: registrationData.firstName,
-			lastName: registrationData.lastName,
-			gender: registrationData.gender,
-			shirtSize: registrationData.shirtSize,
-			dietaryRestriction: registrationData.dietaryRestrictions ?? "",
-			allergies: registrationData.allergies ?? "",
-			university: registrationData.university,
-			email: user?.email ?? "",
-			major: registrationData.major,
-			phone: registrationData.phoneNumber,
-			country: registrationData.country,
-			race: registrationData.race ?? "",
-		};
-
-		// Update the user in the database.
-		try {
-			await updateUserMutation.mutateAsync({
-				id: registrationData.id,
-				data: newUser,
-			});
-		} catch (err) {
-			console.error("Error updating user:", err);
-			// Optionally, try creating the user if update fails.
-		}
-
-		// Build the registration object (include the hackathon ID if available).
-		const registration = {
-			travelReimbursement: false,
-			driving: registrationData.driving,
-			firstHackathon: registrationData.firstHackathon,
-			academicYear: registrationData.academicYear,
-			educationalInstitutionType: registrationData.educationalInstitutionType,
-			codingExperience: registrationData.codingExperience,
-			age: registrationData.age,
-			mlhCoc: registrationData.mlhCoc,
-			mlhDcp: registrationData.mlhDcp,
-			referral: registrationData.referral,
-			project: registrationData.project,
-			expectations: registrationData.expectations,
-			shareEmailMlh: registrationData.shareEmailMlh,
-			veteran: registrationData.veteran,
+		const registrationData: RegistrationCreateEntity & { time: number } = {
+			age: formData.age,
+			educationalInstitutionType: formData.educationalInstitutionType,
+			academicYear: formData.academicYear,
+			codingExperience: formData.codingExperience,
+			expectations: formData.expectations,
+			driving: formData.driving,
+			firstHackathon: formData.firstHackathon,
+			mlhCoc: formData.mlhCoc,
+			mlhDcp: formData.mlhDcp,
+			project: formData.project,
+			referral: formData.referral,
+			shareEmailMlh: formData.shareEmailMlh,
+			veteran: formData.veteran,
 			time: Date.now(),
 		};
 
-		// Create the registration entry.
-		try {
-			await createRegistrationMutation.mutateAsync({
-				userId: registrationData.id,
-				data: registration,
-			});
-			track("registration", {
-				user: registrationData.id,
-			});
-			alertFn("You are now registered for the hackathon!", "success");
-			setTimeout(() => {
-				router.push("/profile");
-			}, 3000);
-		} catch (err: any) {
-			console.error("Error creating registration:", err);
-			alertFn("You are already registered for the Hackathon!", "warning");
-		}
+		toast.promise(
+			async () => {
+				await replaceUserMutation.mutateAsync({
+					id: user?.uid,
+					data: userData,
+				});
+				await createRegistrationMutation.mutateAsync({
+					userId: user?.uid,
+					data: registrationData,
+				});
+			},
+			{
+				loading: "Submitting your registration...",
+				success: () => {
+					setTimeout(() => router.push("/profile"), 2000);
+					return "Registration successful! Redirecting to your profile...";
+				},
+				error: (err: any) =>
+					err?.message || "An error occurred during registration.",
+			}
+		);
 	};
 
-	if (!componentMounted || hackathonLoading) {
-		return <div>Loading...</div>;
+	if (isUserInfoLoading) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<p>Loading user data...</p>
+			</div>
+		);
 	}
-	if (hackathonError) {
-		return <div>Error loading hackathon data.</div>;
-	}
+
+	const ageOptions = Array.from({ length: 89 }, (_, i) => (
+		<SelectItem key={i + 12} value={String(i + 12)}>
+			{i + 12}
+		</SelectItem>
+	));
 
 	return (
 		<>
-			<div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
-				<div className="mt-10 mx-auto w-4/5 md:w-[480px]">
-					<div className="m-2 text-center cornerstone-font">
-						<h1 className="text-4xl font-bold mb-2">Registration</h1>
-						<div>
-							for our{" "}
-							<span className="inline font-bold text-lime-400">
-								{hackathon?.name ?? ""}
-							</span>{" "}
-							Hackathon!
-						</div>
-					</div>
-
-					<form className="form" onSubmit={handleSubmit}>
-						{/** Name */}
-						<div className="card" id="name">
-							<div>
-								<div className="card-header">What is your name?</div>
-								<label htmlFor="firstName" className="label">
-									First Name
-								</label>
-								<div className="my-2">
-									<input
-										id="firstName"
-										name="firstName"
-										onChange={handleChange}
-									/>
-								</div>
-								<label htmlFor="lastName" className="label">
-									Last Name
-								</label>
-								<div className="my-2">
-									<input
-										id="lastName"
-										name="lastName"
-										onChange={handleChange}
-									/>
-								</div>
-								{(!registrationData.firstName ||
-									!registrationData.lastName) && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-						{/** Gender */}
-						<div className="card" id="gender">
-							<div className="card-header">
-								Which gender do you identify with?
-							</div>
-							<div className="my-2">
-								<input
-									type="radio"
-									name="gender"
-									value="male"
-									id="male"
-									onChange={handleChange}
-								/>
-								<label htmlFor="male">Male</label>
-								<br />
-								<input
-									type="radio"
-									name="gender"
-									value="female"
-									id="female"
-									onChange={handleChange}
-								/>
-								<label htmlFor="female">Female</label>
-								<br />
-								<input
-									type="radio"
-									name="gender"
-									value="non-binary"
-									id="non-binary"
-									onChange={handleChange}
-								/>
-								<label htmlFor="non-binary">Non-Binary</label>
-								<br />
-								<input
-									type="radio"
-									name="gender"
-									value="no-disclose"
-									id="no-disclose"
-									onChange={handleChange}
-								/>
-								<label htmlFor="no-disclose">Prefer not to disclose</label>
-								<br />
-								{!registrationData.gender && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-						{/** Phone Number */}
-						<div className="card" id="phoneNumber">
-							<div className="card-header">What is your phone number?</div>
-							<div className="info">
-								This information is required by MLH. We won’t spam your phone.
-							</div>
-							<div className="my-2">
-								<TelephoneFormatter
-									name="phoneNumber"
-									onChange={handlePhoneInput}
-								/>
-							</div>
-							{!registrationData.phoneNumber && (
-								<label className="data-error">Required</label>
-							)}
-						</div>
-						{/** Race/Ethnicity */}
-						<div className="card" id="raceEthnicity">
-							<div className="card-header">What is your race/ethnicity?</div>
-							<div className="my-2">
-								<input
-									type="checkbox"
-									id="native"
-									name="race"
-									value="native"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="native">Native American or Alaska Native</label>
-								<br />
-								<input
-									type="checkbox"
-									id="asian"
-									name="race"
-									value="asian"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="asian">Asian</label>
-								<br />
-								<input
-									type="checkbox"
-									id="african"
-									name="race"
-									value="african"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="african">Black or African American</label>
-								<br />
-								<input
-									type="checkbox"
-									id="latinx"
-									name="race"
-									value="latinx"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="latinx">Hispanic or Latinx</label>
-								<br />
-								<input
-									type="checkbox"
-									id="pacific"
-									name="race"
-									value="pacific"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="pacific">
-									Native Hawaiian or Other Pacific Islander
-								</label>
-								<br />
-								<input
-									type="checkbox"
-									id="caucasian"
-									name="race"
-									value="caucasian"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="caucasian">Caucasian</label>
-								<br />
-								<input
-									type="checkbox"
-									id="noDisclose"
-									name="race"
-									value="noDisclose"
-									onChange={handleCheckboxChange}
-								/>
-								<label htmlFor="noDisclose">Prefer not to disclose</label>
-							</div>
-						</div>
-						{/** Veteran */}
-						<div className="card" id="veteran">
-							<div className="card-header">Are you a veteran?</div>
-							<div className="my-2">
-								<input
-									type="radio"
-									name="veteran"
-									value="yes"
-									id="yes"
-									onChange={handleChange}
-								/>
-								<label htmlFor="yes">Yes</label>
-								<br />
-								<input
-									type="radio"
-									name="veteran"
-									value="no"
-									id="no"
-									onChange={handleChange}
-								/>
-								<label htmlFor="no">No</label>
-								<br />
-								<input
-									type="radio"
-									name="veteran"
-									value="no-disclose"
-									id="no-disclose-veteran"
-									onChange={handleChange}
-								/>
-								<label htmlFor="no-disclose-veteran">
-									Prefer not to disclose
-								</label>
-								<br />
-								{!registrationData.veteran && (
-									<label className="data-error">Required</label>
-								)}
-							</div>
-						</div>
-						{/** Age */}
-						<div className="card" id="age">
-							<div className="card-header">
-								What will your age be on{" "}
-								{hackathon?.startTime
-									? new Date(hackathon.startTime).toISOString().split("T")[0]
-									: "the event date"}
-								?
-								<p className="info">
-									You must be 18 years or older to participate.
-								</p>
-							</div>
-							<select
-								name="age"
-								onChange={handleNumericSelectionChange}
-								value={registrationData.age}
+			<Toaster richColors />
+			<div className=" text-foreground min-h-screen p-4 sm:p-6 lg:p-8">
+				<div className="max-w-3xl mx-auto">
+					<header className="text-center mb-8">
+						<h1 className="text-4xl font-bold tracking-tight text-primary">
+							Register for our {hackathon?.name} hackathon
+						</h1>
+						<p className="text-muted-foreground mt-2">
+							Feel free to reach out to us at{" "}
+							<a
+								href="mailto:technology@hackpsu.org"
+								className="text-primary underline"
 							>
-								<option value={0}>Select age</option>
-								{Array.from({ length: 89 }, (_, i) => (
-									<option key={i + 12} value={i + 12}>
-										{i + 12}
-									</option>
-								))}
-							</select>
-							<br />
-							{!registrationData.age && (
-								<label className="data-error">Required</label>
-							)}
-						</div>
-						{!!registrationData.age && (
-							<>
-								{/** Shirt Size */}
-								<div className="card" id="shirtSize">
-									<div className="card-header">What is your shirt size?</div>
-									<div className="my-2">
-										{["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
-											<React.Fragment key={size}>
-												<input
-													type="radio"
-													name="shirtSize"
-													value={size}
-													id={size}
-													onChange={handleChange}
-												/>
-												<label htmlFor={size}>
-													{size === "XS"
-														? "X-Small"
-														: size === "XXL"
-															? "XX-Large"
-															: size}
-												</label>
-												<br />
-											</React.Fragment>
-										))}
-										{!registrationData.shirtSize && (
-											<label className="data-error">Required</label>
-										)}
-									</div>
-								</div>
-								{/** Country */}
-								<div className="card" id="country">
-									<div className="card-header">
-										What is your country of residence?
-									</div>
-									<div className="my-2">
-										<Autocomplete
-											data="country"
-											onSelectionChange={handleAutocompleteChange}
+								<span className="">technology@hackpsu.org</span>
+							</a>{" "}
+							if you have any questions or concerns.
+						</p>
+					</header>
+
+					<form onSubmit={handleSubmit} className="space-y-8">
+						{/* Personal Information */}
+						<Card>
+							<CardHeader>
+								<CardTitle>Personal Information</CardTitle>
+								<CardDescription>
+									Let&apos;s get to know you. This information is required for
+									registration.
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-6">
+								<div className="grid sm:grid-cols-2 gap-4">
+									<div className="space-y-2">
+										<Label htmlFor="firstName">First Name</Label>
+										<Input
+											id="firstName"
+											name="firstName"
+											value={formData.firstName}
+											onChange={handleChange}
+											required
 										/>
 									</div>
-									{!registrationData.country && (
-										<label className="data-error">Required</label>
-									)}
-								</div>
-								{/** Driving */}
-								<div className="card" id="driving">
-									<div className="card-header">
-										Will you be driving to the event?
-									</div>
-									<ToggleSwitch
-										name="driving"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-								</div>
-								{/** First Hackathon */}
-								<div className="card" id="firstHackathon">
-									<div className="card-header">
-										Is this your first hackathon?
-									</div>
-									<ToggleSwitch
-										name="firstHackathon"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-								</div>
-								{/** Dietary Restrictions and Allergies */}
-								<div className="card" id="dietaryAllergies">
-									<div className="card-header">
-										Do you have any dietary restrictions or allergies?
-									</div>
-									<ToggleSwitch
-										name="hasDietaryRestrictionsOrAllegies"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-									{registrationData.hasDietaryRestrictionsOrAllegies && (
-										<>
-											<label htmlFor="dietaryRestrictions" className="label">
-												Dietary Restrictions
-											</label>
-											<div className="my-2">
-												<input
-													id="dietaryRestrictions"
-													name="dietaryRestrictions"
-													onChange={handleChange}
-												/>
-											</div>
-											<label htmlFor="allergies" className="label">
-												Allergies
-											</label>
-											<div className="my-2">
-												<input
-													id="allergies"
-													name="allergies"
-													onChange={handleChange}
-												/>
-											</div>
-										</>
-									)}
-								</div>
-								{/** Major */}
-								<div className="card" id="major">
-									<div className="card-header">
-										What is your (intended) major?
-									</div>
-									<div className="my-2">
-										<Autocomplete
-											data="major"
-											onSelectionChange={handleAutocompleteChange}
+									<div className="space-y-2">
+										<Label htmlFor="lastName">Last Name</Label>
+										<Input
+											id="lastName"
+											name="lastName"
+											value={formData.lastName}
+											onChange={handleChange}
+											required
 										/>
 									</div>
-									{!registrationData.major && (
-										<label className="data-error">Required</label>
-									)}
 								</div>
-								{/** University */}
-								<div className="card" id="university">
-									<div className="card-header">What school do you attend?</div>
-									<div className="my-2">
-										<Autocomplete
-											data="university"
-											onSelectionChange={handleAutocompleteChange}
-										/>
-									</div>
-									{!registrationData.university && (
-										<label className="data-error">Required</label>
-									)}
-								</div>
-								{/** Academic Year */}
-								<div className="card" id="academicYear">
-									<div className="card-header">What is your academic year?</div>
-									<div className="my-2">
-										{[
-											"freshman",
-											"sophomore",
-											"junior",
-											"senior",
-											"graduate",
-											"other",
-										].map((year) => (
-											<React.Fragment key={year}>
-												<input
-													type="radio"
-													name="academicYear"
-													value={year}
-													id={year}
-													onChange={handleChange}
-												/>
-												<label htmlFor={year}>
-													{year.charAt(0).toUpperCase() + year.slice(1)}
-												</label>
-												<br />
-											</React.Fragment>
-										))}
-										{!registrationData.academicYear && (
-											<label className="data-error">Required</label>
-										)}
-									</div>
-								</div>
-								{/** Educational Institution Type */}
-								<div className="card" id="educationalInstitutionType">
-									<div className="card-header">
-										What type of educational institution are you enrolled in?
-									</div>
-									<div className="my-2">
-										{[
-											{
-												value: "less-than-secondary",
-												label: "Less than Secondary / High School",
-											},
-											{
-												value: "secondary",
-												label: "Secondary / High School",
-											},
-											{
-												value: "two-year-university",
-												label:
-													"Undergraduate University (2 year - community college or similar)",
-											},
-											{
-												value: "three-plus-year-university",
-												label: "Undergraduate University (3+ year)",
-											},
-											{
-												value: "graduate-university",
-												label:
-													"Graduate University (Masters, Professional, Doctoral, etc.)",
-											},
-											{
-												value: "code-school-or-bootcamp",
-												label: "Code School / Bootcamp",
-											},
-											{
-												value: "vocational-trade-apprenticeship",
-												label:
-													"Other Vocational / Trade Program or Apprenticeship",
-											},
-											{
-												value: "other",
-												label: "Other",
-											},
-											{
-												value: "not-a-student",
-												label: "I'm not currently a student",
-											},
-											{
-												value: "prefer-no-answer",
-												label: "Prefer not to answer",
-											},
-										].map((option) => (
-											<React.Fragment key={option.value}>
-												<input
-													type="radio"
-													name="educationalInstitutionType"
-													value={option.value}
-													id={option.value}
-													onChange={handleChange}
-												/>
-												<label htmlFor={option.value}>{option.label}</label>
-												<br />
-											</React.Fragment>
-										))}
-										{!registrationData.educationalInstitutionType && (
-											<label className="data-error">Required</label>
-										)}
-									</div>
-								</div>
-								{/** Resume */}
-								<div className="card" id="resume">
-									<div className="card-header">Submit a PDF of your resume</div>
-									<div className="info">
-										If a resume is submitted, it will be shared with employers
-										sponsoring HackPSU.
-									</div>
-									<div className="flex justify-center w-full my-2">
-										<div className="file-upload-container">
-											<input
-												type="file"
-												id="resume-input"
-												name="resume"
-												className="input-file"
-												onChange={handleFileChange}
-												accept="application/pdf"
+								<div className="space-y-2">
+									<Label>Gender</Label>
+									<RadioGroup
+										name="gender"
+										value={formData.gender}
+										onValueChange={(value) =>
+											handleSelectChange("gender", value)
+										}
+										className="flex flex-wrap gap-4 pt-2"
+									>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem value="male" id="male" />
+											<Label htmlFor="male">Male</Label>
+										</div>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem value="female" id="female" />
+											<Label htmlFor="female">Female</Label>
+										</div>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem value="non-binary" id="non-binary" />
+											<Label htmlFor="non-binary">Non-binary</Label>
+										</div>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem
+												value="no-disclose"
+												id="no-disclose-gender"
 											/>
-											<label
-												htmlFor="resume-input"
-												className="file-upload-button"
+											<Label htmlFor="no-disclose-gender">
+												Prefer not to say
+											</Label>
+										</div>
+									</RadioGroup>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="phone">Phone Number</Label>
+									<Input
+										id="phone"
+										name="phone"
+										type="tel"
+										placeholder="(123) 456-7890"
+										value={formData.phone}
+										onChange={handleChange}
+										required
+									/>
+								</div>
+								<div className="space-y-2">
+									<Label>Race/Ethnicity (Select all that apply)</Label>
+									<div className="space-y-2 pt-2">
+										{[
+											"Native American or Alaska Native",
+											"Asian",
+											"Black or African American",
+											"Hispanic or Latinx",
+											"Native Hawaiian or Other Pacific Islander",
+											"Caucasian",
+										].map((race) => (
+											<div key={race} className="flex items-center space-x-2">
+												<Checkbox
+													id={race}
+													checked={races.includes(race)}
+													onCheckedChange={(checked) =>
+														handleRaceChange(!!checked, race)
+													}
+												/>
+												<Label htmlFor={race} className="font-normal">
+													{race}
+												</Label>
+											</div>
+										))}
+									</div>
+								</div>
+								<div className="space-y-2">
+									<Label>Are you a veteran?</Label>
+									<RadioGroup
+										name="veteran"
+										value={formData.veteran}
+										onValueChange={(value) =>
+											handleSelectChange("veteran", value)
+										}
+										className="flex flex-wrap gap-4 pt-2"
+										required
+									>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem value="yes" id="vet-yes" />
+											<Label htmlFor="vet-yes">Yes</Label>
+										</div>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem value="no" id="vet-no" />
+											<Label htmlFor="vet-no">No</Label>
+										</div>
+										<div className="flex items-center space-x-2">
+											<RadioGroupItem
+												value="no-disclose"
+												id="vet-no-disclose"
+											/>
+											<Label htmlFor="vet-no-disclose">Prefer not to say</Label>
+										</div>
+									</RadioGroup>
+								</div>
+								<div className="space-y-2">
+									<Label htmlFor="age">Age (at the time of the event)</Label>
+									<Select
+										name="age"
+										value={String(formData.age)}
+										onValueChange={(value) =>
+											handleSelectChange("age", Number(value))
+										}
+										required
+									>
+										<SelectTrigger>
+											<SelectValue placeholder="Select your age" />
+										</SelectTrigger>
+										<SelectContent>{ageOptions}</SelectContent>
+									</Select>
+									<p className="text-sm text-muted-foreground">
+										You must be 18 or older to participate.
+									</p>
+								</div>
+							</CardContent>
+						</Card>
+
+						{formData.age >= 18 && (
+							<>
+								{/* Logistics & Preferences */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Logistics & Preferences</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-6">
+										<div className="space-y-2">
+											<Label htmlFor="shirtSize">T-Shirt Size (Unisex)</Label>
+											<Select
+												name="shirtSize"
+												value={formData.shirtSize}
+												onValueChange={(value) =>
+													handleSelectChange("shirtSize", value)
+												}
+												required
 											>
-												Upload Resume
-											</label>
+												<SelectTrigger>
+													<SelectValue placeholder="Select a size" />
+												</SelectTrigger>
+												<SelectContent>
+													{["XS", "S", "M", "L", "XL", "XXL"].map((size) => (
+														<SelectItem key={size} value={size}>
+															{size}
+														</SelectItem>
+													))}
+												</SelectContent>
+											</Select>
 										</div>
-									</div>
-									{registrationData.resume && (
-										<a className="resume-download" onClick={downloadResume}>
-											{(registrationData.resume as File).name}
-										</a>
-									)}
-								</div>
-								{/** MLH Code of Conduct */}
-								<div className="card" id="mlhCoc">
-									<div className="card-header">
-										Do you agree to the MLH Code of Conduct?
-									</div>
-									<span>
-										<p className="inline">I have read and agree to the&nbsp;</p>
-										<a
-											href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											MLH Code of Conduct
-										</a>
-										<p className="info">
-											To participate at HackPSU, you must agree to this policy.
-										</p>
-									</span>
-									<ToggleSwitch
-										name="mlhCoc"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-									{!registrationData.mlhCoc && (
-										<label className="data-error">Required</label>
-									)}
-								</div>
-								{/** MLH Data Sharing */}
-								<div className="card" id="mlhDcp">
-									<div className="card-header">
-										Do you agree to the MLH Data Sharing?
-									</div>
-									<span>
-										By agreeing, you authorize MLH to share your registration
-										information with event sponsors and MLH as outlined in the{" "}
-										<a
-											href="https://mlh.io/privacy"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											MLH Privacy Policy
-										</a>
-										.
-										<p className="info">
-											To participate at HackPSU, you must agree to this policy.
-										</p>
-									</span>
-									<ToggleSwitch
-										name="mlhDcp"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-									{!registrationData.mlhDcp && (
-										<label className="data-error">Required</label>
-									)}
-								</div>
-								{/** Share Email with MLH */}
-								<div className="card" id="shareEmailMlh">
-									<div className="card-header">
-										Do you want to opt into further communications from MLH?
-									</div>
-									<span>
-										<p className="inline">
-											I authorize MLH to send me occasional emails about
-											relevant events and opportunities.
-										</p>
-										<br />
-										<br />
-										<p className="info">This is entirely optional.</p>
-									</span>
-									<ToggleSwitch
-										name="shareEmailMlh"
-										on="Yes"
-										off="No"
-										onChange={handleToggle}
-									/>
-								</div>
-								{registrationData.mlhCoc && registrationData.mlhDcp && (
-									<>
-										{/** Coding Experience */}
-										<div className="card" id="codingExperience">
-											<div className="card-header">
-												What is your level of coding experience?
-											</div>
-											<div className="my-2">
-												<input
-													type="radio"
-													name="codingExperience"
-													value="none"
-													id="none"
-													onChange={handleChange}
-												/>
-												<label htmlFor="none">None</label>
-												<br />
-												<input
-													type="radio"
-													name="codingExperience"
-													value="beginner"
-													id="beginner"
-													onChange={handleChange}
-												/>
-												<label htmlFor="beginner">Beginner (0-2 years)</label>
-												<br />
-												<input
-													type="radio"
-													name="codingExperience"
-													value="intermediate"
-													id="intermediate"
-													onChange={handleChange}
-												/>
-												<label htmlFor="intermediate">
-													Intermediate (2-4 years)
-												</label>
-												<br />
-												<input
-													type="radio"
-													name="codingExperience"
-													value="advanced"
-													id="advanced"
-													onChange={handleChange}
-												/>
-												<label htmlFor="advanced">
-													Advanced (&gt; 4 years)
-												</label>
-												<br />
-											</div>
+										<div className="space-y-2">
+											<Label htmlFor="country">Country of Residence</Label>
+											<Autocomplete
+												data={Object.keys(countries)}
+												value={formData.country}
+												placeholder="Select your country"
+												onSelectionChange={(value) =>
+													handleSelectChange("country", value)
+												}
+											/>
 										</div>
-										{/** Referral */}
-										<div className="card" id="referral">
-											<div className="card-header">
-												Where did you hear about HackPSU?
+										<div className="flex items-center justify-between rounded-lg border p-4">
+											<div className="space-y-0.5">
+												<Label>Will you be driving to the event?</Label>
 											</div>
-											<div className="my-2">
+											<Switch
+												name="driving"
+												checked={formData.driving}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("driving", checked)
+												}
+											/>
+										</div>
+										<div className="flex items-center justify-between rounded-lg border p-4">
+											<div className="space-y-0.5">
+												<Label>Is this your first hackathon?</Label>
+											</div>
+											<Switch
+												name="firstHackathon"
+												checked={formData.firstHackathon}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("firstHackathon", checked)
+												}
+											/>
+										</div>
+									</CardContent>
+								</Card>
+
+								{/* Dietary Needs */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Dietary Needs</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-6">
+										<div className="flex items-center justify-between rounded-lg border p-4">
+											<div className="space-y-0.5">
+												<Label>
+													Do you have any dietary restrictions or allergies?
+												</Label>
+											</div>
+											<Switch
+												name="hasDietaryRestrictions"
+												checked={formData.hasDietaryRestrictions}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("hasDietaryRestrictions", checked)
+												}
+											/>
+										</div>
+										{formData.hasDietaryRestrictions && (
+											<div className="space-y-4">
+												<div className="space-y-2">
+													<Label htmlFor="dietaryRestriction">
+														Dietary Restrictions
+													</Label>
+													<Textarea
+														id="dietaryRestriction"
+														name="dietaryRestriction"
+														placeholder="e.g., Vegetarian, Gluten-Free"
+														value={formData.dietaryRestriction}
+														onChange={handleChange}
+													/>
+												</div>
+												<div className="space-y-2">
+													<Label htmlFor="allergies">Allergies</Label>
+													<Textarea
+														id="allergies"
+														name="allergies"
+														placeholder="e.g., Peanuts, Shellfish"
+														value={formData.allergies}
+														onChange={handleChange}
+													/>
+												</div>
+											</div>
+										)}
+									</CardContent>
+								</Card>
+
+								{/* Education & Professional */}
+								<Card>
+									<CardHeader>
+										<CardTitle>Education & Professional</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-6">
+										<div className="space-y-2">
+											<Label htmlFor="university">School/University</Label>
+											<Autocomplete
+												data={Object.keys(universities)}
+												value={formData.university}
+												placeholder="Select your school"
+												onSelectionChange={(value) =>
+													handleSelectChange("university", value)
+												}
+											/>
+										</div>
+										<div className="space-y-2">
+											<Label htmlFor="major">Major</Label>
+											<Autocomplete
+												data={Object.keys(majors)}
+												value={formData.major}
+												placeholder="Select your major"
+												onSelectionChange={(value) =>
+													handleSelectChange("major", value)
+												}
+											/>
+										</div>
+										<div className="space-y-2">
+											<Label>Academic Year</Label>
+											<RadioGroup
+												name="academicYear"
+												value={formData.academicYear}
+												onValueChange={(value) =>
+													handleSelectChange("academicYear", value)
+												}
+												className="flex flex-wrap gap-4 pt-2"
+												required
+											>
+												{[
+													"freshman",
+													"sophomore",
+													"junior",
+													"senior",
+													"graduate",
+													"other",
+												].map((year) => (
+													<div
+														key={year}
+														className="flex items-center space-x-2"
+													>
+														<RadioGroupItem value={year} id={year} />
+														<Label htmlFor={year} className="capitalize">
+															{year}
+														</Label>
+													</div>
+												))}
+											</RadioGroup>
+										</div>
+										<div className="space-y-2">
+											<Label>Educational Institution Type</Label>
+											<Select
+												name="educationalInstitutionType"
+												value={formData.educationalInstitutionType}
+												onValueChange={(value) =>
+													handleSelectChange(
+														"educationalInstitutionType",
+														value
+													)
+												}
+												required
+											>
+												<SelectTrigger>
+													<SelectValue placeholder="Select institution type" />
+												</SelectTrigger>
+												<SelectContent>
+													<SelectItem value="less-than-secondary">
+														Less than Secondary / High School
+													</SelectItem>
+													<SelectItem value="secondary">
+														Secondary / High School
+													</SelectItem>
+													<SelectItem value="two-year-university">
+														Undergraduate University (2 year)
+													</SelectItem>
+													<SelectItem value="three-plus-year-university">
+														Undergraduate University (3+ year)
+													</SelectItem>
+													<SelectItem value="graduate-university">
+														Graduate University
+													</SelectItem>
+													<SelectItem value="code-school-or-bootcamp">
+														Code School / Bootcamp
+													</SelectItem>
+													<SelectItem value="other">Other</SelectItem>
+												</SelectContent>
+											</Select>
+										</div>
+										<div className="space-y-2">
+											<Label htmlFor="resume">Resume (PDF only)</Label>
+											<Input
+												id="resume"
+												name="resume"
+												type="file"
+												accept="application/pdf"
+												onChange={handleFileChange}
+											/>
+											<p className="text-sm text-muted-foreground">
+												Your resume will be shared with our sponsors.
+											</p>
+										</div>
+									</CardContent>
+								</Card>
+
+								{/* MLH Agreements */}
+								<Card>
+									<CardHeader>
+										<CardTitle>MLH Agreements</CardTitle>
+										<CardDescription>
+											These are required to participate in the event.
+										</CardDescription>
+									</CardHeader>
+									<CardContent className="space-y-6">
+										<div className="flex items-start justify-between rounded-lg border p-4">
+											<div className="space-y-1.5 pr-4">
+												<Label>MLH Code of Conduct</Label>
+												<p className="text-sm text-muted-foreground">
+													I have read and agree to the{" "}
+													<a
+														href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+														target="_blank"
+														rel="noopener noreferrer"
+														className="underline"
+													>
+														MLH Code of Conduct
+													</a>
+													.
+												</p>
+											</div>
+											<Switch
+												name="mlhCoc"
+												checked={formData.mlhCoc}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("mlhCoc", checked)
+												}
+											/>
+										</div>
+										<div className="flex items-start justify-between rounded-lg border p-4">
+											<div className="space-y-1.5 pr-4">
+												<Label>MLH Data Sharing</Label>
+												<p className="text-sm text-muted-foreground">
+													I authorize MLH to share my registration information
+													with event sponsors as per the{" "}
+													<a
+														href="https://mlh.io/privacy"
+														target="_blank"
+														rel="noopener noreferrer"
+														className="underline"
+													>
+														MLH Privacy Policy
+													</a>
+													.
+												</p>
+											</div>
+											<Switch
+												name="mlhDcp"
+												checked={formData.mlhDcp}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("mlhDcp", checked)
+												}
+											/>
+										</div>
+										<div className="flex items-start justify-between rounded-lg border p-4">
+											<div className="space-y-1.5 pr-4">
+												<Label>MLH Communications (Optional)</Label>
+												<p className="text-sm text-muted-foreground">
+													I authorize MLH to send me occasional emails about
+													relevant events and opportunities.
+												</p>
+											</div>
+											<Switch
+												name="shareEmailMlh"
+												checked={formData.shareEmailMlh}
+												onCheckedChange={(checked) =>
+													handleSwitchChange("shareEmailMlh", checked)
+												}
+											/>
+										</div>
+									</CardContent>
+								</Card>
+
+								{/* Additional Questions */}
+								{formData.mlhCoc && formData.mlhDcp && (
+									<Card>
+										<CardHeader>
+											<CardTitle>Additional Questions</CardTitle>
+										</CardHeader>
+										<CardContent className="space-y-6">
+											<div className="space-y-2">
+												<Label>Level of coding experience?</Label>
+												<RadioGroup
+													name="codingExperience"
+													value={formData.codingExperience}
+													onValueChange={(value) =>
+														handleSelectChange("codingExperience", value)
+													}
+													className="flex flex-wrap gap-4 pt-2"
+													required
+												>
+													<div className="flex items-center space-x-2">
+														<RadioGroupItem value="none" id="exp-none" />
+														<Label htmlFor="exp-none">None</Label>
+													</div>
+													<div className="flex items-center space-x-2">
+														<RadioGroupItem
+															value="beginner"
+															id="exp-beginner"
+														/>
+														<Label htmlFor="exp-beginner">
+															Beginner (0-2 years)
+														</Label>
+													</div>
+													<div className="flex items-center space-x-2">
+														<RadioGroupItem
+															value="intermediate"
+															id="exp-intermediate"
+														/>
+														<Label htmlFor="exp-intermediate">
+															Intermediate (2-4 years)
+														</Label>
+													</div>
+													<div className="flex items-center space-x-2">
+														<RadioGroupItem
+															value="advanced"
+															id="exp-advanced"
+														/>
+														<Label htmlFor="exp-advanced">
+															Advanced (4+ years)
+														</Label>
+													</div>
+												</RadioGroup>
+											</div>
+											<div className="space-y-2">
+												<Label htmlFor="referral">
+													How did you hear about us?
+												</Label>
 												<Autocomplete
-													data="referral"
-													onSelectionChange={handleAutocompleteChange}
-													searchTermMin={1}
+													data={Object.keys(referrals)}
+													value={formData.referral}
+													placeholder="Select a source"
+													onSelectionChange={(value) =>
+														handleSelectChange("referral", value)
+													}
 												/>
 											</div>
-											{!registrationData.referral && (
-												<label className="data-error">Required</label>
-											)}
-										</div>
-										{/** Project */}
-										<div className="card" id="project">
-											<div className="card-header">
-												What is a project you’re proud of?
-											</div>
-											<div className="my-2">
-												<textarea
+											<div className="space-y-2">
+												<Label htmlFor="project">
+													What is a project you&apos;re proud of?
+												</Label>
+												<Textarea
 													id="project"
 													name="project"
+													placeholder="Describe a project and your role in it..."
+													value={formData.project}
 													onChange={handleChange}
 												/>
 											</div>
-										</div>
-										{/** Expectations */}
-										<div className="card" id="expectations">
-											<div className="card-header">
-												What would you like to get out of HackPSU?
-											</div>
-											<div className="my-2">
-												<textarea
+											<div className="space-y-2">
+												<Label htmlFor="expectations">
+													What do you want to get out of this hackathon?
+												</Label>
+												<Textarea
 													id="expectations"
 													name="expectations"
+													placeholder="e.g., Learn a new skill, meet new people, build something cool..."
+													value={formData.expectations}
 													onChange={handleChange}
 												/>
 											</div>
-										</div>
-										{/** Submit */}
-										<div id="submit" className="flex items-center">
-											<BigButton className="bg-blue-300 border rounded-full p-4 flex justify-center">
-												<p className="text-white">Register</p>
-											</BigButton>
-										</div>
-									</>
+										</CardContent>
+									</Card>
 								)}
 							</>
 						)}
+
+						<CardFooter>
+							<Button
+								type="submit"
+								className="w-full"
+								size="lg"
+								disabled={formData.age < 18}
+							>
+								Register
+							</Button>
+						</CardFooter>
 					</form>
 				</div>
 			</div>
-
-			{/** Sidebar (shown on large screens) */}
-			{typeof window !== "undefined" && window.innerWidth >= 1024 && (
-				<div className="p-2 m-auto fixed top-0 left-0 h-full w-[300px] flex justify-center items-center hidden lg:flex">
-					{registrationData.age ? (
-						<div className="bg-white opacity-80 p-4 w-[225px] border rounded-lg flex flex-col absolute right-0">
-							{Array.from(sidebarFields.keys()).map((field) =>
-								field === "Additional Questions" &&
-								(!registrationData.mlhCoc ||
-									!registrationData.mlhDcp) ? null : (
-									<a
-										key={field}
-										className={
-											selectedSidebarField === field
-												? "sidebar-selected"
-												: "sidebar"
-										}
-										onClick={() => handleSidebarSelect(field)}
-									>
-										{field}
-									</a>
-								)
-							)}
-							<br />
-							<p>
-								Any issues? - Email us at <br />{" "}
-								<a href="mailto:technology@hackpsu.org">
-									technology@hackpsu.org
-								</a>
-							</p>
-						</div>
-					) : null}
-				</div>
-			)}
-
-			{/** Alert */}
-			{showAlert && (
-				<Alert
-					message={alertMessage}
-					onClose={() => setShowAlert(false)}
-					severity={alertSeverity}
-				/>
-			)}
 		</>
 	);
-};
-
-export default Registration;
+}

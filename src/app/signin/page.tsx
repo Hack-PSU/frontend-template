@@ -32,6 +32,11 @@ const AuthPage: React.FC = () => {
 		}
 	}, [isAuthenticated, router]);
 
+	// Track signin page view
+	useEffect(() => {
+		track("signin_page_view");
+	}, []);
+
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setAuthData((prev) => ({ ...prev, [name]: value }));

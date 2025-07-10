@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useUserInfoMe } from "@/lib/api/user/hook";
@@ -9,49 +9,77 @@ import {
 	useCreateAppleWalletPass,
 } from "@/lib/api/wallet/hook";
 import Image from "next/image";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import googleWalletImg from "../../../public/google_wallet.svg";
-import appleWalletImg from "../../../public/apple_wallet.svg";
 import QRCode from "react-qr-code";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardHeader,
+	CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
+import { toast } from "sonner";
+import {
+	User,
+	Mail,
+	QrCode,
+	Wallet,
+	FileText,
+	LogOut,
+	Eye,
+	EyeOff,
+	Loader2,
+} from "lucide-react";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
 	const router = useRouter();
 	const { data: userData } = useUserInfoMe();
 
-	// Mutation for Google Wallet
-	const { mutateAsync: createWalletPass } = useCreateWalletPass();
-
-	// Mutation for Apple Wallet
-	const { mutateAsync: createAppleWalletPass } = useCreateAppleWalletPass();
+	// Mutations for wallet integration
+	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
+		useCreateWalletPass();
+	const {
+		mutateAsync: createAppleWalletPass,
+		isPending: isCreatingAppleWallet,
+	} = useCreateAppleWalletPass();
 
 	const [showQRCode, setShowQRCode] = useState(false);
+
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
 		try {
-			if (!user) return; // Safeguard for unauthenticated users
+			if (!user) {
+				toast.error("Please sign in to add to Google Wallet");
+				return;
+			}
+
 			const response = await createWalletPass(user.uid);
 			if (response?.walletLink) {
 				window.open(response.walletLink, "_blank");
+				toast.success("Google Wallet pass created successfully!");
 			} else {
-				console.error("No wallet link received:", response);
+				throw new Error("No wallet link received");
 			}
 		} catch (error) {
 			console.error("Error creating wallet pass:", error);
-			alert("Failed to create Google Wallet pass.");
+			toast.error("Failed to create Google Wallet pass. Please try again.");
 		}
 	};
 
 	// Handle add-to-Apple Wallet click
 	const handleAddToAppleWallet = async () => {
 		try {
-			if (!user) return;
+			if (!user) {
+				toast.error("Please sign in to add to Apple Wallet");
+				return;
+			}
+
 			const response = await createAppleWalletPass(user.uid);
-			console.log("Apple Wallet pass response:", response);
-			// open the pass in a new tab
 			const blobUrl = URL.createObjectURL(response);
 			const link = document.createElement("a");
 			link.href = blobUrl;
@@ -61,9 +89,11 @@ export default function Profile() {
 
 			// Clean up
 			URL.revokeObjectURL(blobUrl);
+
+			toast.success("Apple Wallet pass downloaded successfully!");
 		} catch (error) {
 			console.error("Error creating Apple Wallet pass:", error);
-			alert("Failed to create Apple Wallet pass.");
+			toast.error("Failed to create Apple Wallet pass. Please try again.");
 		}
 	};
 
@@ -71,138 +101,196 @@ export default function Profile() {
 		try {
 			await logout();
 			router.push("/");
+			toast.success("You have been successfully signed out.");
 		} catch (error) {
 			console.error("Error signing out:", error);
-			alert("An error occurred while trying to sign out.");
+			toast.error("An error occurred while signing out. Please try again.");
 		}
 	};
 
-	const handleReimbursement = async () => {
+	const handleReimbursement = () => {
 		if (user) {
 			router.push("/reimbursements");
 		} else {
 			router.push("/signin");
-			alert("Must be logged in to submit reimbursement form");
+			toast.error("Please sign in to submit a reimbursement form.");
 		}
 	};
 
-	return (
-		<div className="flex min-h-full flex-1 flex-col justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8 font-sans">
-			<div className="mx-auto w-full max-w-md sm:max-w-lg lg:max-w-xl bg-gradient-to-r from-[#00000080] to-[#000000f1] border-red-500 border-4 rounded-lg px-6 py-10 shadow-lg sm:px-12">
-				{/* Profile header */}
-				<div className="text-center">
-					<div className="flex justify-center mb-4">
-						{user?.photoURL ? (
-							<Image
-								src={user.photoURL}
-								alt="Profile Picture"
-								width={80}
-								height={80}
-								className="w-20 h-20 sm:w-24 sm:h-24 rounded-full"
-							/>
-						) : (
-							<AccountCircleIcon style={{ fontSize: 80, color: "white" }} />
-						)}
-					</div>
-					<h2 className="text-xl sm:text-2xl font-bold text-white">Profile</h2>
+	if (isLoading) {
+		return (
+			<div className="flex min-h-screen items-center justify-center">
+				<div className="flex items-center space-x-2">
+					<Loader2 className="h-6 w-6 animate-spin" />
+					<span className="text-lg">Loading profile...</span>
 				</div>
+			</div>
+		);
+	}
 
-				{/* Basic info */}
-				<dl className="mt-6 space-y-4 divide-y divide-white text-white text-base sm:text-lg">
-					<div className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:items-center">
-						<div className="font-medium sm:w-64 sm:flex-none sm:pr-6">Name</div>
-						<div className="mt-1 sm:mt-0 sm:flex-auto">
-							{isLoading
-								? "Loading..."
-								: `${userData?.firstName} ${userData?.lastName}`}
-						</div>
-					</div>
-					<div className="pt-4 sm:pt-6 flex flex-col sm:flex-row sm:items-center">
-						<div className="font-medium sm:w-64 sm:flex-none sm:pr-6">
-							Email
-						</div>
-						<div className="mt-1 sm:mt-0 sm:flex-auto">{user?.email}</div>
-					</div>
-				</dl>
+	if (!isAuthenticated || !user) {
+		router.push("/signin");
+		return null;
+	}
 
-				{/* QR code section */}
-				<div className="mt-8">
-					<h2 className="text-lg sm:text-xl font-semibold text-white">
-						QR Code
-					</h2>
-					<p className="mt-2 text-sm sm:text-lg text-white">
-						Bring this QR Code to sign in for the Hackathons and Workshops.
-					</p>
-					<button
-						type="button"
-						className="mt-4 w-full text-sm sm:text-base px-4 py-2 font-light rounded-md border-2 border-white text-white hover:bg-white hover:text-indigo-600 transition-colors duration-300"
-						onClick={toggleQRCode}
-					>
-						{showQRCode ? "Hide QR Code" : "View QR Code"}
-					</button>
-					{showQRCode && (
-						<div className="mt-2 mb-2 flex justify-center">
-							<div className="bg-white p-2 sm:p-4">
-								<QRCode
-									value={`HACKPSU_${user?.uid ?? ""}`}
-									size={300}
-									level="H"
-								/>
+	return (
+		<div className="min-h-screen bg-gradient-to-br py-8 px-4">
+			<div className="mx-auto max-w-4xl space-y-6">
+				{/* Profile Header */}
+				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+					<CardHeader className="text-center">
+						<div className="flex justify-center mb-4">
+							<Avatar className="h-24 w-24">
+								<AvatarImage src={user.photoURL || ""} alt="Profile Picture" />
+								<AvatarFallback className="bg-slate-700 text-white text-2xl">
+									<User className="h-12 w-12" />
+								</AvatarFallback>
+							</Avatar>
+						</div>
+						<CardTitle className="text-2xl md:text-3xl font-bold">
+							{userData?.firstName && userData?.lastName
+								? `${userData.firstName} ${userData.lastName}`
+								: "Profile"}
+						</CardTitle>
+						<CardDescription className="text-slate-300">
+							HackPSU Participant
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="flex items-center justify-center space-x-2">
+							<Mail className="h-5 w-5" />
+							<span className="text-sm md:text-base">{user.email}</span>
+						</div>
+					</CardContent>
+				</Card>
+
+				{/* QR Code Section */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center space-x-2">
+							<QrCode className="h-6 w-6" />
+							<span>Check-in QR Code</span>
+						</CardTitle>
+						<CardDescription>
+							Use this QR code to sign in for hackathons and workshops
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<Button
+							onClick={toggleQRCode}
+							variant="outline"
+							className="w-full bg-transparent"
+							size="lg"
+						>
+							{showQRCode ? (
+								<>
+									<EyeOff className="mr-2 h-4 w-4" />
+									Hide QR Code
+								</>
+							) : (
+								<>
+									<Eye className="mr-2 h-4 w-4" />
+									Show QR Code
+								</>
+							)}
+						</Button>
+
+						{showQRCode && (
+							<div className="flex justify-center">
+								<div className="bg-white p-4 rounded-lg shadow-lg">
+									<QRCode
+										value={`HACKPSU_${user.uid}`}
+										size={Math.min(300, window.innerWidth - 120)}
+										level="H"
+									/>
+								</div>
+							</div>
+						)}
+					</CardContent>
+				</Card>
+
+				{/* Wallet Integration */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center space-x-2">
+							<Wallet className="h-6 w-6" />
+							<span>Add to Wallet</span>
+						</CardTitle>
+						<CardDescription>
+							Save your HackPSU pass to your digital wallet for easy access
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div className="flex justify-center">
+								{isCreatingGoogleWallet ? (
+									<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
+										<Loader2 className="h-6 w-6 animate-spin" />
+									</div>
+								) : (
+									<Image
+										src="/google_wallet.svg"
+										alt="Add to Google Wallet"
+										width={200}
+										height={60}
+										className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+										onClick={handleAddToGoogleWallet}
+										priority
+									/>
+								)}
+							</div>
+
+							<div className="flex justify-center">
+								{isCreatingAppleWallet ? (
+									<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
+										<Loader2 className="h-6 w-6 animate-spin" />
+									</div>
+								) : (
+									<Image
+										src="/apple_wallet.svg"
+										alt="Add to Apple Wallet"
+										width={200}
+										height={60}
+										className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
+										onClick={handleAddToAppleWallet}
+										priority
+									/>
+								)}
 							</div>
 						</div>
-					)}
-				</div>
+					</CardContent>
+				</Card>
 
-				{/* ADD TO WALLET BUTTONS */}
-				<div className="mt-8 flex flex-col items-center space-y-4">
-					<button
-						type="button"
-						onClick={handleAddToGoogleWallet}
-						className="hover:opacity-80 transition-opacity duration-200"
-					>
-						<Image
-							src={googleWalletImg}
-							alt="Add to Google Wallet"
-							width={200}
-							height={50}
-							priority
-						/>
-					</button>
-					<button
-						type="button"
-						onClick={handleAddToAppleWallet}
-						className="hover:opacity-80 transition-opacity duration-200"
-					>
-						<Image
-							src={appleWalletImg}
-							alt="Add to Apple Wallet"
-							width={200}
-							height={50}
-							priority
-						/>
-					</button>
-				</div>
+				{/* Actions */}
+				<Card>
+					<CardHeader>
+						<CardTitle>Quick Actions</CardTitle>
+						<CardDescription>Manage your HackPSU experience</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<Button
+							onClick={handleReimbursement}
+							className="w-full"
+							variant="default"
+							size="lg"
+						>
+							<FileText className="mr-2 h-4 w-4" />
+							Submit Reimbursement Form
+						</Button>
 
-				<div className="mt-8">
-					<button
-						type="button"
-						className="w-full text-sm sm:text-base px-4 py-2 font-light rounded-md border-2 border-blue-500 text-white hover:bg-blue-500 transition-colors duration-300"
-						onClick={handleReimbursement}
-					>
-						Submit Reimbursement Form
-					</button>
-				</div>
+						<Separator />
 
-				{/* Sign-out button */}
-				<div className="mt-8">
-					<button
-						type="button"
-						className="w-full text-sm sm:text-base px-4 py-2 font-light rounded-md border-2 border-red-500 text-white hover:bg-red-500 transition-colors duration-300"
-						onClick={handleSignOut}
-					>
-						Sign Out
-					</button>
-				</div>
+						<Button
+							onClick={handleSignOut}
+							variant="destructive"
+							className="w-full"
+							size="lg"
+						>
+							<LogOut className="mr-2 h-4 w-4" />
+							Sign Out
+						</Button>
+					</CardContent>
+				</Card>
 			</div>
 		</div>
 	);
