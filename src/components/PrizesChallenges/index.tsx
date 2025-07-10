@@ -58,7 +58,6 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 };
 
 const PrizesChallenges: React.FC = () => {
-
 	// Temporary early return while we update the prizes
 	return;
 

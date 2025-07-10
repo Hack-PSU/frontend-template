@@ -5,7 +5,7 @@ import LayoutProvider from "@/lib/providers/LayoutProvider";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import {GoogleAnalytics} from "@next/third-parties/google"
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const inter = Inter({ subsets: ["latin"] });
 

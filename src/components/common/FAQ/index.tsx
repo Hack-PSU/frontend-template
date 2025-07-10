@@ -62,14 +62,14 @@ const faqs = [
 			text: "devpost.hackpsu.org",
 		},
 	},
-{
-question: "Is there a code of conduct?",
-answer: "All participants are expected to follow the MLH Code of Conduct",
-link: {
-target: "http://mlh.io/code-of-conduct",
-text: "MLH Code of Conduct",
-},
-},
+	{
+		question: "Is there a code of conduct?",
+		answer: "All participants are expected to follow the MLH Code of Conduct",
+		link: {
+			target: "http://mlh.io/code-of-conduct",
+			text: "MLH Code of Conduct",
+		},
+	},
 ];
 
 const FAQ = () => {

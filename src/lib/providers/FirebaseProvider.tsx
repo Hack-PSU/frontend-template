@@ -237,9 +237,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 	}, [auth]);
 
 	const actionCodeSettings = {
-		// This must be listed under "Authorized domains" in your Firebase console
-		url: "https://hackpsu.org/reset-password",
-		// Use in-app handling so Firebase gives you back the oobCode in the URL
+		url: "https://hackpsu.org/login",
 		handleCodeInApp: true,
 	};
 
