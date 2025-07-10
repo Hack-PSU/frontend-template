@@ -40,6 +40,7 @@ import { useReplaceUser, useUserInfoMe } from "@/lib/api/user/hook";
 import { useCreateRegistration } from "@/lib/api/registration/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon";
+import { track } from "@vercel/analytics";
 
 type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 	Omit<
@@ -63,6 +64,17 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useReplaceUser();
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
+
+	const trackPageView = () => {
+		if (user) {
+			track("registration_page_view", {
+				userId: user.uid,
+			});
+		}
+	};
+	useEffect(() => {
+		trackPageView();
+	}, [hackathon, user]);
 
 	const [formData, setFormData] = useState<FormData>({
 		firstName: "",
