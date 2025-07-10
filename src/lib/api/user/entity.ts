@@ -17,6 +17,10 @@ export interface UserEntity {
 	resume?: string;
 }
 
+export interface UserCreateEntity extends Omit<UserEntity, "id" | "resume"> {
+	resume?: File;
+}
+
 export interface UserInfoMe extends UserEntity {
 	registration: RegistrationEntity;
 }

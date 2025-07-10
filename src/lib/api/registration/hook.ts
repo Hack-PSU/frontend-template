@@ -1,3 +1,4 @@
+// src/common/api/registration/hooks.ts
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
 	getAllRegistrations,
@@ -15,7 +16,7 @@ import {
 
 export const registrationQueryKeys = {
 	all: ["registrations"] as const,
-	detail: (id: number) => ["registrations", id] as const,
+	detail: (id: string) => ["registration", id] as const,
 };
 
 export function useAllRegistrations(all?: boolean) {
@@ -25,7 +26,7 @@ export function useAllRegistrations(all?: boolean) {
 	});
 }
 
-export function useRegistration(id: number) {
+export function useRegistration(id: string) {
 	return useQuery<RegistrationEntity>({
 		queryKey: registrationQueryKeys.detail(id),
 		queryFn: () => getRegistration(id),
@@ -36,13 +37,8 @@ export function useRegistration(id: number) {
 export function useCreateRegistration() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({
-			userId,
-			data,
-		}: {
-			userId: string;
-			data: RegistrationCreateEntity;
-		}) => createRegistration(userId, data),
+		mutationFn: (opts: { userId: string; data: RegistrationCreateEntity }) =>
+			createRegistration(opts.userId, opts.data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
 		},
@@ -52,15 +48,13 @@ export function useCreateRegistration() {
 export function useUpdateRegistration() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({
-			id,
-			data,
-		}: {
-			id: number;
-			data: RegistrationUpdateEntity;
-		}) => updateRegistration(id, data),
-		onSuccess: () => {
+		mutationFn: (opts: { id: string; data: RegistrationUpdateEntity }) =>
+			updateRegistration(opts.id, opts.data),
+		onSuccess: (updated) => {
 			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
+			queryClient.invalidateQueries({
+				queryKey: registrationQueryKeys.detail(updated.id.toString()),
+			});
 		},
 	});
 }
@@ -68,15 +62,13 @@ export function useUpdateRegistration() {
 export function useReplaceRegistration() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({
-			id,
-			data,
-		}: {
-			id: number;
-			data: RegistrationCreateEntity;
-		}) => replaceRegistration(id, data),
-		onSuccess: () => {
+		mutationFn: (opts: { id: string; data: RegistrationCreateEntity }) =>
+			replaceRegistration(opts.id, opts.data),
+		onSuccess: (updated) => {
 			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
+			queryClient.invalidateQueries({
+				queryKey: registrationQueryKeys.detail(updated.id.toString()),
+			});
 		},
 	});
 }
@@ -84,7 +76,7 @@ export function useReplaceRegistration() {
 export function useDeleteRegistration() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (id: number) => deleteRegistration(id),
+		mutationFn: (id: string) => deleteRegistration(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
 		},

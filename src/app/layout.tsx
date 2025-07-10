@@ -10,7 +10,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-	title: "HackPSU Spring 2025",
+	title: "HackPSU Fall 2025",
 	description: "Main website for HackPSU",
 };
 
