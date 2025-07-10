@@ -24,42 +24,15 @@ export default function ResetPasswordPage() {
 
 	const mode = params.get("mode");
 	const oobCode = params.get("oobCode");
-	const continueUrl = params.get("continueUrl") || "/login";
+	const continueUrl = params.get("continueUrl") || "/signin";
 
 	const [step, setStep] = useState<
 		"verifying" | "ready" | "submitting" | "done"
 	>("verifying");
 	const [email, setEmail] = useState("");
 	const [newPassword, setNewPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState("");
-	const [passwordStrength, setPasswordStrength] = useState<
-		"weak" | "medium" | "strong" | null
-	>(null);
 
-	// Password strength checker
-	const checkPasswordStrength = (password: string) => {
-		if (password.length < 6) return "weak";
-		if (password.length < 8) return "medium";
-		if (
-			password.match(
-				/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/
-			)
-		) {
-			return "strong";
-		}
-		return "medium";
-	};
-
-	useEffect(() => {
-		if (newPassword) {
-			setPasswordStrength(checkPasswordStrength(newPassword));
-		} else {
-			setPasswordStrength(null);
-		}
-	}, [newPassword]);
-
-	// Verify the action code
 	useEffect(() => {
 		if (mode !== "resetPassword" || !oobCode) {
 			setError("Invalid or missing reset code.");
@@ -87,17 +60,6 @@ export default function ResetPasswordPage() {
 
 		if (!oobCode) return;
 
-		// Validation
-		if (newPassword.length < 6) {
-			setError("Password must be at least 6 characters long.");
-			return;
-		}
-
-		if (newPassword !== confirmPassword) {
-			setError("Passwords do not match.");
-			return;
-		}
-
 		setError("");
 		setStep("submitting");
 
@@ -109,8 +71,7 @@ export default function ResetPasswordPage() {
 			let errorMessage = "Failed to reset password. Please try again.";
 
 			if (e.code === "auth/weak-password") {
-				errorMessage =
-					"Password is too weak. Please choose a stronger password.";
+				errorMessage = "Please choose a stronger password.";
 			} else if (e.code === "auth/expired-action-code") {
 				errorMessage = "This reset link has expired. Please request a new one.";
 			} else if (e.code === "auth/invalid-action-code") {
@@ -125,7 +86,7 @@ export default function ResetPasswordPage() {
 	// Verifying state
 	if (step === "verifying") {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50">
+			<div className="min-h-screen flex items-center justify-center">
 				<Card className="w-full max-w-md">
 					<CardContent className="flex flex-col items-center justify-center py-12">
 						<Loader2 className="h-8 w-8 animate-spin text-gray-600 mb-4" />
@@ -139,7 +100,7 @@ export default function ResetPasswordPage() {
 	// Error state
 	if (error && step === "done") {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+			<div className="min-h-screen flex items-center justify-center p-4">
 				<Card className="w-full max-w-md">
 					<CardHeader className="text-center">
 						<div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
@@ -147,25 +108,25 @@ export default function ResetPasswordPage() {
 						</div>
 						<CardTitle className="text-xl">Reset Link Invalid</CardTitle>
 					</CardHeader>
-					<CardContent className="space-y-4">
+					<CardContent className="space-y-4 items-center">
 						<Alert>
 							<AlertCircle className="h-4 w-4" />
 							<AlertDescription>{error}</AlertDescription>
 						</Alert>
 						<div className="flex flex-col gap-2">
 							<Button
-								onClick={() => router.push("/login")}
+								onClick={() => router.push("/forgot-password")}
 								className="w-full"
 							>
 								Request New Reset Link
 							</Button>
 							<Button
 								variant="outline"
-								onClick={() => router.push("/login")}
+								onClick={() => router.push("/signin")}
 								className="w-full"
 							>
 								<ArrowLeft className="mr-2 h-4 w-4" />
-								Back to Login
+								Back to Sign In
 							</Button>
 						</div>
 					</CardContent>
@@ -189,8 +150,8 @@ export default function ResetPasswordPage() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<Button onClick={() => router.push("/login")} className="w-full">
-							Continue to Login
+						<Button onClick={() => router.push(continueUrl)} className="w-full">
+							Continue
 						</Button>
 					</CardContent>
 				</Card>
@@ -200,7 +161,7 @@ export default function ResetPasswordPage() {
 
 	// Form state
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+		<div className="min-h-screen flex items-center justify-center p-4">
 			<Card className="w-full max-w-md">
 				<CardHeader>
 					<CardTitle className="text-xl">Reset Your Password</CardTitle>
@@ -229,57 +190,12 @@ export default function ResetPasswordPage() {
 								placeholder="Enter your new password"
 								disabled={step === "submitting"}
 							/>
-							{passwordStrength && (
-								<div className="flex items-center gap-2 text-sm">
-									<div className="flex gap-1">
-										<div
-											className={`h-1 w-4 rounded ${passwordStrength === "weak" ? "bg-red-500" : "bg-gray-200"}`}
-										/>
-										<div
-											className={`h-1 w-4 rounded ${passwordStrength === "medium" || passwordStrength === "strong" ? "bg-yellow-500" : "bg-gray-200"}`}
-										/>
-										<div
-											className={`h-1 w-4 rounded ${passwordStrength === "strong" ? "bg-green-500" : "bg-gray-200"}`}
-										/>
-									</div>
-									<span
-										className={`${
-											passwordStrength === "weak"
-												? "text-red-600"
-												: passwordStrength === "medium"
-													? "text-yellow-600"
-													: "text-green-600"
-										}`}
-									>
-										{passwordStrength === "weak"
-											? "Weak"
-											: passwordStrength === "medium"
-												? "Medium"
-												: "Strong"}
-									</span>
-								</div>
-							)}
-						</div>
-
-						<div className="space-y-2">
-							<Label htmlFor="confirm-password">Confirm New Password</Label>
-							<Input
-								id="confirm-password"
-								type="password"
-								required
-								value={confirmPassword}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								placeholder="Confirm your new password"
-								disabled={step === "submitting"}
-							/>
 						</div>
 
 						<div className="flex flex-col gap-2 pt-2">
 							<Button
 								type="submit"
-								disabled={
-									step === "submitting" || !newPassword || !confirmPassword
-								}
+								disabled={step === "submitting" || !newPassword}
 								className="w-full"
 							>
 								{step === "submitting" ? (
@@ -295,12 +211,12 @@ export default function ResetPasswordPage() {
 							<Button
 								type="button"
 								variant="outline"
-								onClick={() => router.push("/login")}
+								onClick={() => router.push("/signin")}
 								disabled={step === "submitting"}
 								className="w-full"
 							>
 								<ArrowLeft className="mr-2 h-4 w-4" />
-								Back to Login
+								Back to Sign In
 							</Button>
 						</div>
 					</form>
