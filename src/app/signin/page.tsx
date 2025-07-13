@@ -6,7 +6,7 @@ import Alert from "@/components/common/Alert";
 import {
 	Google as GoogleIcon,
 	GitHub as GithubIcon,
-	Microsoft as MicrosoftIcon
+	Microsoft as MicrosoftIcon,
 } from "@mui/icons-material";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { track } from "@vercel/analytics";
@@ -91,15 +91,15 @@ const AuthPage: React.FC = () => {
 	};
 
 	const handleMicrosoftSignIn = async () => {
-    try {
-      track("login", { method: "microsoft" });
-      await signInWithMicrosoft();
-      router.push("/profile");
-    } catch (err: any) {
-      setAlertMessage(err.message || "Microsoft sign-in failed");
-      setShowAlert(true);
-    }
-  };
+		try {
+			track("login", { method: "microsoft" });
+			await signInWithMicrosoft();
+			router.push("/profile");
+		} catch (err: any) {
+			setAlertMessage(err.message || "Microsoft sign-in failed");
+			setShowAlert(true);
+		}
+	};
 
 	const handleForgotPassword = async () => {
 		if (!authData.email) {
@@ -228,19 +228,7 @@ const AuthPage: React.FC = () => {
 								Sign in with GitHub
 							</button>
 						</div>
-												<div className="mt-6">
-							<button
-								type="button"
-								onClick={handleMicrosoftSignIn}
-								className="flex w-full items-center justify-center rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-							>
-								<MicrosoftIcon className="mr-2" />
-								Sign in with Microsoft
-							</button>
-						</div>
 					</div>
-
-
 
 					<div className="bg-slate-100 mt-10 p-2 shadow sm:rounded-lg sm:px-12">
 						<p className="text-center text-sm text-gray-500">
