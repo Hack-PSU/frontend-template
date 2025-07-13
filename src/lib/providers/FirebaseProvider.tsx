@@ -236,6 +236,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		setIsLoading(true);
 		try {
 			const provider = new OAuthProvider("microsoft.com");
+			provider.setCustomParameters({ prompt: "select_account" });
 			// Optional: force consent or target a tenant
 			// provider.setCustomParameters({ prompt: "consent", tenant: "common" });
 			const userCredential = await signInWithPopup(auth, provider);
