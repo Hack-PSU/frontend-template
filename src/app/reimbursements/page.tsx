@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
 	Box,
@@ -18,8 +18,9 @@ import {
 	Stepper,
 	Step,
 	StepLabel,
+	Chip,
 } from "@mui/material";
-import { CloudUpload } from "@mui/icons-material";
+import { CloudUpload, Lock, Schedule } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { z } from "zod";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -29,6 +30,7 @@ import {
 	useCreateFinance,
 	Category,
 } from "@/lib/api/finance";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 // Custom styled component for visually hiding the file input
 const VisuallyHiddenInput = styled("input")({
@@ -337,9 +339,12 @@ export default function ReimbursementPage() {
 	const [submitError, setSubmitError] = useState<string | null>(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
-
 	const { user } = useFirebase();
 	const createFinance = useCreateFinance();
+
+	// Feature flag check
+	const { data: participantReimbursementFlag, isLoading: flagLoading } =
+		useFlagState("ParticipantReimbursement");
 
 	const {
 		handleSubmit,
@@ -400,7 +405,6 @@ export default function ReimbursementPage() {
 			formData.append("status", Status.PENDING);
 
 			await createFinance.mutateAsync(formData);
-
 			setSubmitSuccess(true);
 			reset();
 			setActiveStep(0);
@@ -438,51 +442,116 @@ export default function ReimbursementPage() {
 		}
 	};
 
+	// Show loading state while flag is being fetched
+	if (flagLoading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<Container maxWidth="md">
+					<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
+						<CardContent className="p-8 text-center">
+							<CircularProgress className="mb-4" />
+							<Typography variant="h6" color="text.secondary">
+								Loading...
+							</Typography>
+						</CardContent>
+					</Card>
+				</Container>
+			</div>
+		);
+	}
+
+	const isReimbursementEnabled =
+		participantReimbursementFlag?.isEnabled ?? false;
+
 	return (
 		<div className="min-h-screen flex items-center justify-center">
 			<Container maxWidth="md">
 				<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
 					<CardContent className="p-8">
-						<Typography
-							variant="h4"
-							gutterBottom
-							align="center"
-							className="mb-6"
-						>
-							Submit Reimbursement Request
-						</Typography>
+						{/* Feature Flag Status Banner */}
+						{isReimbursementEnabled ? (
+							// Show the normal form when flag is enabled
+							<>
+								<Typography
+									variant="h4"
+									gutterBottom
+									align="center"
+									className="mb-6"
+								>
+									Submit Reimbursement Request
+								</Typography>
 
-						<Stepper activeStep={activeStep} className="mb-8">
-							{steps.map((label) => (
-								<Step key={label}>
-									<StepLabel>{label}</StepLabel>
-								</Step>
-							))}
-						</Stepper>
+								<Stepper activeStep={activeStep} className="mb-8">
+									{steps.map((label) => (
+										<Step key={label}>
+											<StepLabel>{label}</StepLabel>
+										</Step>
+									))}
+								</Stepper>
 
-						{submitError && (
-							<Alert severity="error" className="mb-4">
-								{submitError}
-							</Alert>
+								{submitError && (
+									<Alert severity="error" className="mb-4">
+										{submitError}
+									</Alert>
+								)}
+
+								{submitSuccess && (
+									<Alert severity="success" className="mb-4">
+										Reimbursement request submitted successfully!
+									</Alert>
+								)}
+
+								<form onSubmit={handleSubmit(onSubmit)}>
+									{renderStepContent(activeStep)}
+									<NavigationButtons
+										activeStep={activeStep}
+										steps={steps}
+										handleNext={handleNext}
+										handleBack={handleBack}
+										isSubmitting={isSubmitting}
+										isValid={isValid}
+									/>
+								</form>
+							</>
+						) : (
+							<>
+								<Box className="mb-6">
+									<Box className="flex items-center justify-between mb-2">
+										<Typography variant="h6" className="text-gray-700">
+											Reimbursement System
+										</Typography>
+										<Chip
+											label={isReimbursementEnabled ? "ENABLED" : "DISABLED"}
+											color={isReimbursementEnabled ? "success" : "default"}
+											size="small"
+											icon={isReimbursementEnabled ? undefined : <Lock />}
+										/>
+									</Box>
+									<Alert
+										severity={isReimbursementEnabled ? "success" : "info"}
+										icon={isReimbursementEnabled ? undefined : <Schedule />}
+									>
+										{isReimbursementEnabled
+											? "Participant reimbursement submissions are currently open."
+											: "Participant reimbursement submissions are currently closed. We will open reimbursements on the day of the hackathon."}
+									</Alert>
+								</Box>
+								<Box className="text-center py-12">
+									<Lock
+										className="text-gray-400 mb-4"
+										style={{ fontSize: 64 }}
+									/>
+
+									<Typography
+										variant="h6"
+										color="text.secondary"
+										className="mb-4"
+									>
+										Participant reimbursement submissions are not yet open.
+									</Typography>
+								</Box>
+							</>
 						)}
-
-						{submitSuccess && (
-							<Alert severity="success" className="mb-4">
-								Reimbursement request submitted successfully!
-							</Alert>
-						)}
-
-						<form onSubmit={handleSubmit(onSubmit)}>
-							{renderStepContent(activeStep)}
-							<NavigationButtons
-								activeStep={activeStep}
-								steps={steps}
-								handleNext={handleNext}
-								handleBack={handleBack}
-								isSubmitting={isSubmitting}
-								isValid={isValid}
-							/>
-						</form>
 					</CardContent>
 				</Card>
 			</Container>

@@ -58,8 +58,10 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 };
 
 const PrizesChallenges: React.FC = () => {
-	// Temporary early return while we update the prizes
-	return;
+	const { data: flag } = useFlagState("PrizesEnabled");
+	if (!flag?.isEnabled) {
+		return null;
+	}
 
 	return (
 		<section

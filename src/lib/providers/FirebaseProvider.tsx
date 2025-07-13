@@ -16,6 +16,7 @@ import {
 	signInWithEmailAndPassword,
 	createUserWithEmailAndPassword,
 	signInWithPopup,
+	OAuthProvider,
 	signOut,
 	sendPasswordResetEmail,
 	GoogleAuthProvider,
@@ -65,6 +66,7 @@ type FirebaseContextType = {
 	signUpWithEmailAndPassword(email: string, password: string): Promise<void>;
 	signInWithGoogle(): Promise<void>;
 	signInWithGithub(): Promise<void>;
+	signInWithMicrosoft(): Promise<void>;
 	resetPassword(email: string): Promise<void>;
 	logout(): Promise<void>;
 };
@@ -84,15 +86,12 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 
 	// Listen for auth and token changes.
 	useEffect(() => {
-		// This handler is used by both onAuthStateChanged and onIdTokenChanged.
 		const handleAuthChange = async (currentUser: User | null) => {
 			setIsLoading(true);
 			if (currentUser) {
 				try {
 					const currentToken = await getIdToken(currentUser, true);
-					// Save the token and check if the user has sufficient permissions.
 					if (getRole(currentToken) < MINIMUM_ROLE) {
-						// Insufficient permissions: sign out and show an error.
 						await signOut(auth);
 						setError(
 							"You do not have the required permissions to access this app."
@@ -111,7 +110,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 					setToken("");
 				}
 			} else {
-				// User signed out.
 				setUser(null);
 				setToken("");
 				setError("");
@@ -147,7 +145,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 					);
 					return;
 				}
-				// The auth state listener will update the state.
 			} catch (err: any) {
 				setError(err.message || "Login failed");
 				throw err;
@@ -177,7 +174,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 					);
 					return;
 				}
-				// The auth state listener will update the state.
 			} catch (err: any) {
 				setError(err.message || "Sign-up failed");
 				throw err;
@@ -203,7 +199,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				);
 				return;
 			}
-			// The auth state listener will update the state.
 		} catch (err: any) {
 			setError(err.message || "Google sign-in failed");
 			throw err;
@@ -227,9 +222,33 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 				);
 				return;
 			}
-			// The auth state listener will update the state.
 		} catch (err: any) {
 			setError(err.message || "GitHub sign-in failed");
+			throw err;
+		} finally {
+			setIsLoading(false);
+		}
+	}, [auth]);
+
+	// Sign in with Microsoft.
+	const signInWithMicrosoft = useCallback(async () => {
+		setError("");
+		setIsLoading(true);
+		try {
+			const provider = new OAuthProvider("microsoft.com");
+			// Optional: force consent or target a tenant
+			// provider.setCustomParameters({ prompt: "consent", tenant: "common" });
+			const userCredential = await signInWithPopup(auth, provider);
+			const currentToken = await getIdToken(userCredential.user);
+			if (getRole(currentToken) < MINIMUM_ROLE) {
+				await signOut(auth);
+				setError(
+					"You do not have the required permissions to access this app."
+				);
+				return;
+			}
+		} catch (err: any) {
+			setError(err.message || "Microsoft sign-in failed");
 			throw err;
 		} finally {
 			setIsLoading(false);
@@ -261,7 +280,6 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 		setIsLoading(true);
 		try {
 			await signOut(auth);
-			// The auth state listener will update the state.
 		} catch (err: any) {
 			setError(err.message || "Logout failed");
 			throw err;
@@ -282,6 +300,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			signInWithGoogle,
 			signInWithGithub,
+			signInWithMicrosoft,
 			resetPassword,
 			logout,
 		}),
@@ -295,6 +314,7 @@ const FirebaseProvider: FC<Props> = ({ children, auth }) => {
 			signUpWithEmailAndPassword,
 			signInWithGoogle,
 			signInWithGithub,
+			signInWithMicrosoft,
 			resetPassword,
 			logout,
 		]
