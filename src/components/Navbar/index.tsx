@@ -114,7 +114,7 @@ function MLHBadge() {
         alt="Major League Hacking 2026 Hackathon Season"
         width={100}
         height={100}
-        className="w-16 h-16 lg:w-20 lg:h-20 drop-shadow-lg"
+        className="w-16 h-16 lg:w-40 lg:h-40 drop-shadow-lg"
       />
     </a>
   )
@@ -258,7 +258,7 @@ export default function Navbar() {
           </div>
 
           {/* MLH Badge - Desktop Only */}
-          <div className="absolute right-4 xl:right-8 top-1/2 -translate-y-1/2 hidden xl:block">
+          <div className="absolute right-4 xl:right-8 top-[0px] hidden xl:block">
             <MLHBadge />
           </div>
         </div>
