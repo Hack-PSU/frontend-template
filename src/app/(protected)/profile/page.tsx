@@ -36,7 +36,7 @@ import {
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
 	const router = useRouter();
-	const { data: userData } = useUserInfoMe();
+	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
 
 	// Mutations for wallet integration
 	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
@@ -51,6 +51,9 @@ export default function Profile() {
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
+		// if user data is still loading, do not redirect
+		if (isUserLoading) return;
+
 		if (!userData || !userData.registration) router.push("/register");
 	}, [userData, router]);
 
