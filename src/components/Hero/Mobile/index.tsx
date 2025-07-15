@@ -35,7 +35,7 @@ const Hero = () => {
 								<BigButton
 									background={Register}
 									onClick={() => {
-										router.push("/signin");
+										router.push("/profile");
 									}}
 									className="mb-2 w-full"
 								></BigButton>
