@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useUserInfoMe } from "@/lib/api/user/hook";
@@ -49,6 +49,10 @@ export default function Profile() {
 	const [showQRCode, setShowQRCode] = useState(false);
 
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
+
+	useEffect(() => {
+		if (!userData || !userData.registration) router.push("/register");
+	}, [userData, router]);
 
 	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
@@ -112,7 +116,7 @@ export default function Profile() {
 		if (user) {
 			router.push("/reimbursements");
 		} else {
-			router.push("/signin");
+			router.push("/");
 			toast.error("Please sign in to submit a reimbursement form.");
 		}
 	};
@@ -129,7 +133,7 @@ export default function Profile() {
 	}
 
 	if (!isAuthenticated || !user) {
-		router.push("/signin");
+		router.push("/");
 		return null;
 	}
 

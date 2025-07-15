@@ -36,7 +36,7 @@ const Hero = () => {
 				<div className="w-50 h-40 mb-12">
 					<BigButton
 						background={Register}
-						onClick={() => router.push("/signin")}
+						onClick={() => router.push("/profile")}
 						className="w-full h-full"
 					/>
 				</div>
