@@ -74,6 +74,13 @@ export default function RegistrationPage() {
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
 
+	useEffect(() => {
+		// if user data is still loading, do not redirect
+		if (isUserInfoLoading) return;
+
+		if (userInfo && userInfo.registration) router.push("/profile");
+	}, [userInfo, router]);
+
 	// Refs for sections
 	const personalInfoRef = useRef<HTMLDivElement>(null);
 	const logisticsRef = useRef<HTMLDivElement>(null);
