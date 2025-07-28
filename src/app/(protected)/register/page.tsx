@@ -1059,7 +1059,7 @@ export default function RegistrationPage() {
 																}
 															/>
 														</div>
-														{additionalQuestionsFlag && (
+														{additionalQuestionsFlag?.isEnabled && (
 															<>
 																<div className="space-y-2">
 																	<Label htmlFor="project">
