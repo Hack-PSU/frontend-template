@@ -43,6 +43,7 @@ import { useCreateRegistration } from "@/lib/api/registration/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon";
 import { track } from "@vercel/analytics";
+import { useFlagState } from "@/lib/api/flag";
 
 type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 	Omit<
@@ -73,6 +74,9 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useReplaceUser();
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
+	const { data: additionalQuestionsFlag } = useFlagState(
+		"RegistrationAdditionalQuestions"
+	);
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
@@ -1042,7 +1046,6 @@ export default function RegistrationPage() {
 																</div>
 															</RadioGroup>
 														</div>
-
 														<div className="space-y-2">
 															<Label htmlFor="referral">
 																How did you hear about us?
@@ -1056,32 +1059,35 @@ export default function RegistrationPage() {
 																}
 															/>
 														</div>
-
-														<div className="space-y-2">
-															<Label htmlFor="project">
-																What is a project you&apos;re proud of?
-															</Label>
-															<Textarea
-																id="project"
-																name="project"
-																placeholder="Describe a project and your role in it..."
-																value={formData.project}
-																onChange={handleChange}
-															/>
-														</div>
-
-														<div className="space-y-2">
-															<Label htmlFor="expectations">
-																What do you want to get out of this hackathon?
-															</Label>
-															<Textarea
-																id="expectations"
-																name="expectations"
-																placeholder="e.g., Learn a new skill, meet new people, build something cool..."
-																value={formData.expectations}
-																onChange={handleChange}
-															/>
-														</div>
+														{additionalQuestionsFlag?.isEnabled && (
+															<>
+																<div className="space-y-2">
+																	<Label htmlFor="project">
+																		What is a project you&apos;re proud of?
+																	</Label>
+																	<Textarea
+																		id="project"
+																		name="project"
+																		placeholder="Describe a project and your role in it..."
+																		value={formData.project}
+																		onChange={handleChange}
+																	/>
+																</div>
+																<div className="space-y-2">
+																	<Label htmlFor="expectations">
+																		What do you want to get out of this
+																		hackathon?
+																	</Label>
+																	<Textarea
+																		id="expectations"
+																		name="expectations"
+																		placeholder="e.g., Learn a new skill, meet new people, build something cool..."
+																		value={formData.expectations}
+																		onChange={handleChange}
+																	/>
+																</div>
+															</>
+														)}
 													</CardContent>
 												</Card>
 											</div>
