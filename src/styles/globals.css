@@ -41,9 +41,6 @@
 
 
 	/* Account for fixed size of the Navbar upon jumping to links. */
-	:target {
-		scroll-margin-top: 130px;
-	}
 
 	body {
 		font-family: "Lato", "Georgia", sans-serif;
@@ -85,117 +82,8 @@
 	}
 }
 
-@layer components {
-	.mlh-badge {
-		display: block;
-		max-width: 100px;
-		min-width: 60px;
-		position: fixed;
-		right: 0px;
-		top: 0;
-		width: 10%;
-		z-index: -1;
-	}
 
-	.frame {
-		background-image: url("../../public/screen.png");
-		background-size: 100% auto;
-		background-repeat: no-repeat;
-		background-position: center center;
-		background-attachment: scroll;
-		--border-width: 8px;
-		position: relative;
-		@media (max-width: 960px) {
-			background-size: cover;
-			background-position: center center;
-		}
-		border-radius: var(--border-width);
-	}
 
-	.cornerstone-font {
-		font-family: "cornerstone";
-		font-size: 18px;
-		@media (min-width: 768px) {
-			font-size: 24px;
-		}
-	}
-
-	.section-header-text {
-		color: white;
-		font-family: "cornerstone";
-		font-size: 4rem;
-		text-shadow:
-			-2px -2px 0 black,
-			2px -2px 0 black,
-			-2px 2px 0 black,
-			2px 2px 0 black;
-		font-weight: bold;
-		line-height: 1;
-		text-align: center;
-	}
-
-	.font-lato {
-		font-family: Lato, sans-serif;
-	}
-
-	.limelight-regular {
-		font-family: "limelight-regular";
-		@media (min-width: 768px) {
-			font-size: 36px;
-		}
-		color: #a20021;
-	}
-}
-
-@font-face {
-	font-family: "limelight-regular";
-	src: url("../../public/fonts/Limelight-Regular.ttf");
-}
-
-@font-face {
-	font-family: "cornerstone";
-	src: url("../../public/fonts/Cornerstone.ttf");
-}
-
-@font-face {
-	font-family: "rye";
-	src: url("../../public/fonts/Rye.ttf");
-}
-
-@font-face {
-    font-family: 'tiltneon';
-    src: url('../../public/fonts/TiltNeon.ttf');
-}
-
-a {
-	color: var(--link-color);
-	text-decoration: underline;
-}
-
-a:hover {
-	color: var(--link-color);
-	text-decoration: underline;
-	text-shadow: 0 0 1px var(--link-color);
-}
-
-.mobile-container {
-	display: flex;
-	flex-direction: column;
-	height: 100vh;
-	overflow-y: scroll;
-	scroll-snap-type: y mandatory;
-	scroll-behavior: smooth;
-	border: white 1px solid;
-}
-
-.mobile-content {
-	scroll-snap-align: start;
-	scroll-padding-top: 50px;
-	scroll-padding-bottom: 50px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
 
 
 
