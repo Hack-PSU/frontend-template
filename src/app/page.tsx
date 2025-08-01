@@ -42,7 +42,6 @@ export default function Home() {
 					waveDelta={20}
 					speed={0.3}
 					wavePoints={6}
-					inverted={false}
 					className="w-full"
 					style={{ backgroundColor: "#D8FFFC" }}
 				/>

@@ -240,26 +240,10 @@ const Hero = () => {
 				HackPSU Fall 2025
 			</motion.h1>
 
-			{/* Date and Location */}
-			<motion.div
-				className="text-center mb-[4vw] font-semibold"
-				style={{ 
-					fontSize: 'clamp(16px, 3vw, 24px)',
-					color: '#00DAB7',
-					fontFamily: 'Monomaniac One, monospace'
-				}}
-				initial={{ opacity: 0, y: -30 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 1, delay: 0.2 }}
-			>
-				<div className="mb-[1vw]">November 9-10, 2025</div>
-				<div>Penn State University, University Park</div>
-			</motion.div>
-
 			{/* Countdown Timer */}
 			{state !== 2 ? (
 				<motion.div
-					className="flex flex-col items-center mb-[4vw]"
+					className="flex flex-col items-center mb-[2vw]"
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{ duration: 1, delay: 0.3 }}
@@ -368,15 +352,31 @@ const Hero = () => {
 
 					{/* Banner Message */}
 					<div
-						className="text-center font-bold"
+						className="text-center font-bold mb-[1.5vw]"
 						style={{ fontSize: 'clamp(14px, 2.5vw, 32px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
 					>
 						{bannerMessage}
 					</div>
+
+					{/* Date and Location */}
+					<motion.div
+						className="text-center font-semibold"
+						style={{ 
+							fontSize: 'clamp(16px, 3vw, 24px)',
+							color: '#00DAB7',
+							fontFamily: 'Monomaniac One, monospace'
+						}}
+						initial={{ opacity: 0, y: -30 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1, delay: 0.2 }}
+					>
+						<div className="mb-[1vw]">November 9-10, 2025</div>
+						<div>Penn State University, University Park</div>
+					</motion.div>
 				</motion.div>
 			) : (
 				<div
-					className="text-center font-bold mb-[4vw]"
+					className="text-center font-bold mb-[2vw]"
 					style={{ fontSize: 'clamp(14px, 2.5vw, 32px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
 				>
 					{bannerMessage}
@@ -385,7 +385,7 @@ const Hero = () => {
 
 			{/* Register & Discord Buttons */}
 			<motion.div
-				className="flex flex-col md:flex-row items-center justify-center gap-[2vw] md:gap-[4vw] w-full"
+				className="flex flex-col md:flex-row items-center justify-center gap-[1vw] md:gap-[2vw] w-full"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
