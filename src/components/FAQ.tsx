@@ -212,9 +212,9 @@ const FAQ: React.FC = () => {
 				<motion.div
 					className="absolute cursor-pointer"
 					style={{
-						right: "-10%",
-						top: "-40%",
-						width: "clamp(40px, 300vw, 600px)",
+						right: "20%",
+						top: "00%",
+						width: "clamp(40px, 30vw, 300px)",
 						height: "clamp(30px, 300vw, 600px)",
 						zIndex: 10,
 					}}
