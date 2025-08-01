@@ -27,10 +27,10 @@ export default function Home() {
 					fill="#B1E8FF"
 					borderColor="#ffffff"
 					borderOffset={-30}
-					waveHeight={150}
+					waveHeight={100}
 					waveDelta={50}
-					speed={0.4}
-					wavePoints={20}
+					speed={0.2}
+					wavePoints={6}
 					className="w-full"
 					style={{ backgroundColor: "#FFEBB8" }}
 				/>
