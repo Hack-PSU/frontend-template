@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Hero from "@/components/Hero";
-import MobileHero from "@/components/Hero/Mobile";
 import Schedule from "@/components/Schedule";
 import FAQRules from "@/components/FAQRules";
 import Rules from "@/components/common/Rules/index";
@@ -36,16 +35,30 @@ export default function Home() {
 					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
 				/>
 				<InfoSections />
+				<Wave
+					height={200}
+					fill="#84cefe"
+					borderColor="#ffffff"
+					borderOffset={-20}
+					waveHeight={50}
+					waveDelta={50}
+					speed={0.15}
+					wavePoints={6}
+					className="w-full"
+					style={{ backgroundColor: "#B1E8FF" }}
+				/>
 				<Schedule />
 				<Wave
 					height={120}
 					fill="#215172"
-					waveHeight={60}
-					waveDelta={20}
+					borderColor="#9eadbd"
+					borderOffset={-10}
+					waveHeight={50}
+					waveDelta={50}
 					speed={0.15}
 					wavePoints={6}
 					className="w-full"
-					style={{ backgroundColor: "#D8FFFC" }}
+					style={{ backgroundColor: "#84cefe" }}
 				/>
 				<PhotoGallery
 					images={[

@@ -1,5 +1,12 @@
-import React, { useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+"use client";
+import React, { useMemo, useState, useEffect, useRef } from "react";
+import {
+	motion,
+	AnimatePresence,
+	useScroll,
+	useTransform,
+	useMotionValue,
+} from "framer-motion";
 import Image from "next/image";
 import { useAllEvents } from "@/lib/api/event/hook";
 import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
@@ -52,6 +59,7 @@ interface EventItemProps {
 	totalColumns: number;
 	useTwoHourIntervals: boolean;
 	onEventClick: (event: ProcessedEvent) => void;
+	isMobile?: boolean;
 }
 
 interface EventDetailsModalProps {
@@ -223,6 +231,7 @@ const EventItem: React.FC<EventItemProps> = ({
 	totalColumns,
 	useTwoHourIntervals,
 	onEventClick,
+	isMobile = false,
 }) => {
 	const colors = eventTypeColors[event.type];
 	const columnWidth = `${100 / totalColumns}%`;
@@ -253,7 +262,13 @@ const EventItem: React.FC<EventItemProps> = ({
 			whileTap={{ scale: 0.99 }}
 			onClick={() => onEventClick(event)}
 		>
-			<div className="text-sm font-bold text-center leading-tight overflow-y-auto max-h-full w-full px-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,0,0,0.3) transparent' }}>
+			<div
+				className={`font-bold text-center leading-tight overflow-y-auto max-h-full w-full px-1 ${isMobile ? "text-xs" : "text-sm"}`}
+				style={{
+					scrollbarWidth: "thin",
+					scrollbarColor: "rgba(0,0,0,0.3) transparent",
+				}}
+			>
 				{event.name}
 			</div>
 		</motion.div>
@@ -268,6 +283,8 @@ interface DayColumnProps {
 	totalColumns: number;
 	useTwoHourIntervals: boolean;
 	onEventClick: (event: ProcessedEvent) => void;
+	isMobile?: boolean;
+	allEvents?: { Saturday: ProcessedEvent[]; Sunday: ProcessedEvent[] };
 }
 
 const DayColumn: React.FC<DayColumnProps> = ({
@@ -278,11 +295,45 @@ const DayColumn: React.FC<DayColumnProps> = ({
 	totalColumns,
 	useTwoHourIntervals,
 	onEventClick,
+	isMobile = false,
+	allEvents,
 }) => {
-	const hours = [];
 	const increment = useTwoHourIntervals ? 2 : 1;
 
-	for (let hour = startHour; hour <= endHour; hour += increment) {
+	let adjustedStartHour = startHour;
+	let adjustedEndHour = endHour;
+
+	// On mobile, trim empty hours at start/end of weekend
+	if (isMobile && allEvents) {
+		if (day === "Saturday" && allEvents.Saturday.length > 0) {
+			// Find first event on Saturday
+			const firstEventHour = Math.min(
+				...allEvents.Saturday.map((e) => Math.floor(e.startMinutes / 60))
+			);
+			adjustedStartHour = Math.max(
+				startHour,
+				Math.floor(firstEventHour / increment) * increment
+			);
+		}
+
+		if (day === "Sunday" && allEvents.Sunday.length > 0) {
+			// Find last event on Sunday
+			const lastEventHour = Math.max(
+				...allEvents.Sunday.map((e) => Math.ceil(e.endMinutes / 60))
+			);
+			adjustedEndHour = Math.min(
+				endHour,
+				Math.ceil(lastEventHour / increment) * increment
+			);
+		}
+	}
+
+	const hours = [];
+	for (
+		let hour = adjustedStartHour;
+		hour <= adjustedEndHour;
+		hour += increment
+	) {
 		hours.push(hour);
 	}
 
@@ -290,18 +341,20 @@ const DayColumn: React.FC<DayColumnProps> = ({
 		<div className="flex-1 min-w-0 relative">
 			{/* Day Header */}
 			<motion.div
-				className="sticky top-0 z-20 p-4 text-center bg-[#215172] border-b-4 border-[#1a3f5c]"
+				className={`sticky top-0 z-20 text-center bg-[#215172] border-b-4 border-[#1a3f5c] ${isMobile ? "p-3" : "p-4"}`}
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
 			>
 				<h3
-					className="text-lg md:text-xl font-bold text-white"
+					className={`font-bold text-white ${isMobile ? "text-base" : "text-lg md:text-xl"}`}
 					style={{ fontFamily: "Monomaniac One, monospace" }}
 				>
 					{day}
 				</h3>
-				<div className="text-sm text-white/70 font-medium">
+				<div
+					className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"}`}
+				>
 					{events.length} event{events.length !== 1 ? "s" : ""}
 				</div>
 			</motion.div>
@@ -321,6 +374,19 @@ const DayColumn: React.FC<DayColumnProps> = ({
 							animate={{ opacity: 1 }}
 							transition={{ duration: 0.3, delay: index * 0.05 }}
 						>
+							{/* Hour label */}
+							<div
+								className={`absolute left-2 top-1 font-medium text-[#215172] bg-white/80 px-1 rounded ${isMobile ? "text-[10px]" : "text-xs"}`}
+							>
+								{hour === 0
+									? "12 AM"
+									: hour < 12
+										? `${hour} AM`
+										: hour === 12
+											? "12 PM"
+											: `${hour - 12} PM`}
+							</div>
+
 							{/* Subdivisions based on interval type */}
 							{useTwoHourIntervals ? (
 								// 30-minute subdivisions for 2-hour intervals (compact)
@@ -352,15 +418,26 @@ const DayColumn: React.FC<DayColumnProps> = ({
 
 				{/* Events Container */}
 				<div className="absolute inset-0 px-4">
-					{events.map((event) => (
-						<EventItem
-							key={event.id}
-							event={event}
-							totalColumns={totalColumns}
-							useTwoHourIntervals={useTwoHourIntervals}
-							onEventClick={onEventClick}
-						/>
-					))}
+					{events.map((event) => {
+						// Adjust event positioning based on trimmed hours
+						const adjustedEvent = isMobile
+							? {
+									...event,
+									startMinutes: event.startMinutes - adjustedStartHour * 60,
+								}
+							: event;
+
+						return (
+							<EventItem
+								key={event.id}
+								event={adjustedEvent}
+								totalColumns={totalColumns}
+								useTwoHourIntervals={useTwoHourIntervals}
+								onEventClick={onEventClick}
+								isMobile={isMobile}
+							/>
+						);
+					})}
 				</div>
 			</div>
 		</div>
@@ -423,6 +500,32 @@ const assignColumns = (
 const Schedule: React.FC = () => {
 	const { data: events, isLoading, error } = useAllEvents();
 	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
+
+	// Ref for tracking scroll position of schedule section
+	const scheduleRef = useRef<HTMLDivElement>(null);
+
+	// State to track if component is mounted (client-side
+
+	const tempScroll = useScroll({
+		offset: ["1500px", "2500px"],
+	});
+
+	// pick the real scrollYProgress only after mount
+	const scrollYProgress = tempScroll.scrollYProgress;
+	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "100vw"]);
+
+	// Mobile detection
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 1024); // lg breakpoint
+		};
+
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
 
 	// Determine if we should use 2-hour intervals (default to 1-hour if flag not found)
 	const useTwoHourIntervals = twoHourFlag?.isEnabled ?? false;
@@ -629,7 +732,10 @@ const Schedule: React.FC = () => {
 
 	if (isLoading) {
 		return (
-			<div className="w-full flex justify-center items-center py-20">
+			<div
+				ref={scheduleRef}
+				className="w-full flex justify-center items-center py-20"
+			>
 				<motion.p
 					className="text-xl text-[#048A81]"
 					style={{ fontFamily: "Monomaniac One, monospace" }}
@@ -644,7 +750,10 @@ const Schedule: React.FC = () => {
 
 	if (error || !events) {
 		return (
-			<div className="w-full flex justify-center items-center py-20">
+			<div
+				ref={scheduleRef}
+				className="w-full flex justify-center items-center py-20"
+			>
 				<p
 					className="text-xl text-[#A20021]"
 					style={{ fontFamily: "Monomaniac One, monospace" }}
@@ -657,10 +766,34 @@ const Schedule: React.FC = () => {
 
 	return (
 		<section
+			ref={scheduleRef}
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
 			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
 			id="schedule"
 		>
+			{/* Animated Surfboard - Scroll-linked */}
+			<motion.div
+				className="absolute z-50
+				md:top-[-300px]
+				top-[0px]
+				"
+				style={{
+					left: surfboardX,
+					width: "clamp(120px, 15vw, 250px)",
+					height: "clamp(80px, 15vw, 250px)",
+				}}
+				initial={{ opacity: 1, rotate: -15 }}
+				animate={{ opacity: 1, y: [-20, 20, -20] }}
+				transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+			>
+				<Image
+					src="/f25/surfboard.png"
+					alt="Surfboard"
+					className="object-contain"
+					fill
+				/>
+			</motion.div>
+
 			{/* Header */}
 			<motion.div
 				className="text-center mb-8 z-10 relative"
@@ -745,7 +878,7 @@ const Schedule: React.FC = () => {
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8, delay: 0.3 }}
 			>
-				<div className="flex flex-col lg:flex-row min-h-96">
+				<div className="flex flex-col lg:flex-row min-h-96 gap-4 lg:gap-0">
 					<DayColumn
 						day="Saturday"
 						events={processedEvents.Saturday.events}
@@ -754,6 +887,11 @@ const Schedule: React.FC = () => {
 						totalColumns={processedEvents.Saturday.totalColumns}
 						useTwoHourIntervals={useTwoHourIntervals}
 						onEventClick={handleEventClick}
+						isMobile={isMobile}
+						allEvents={{
+							Saturday: processedEvents.Saturday.events,
+							Sunday: processedEvents.Sunday.events,
+						}}
 					/>
 					<div className="w-1 bg-[#FFB6D9] hidden lg:block"></div>
 					<DayColumn
@@ -764,6 +902,11 @@ const Schedule: React.FC = () => {
 						totalColumns={processedEvents.Sunday.totalColumns}
 						useTwoHourIntervals={useTwoHourIntervals}
 						onEventClick={handleEventClick}
+						isMobile={isMobile}
+						allEvents={{
+							Saturday: processedEvents.Saturday.events,
+							Sunday: processedEvents.Sunday.events,
+						}}
 					/>
 				</div>
 			</motion.div>

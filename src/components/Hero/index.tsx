@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
+import settings from "@/lib/config/settings.json";
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
@@ -203,13 +204,40 @@ const Hero = () => {
 				/>
 			</motion.div>
 
+			{/* Chill Hacky Character */}
+			<motion.div
+				className="absolute "
+				style={{
+					width: "clamp(120px, 18vw, 300px)",
+					height: "clamp(120px, 18vw, 300px)",
+					left: "clamp(15px, 3vw, 60px)",
+					bottom: "clamp(60px, 80vw, 200px)",
+				}}
+				initial={{ opacity: 1, rotate: 0 }}
+				animate={{
+					opacity: 1,
+				}}
+				transition={{
+					duration: 4,
+					repeat: Infinity,
+					ease: "easeInOut",
+				}}
+			>
+				<Image
+					src="/f25/chill_hacky.png"
+					alt="Chill Hacky"
+					fill
+					className="object-contain"
+				/>
+			</motion.div>
+
 			{/* Rotating Beach Ball */}
 			<motion.div
-				className="absolute"
+				className="absolute z-50"
 				style={{
 					width: "clamp(150px, 20vw, 1000px)",
 					height: "clamp(150px, 20vw, 1000px)",
-					bottom: "clamp(125px, 20vw, 400px)",
+					bottom: "clamp(-40px, -100vw, 400px)",
 					left: "calc(0% - 25px)", // Center horizontally
 				}}
 				initial={{
@@ -233,6 +261,93 @@ const Hero = () => {
 					fill
 					className="object-contain"
 				/>
+			</motion.div>
+
+			{/* Additional Decorative Images */}
+			{/* Starfish */}
+			<motion.div
+				className="absolute z-10"
+				initial={{ opacity: 0, scale: 0.8 }}
+				animate={{ opacity: 1, scale: 1 }}
+				transition={{ duration: 0.6 }}
+			>
+				<Image
+					src="/f25/starfish.png"
+					alt="Starfish"
+					width={200}
+					height={200}
+					className="object-contain"
+					style={{
+						width: "clamp(80px, 12vw, 200px)",
+						height: "auto",
+					}}
+				/>
+			</motion.div>
+
+			{/* Orange Starfish */}
+			<motion.div
+				className="absolute z-10"
+				initial={{ opacity: 0, scale: 0.8 }}
+				animate={{ opacity: 1, scale: 1 }}
+				transition={{ duration: 0.6, delay: 0.2 }}
+			>
+				<Image
+					src="/f25/starfish-orange.png"
+					alt="Orange Starfish"
+					width={200}
+					height={200}
+					className="object-contain"
+					style={{
+						width: "clamp(80px, 12vw, 200px)",
+						height: "auto",
+					}}
+				/>
+			</motion.div>
+
+			{/* Crab */}
+			<motion.div
+				className="absolute z-20
+				max-sm:hidden
+				right-[clamp(15px, 3vw, 60px)]
+				md:right-[16vw]
+				top-[clamp(60px, 80vw, 200px)] 
+				md:top-[12vw]"
+				initial={{ opacity: 1, scale: 1 }}
+				animate={{ rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }}
+				transition={{
+					duration: 3.5,
+					repeat: Infinity,
+					ease: "linear",
+				}}
+				style={{
+					width: "clamp(60px, 18vw, 100px)",
+					height: "clamp(60px, 18vw, 100px)",
+				}}
+			>
+				<Image
+					src="/f25/5.png"
+					alt="Number 5"
+					fill
+					className="object-contain"
+				/>
+			</motion.div>
+
+			{/* Sand */}
+			<motion.div
+				className="absolute z-10
+				max-sm:hidden
+				right-[clamp(15px, 3vw, 60px)]
+				md:right-[18vw]
+				top-[clamp(60px, 80vw, 200px)] 
+				md:top-[2vw]
+				"
+				initial={{ opacity: 1, scale: 1 }}
+				style={{
+					width: "clamp(60px, 18vw, 200px)",
+					height: "clamp(60px, 18vw, 200px)",
+				}}
+			>
+				<Image src="/f25/sand.png" alt="Sand" fill className="object-contain" />
 			</motion.div>
 
 			{/* Container for scaled content (title and countdown only) */}
@@ -414,8 +529,8 @@ const Hero = () => {
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 1, delay: 0.2 }}
 						>
-							<div className="mb-[1vw]">November 9-10, 2025</div>
-							<div>Penn State University, University Park</div>
+							<div className="mb-[1vw]">{settings.hackathonDateRepr}</div>
+							<div>ECore Building, Penn State</div>
 						</motion.div>
 					</motion.div>
 				) : (
@@ -434,7 +549,7 @@ const Hero = () => {
 
 			{/* Register & Discord Buttons - kept at original size */}
 			<motion.div
-				className="flex flex-col md:flex-row items-center justify-center gap-[0.5vw] md:gap-[0vw] w-full mt-[-8vw]"
+				className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-[0vw] md:w-full mt-[-8vw]"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
@@ -473,7 +588,7 @@ const Hero = () => {
 				{/* Discord Button */}
 				<motion.button
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
+					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center mt-[-60px] md:mt-0"
 					style={{
 						width: "clamp(400px, 50vw, 700px)",
 						height: "clamp(160px, 20vw, 280px)",
