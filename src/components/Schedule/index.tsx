@@ -376,7 +376,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 						>
 							{/* Hour label */}
 							<div
-								className={`absolute left-2 top-1 font-medium text-[#215172] bg-white/80 px-1 rounded ${isMobile ? "text-[10px]" : "text-xs"}`}
+								className={`absolute right-2 top-1 font-medium text-[#215172] bg-white/80 px-1 rounded ${isMobile ? "text-[10px]" : "text-xs"}`}
 							>
 								{hour === 0
 									? "12 AM"
