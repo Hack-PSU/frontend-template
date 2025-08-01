@@ -225,10 +225,10 @@ const FAQ: React.FC = () => {
 									x: "-100vw",
 									y: [0, -20, 0, -15, 0, -10, 0],
 									opacity: [1, 1, 1, 1, 0],
-							  }
+								}
 							: {
 									y: [0, -8, 0, -5, 0],
-							  }
+								}
 					}
 					transition={
 						fishClicked
@@ -236,12 +236,12 @@ const FAQ: React.FC = () => {
 									duration: 3,
 									ease: "easeInOut",
 									times: [0, 0.2, 0.4, 0.6, 1],
-							  }
+								}
 							: {
 									duration: 4,
 									repeat: Infinity,
 									ease: "easeInOut",
-							  }
+								}
 					}
 					onClick={handleFishClick}
 					whileHover={{ scale: 1.1 }}
@@ -265,9 +265,10 @@ const FAQ: React.FC = () => {
 							width: "clamp(200px, 50vw, 800px)",
 							height: "clamp(200px, 50vw, 800px)",
 						}}
-						initial={{ opacity: 1, scale: 1, rotate: -90}}
-						animate={{ scale:[0.9, 1, 0.9], opacity:[0.8, 1, 0.8]}}
-						transition={{ duration: 6,
+						initial={{ opacity: 1, scale: 1, rotate: -90 }}
+						animate={{ scale: [0.9, 1, 0.9], opacity: [0.8, 1, 0.8] }}
+						transition={{
+							duration: 6,
 							repeat: Infinity,
 							ease: "easeInOut",
 							delay: 0.2,
@@ -284,7 +285,6 @@ const FAQ: React.FC = () => {
 
 				{/* FAQ Content - Right half on desktop, full width on mobile */}
 				<div className="w-full lg:w-1/2 px-[4vw] pb-[8vw] flex flex-col justify-center">
-
 					{/* Accordion Container */}
 					<motion.div
 						className="bg-[#215172] rounded-2xl shadow-2xl overflow-hidden backdrop-blur-sm border border-white/10"
