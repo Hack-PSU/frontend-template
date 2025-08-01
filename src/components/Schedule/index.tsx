@@ -51,12 +51,178 @@ interface EventItemProps {
 	event: ProcessedEvent;
 	totalColumns: number;
 	useTwoHourIntervals: boolean;
+	onEventClick: (event: ProcessedEvent) => void;
 }
+
+interface EventDetailsModalProps {
+	event: ProcessedEvent | null;
+	isOpen: boolean;
+	onClose: () => void;
+	originalEvent?: EventEntityResponse;
+}
+
+const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
+	event,
+	isOpen,
+	onClose,
+	originalEvent,
+}) => {
+	if (!event || !isOpen) return null;
+
+	const colors = eventTypeColors[event.type];
+
+	return (
+		<AnimatePresence>
+			<motion.div
+				className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				onClick={onClose}
+			>
+				<motion.div
+					className={`bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 border-4 ${colors.border}`}
+					initial={{ scale: 0.8, opacity: 0 }}
+					animate={{ scale: 1, opacity: 1 }}
+					exit={{ scale: 0.8, opacity: 0 }}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{/* Header */}
+					<div
+						className={`${colors.bg} rounded-xl p-4 mb-4 border-2 ${colors.border}`}
+					>
+						<div className="flex justify-between items-start">
+							<div>
+								<h3
+									className={`text-xl font-bold ${colors.text} mb-2`}
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+								>
+									{event.name}
+								</h3>
+								<span
+									className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${colors.text} bg-white/80`}
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+								>
+									{colors.label}
+								</span>
+							</div>
+							<button
+								onClick={onClose}
+								className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+							>
+								×
+							</button>
+						</div>
+					</div>
+
+					{/* Details */}
+					<div className="space-y-4">
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Time</h4>
+							<p className="text-gray-600">
+								{event.startTime.toLocaleTimeString("en-US", {
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+								})}{" "}
+								-{" "}
+								{event.endTime.toLocaleTimeString("en-US", {
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+								})}
+							</p>
+							<p className="text-sm text-gray-500">
+								{event.startTime.toLocaleDateString("en-US", {
+									weekday: "long",
+									month: "long",
+									day: "numeric",
+								})}
+							</p>
+						</div>
+
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Location</h4>
+							<p className="text-gray-600">{event.location}</p>
+						</div>
+
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Duration</h4>
+							<p className="text-gray-600">
+								{Math.round(event.duration)} minutes
+							</p>
+						</div>
+
+						{originalEvent?.description && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Description
+								</h4>
+								<p className="text-gray-600">{originalEvent.description}</p>
+							</div>
+						)}
+
+						{originalEvent?.wsPresenterNames && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Presenter(s)
+								</h4>
+								<p className="text-gray-600">
+									{originalEvent.wsPresenterNames}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsRelevantSkills && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">Skills</h4>
+								<p className="text-gray-600">
+									{originalEvent.wsRelevantSkills}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsSkillLevel && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Skill Level
+								</h4>
+								<p className="text-gray-600 capitalize">
+									{originalEvent.wsSkillLevel}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsUrls && originalEvent.wsUrls.length > 0 && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">Resources</h4>
+								<div className="space-y-1">
+									{originalEvent.wsUrls.map((url, index) => (
+										<a
+											key={index}
+											href={url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-blue-600 hover:text-blue-800 block text-sm underline"
+										>
+											{url}
+										</a>
+									))}
+								</div>
+							</div>
+						)}
+					</div>
+				</motion.div>
+			</motion.div>
+		</AnimatePresence>
+	);
+};
 
 const EventItem: React.FC<EventItemProps> = ({
 	event,
 	totalColumns,
 	useTwoHourIntervals,
+	onEventClick,
 }) => {
 	const colors = eventTypeColors[event.type];
 	const columnWidth = `${100 / totalColumns}%`;
@@ -70,7 +236,7 @@ const EventItem: React.FC<EventItemProps> = ({
 
 	return (
 		<motion.div
-			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} ${colors.text} shadow-md overflow-hidden`}
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} ${colors.text} shadow-md overflow-hidden cursor-pointer`}
 			style={{
 				top: `${topPosition}px`,
 				left: leftOffset,
@@ -84,6 +250,8 @@ const EventItem: React.FC<EventItemProps> = ({
 			animate={{ opacity: 1, scale: 1 }}
 			transition={{ duration: 0.3, delay: event.column * 0.1 }}
 			whileHover={{ scale: 1.05, zIndex: 10 }}
+			whileTap={{ scale: 0.95 }}
+			onClick={() => onEventClick(event)}
 		>
 			<div className="text-sm font-bold truncate">{event.name}</div>
 			<div className="text-xs opacity-75 truncate">{event.location}</div>
@@ -105,6 +273,7 @@ interface DayColumnProps {
 	endHour: number;
 	totalColumns: number;
 	useTwoHourIntervals: boolean;
+	onEventClick: (event: ProcessedEvent) => void;
 }
 
 const DayColumn: React.FC<DayColumnProps> = ({
@@ -114,6 +283,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 	endHour,
 	totalColumns,
 	useTwoHourIntervals,
+	onEventClick,
 }) => {
 	const hours = [];
 	const increment = useTwoHourIntervals ? 2 : 1;
@@ -157,51 +327,29 @@ const DayColumn: React.FC<DayColumnProps> = ({
 							animate={{ opacity: 1 }}
 							transition={{ duration: 0.3, delay: index * 0.05 }}
 						>
-							<div
-								className="absolute left-3 top-2 text-sm font-bold text-[#1E40AF] bg-[#DBEAFE] px-2 py-1 rounded-lg"
-								style={{ fontFamily: "Monomaniac One, monospace" }}
-							>
-								{useTwoHourIntervals
-									? // Show time range for 2-hour intervals
-										`${hour === 0 ? "12" : hour > 12 ? hour - 12 : hour}${hour < 12 ? " AM" : " PM"} - ${
-											hour + 2 === 0
-												? "12"
-												: hour + 2 > 12
-													? hour + 2 - 12
-													: hour + 2
-										}${hour + 2 < 12 ? " AM" : " PM"}`
-									: // Show single hour for 1-hour intervals
-										hour === 0
-										? "12 AM"
-										: hour < 12
-											? `${hour} AM`
-											: hour === 12
-												? "12 PM"
-												: `${hour - 12} PM`}
-							</div>
 							{/* Subdivisions based on interval type */}
 							{useTwoHourIntervals ? (
 								// 30-minute subdivisions for 2-hour intervals (compact)
 								<>
 									<div
-										className="absolute left-16 right-0 border-b border-[#E0F2FE] border-dashed"
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
 										style={{ top: "20px" }}
 									></div>
 									<div
-										className="absolute left-16 right-0 border-b border-[#E0F2FE] border-dashed"
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
 										style={{ top: "40px" }}
 									></div>
 									<div
-										className="absolute left-16 right-0 border-b border-[#E0F2FE] border-dashed"
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
 										style={{ top: "60px" }}
 									></div>
 								</>
 							) : (
 								// 15-minute subdivisions for 1-hour intervals
 								<>
-									<div className="absolute top-5 left-16 right-0 border-b border-[#E0F2FE] border-dashed"></div>
-									<div className="absolute top-10 left-16 right-0 border-b border-[#E0F2FE] border-dashed"></div>
-									<div className="absolute top-15 left-16 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+									<div className="absolute top-5 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+									<div className="absolute top-10 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+									<div className="absolute top-15 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
 								</>
 							)}
 						</motion.div>
@@ -209,13 +357,14 @@ const DayColumn: React.FC<DayColumnProps> = ({
 				})}
 
 				{/* Events Container */}
-				<div className="absolute inset-0 pl-20 pr-4">
+				<div className="absolute inset-0 px-4">
 					{events.map((event) => (
 						<EventItem
 							key={event.id}
 							event={event}
 							totalColumns={totalColumns}
 							useTwoHourIntervals={useTwoHourIntervals}
+							onEventClick={onEventClick}
 						/>
 					))}
 				</div>
@@ -290,6 +439,34 @@ const Schedule: React.FC = () => {
 			Object.values(EventType).filter((type) => type !== EventType.checkIn)
 		) // Exclude check-in from default selection
 	);
+
+	// State for event details modal
+	const [selectedEvent, setSelectedEvent] = useState<ProcessedEvent | null>(
+		null
+	);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	// Handle event click
+	const handleEventClick = (event: ProcessedEvent) => {
+		setSelectedEvent(event);
+		setIsModalOpen(true);
+	};
+
+	// Get original event data for modal
+	const getOriginalEvent = (
+		processedEvent: ProcessedEvent
+	): EventEntityResponse | undefined => {
+		if (!events) return undefined;
+		// Handle split events (those with "-part1" or "-part2" suffix)
+		const baseId = processedEvent.id.replace(/-part[12]$/, "");
+		return events.find((e) => e.id === baseId || e.id === processedEvent.id);
+	};
+
+	// Handle modal close
+	const handleModalClose = () => {
+		setIsModalOpen(false);
+		setSelectedEvent(null);
+	};
 
 	// Toggle category selection
 	const toggleCategory = (category: EventType) => {
@@ -487,7 +664,7 @@ const Schedule: React.FC = () => {
 	return (
 		<section
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
-			style={{ minHeight: "60vw", backgroundColor: "#FFE4F4" }}
+			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
 			id="schedule"
 		>
 			{/* Header */}
@@ -582,6 +759,7 @@ const Schedule: React.FC = () => {
 						endHour={timeRange.end}
 						totalColumns={processedEvents.Saturday.totalColumns}
 						useTwoHourIntervals={useTwoHourIntervals}
+						onEventClick={handleEventClick}
 					/>
 					<div className="w-1 bg-[#FFB6D9] hidden lg:block"></div>
 					<DayColumn
@@ -591,9 +769,20 @@ const Schedule: React.FC = () => {
 						endHour={timeRange.end}
 						totalColumns={processedEvents.Sunday.totalColumns}
 						useTwoHourIntervals={useTwoHourIntervals}
+						onEventClick={handleEventClick}
 					/>
 				</div>
 			</motion.div>
+
+			{/* Event Details Modal */}
+			<EventDetailsModal
+				event={selectedEvent}
+				isOpen={isModalOpen}
+				onClose={handleModalClose}
+				originalEvent={
+					selectedEvent ? getOriginalEvent(selectedEvent) : undefined
+				}
+			/>
 		</section>
 	);
 };

@@ -15,6 +15,7 @@ import { Fireworks } from "@fireworks-js/react";
 import FerrisWheel from "@/components/FerrisWheel";
 import InfoSections from "@/components/InfoSections";
 import Wave from "@/components/Wave";
+import PhotoGallery from "@/components/PhotoGallery";
 
 export default function Home() {
 	return (
@@ -27,14 +28,15 @@ export default function Home() {
 					fill="#B1E8FF"
 					borderColor="#ffffff"
 					borderOffset={-30}
-					waveHeight={100}
+					waveHeight={50}
 					waveDelta={50}
 					speed={0.2}
 					wavePoints={6}
 					className="w-full"
-					style={{ backgroundColor: "#FFEBB8" }}
+					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
 				/>
 				<InfoSections />
+				<Schedule />
 				<Wave
 					height={120}
 					fill="#215172"
@@ -45,7 +47,22 @@ export default function Home() {
 					className="w-full"
 					style={{ backgroundColor: "#D8FFFC" }}
 				/>
-				<Schedule />
+				<PhotoGallery
+					images={[
+						"/event/event_1.jpg",
+						"/event/event_2.jpg",
+						"/event/event_3.jpg",
+						"/event/event_4.jpg",
+						"/event/event_5.jpg",
+						"/event/event_6.jpg",
+						"/event/event_7.jpg",
+						"/event/event_8.jpg",
+						"/event/event_9.jpg",
+						"/event/event_10.jpg",
+						"/event/event_11.jpg",
+						"/event/event_12.jpg",
+					]}
+				/>
 				<Footer />
 			</main>
 		</>

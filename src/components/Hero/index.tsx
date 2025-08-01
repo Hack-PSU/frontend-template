@@ -152,9 +152,10 @@ const Hero = () => {
 	return (
 		<section
 			id="hero"
-			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] overflow-hidden"
-			style={{ minHeight: "60vw", backgroundColor: "#FFEBB8" }}
+			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[4vw] overflow-hidden"
+			style={{ minHeight: "45vw", backgroundColor: "#FFEBB8" }}
 		>
+			{/* Decorative elements - kept at normal size */}
 			{/* Animated Starfish Elements */}
 			<motion.div
 				className="absolute"
@@ -233,150 +234,193 @@ const Hero = () => {
 					className="object-contain"
 				/>
 			</motion.div>
-			{/* Title */}
-			<motion.h1
-				className="text-center mb-[2vw] font-bold"
-				style={{
-					fontSize: "clamp(32px, 8vw, 80px)",
-					fontFamily: "Monomaniac One, monospace",
-					color: "#00DAB7",
-				}}
-				initial={{ opacity: 0, y: -50 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 1 }}
-			>
-				HackPSU Fall 2025
-			</motion.h1>
 
-			{/* Countdown Timer */}
-			{state !== 2 ? (
-				<motion.div
-					className="flex flex-col items-center mb-[2vw]"
-					initial={{ opacity: 0, scale: 0.8 }}
-					animate={{ opacity: 1, scale: 1 }}
-					transition={{ duration: 1, delay: 0.3 }}
+			{/* Container for scaled content (title and countdown only) */}
+			<div style={{ transform: "scale(0.75)", transformOrigin: "center" }}>
+				{/* Title */}
+				<motion.h1
+					className="text-center mb-[2vw] font-bold"
+					style={{
+						fontSize: "clamp(32px, 8vw, 80px)",
+						fontFamily: "Monomaniac One, monospace",
+						color: "#00DAB7",
+					}}
+					initial={{ opacity: 0, y: -50 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1 }}
 				>
-					{/* Countdown Numbers */}
-					<div
-						className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+					HackPSU Fall 2025
+				</motion.h1>
+
+				{/* Countdown Timer */}
+				{state !== 2 ? (
+					<motion.div
+						className="flex flex-col items-center mb-[2vw]"
+						initial={{ opacity: 0, scale: 0.8 }}
+						animate={{ opacity: 1, scale: 1 }}
+						transition={{ duration: 1, delay: 0.3 }}
 					>
-						{/* Days */}
-						<div className="flex flex-col items-center">
-							<motion.div
-								className="font-bold"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
-								initial={{ scaleY: 0 }}
-								animate={{ scaleY: 1 }}
-							>
-								{renderTime(days)}
-							</motion.div>
-							<div
-								className="font-semibold"
-								style={{
-									fontSize: "clamp(10px, 1.5vw, 18px)",
-									color: "#00DAB7",
-									fontFamily: "Monomaniac One, monospace",
-								}}
-							>
-								{days === 1 ? "Day" : "Days"}
-							</div>
-						</div>
-
-						{/* Colon */}
+						{/* Countdown Numbers */}
 						<div
-							className="font-bold mb-[2vw]"
-							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+							className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
+							style={{ fontFamily: "Monomaniac One, monospace" }}
 						>
-							:
-						</div>
+							{/* Days */}
+							<div className="flex flex-col items-center">
+								<motion.div
+									className="font-bold"
+									style={{
+										fontSize: "clamp(24px, 6vw, 80px)",
+										color: "#00DAB7",
+									}}
+									initial={{ scaleY: 0 }}
+									animate={{ scaleY: 1 }}
+								>
+									{renderTime(days)}
+								</motion.div>
+								<div
+									className="font-semibold"
+									style={{
+										fontSize: "clamp(10px, 1.5vw, 18px)",
+										color: "#00DAB7",
+										fontFamily: "Monomaniac One, monospace",
+									}}
+								>
+									{days === 1 ? "Day" : "Days"}
+								</div>
+							</div>
 
-						{/* Hours */}
-						<div className="flex flex-col items-center">
-							<motion.div
-								className="font-bold"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
-								initial={{ scaleY: 0 }}
-								animate={{ scaleY: 1 }}
-							>
-								{renderTime(hours)}
-							</motion.div>
+							{/* Colon */}
 							<div
-								className="font-semibold"
-								style={{
-									fontSize: "clamp(10px, 1.5vw, 18px)",
-									color: "#00DAB7",
-									fontFamily: "Monomaniac One, monospace",
-								}}
+								className="font-bold mb-[2vw]"
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 							>
-								{hours === 1 ? "Hour" : "Hours"}
+								:
+							</div>
+
+							{/* Hours */}
+							<div className="flex flex-col items-center">
+								<motion.div
+									className="font-bold"
+									style={{
+										fontSize: "clamp(24px, 6vw, 80px)",
+										color: "#00DAB7",
+									}}
+									initial={{ scaleY: 0 }}
+									animate={{ scaleY: 1 }}
+								>
+									{renderTime(hours)}
+								</motion.div>
+								<div
+									className="font-semibold"
+									style={{
+										fontSize: "clamp(10px, 1.5vw, 18px)",
+										color: "#00DAB7",
+										fontFamily: "Monomaniac One, monospace",
+									}}
+								>
+									{hours === 1 ? "Hour" : "Hours"}
+								</div>
+							</div>
+
+							{/* Colon */}
+							<div
+								className="font-bold mb-[2vw]"
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+							>
+								:
+							</div>
+
+							{/* Minutes */}
+							<div className="flex flex-col items-center">
+								<motion.div
+									className="font-bold"
+									style={{
+										fontSize: "clamp(24px, 6vw, 80px)",
+										color: "#00DAB7",
+									}}
+									initial={{ scaleY: 0 }}
+									animate={{ scaleY: 1 }}
+								>
+									{renderTime(minutes)}
+								</motion.div>
+								<div
+									className="font-semibold"
+									style={{
+										fontSize: "clamp(10px, 1.5vw, 18px)",
+										color: "#00DAB7",
+										fontFamily: "Monomaniac One, monospace",
+									}}
+								>
+									{minutes === 1 ? "Minute" : "Minutes"}
+								</div>
+							</div>
+
+							{/* Colon */}
+							<div
+								className="font-bold mb-[2vw]"
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+							>
+								:
+							</div>
+
+							{/* Seconds */}
+							<div className="flex flex-col items-center">
+								<motion.div
+									className="font-bold"
+									style={{
+										fontSize: "clamp(24px, 6vw, 80px)",
+										color: "#00DAB7",
+									}}
+									animate={secondsControls}
+									initial={{ scaleY: 1 }}
+								>
+									{renderTime(seconds)}
+								</motion.div>
+								<div
+									className="font-semibold"
+									style={{
+										fontSize: "clamp(10px, 1.5vw, 18px)",
+										color: "#00DAB7",
+										fontFamily: "Monomaniac One, monospace",
+									}}
+								>
+									{seconds === 1 ? "Second" : "Seconds"}
+								</div>
 							</div>
 						</div>
 
-						{/* Colon */}
+						{/* Banner Message */}
 						<div
-							className="font-bold mb-[2vw]"
-							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+							className="text-center font-bold mb-[1.5vw]"
+							style={{
+								fontSize: "clamp(14px, 2.5vw, 32px)",
+								color: "#00DAB7",
+								fontFamily: "Monomaniac One, monospace",
+							}}
 						>
-							:
+							{bannerMessage}
 						</div>
 
-						{/* Minutes */}
-						<div className="flex flex-col items-center">
-							<motion.div
-								className="font-bold"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
-								initial={{ scaleY: 0 }}
-								animate={{ scaleY: 1 }}
-							>
-								{renderTime(minutes)}
-							</motion.div>
-							<div
-								className="font-semibold"
-								style={{
-									fontSize: "clamp(10px, 1.5vw, 18px)",
-									color: "#00DAB7",
-									fontFamily: "Monomaniac One, monospace",
-								}}
-							>
-								{minutes === 1 ? "Minute" : "Minutes"}
-							</div>
-						</div>
-
-						{/* Colon */}
-						<div
-							className="font-bold mb-[2vw]"
-							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+						{/* Date and Location */}
+						<motion.div
+							className="text-center font-semibold"
+							style={{
+								fontSize: "clamp(16px, 3vw, 24px)",
+								color: "#00DAB7",
+								fontFamily: "Monomaniac One, monospace",
+							}}
+							initial={{ opacity: 0, y: -30 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 1, delay: 0.2 }}
 						>
-							:
-						</div>
-
-						{/* Seconds */}
-						<div className="flex flex-col items-center">
-							<motion.div
-								className="font-bold"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
-								animate={secondsControls}
-								initial={{ scaleY: 1 }}
-							>
-								{renderTime(seconds)}
-							</motion.div>
-							<div
-								className="font-semibold"
-								style={{
-									fontSize: "clamp(10px, 1.5vw, 18px)",
-									color: "#00DAB7",
-									fontFamily: "Monomaniac One, monospace",
-								}}
-							>
-								{seconds === 1 ? "Second" : "Seconds"}
-							</div>
-						</div>
-					</div>
-
-					{/* Banner Message */}
+							<div className="mb-[1vw]">November 9-10, 2025</div>
+							<div>Penn State University, University Park</div>
+						</motion.div>
+					</motion.div>
+				) : (
 					<div
-						className="text-center font-bold mb-[1.5vw]"
+						className="text-center font-bold mb-[2vw]"
 						style={{
 							fontSize: "clamp(14px, 2.5vw, 32px)",
 							color: "#00DAB7",
@@ -385,39 +429,12 @@ const Hero = () => {
 					>
 						{bannerMessage}
 					</div>
+				)}
+			</div>
 
-					{/* Date and Location */}
-					<motion.div
-						className="text-center font-semibold"
-						style={{
-							fontSize: "clamp(16px, 3vw, 24px)",
-							color: "#00DAB7",
-							fontFamily: "Monomaniac One, monospace",
-						}}
-						initial={{ opacity: 0, y: -30 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 1, delay: 0.2 }}
-					>
-						<div className="mb-[1vw]">November 9-10, 2025</div>
-						<div>Penn State University, University Park</div>
-					</motion.div>
-				</motion.div>
-			) : (
-				<div
-					className="text-center font-bold mb-[2vw]"
-					style={{
-						fontSize: "clamp(14px, 2.5vw, 32px)",
-						color: "#00DAB7",
-						fontFamily: "Monomaniac One, monospace",
-					}}
-				>
-					{bannerMessage}
-				</div>
-			)}
-
-			{/* Register & Discord Buttons */}
+			{/* Register & Discord Buttons - kept at original size */}
 			<motion.div
-				className="flex flex-col md:flex-row items-center justify-center gap-[1vw] md:gap-[2vw] w-full"
+				className="flex flex-col md:flex-row items-center justify-center gap-[0.5vw] md:gap-[0vw] w-full mt-[-8vw]"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}

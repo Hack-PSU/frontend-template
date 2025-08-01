@@ -132,7 +132,13 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(0, 6)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "0vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "0vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
+					//style={{ left: "0vw", width: "12vw", height: "18vw", zIndex: 1 }}
 				>
 					<Image
 						src="/f25/8.png"
@@ -144,7 +150,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(0.3, 5)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "8vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "8vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -156,7 +167,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(0.6, 7)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "16vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "16vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -168,7 +184,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(0.9, 4)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "24vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "24vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -180,7 +201,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(1.2, 6)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "32vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "32vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -192,7 +218,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(1.5, 8)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "40vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "40vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -204,7 +235,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(1.8, 5)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "48vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "48vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -216,7 +252,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(2.1, 7)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "56vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "56vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -228,7 +269,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(2.4, 6)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "64vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "64vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -240,7 +286,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(2.7, 4)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "72vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "72vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -252,7 +303,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(3.0, 8)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "80vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "80vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"
@@ -264,7 +320,12 @@ const Footer = () => {
 				<motion.div
 					animate={leftRightSway(3.3, 5)}
 					className="absolute bottom-[-2vw]"
-					style={{ left: "88vw", width: "12vw", height: "18vw", zIndex: 1 }}
+					style={{
+						left: "88vw",
+						width: "clamp(12vw, 16vw, 20vw)",
+						height: "clamp(18vw, 24vw, 18vw)",
+						zIndex: 1,
+					}}
 				>
 					<Image
 						src="/f25/8.png"

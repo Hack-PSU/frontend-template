@@ -1,45 +1,36 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import HomeIcon from "@mui/icons-material/Home";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
+import { Menu, X } from "lucide-react";
 
-// Desktop NavbarButton Component (with button images)
-interface NavbarButtonProps {
+interface NavItemProps {
 	href: string;
 	text: string;
 	isExternal?: boolean;
 	onClick?: () => void;
 }
 
-function NavbarButton({
+const NavItem: React.FC<NavItemProps> = ({
 	href,
 	text,
 	isExternal = false,
 	onClick,
-}: NavbarButtonProps) {
+}) => {
 	const content = (
-		<div className="relative w-32 h-18 md:w-36 md:h-20 lg:w-40 lg:h-22 transition-all duration-200 ease-out hover:scale-105 active:scale-95 hover:brightness-110 hover:drop-shadow-lg">
-			<Image
-				src="/Navbar.svg"
-				alt={`${text} navigation button`}
-				fill
-				className="object-contain drop-shadow-sm"
-				priority
-			/>
-			<span className="absolute inset-0 flex items-center justify-center font-rye font-semibold text-black text-[9px] md:text-[10px] lg:text-[11px] tracking-wider drop-shadow-sm">
-				{text.toUpperCase()}
-			</span>
-		</div>
+		<motion.span
+			className="relative px-6 py-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] border-2 border-[#FF91A4] hover:border-[#FF6B9D] text-[#A20021] font-bold shadow-lg hover:shadow-xl transition-all duration-300"
+			style={{ fontFamily: "Monomaniac One, monospace" }}
+			whileHover={{ scale: 1.08 }}
+			whileTap={{ scale: 0.92 }}
+		>
+			{text}
+		</motion.span>
 	);
-
-	const className =
-		"block focus:outline-none focus:ring-2 focus:ring-customYellow focus:ring-opacity-50 rounded-lg";
 
 	if (isExternal) {
 		return (
@@ -48,8 +39,7 @@ function NavbarButton({
 				target="_blank"
 				rel="noopener noreferrer"
 				onClick={onClick}
-				className={className}
-				aria-label={`Navigate to ${text} (opens in new tab)`}
+				className="focus:outline-none focus:ring-2 focus:ring-white/50 rounded-xl"
 			>
 				{content}
 			</a>
@@ -60,37 +50,29 @@ function NavbarButton({
 		<Link
 			href={href}
 			onClick={onClick}
-			className={className}
-			aria-label={`Navigate to ${text}`}
+			className="focus:outline-none focus:ring-2 focus:ring-white/50 rounded-xl"
 		>
 			{content}
 		</Link>
 	);
-}
+};
 
-// Mobile Menu Item Component (standard styling with golden theme)
-interface MobileMenuItemProps {
-	href: string;
-	text: string;
-	isExternal?: boolean;
-	onClick?: () => void;
-}
-
-function MobileMenuItem({
+const MobileNavItem: React.FC<NavItemProps> = ({
 	href,
 	text,
 	isExternal = false,
 	onClick,
-}: MobileMenuItemProps) {
-	const className = `
-    block w-full px-6 py-4 text-lg font-rye font-semibold text-black bg-customYellow 
-    rounded-lg border-2 border-yellow-600 shadow-lg
-    hover:bg-yellow-300 hover:border-yellow-700 hover:shadow-xl
-    active:bg-yellow-400 active:scale-98
-    focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-opacity-50
-    transition-all duration-200 ease-out
-    text-center tracking-wide
-  `;
+}) => {
+	const content = (
+		<motion.div
+			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] border-3 border-[#FF91A4] text-[#A20021] font-bold rounded-2xl shadow-lg"
+			style={{ fontFamily: "Monomaniac One, monospace" }}
+			whileHover={{ scale: 1.02 }}
+			whileTap={{ scale: 0.98 }}
+		>
+			{text.toUpperCase()}
+		</motion.div>
+	);
 
 	if (isExternal) {
 		return (
@@ -99,10 +81,9 @@ function MobileMenuItem({
 				target="_blank"
 				rel="noopener noreferrer"
 				onClick={onClick}
-				className={className}
-				aria-label={`Navigate to ${text} (opens in new tab)`}
+				className="block w-full focus:outline-none focus:ring-2 focus:ring-white/50 rounded-xl"
 			>
-				{text.toUpperCase()}
+				{content}
 			</a>
 		);
 	}
@@ -111,245 +92,262 @@ function MobileMenuItem({
 		<Link
 			href={href}
 			onClick={onClick}
-			className={className}
-			aria-label={`Navigate to ${text}`}
+			className="block w-full focus:outline-none focus:ring-2 focus:ring-white/50 rounded-xl"
 		>
-			{text.toUpperCase()}
+			{content}
 		</Link>
 	);
-}
+};
 
-// MLH Badge Component (desktop only)
-function MLHBadge() {
-	return (
-		<a
-			id="mlh-trust-badge"
-			className="mlh-badge block transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-customYellow focus:ring-opacity-50 rounded-lg"
-			href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
-			target="_blank"
-			rel="noopener noreferrer"
-			aria-label="Major League Hacking 2026 Hackathon Season"
-		>
-			<Image
-				src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
-				alt="Major League Hacking 2026 Hackathon Season"
-				width={100}
-				height={100}
-				className="w-16 h-16 lg:w-40 lg:h-40 drop-shadow-lg"
-			/>
-		</a>
-	);
-}
+const MLHBanner: React.FC = () => (
+	<motion.a
+		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
+		target="_blank"
+		rel="noopener noreferrer"
+		className="focus:outline-none focus:ring-4 focus:ring-[#FFB6D9]/50 rounded-lg"
+		whileHover={{ scale: 1.05 }}
+		whileTap={{ scale: 0.95 }}
+		initial={{ opacity: 0, x: 20 }}
+		animate={{ opacity: 1, x: 0 }}
+		transition={{ duration: 0.6, delay: 0.4 }}
+	>
+		<Image
+			src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
+			alt="Major League Hacking 2026 Hackathon Season"
+			width={120}
+			height={120}
+			className="w-24 h-24 md:w-32 md:h-32 lg:w-36 lg:h-36 xl:w-40 xl:h-40 drop-shadow-2xl"
+		/>
+	</motion.a>
+);
 
-// Main Navbar Component
-export default function Navbar() {
-	const [menuOpen, setMenuOpen] = useState(false);
-	const [isAnimating, setIsAnimating] = useState(false);
+const Navbar: React.FC = () => {
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { isAuthenticated, isLoading } = useFirebase();
 	const pathname = usePathname();
 	const router = useRouter();
 	const isHome = pathname === "/";
 
-	// Enhanced menu toggle with animation state
-	const toggleMenu = () => {
-		if (isAnimating) return;
+	const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-		setIsAnimating(true);
-		setMenuOpen(!menuOpen);
-
-		setTimeout(() => setIsAnimating(false), 300);
-	};
-
-	// Close mobile menu on route change
 	useEffect(() => {
-		if (menuOpen) {
-			setMenuOpen(false);
-		}
-	}, [pathname]);
-
-	// Enhanced escape key and body scroll handling
-	useEffect(() => {
-		const handleEscape = (e: KeyboardEvent) => {
-			if (e.key === "Escape" && menuOpen) {
-				toggleMenu();
-			}
-		};
-
-		if (menuOpen) {
-			document.addEventListener("keydown", handleEscape);
+		if (isMenuOpen) {
 			document.body.style.overflow = "hidden";
 		} else {
 			document.body.style.overflow = "";
 		}
 
 		return () => {
-			document.removeEventListener("keydown", handleEscape);
 			document.body.style.overflow = "";
 		};
-	}, [menuOpen]);
+	}, [isMenuOpen]);
+
+	useEffect(() => {
+		const handleEscape = (e: KeyboardEvent) => {
+			if (e.key === "Escape" && isMenuOpen) {
+				setIsMenuOpen(false);
+			}
+		};
+
+		document.addEventListener("keydown", handleEscape);
+		return () => document.removeEventListener("keydown", handleEscape);
+	}, [isMenuOpen]);
+
+	useEffect(() => {
+		setIsMenuOpen(false);
+	}, [pathname]);
 
 	const getNavItems = () => {
 		const baseItems = [
-			{ href: isHome ? "#faq" : "/#faq", text: "info" },
-			{ href: isHome ? "#schedule" : "/#schedule", text: "schedule" },
-			{ href: isHome ? "#prizes" : "/#prizes", text: "prizes" },
-			{ href: isHome ? "#sponsors" : "/#sponsors", text: "sponsors" },
-			{ href: isHome ? "#workshops" : "/#workshops", text: "workshops" },
+			{ href: isHome ? "#info" : "/#info", text: "About" },
+			{ href: isHome ? "#schedule" : "/#schedule", text: "Schedule" },
+			{ href: isHome ? "#sponsors" : "/#sponsors", text: "Sponsors" },
+			{ href: isHome ? "#faq" : "/#faq", text: "FAQ" },
 		];
 
 		const authItem =
 			!isLoading && isAuthenticated
-				? { href: "/profile", text: "profile" }
-				: { href: "/profile", text: "register" };
+				? { href: "/profile", text: "Profile" }
+				: { href: "/profile", text: "Register" };
 
 		return [...baseItems, authItem];
 	};
 
 	const navItems = getNavItems();
-	const leftItems = navItems.slice(0, 3);
-	const rightItems = navItems.slice(3);
 
 	return (
 		<>
-			<nav className="sticky top-0 w-full bg-customRed border-b-4 border-customYellow z-50 shadow-lg">
-				{/* Mobile Navbar */}
-				<div className="lg:hidden flex items-center justify-between h-16 px-4 sm:px-6">
-					<button
-						onClick={() => router.push("/")}
-						className="text-white hover:text-customYellow transition-all duration-200 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-customYellow focus:ring-opacity-50"
-						aria-label="Go to homepage"
-					>
-						<HomeIcon fontSize="large" />
-					</button>
+			{/* Main Navbar */}
+			<motion.nav
+				className="relative w-full bg-[#FFEBB8] z-40"
+				initial={{ opacity: 0, y: -20 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.6 }}
+			>
+				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div className="flex items-center justify-between h-24">
+						{/* Logo */}
+						<motion.div
+							className="flex-shrink-0"
+							initial={{ opacity: 0, x: -20 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.6, delay: 0.1 }}
+						>
+							<Link
+								href="/"
+								className="focus:outline-none focus:ring-2 focus:ring-white/50 rounded-xl"
+							>
+								<motion.div
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
+									<Image
+										src="/logo.png"
+										alt="HackPSU Logo"
+										width={80}
+										height={80}
+										className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+										priority
+									/>
+								</motion.div>
+							</Link>
+						</motion.div>
 
-					<Link
-						href="/"
-						className="absolute left-1/2 transform -translate-x-1/2"
-					>
-						<Image
-							src="/logo.png"
-							alt="Logo"
-							width={60}
-							height={60}
-							className="w-16 h-16 drop-shadow-lg"
-						/>
-					</Link>
+						{/* Desktop Navigation */}
+						<motion.div
+							className="hidden md:flex items-center space-x-6"
+							initial={{ opacity: 0, y: -20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.6, delay: 0.2 }}
+						>
+							{navItems.map((item, index) => (
+								<motion.div
+									key={index}
+									initial={{ opacity: 0, y: -10 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+								>
+									<NavItem href={item.href} text={item.text} />
+								</motion.div>
+							))}
+						</motion.div>
 
-					<button
-						onClick={toggleMenu}
-						disabled={isAnimating}
-						className="text-white hover:text-customYellow transition-all duration-200 p-2 rounded-lg  hover:bg-opacity-10 focus:outline-none focus:ring-2 focus:ring-customYellow focus:ring-opacity-50 disabled:opacity-50"
-						aria-label={
-							menuOpen ? "Close navigation menu" : "Open navigation menu"
-						}
-						aria-expanded={menuOpen}
-					>
-						<div className="relative w-6 h-6">
-							<MenuIcon
-								fontSize="large"
-								className={`absolute transition-all duration-300 ${menuOpen ? "opacity-0 rotate-180" : "opacity-100 rotate-0"}`}
-							/>
-							<CloseIcon
-								fontSize="large"
-								className={`absolute transition-all duration-300 ${menuOpen ? "opacity-100 rotate-0" : "opacity-0 -rotate-180"}`}
-							/>
+						{/* MLH Banner (Desktop) */}
+						<div className="hidden lg:block translate-y-[18%]">
+							<MLHBanner />
 						</div>
-					</button>
-				</div>
 
-				{/* Desktop Navbar - Smaller Size */}
-				<div className="hidden lg:flex items-center justify-center relative h-16 px-4 xl:px-8">
-					{/* Left Navigation Items */}
-					<div className="flex items-center space-x-1 xl:space-x-2">
-						{leftItems.map((item, index) => (
-							<NavbarButton key={index} href={item.href} text={item.text} />
-						))}
-					</div>
-
-					{/* Logo */}
-					<Link href="/" className="mx-6 xl:mx-8 group">
-						<Image
-							src="/logo.png"
-							alt="Logo"
-							width={80}
-							height={80}
-							className="w-16 h-16 xl:w-20 xl:h-20 drop-shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:drop-shadow-2xl"
-							priority
-						/>
-					</Link>
-
-					{/* Right Navigation Items */}
-					<div className="flex items-center space-x-1 xl:space-x-2">
-						{rightItems.map((item, index) => (
-							<NavbarButton
-								key={index + leftItems.length}
-								href={item.href}
-								text={item.text}
-							/>
-						))}
-					</div>
-
-					{/* MLH Badge - Desktop Only */}
-					<div className="absolute right-4 xl:right-8 top-[0px] hidden xl:block">
-						<MLHBadge />
+						{/* Mobile Menu Button */}
+						<motion.button
+							onClick={toggleMenu}
+							className="md:hidden p-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] border-2 border-[#FF91A4] text-[#A20021] shadow-lg focus:outline-none focus:ring-4 focus:ring-[#FFB6D9]/50"
+							whileHover={{ scale: 1.1 }}
+							whileTap={{ scale: 0.9 }}
+							initial={{ opacity: 0, x: 20 }}
+							animate={{ opacity: 1, x: 0 }}
+							transition={{ duration: 0.6, delay: 0.3 }}
+						>
+							<AnimatePresence mode="wait">
+								{isMenuOpen ? (
+									<motion.div
+										key="close"
+										initial={{ rotate: -90, opacity: 0 }}
+										animate={{ rotate: 0, opacity: 1 }}
+										exit={{ rotate: 90, opacity: 0 }}
+										transition={{ duration: 0.2 }}
+									>
+										<X size={24} />
+									</motion.div>
+								) : (
+									<motion.div
+										key="menu"
+										initial={{ rotate: 90, opacity: 0 }}
+										animate={{ rotate: 0, opacity: 1 }}
+										exit={{ rotate: -90, opacity: 0 }}
+										transition={{ duration: 0.2 }}
+									>
+										<Menu size={24} />
+									</motion.div>
+								)}
+							</AnimatePresence>
+						</motion.button>
 					</div>
 				</div>
-			</nav>
+			</motion.nav>
 
 			{/* Mobile Menu Overlay */}
-			<div
-				className={`lg:hidden fixed inset-0 z-40 transition-all duration-300 ease-out ${
-					menuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-				}`}
-			>
-				{/* Backdrop */}
-				<div
-					className={`absolute inset-0 bg-black transition-opacity duration-300 ${
-						menuOpen ? "bg-opacity-60" : "bg-opacity-0"
-					}`}
-					onClick={toggleMenu}
-				/>
+			<AnimatePresence>
+				{isMenuOpen && (
+					<motion.div
+						className="fixed inset-0 z-50 md:hidden"
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						transition={{ duration: 0.3 }}
+					>
+						{/* Backdrop */}
+						<motion.div
+							className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							exit={{ opacity: 0 }}
+							onClick={toggleMenu}
+						/>
 
-				{/* Menu Content */}
-				<div
-					className={`absolute top-16 left-0 right-0 bottom-0 bg-customRed border-t-4 border-customYellow transform transition-transform duration-300 ease-out overflow-y-auto ${
-						menuOpen ? "translate-y-0" : "-translate-y-full"
-					}`}
-				>
-					<div className="flex flex-col space-y-4 p-6 pb-12">
-						{/* Mobile Navigation Items - No MLH Badge */}
-						{navItems.map((item, index) => (
-							<div
-								key={index}
-								className={`transform transition-all duration-300 ease-out ${
-									menuOpen
-										? "translate-y-0 opacity-100"
-										: "translate-y-4 opacity-0"
-								}`}
-								style={{ transitionDelay: `${index * 50}ms` }}
-							>
-								<MobileMenuItem
-									href={item.href}
-									text={item.text}
-									onClick={toggleMenu}
-								/>
-							</div>
-						))}
-
-						{/* Close instruction */}
-						<p
-							className={`text-customYellow text-sm text-center mt-6 opacity-75 transform transition-all duration-300 ease-out ${
-								menuOpen
-									? "translate-y-0 opacity-75"
-									: "translate-y-4 opacity-0"
-							}`}
-							style={{ transitionDelay: `${navItems.length * 50}ms` }}
+						{/* Menu Content */}
+						<motion.div
+							className="absolute top-24 left-0 right-0 bg-[#FFEBB8] border-t-4 border-[#FFB6D9] shadow-2xl"
+							initial={{ y: -20, opacity: 0 }}
+							animate={{ y: 0, opacity: 1 }}
+							exit={{ y: -20, opacity: 0 }}
+							transition={{ duration: 0.3 }}
 						>
-							Tap outside or press ESC to close
-						</p>
-					</div>
-				</div>
-			</div>
+							<div className="px-6 py-8 space-y-4">
+								{navItems.map((item, index) => (
+									<motion.div
+										key={index}
+										initial={{ x: -20, opacity: 0 }}
+										animate={{ x: 0, opacity: 1 }}
+										transition={{ delay: index * 0.1, duration: 0.3 }}
+									>
+										<MobileNavItem
+											href={item.href}
+											text={item.text}
+											onClick={toggleMenu}
+										/>
+									</motion.div>
+								))}
+
+								{/* MLH Banner for Mobile */}
+								<motion.div
+									className="flex justify-center pt-4"
+									initial={{ y: 20, opacity: 0 }}
+									animate={{ y: 0, opacity: 1 }}
+									transition={{ delay: navItems.length * 0.1, duration: 0.3 }}
+								>
+									<MLHBanner />
+								</motion.div>
+
+								{/* Close instruction */}
+								<motion.p
+									className="text-center text-[#A20021]/70 text-sm pt-4"
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									transition={{
+										delay: (navItems.length + 1) * 0.1,
+										duration: 0.3,
+									}}
+								>
+									Tap outside or press ESC to close
+								</motion.p>
+							</div>
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 		</>
 	);
-}
+};
+
+export default Navbar;
