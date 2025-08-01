@@ -182,12 +182,15 @@ const Hero = () => {
 			</motion.div>
 
 			<motion.div
-				className="absolute"
+				className="absolute
+				top-[-3vw]
+				md:top-[1.8vw]
+				"
 				style={{
 					width: "clamp(80px, 10vw, 150px)",
 					height: "clamp(80px, 10vw, 150px)",
 					left: "clamp(40px, 5vw, 100px)",
-					top: "clamp(12px, 1.8vw, 25px)",
+					//top: "clamp(12px, 1.8vw, 25px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
 				animate={{
@@ -206,11 +209,14 @@ const Hero = () => {
 
 			{/* Chill Hacky Character */}
 			<motion.div
-				className="absolute "
+				className="absolute 
+				left-[-15px]
+				md:left-[3vw]
+				"
 				style={{
 					width: "clamp(120px, 18vw, 300px)",
 					height: "clamp(120px, 18vw, 300px)",
-					left: "clamp(15px, 3vw, 60px)",
+					//left: "clamp(15px, 3vw, 60px)",
 					bottom: "clamp(60px, 80vw, 200px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
@@ -287,11 +293,13 @@ const Hero = () => {
 
 			{/* Orange Starfish */}
 			<motion.div
-				className="absolute z-10"
+				className="absolute z-10
+				right-[0px]
+				md:right-[5vw]
+				"
 				style={{
 					width: "clamp(80px, 10vw, 80px)",
 					height: "clamp(80px, 10vw, 80px)",
-					right: "clamp(40px, 5vw, 100px)",
 					top: "clamp(12px, 1.8vw, 25px)",
 				}}
 				initial={{ opacity: 0, scale: 0.8 }}
