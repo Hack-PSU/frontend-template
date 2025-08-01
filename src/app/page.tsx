@@ -17,6 +17,20 @@ import Wave from "@/components/Wave";
 import PhotoGallery from "@/components/PhotoGallery";
 
 export default function Home() {
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
+
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	const wavePoints = isMobile ? 3 : 6;
+
 	return (
 		<>
 			<main className="flex flex-col items-center w-full">
@@ -30,7 +44,7 @@ export default function Home() {
 					waveHeight={50}
 					waveDelta={50}
 					speed={0.15}
-					wavePoints={6}
+					wavePoints={wavePoints}
 					className="w-full"
 					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
 				/>
@@ -43,7 +57,7 @@ export default function Home() {
 					waveHeight={50}
 					waveDelta={50}
 					speed={0.15}
-					wavePoints={6}
+					wavePoints={wavePoints}
 					className="w-full"
 					style={{ backgroundColor: "#B1E8FF" }}
 				/>
@@ -57,7 +71,7 @@ export default function Home() {
 					waveHeight={50}
 					waveDelta={50}
 					speed={0.15}
-					wavePoints={6}
+					wavePoints={wavePoints}
 					className="w-full"
 					style={{ backgroundColor: "#84cefe" }}
 				/>{" "}

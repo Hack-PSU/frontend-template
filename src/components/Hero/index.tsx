@@ -233,7 +233,7 @@ const Hero = () => {
 
 			{/* Rotating Beach Ball */}
 			<motion.div
-				className="absolute z-50"
+				className="absolute z-30"
 				style={{
 					width: "clamp(150px, 20vw, 1000px)",
 					height: "clamp(150px, 20vw, 1000px)",
