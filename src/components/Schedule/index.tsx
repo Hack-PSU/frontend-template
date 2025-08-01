@@ -767,7 +767,7 @@ const Schedule: React.FC = () => {
 	return (
 		<section
 			ref={scheduleRef}
-			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
+			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
 			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
 			id="schedule"
 		>

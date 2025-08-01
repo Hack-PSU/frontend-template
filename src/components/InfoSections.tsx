@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
@@ -9,6 +9,7 @@ type Section = {
 	label: string;
 	content: string;
 	textColor: string;
+	color: string;
 };
 
 const SECTIONS: Section[] = [
@@ -16,22 +17,25 @@ const SECTIONS: Section[] = [
 		id: "about",
 		label: "About",
 		content:
-			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. Lets add a lot of text here to see how it looks when it overflows. continue adding text here to see how it looks when it overflows.",
-		textColor: "#FFFFFF",
+			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators. Join us for an incredible weekend of building, learning, and connecting with fellow hackers from universities across the region!",
+		textColor: "#048A81",
+		color: "#FFE4B5",
 	},
 	{
-		id: "rules",
-		label: "Rules",
+		id: "eligibility",
+		label: "Eligibility & Teams",
 		content:
-			"All code must be written during the 48-hour hackathon window. No pre-built assets except open-source libraries.",
-		textColor: "#FFFFFF",
+			"All participants must be at least 18 years old and a student of some university (or a recent PSU graduate within less than one year).\n\nTeams may be comprised of up to five members. A team may only submit one project, and no participant may be a member of multiple teams.\n\nAll participants must bring a valid form of identification.",
+		textColor: "#8B4513",
+		color: "#E6F3FF",
 	},
 	{
-		id: "prepare",
-		label: "How to Prepare",
+		id: "guidelines",
+		label: "Project Guidelines",
 		content:
-			"Form a team, brush up on your stack, check out prior projects, and come with an open mind to learn and build!",
-		textColor: "#FFFFFF",
+			"Projects should be original works created on site. Coming with an idea in mind is perfectly fine, working on an existing project is not.\n\nAll projects must be submitted through Devpost by 12PM on Sunday and can be edited until 1:45PM Sunday. All project code must be attached to the project's Devpost submission.\n\nAnything you create is your work - HackPSU and its partners have no claim over intellectual property produced at the event.",
+		textColor: "#2E8B57",
+		color: "#F0FFF0",
 	},
 ];
 
@@ -64,22 +68,25 @@ const InfoSections: React.FC = () => {
 		>
 			{/* Animated Float Elements */}
 			<motion.div
-				className="absolute"
+				className="absolute
+				left-[clamp(20px, 4vw, 80px)]
+				top-[clamp(100px, 15vw, 200px)]
+				md:left-[10px]
+				md:top-[-100px]"
 				style={{
-					width: "clamp(80px, 12vw, 200px)",
-					height: "clamp(80px, 12vw, 200px)",
-					left: "clamp(20px, 3vw, 60px)",
-					bottom: "clamp(100px, 15vw, 250px)",
+					width: "clamp(80px, 30vw, 400px)",
+					height: "clamp(80px, 30vw, 400px)",
 				}}
 				animate={{
 					rotate: [0, 15, 0],
 					y: [0, -20, 0],
+					scale: [1, 0.8, 1],
 				}}
 				transition={{
-					duration: 6,
+					duration: 6.67,
 					repeat: Infinity,
 					ease: "easeInOut",
-					delay: 0.5,
+					delay: 0,
 				}}
 			>
 				<Image
@@ -118,22 +125,25 @@ const InfoSections: React.FC = () => {
 			</motion.div>
 
 			<motion.div
-				className="absolute"
+				className="absolute
+				left-[clamp(20px, 4vw, 80px)]
+				bottom-[clamp(100px, 15vw, 200px)]
+				md:left-[50vw]
+				md:bottom-[15vw]"
 				style={{
-					width: "clamp(90px, 14vw, 220px)",
-					height: "clamp(90px, 14vw, 220px)",
-					right: "clamp(40px, 6vw, 120px)",
-					bottom: "clamp(80px, 12vw, 200px)",
+					width: "clamp(80px, 30vw, 300px)",
+					height: "clamp(80px, 30vw, 300px)",
 				}}
 				animate={{
-					rotate: [180, 210, 180],
-					y: [0, 15, 0],
+					rotate: [0, 15, 0],
+					y: [0, -20, 0],
+					scale: [1, 0.8, 1],
 				}}
 				transition={{
-					duration: 7,
+					duration: 6.67,
 					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 1.5,
+					ease: "linear",
+					delay: 3,
 				}}
 			>
 				<Image
@@ -144,8 +154,26 @@ const InfoSections: React.FC = () => {
 				/>
 			</motion.div>
 
+			{/* Header */}
+			<div className="absolute top-[2vw] left-1/2 transform -translate-x-1/2 z-10">
+				<motion.div
+					initial={{ opacity: 0, y: -20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8 }}
+					className="text-center"
+				>
+					<h1
+						className="text-4xl md:text-5xl font-bold text-[#A20021] mb-3"
+						style={{ fontFamily: "Rye, serif" }}
+					>
+						Info
+					</h1>
+					<div className="w-16 h-1 bg-[#A20021] rounded-full mx-auto"></div>
+				</motion.div>
+			</div>
+
 			{/* Main Content Container */}
-			<div className="w-full max-w-7xl mx-auto space-y-[8vw]">
+			<div className="w-full max-w-7xl mx-auto mt-[-100px] md:mt-0">
 				{/* Hexagon Section + Info Panel */}
 				<div className="flex flex-col md:flex-row items-center justify-between gap-[4vw]">
 					{/* Hexagon Container */}
@@ -201,7 +229,7 @@ const InfoSections: React.FC = () => {
 							{order[0].label}
 						</h3>
 						<p
-							className="text-gray-700"
+							className="text-gray-700 whitespace-pre-line"
 							style={{ fontSize: "clamp(14px, 2vw, 18px)" }}
 						>
 							{order[0].content}
@@ -210,7 +238,7 @@ const InfoSections: React.FC = () => {
 				</div>
 
 				{/* Stats Section */}
-				<div className="flex flex-wrap justify-center gap-[4vw]">
+				<div className="flex flex-wrap justify-center gap-[4vw] pt-4">
 					{STATS.map((s, i) => {
 						const colors = ["#86CFFC", "#048A81"];
 						return (
@@ -248,16 +276,36 @@ interface HexProps {
 }
 
 function Hex({ section, slot, containerRotation, onClick }: HexProps) {
-	// Fixed triangle vertex positions with rotation angles
-	const positions = [
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => setIsMobile(window.innerWidth < 768);
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	// Desktop: triangle positions, Mobile: horizontal line
+	const desktopPositions = [
 		{ x: "-80%", y: "-60%", rotation: 0 }, // vertex 0: top-left
 		{ x: "80%", y: "-60%", rotation: 0 }, // vertex 1: top-right
 		{ x: "0%", y: "70%", rotation: 0 }, // vertex 2: bottom-center
 	];
 
+	const mobilePositions = [
+		{ x: "-100%", y: "0%", rotation: 0 }, // left
+		{ x: "0%", y: "0%", rotation: 0 }, // center
+		{ x: "100%", y: "0%", rotation: 0 }, // right
+	];
+
 	const isSelected = slot === 0;
-	const scale = isSelected ? 1.6 : 0.8;
-	const position = positions[slot];
+
+	// Different scaling for desktop vs mobile
+	const desktopScale = isSelected ? 1.6 : 0.8;
+	const mobileScale = isSelected ? 1.2 : 0.8;
+
+	const position = isMobile ? mobilePositions[slot] : desktopPositions[slot];
+	const scale = isMobile ? mobileScale : desktopScale;
 
 	return (
 		<motion.div
@@ -282,18 +330,21 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				duration: 0.8,
 			}}
 		>
-			<Image
-				src="/f25/abouthex.png"
-				alt="Hexagon"
-				fill
-				className="object-contain"
-			/>
+			<svg viewBox="0 0 120 100" className="absolute inset-0 w-full h-full">
+				<path
+					d="M38,2 L82,2 A12,12 0 0,1 94,10 L112,44 A12,12 0 0,1 112,56 L94,90 A12,12 0 0,1 82,98 L38,98 A12,12 0 0,1 26,90 L8,56 A12,12 0 0,1 8,44 L26,10 A12,12 0 0,1 38,2"
+					fill={section.color}
+					fillOpacity={0.1}
+					stroke="#86CFFC"
+					strokeWidth={7}
+				/>
+			</svg>
 			<motion.span
 				className="relative z-10 font-medium text-center px-2 absolute inset-0 flex items-center justify-center"
 				style={{
 					color: section.textColor,
 					fontSize: isSelected
-						? "clamp(16px, 3vw, 24px)"
+						? "clamp(14px, 2.5vw, 16px)"
 						: "clamp(12px, 2vw, 16px)",
 					fontFamily: "Monomaniac One, monospace",
 				}}

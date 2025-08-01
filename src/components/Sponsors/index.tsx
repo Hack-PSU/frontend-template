@@ -248,13 +248,13 @@ const Sponsors: React.FC = () => {
 				className="absolute z-10"
 				style={{
 					top: "clamp(2rem, 8vw, 8rem)",
-					right: "clamp(1rem, 6vw, 6rem)",
+					right: "clamp(1rem, 60vw, 60rem)",
 				}}
-				initial={{ opacity: 0, scale: 0.8 }}
+				initial={{ opacity: 1, scale: 1 }}
 				animate={{
-					opacity: 1,
-					scale: 1,
-					y: [-8, 8, -8],
+					opacity: [0.7, 1, 0.7],
+					scale: [0.8, 1, 0.8],
+					y: [-6, 6, -6],
 					filter: [
 						"drop-shadow(0 0 4px rgba(255,255,255,0.4))",
 						"drop-shadow(0 0 12px rgba(255,255,255,0.8))",
@@ -262,7 +262,7 @@ const Sponsors: React.FC = () => {
 					],
 				}}
 				transition={{
-					duration: 2.5,
+					duration: 4,
 					repeat: Infinity,
 					ease: "easeInOut",
 				}}
@@ -284,13 +284,13 @@ const Sponsors: React.FC = () => {
 			<motion.div
 				className="absolute z-10"
 				style={{
-					bottom: "clamp(2rem, 8vw, 8rem)",
-					left: "clamp(1rem, 3vw, 3rem)",
+					top: "clamp(2rem, 8vw, 8rem)",
+					right: "clamp(1rem, 3vw, 3rem)",
 				}}
-				initial={{ opacity: 0, scale: 0.8 }}
+				initial={{ opacity: 1, scale: 1 }}
 				animate={{
-					opacity: 1,
-					scale: 1,
+					opacity: [0.7, 1, 0.7],
+					scale: [0.8, 1, 0.8],
 					y: [-6, 6, -6],
 					filter: [
 						"drop-shadow(0 0 4px rgba(255,255,255,0.4))",
@@ -299,7 +299,7 @@ const Sponsors: React.FC = () => {
 					],
 				}}
 				transition={{
-					duration: 3,
+					duration: 4,
 					repeat: Infinity,
 					ease: "easeInOut",
 					delay: 0.5,
@@ -323,13 +323,13 @@ const Sponsors: React.FC = () => {
 				className="absolute z-10"
 				style={{
 					top: "clamp(12rem, 25vw, 25rem)",
-					right: "clamp(8rem, 15vw, 15rem)",
+					right: "clamp(4rem, 40vw, 30rem)",
 				}}
-				initial={{ opacity: 0, scale: 0.8 }}
+				initial={{ opacity: 1, scale: 1 }}
 				animate={{
-					opacity: 1,
-					scale: 1,
-					y: [-10, 10, -10],
+					opacity: [0.7, 1, 0.7],
+					scale: [0.8, 1, 0.8],
+					y: [-6, 6, -6],
 					filter: [
 						"drop-shadow(0 0 4px rgba(255,255,255,0.4))",
 						"drop-shadow(0 0 12px rgba(255,255,255,0.8))",
@@ -337,7 +337,7 @@ const Sponsors: React.FC = () => {
 					],
 				}}
 				transition={{
-					duration: 2.8,
+					duration: 3.8,
 					repeat: Infinity,
 					ease: "easeInOut",
 					delay: 1,

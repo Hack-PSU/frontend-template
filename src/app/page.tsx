@@ -5,7 +5,7 @@ import Hero from "@/components/Hero";
 import Schedule from "@/components/Schedule";
 import FAQRules from "@/components/FAQRules";
 import Rules from "@/components/common/Rules/index";
-import FAQ from "@/components/common/FAQ";
+import FAQ from "@/components/FAQ";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
@@ -48,6 +48,7 @@ export default function Home() {
 					style={{ backgroundColor: "#B1E8FF" }}
 				/>
 				<Schedule />
+				<FAQ />
 				<Wave
 					height={120}
 					fill="#215172"
@@ -59,7 +60,7 @@ export default function Home() {
 					wavePoints={6}
 					className="w-full"
 					style={{ backgroundColor: "#84cefe" }}
-				/>
+				/>{" "}
 				<PhotoGallery
 					images={[
 						"/event/event_1.jpg",

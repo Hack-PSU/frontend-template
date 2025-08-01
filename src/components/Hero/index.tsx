@@ -159,7 +159,7 @@ const Hero = () => {
 			{/* Decorative elements - kept at normal size */}
 			{/* Animated Starfish Elements */}
 			<motion.div
-				className="absolute"
+				className="absolute hidden"
 				style={{
 					width: "clamp(100px, 15vw, 400px)",
 					height: "clamp(100px, 15vw, 400px)",
@@ -266,7 +266,13 @@ const Hero = () => {
 			{/* Additional Decorative Images */}
 			{/* Starfish */}
 			<motion.div
-				className="absolute z-10"
+				className="absolute z-10 hidden"
+				style={{
+					width: "clamp(80px, 10vw, 150px)",
+					height: "clamp(80px, 10vw, 150px)",
+					left: "clamp(40px, 5vw, 100px)",
+					top: "clamp(12px, 1.8vw, 25px)",
+				}}
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
 				transition={{ duration: 0.6 }}
@@ -274,19 +280,20 @@ const Hero = () => {
 				<Image
 					src="/f25/starfish.png"
 					alt="Starfish"
-					width={200}
-					height={200}
+					fill
 					className="object-contain"
-					style={{
-						width: "clamp(80px, 12vw, 200px)",
-						height: "auto",
-					}}
 				/>
 			</motion.div>
 
 			{/* Orange Starfish */}
 			<motion.div
 				className="absolute z-10"
+				style={{
+					width: "clamp(80px, 10vw, 80px)",
+					height: "clamp(80px, 10vw, 80px)",
+					right: "clamp(40px, 5vw, 100px)",
+					top: "clamp(12px, 1.8vw, 25px)",
+				}}
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
 				transition={{ duration: 0.6, delay: 0.2 }}
@@ -294,13 +301,8 @@ const Hero = () => {
 				<Image
 					src="/f25/starfish-orange.png"
 					alt="Orange Starfish"
-					width={200}
-					height={200}
+					fill
 					className="object-contain"
-					style={{
-						width: "clamp(80px, 12vw, 200px)",
-						height: "auto",
-					}}
 				/>
 			</motion.div>
 
