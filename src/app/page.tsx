@@ -45,6 +45,7 @@ export default function Home() {
 					className="w-full"
 					style={{ backgroundColor: "#D8FFFC" }}
 				/>
+				<Schedule />
 				<Footer />
 			</main>
 		</>

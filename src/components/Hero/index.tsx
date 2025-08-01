@@ -122,21 +122,29 @@ const Hero = () => {
 	// Utility: render the time or a blank if uninitialized.
 	const renderTime = (metric: number): string => {
 		if (Math.abs(metric) === Infinity) return "⠀";
-		return metric.toString().padStart(2, '0');
+		return metric.toString().padStart(2, "0");
 	};
 
 	if (hackathonLoading) {
 		return (
-			<section className="flex items-center justify-center" style={{ height: '50vw', minHeight: '400px' }}>
-				<div style={{ fontSize: 'clamp(16px, 3vw, 24px)' }}>Loading...</div>
+			<section
+				className="flex items-center justify-center"
+				style={{ height: "50vw", minHeight: "400px" }}
+			>
+				<div style={{ fontSize: "clamp(16px, 3vw, 24px)" }}>Loading...</div>
 			</section>
 		);
 	}
 
 	if (hackathonError) {
 		return (
-			<section className="flex items-center justify-center" style={{ height: '50vw', minHeight: '400px' }}>
-				<div style={{ fontSize: 'clamp(16px, 3vw, 24px)' }}>Error loading hackathon data.</div>
+			<section
+				className="flex items-center justify-center"
+				style={{ height: "50vw", minHeight: "400px" }}
+			>
+				<div style={{ fontSize: "clamp(16px, 3vw, 24px)" }}>
+					Error loading hackathon data.
+				</div>
 			</section>
 		);
 	}
@@ -145,22 +153,22 @@ const Hero = () => {
 		<section
 			id="hero"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] overflow-hidden"
-			style={{ minHeight: '60vw', backgroundColor: '#FFEBB8' }}
+			style={{ minHeight: "60vw", backgroundColor: "#FFEBB8" }}
 		>
 			{/* Animated Starfish Elements */}
 			<motion.div
 				className="absolute"
-				style={{ 
-					width: 'clamp(100px, 15vw, 400px)', 
-					height: 'clamp(100px, 15vw, 400px)',
-					left: 'clamp(20px, 3vw, 60px)',
-					top: 'clamp(10px, 1.5vw, 20px)'
+				style={{
+					width: "clamp(100px, 15vw, 400px)",
+					height: "clamp(100px, 15vw, 400px)",
+					left: "clamp(20px, 3vw, 60px)",
+					top: "clamp(10px, 1.5vw, 20px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
-				animate={{ 
-					opacity: 1, 
+				animate={{
+					opacity: 1,
 					rotate: [0, 10, -10, 0],
-					y: [0, -10, 0]
+					y: [0, -10, 0],
 				}}
 			>
 				<Image
@@ -173,17 +181,17 @@ const Hero = () => {
 
 			<motion.div
 				className="absolute"
-				style={{ 
-					width: 'clamp(80px, 10vw, 150px)', 
-					height: 'clamp(80px, 10vw, 150px)',
-					left: 'clamp(40px, 5vw, 100px)',
-					top: 'clamp(12px, 1.8vw, 25px)'
+				style={{
+					width: "clamp(80px, 10vw, 150px)",
+					height: "clamp(80px, 10vw, 150px)",
+					left: "clamp(40px, 5vw, 100px)",
+					top: "clamp(12px, 1.8vw, 25px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
-				animate={{ 
-					opacity: 1, 
+				animate={{
+					opacity: 1,
 					rotate: [0, -15, 15, 0],
-					x: [0, 5, -5, 0]
+					x: [0, 5, -5, 0],
 				}}
 			>
 				<Image
@@ -197,25 +205,25 @@ const Hero = () => {
 			{/* Rotating Beach Ball */}
 			<motion.div
 				className="absolute"
-				style={{ 
-					width: 'clamp(150px, 20vw, 1000px)', 
-					height: 'clamp(150px, 20vw, 1000px)',
-					bottom: 'clamp(125px, 20vw, 400px)',
-					left: 'calc(0% - 25px)'  // Center horizontally
+				style={{
+					width: "clamp(150px, 20vw, 1000px)",
+					height: "clamp(150px, 20vw, 1000px)",
+					bottom: "clamp(125px, 20vw, 400px)",
+					left: "calc(0% - 25px)", // Center horizontally
 				}}
-				initial={{ 
-					x: 'calc(-10vw - 50px)', 
-					rotate: 0 
+				initial={{
+					x: "calc(-10vw - 50px)",
+					rotate: 0,
 				}}
-				animate={{ 
-					x: 'calc(100vw + 50px)', 
-					rotate: 180 * 6, 
+				animate={{
+					x: "calc(100vw + 50px)",
+					rotate: 180 * 6,
 				}}
-				transition={{ 
-					duration: 10, 
-					repeat: Infinity, 
+				transition={{
+					duration: 10,
+					repeat: Infinity,
 					ease: "linear",
-					delay: 2
+					delay: 2,
 				}}
 			>
 				<Image
@@ -228,10 +236,10 @@ const Hero = () => {
 			{/* Title */}
 			<motion.h1
 				className="text-center mb-[2vw] font-bold"
-				style={{ 
-					fontSize: 'clamp(32px, 8vw, 80px)',
-					fontFamily: 'Monomaniac One, monospace',
-					color: '#00DAB7'
+				style={{
+					fontSize: "clamp(32px, 8vw, 80px)",
+					fontFamily: "Monomaniac One, monospace",
+					color: "#00DAB7",
 				}}
 				initial={{ opacity: 0, y: -50 }}
 				animate={{ opacity: 1, y: 0 }}
@@ -249,32 +257,36 @@ const Hero = () => {
 					transition={{ duration: 1, delay: 0.3 }}
 				>
 					{/* Countdown Numbers */}
-					<div 
+					<div
 						className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
-						style={{ fontFamily: 'Monomaniac One, monospace' }}
+						style={{ fontFamily: "Monomaniac One, monospace" }}
 					>
 						{/* Days */}
 						<div className="flex flex-col items-center">
 							<motion.div
 								className="font-bold"
-								style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 								initial={{ scaleY: 0 }}
 								animate={{ scaleY: 1 }}
 							>
 								{renderTime(days)}
 							</motion.div>
-							<div 
+							<div
 								className="font-semibold"
-								style={{ fontSize: 'clamp(10px, 1.5vw, 18px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+								style={{
+									fontSize: "clamp(10px, 1.5vw, 18px)",
+									color: "#00DAB7",
+									fontFamily: "Monomaniac One, monospace",
+								}}
 							>
 								{days === 1 ? "Day" : "Days"}
 							</div>
 						</div>
 
 						{/* Colon */}
-						<div 
+						<div
 							className="font-bold mb-[2vw]"
-							style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 						>
 							:
 						</div>
@@ -283,24 +295,28 @@ const Hero = () => {
 						<div className="flex flex-col items-center">
 							<motion.div
 								className="font-bold"
-								style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 								initial={{ scaleY: 0 }}
 								animate={{ scaleY: 1 }}
 							>
 								{renderTime(hours)}
 							</motion.div>
-							<div 
+							<div
 								className="font-semibold"
-								style={{ fontSize: 'clamp(10px, 1.5vw, 18px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+								style={{
+									fontSize: "clamp(10px, 1.5vw, 18px)",
+									color: "#00DAB7",
+									fontFamily: "Monomaniac One, monospace",
+								}}
 							>
 								{hours === 1 ? "Hour" : "Hours"}
 							</div>
 						</div>
 
 						{/* Colon */}
-						<div 
+						<div
 							className="font-bold mb-[2vw]"
-							style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 						>
 							:
 						</div>
@@ -309,24 +325,28 @@ const Hero = () => {
 						<div className="flex flex-col items-center">
 							<motion.div
 								className="font-bold"
-								style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 								initial={{ scaleY: 0 }}
 								animate={{ scaleY: 1 }}
 							>
 								{renderTime(minutes)}
 							</motion.div>
-							<div 
+							<div
 								className="font-semibold"
-								style={{ fontSize: 'clamp(10px, 1.5vw, 18px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+								style={{
+									fontSize: "clamp(10px, 1.5vw, 18px)",
+									color: "#00DAB7",
+									fontFamily: "Monomaniac One, monospace",
+								}}
 							>
 								{minutes === 1 ? "Minute" : "Minutes"}
 							</div>
 						</div>
 
 						{/* Colon */}
-						<div 
+						<div
 							className="font-bold mb-[2vw]"
-							style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+							style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 						>
 							:
 						</div>
@@ -335,15 +355,19 @@ const Hero = () => {
 						<div className="flex flex-col items-center">
 							<motion.div
 								className="font-bold"
-								style={{ fontSize: 'clamp(24px, 6vw, 80px)', color: '#00DAB7' }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
 								animate={secondsControls}
 								initial={{ scaleY: 1 }}
 							>
 								{renderTime(seconds)}
 							</motion.div>
-							<div 
+							<div
 								className="font-semibold"
-								style={{ fontSize: 'clamp(10px, 1.5vw, 18px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+								style={{
+									fontSize: "clamp(10px, 1.5vw, 18px)",
+									color: "#00DAB7",
+									fontFamily: "Monomaniac One, monospace",
+								}}
 							>
 								{seconds === 1 ? "Second" : "Seconds"}
 							</div>
@@ -353,7 +377,11 @@ const Hero = () => {
 					{/* Banner Message */}
 					<div
 						className="text-center font-bold mb-[1.5vw]"
-						style={{ fontSize: 'clamp(14px, 2.5vw, 32px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+						style={{
+							fontSize: "clamp(14px, 2.5vw, 32px)",
+							color: "#00DAB7",
+							fontFamily: "Monomaniac One, monospace",
+						}}
 					>
 						{bannerMessage}
 					</div>
@@ -361,10 +389,10 @@ const Hero = () => {
 					{/* Date and Location */}
 					<motion.div
 						className="text-center font-semibold"
-						style={{ 
-							fontSize: 'clamp(16px, 3vw, 24px)',
-							color: '#00DAB7',
-							fontFamily: 'Monomaniac One, monospace'
+						style={{
+							fontSize: "clamp(16px, 3vw, 24px)",
+							color: "#00DAB7",
+							fontFamily: "Monomaniac One, monospace",
 						}}
 						initial={{ opacity: 0, y: -30 }}
 						animate={{ opacity: 1, y: 0 }}
@@ -377,7 +405,11 @@ const Hero = () => {
 			) : (
 				<div
 					className="text-center font-bold mb-[2vw]"
-					style={{ fontSize: 'clamp(14px, 2.5vw, 32px)', color: '#00DAB7', fontFamily: 'Monomaniac One, monospace' }}
+					style={{
+						fontSize: "clamp(14px, 2.5vw, 32px)",
+						color: "#00DAB7",
+						fontFamily: "Monomaniac One, monospace",
+					}}
 				>
 					{bannerMessage}
 				</div>
@@ -395,8 +427,8 @@ const Hero = () => {
 					onClick={() => router.push("/profile")}
 					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
-						width: 'clamp(400px, 50vw, 700px)',
-						height: 'clamp(160px, 20vw, 280px)'
+						width: "clamp(400px, 50vw, 700px)",
+						height: "clamp(160px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
@@ -410,11 +442,11 @@ const Hero = () => {
 					/>
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
-						style={{ 
-							fontSize: 'clamp(21px, 3.75vw, 42px)', 
-							color: '#FFFFFF',
-							fontFamily: 'Monomaniac One, monospace',
-							transform: 'translate(-10px, 4px)'
+						style={{
+							fontSize: "clamp(21px, 3.75vw, 42px)",
+							color: "#FFFFFF",
+							fontFamily: "Monomaniac One, monospace",
+							transform: "translate(-10px, 4px)",
 						}}
 					>
 						Register now
@@ -426,8 +458,8 @@ const Hero = () => {
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
 					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
-						width: 'clamp(400px, 50vw, 700px)',
-						height: 'clamp(160px, 20vw, 280px)'
+						width: "clamp(400px, 50vw, 700px)",
+						height: "clamp(160px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
@@ -441,11 +473,11 @@ const Hero = () => {
 					/>
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
-						style={{ 
-							fontSize: 'clamp(21px, 3.75vw, 42px)', 
-							color: '#FFFFFF',
-							fontFamily: 'Monomaniac One, monospace',
-							transform: 'translate(-10px, 4px)'
+						style={{
+							fontSize: "clamp(21px, 3.75vw, 42px)",
+							color: "#FFFFFF",
+							fontFamily: "Monomaniac One, monospace",
+							transform: "translate(-10px, 4px)",
 						}}
 					>
 						Discord
