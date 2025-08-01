@@ -23,7 +23,7 @@ const SECTIONS: Section[] = [
 	},
 	{
 		id: "eligibility",
-		label: "Eligibility & Teams",
+		label: "Team Formation",
 		content:
 			"All participants must be at least 18 years old and a student of some university (or a recent PSU graduate within less than one year).\n\nTeams may be comprised of up to five members. A team may only submit one project, and no participant may be a member of multiple teams.\n\nAll participants must bring a valid form of identification.",
 		textColor: "#8B4513",
@@ -344,8 +344,8 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				style={{
 					color: section.textColor,
 					fontSize: isSelected
-						? "clamp(14px, 2.5vw, 16px)"
-						: "clamp(12px, 2vw, 16px)",
+						? "clamp(12px, 2.5vw, 12px)"
+						: "clamp(12px, 2vw, 12px)",
 					fontFamily: "Monomaniac One, monospace",
 				}}
 				animate={{ rotate: -(position.rotation + containerRotation) }}
