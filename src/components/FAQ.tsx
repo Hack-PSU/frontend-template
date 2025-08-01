@@ -213,16 +213,16 @@ const FAQ: React.FC = () => {
 					className="absolute cursor-pointer"
 					style={{
 						right: "20%",
-						top: "00%",
+						top: "-30%",
 						width: "clamp(40px, 30vw, 300px)",
-						height: "clamp(30px, 300vw, 600px)",
+						height: "clamp(30px, 30vw, 300px)",
 						zIndex: 10,
 					}}
 					initial={{ x: 0, y: 0, opacity: 1 }}
 					animate={
 						fishClicked
 							? {
-									x: "-100vw",
+									x: "-50vw",
 									y: [0, -20, 0, -15, 0, -10, 0],
 									opacity: [1, 1, 1, 1, 0],
 								}

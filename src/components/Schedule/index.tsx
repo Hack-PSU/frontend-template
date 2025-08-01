@@ -512,7 +512,7 @@ const Schedule: React.FC = () => {
 
 	// pick the real scrollYProgress only after mount
 	const scrollYProgress = tempScroll.scrollYProgress;
-	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "100vw"]);
+	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "70vw"]);
 
 	// Mobile detection
 	const [isMobile, setIsMobile] = useState(false);
