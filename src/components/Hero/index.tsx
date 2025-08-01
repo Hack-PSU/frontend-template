@@ -540,7 +540,7 @@ const Hero = () => {
 							transition={{ duration: 1, delay: 0.2 }}
 						>
 							<div className="mb-[1vw]">{settings.hackathonDateRepr}</div>
-							<div>ECore Building, Penn State</div>
+							<div>ECoRE Building, Penn State</div>
 						</motion.div>
 					</motion.div>
 				) : (
