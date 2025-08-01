@@ -4,6 +4,7 @@
 
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
 @import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap");
 
 @layer base {
 	:root {
@@ -47,9 +48,7 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-image: url("../../public/Website\ Background\ \(Updated\).jpg");
-		background-size: cover;
-		background-position: top center;
+		background-color: #FFEBB8;
 		min-height: 100vh;
 		margin: 0;
 		overscroll-behavior: none;
