@@ -286,7 +286,9 @@ const Schedule: React.FC = () => {
 
 	// State for category filtering - all categories selected by default
 	const [selectedCategories, setSelectedCategories] = useState<Set<EventType>>(
-		new Set(Object.values(EventType).filter((type) => type !== EventType.checkIn)) // Exclude check-in from default selection
+		new Set(
+			Object.values(EventType).filter((type) => type !== EventType.checkIn)
+		) // Exclude check-in from default selection
 	);
 
 	// Toggle category selection

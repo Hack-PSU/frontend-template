@@ -26,6 +26,20 @@ const Footer = () => {
 		},
 	};
 
+	const fishAnimation = {
+		y: [-8, 8, -8],
+		filter: [
+			"drop-shadow(0 0 4px rgba(255,255,255,0.4))",
+			"drop-shadow(0 0 12px rgba(255,255,255,0.8))",
+			"drop-shadow(0 0 4px rgba(255,255,255,0.4))",
+		],
+		transition: {
+			duration: 2.5,
+			repeat: Infinity,
+			ease: "easeInOut" as const,
+		},
+	};
+
 	return (
 		<footer className="relative w-full overflow-hidden bg-[#215172]">
 			{/* Social Links Section */}
@@ -75,11 +89,12 @@ const Footer = () => {
 
 					{/* Deep Fish - Bobbing animation on the right */}
 					<motion.div
-						animate={bobAnimation}
+						animate={fishAnimation}
 						className="absolute right-[4vw] top-1/2 transform -translate-y-1/2"
 						style={{
 							width: `clamp(60px, 8vw, 120px)`,
 							height: `clamp(60px, 8vw, 120px)`,
+							filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
 						}}
 					>
 						<Image
