@@ -218,10 +218,10 @@ const Hero = () => {
 				}}
 				animate={{
 					x: "calc(100vw + 50px)",
-					rotate: 180 * 6,
+					rotate: 360 * 6,
 				}}
 				transition={{
-					duration: 10,
+					duration: 30,
 					repeat: Infinity,
 					ease: "linear",
 					delay: 2,

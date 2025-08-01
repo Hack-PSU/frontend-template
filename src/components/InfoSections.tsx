@@ -186,6 +186,7 @@ const InfoSections: React.FC = () => {
 						className="rounded-xl shadow-lg p-[3vw] bg-white/90 backdrop-blur-sm"
 						style={{
 							width: "clamp(300px, 35vw, 450px)",
+							minHeight: "clamp(200px, 25vw, 320px)",
 							borderLeft: `clamp(4px, 0.8vw, 8px) solid #86CFFC`,
 						}}
 					>

@@ -1,57 +1,249 @@
-import Image from "next/image";
-import React from "react";
-import Divider from "../common/Divider";
-import "./sponsors.css";
-import { useAllSponsors } from "@/lib/api/sponsor/hook";
+"use client";
 
-export default function Sponsors() {
-	// Use the React Query hook to fetch sponsors.
+import React, { useMemo } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useAllSponsors } from "@/lib/api/sponsor/hook";
+import { SponsorEntity } from "@/lib/api/sponsor/entity";
+
+// Define sponsor tier levels and their visual properties
+const TIER_CONFIG = {
+	title: {
+		priority: 1,
+		maxLogos: 1,
+		logoSize: "w-80 h-32 md:w-96 md:h-40 lg:w-[28rem] lg:h-48",
+		containerBg: "bg-white",
+		borderColor: "border-[#FFE4B5]",
+		shadowColor: "shadow-lg",
+	},
+	platinum: {
+		priority: 2,
+		maxLogos: 2,
+		logoSize: "w-64 h-24 md:w-72 md:h-28 lg:w-80 lg:h-32",
+		containerBg: "bg-white",
+		borderColor: "border-[#E6E6FA]",
+		shadowColor: "shadow-lg",
+	},
+	gold: {
+		priority: 3,
+		maxLogos: 3,
+		logoSize: "w-56 h-20 md:w-64 md:h-24 lg:w-72 lg:h-28",
+		containerBg: "bg-white",
+		borderColor: "border-[#FFE4B5]",
+		shadowColor: "shadow-lg",
+	},
+	silver: {
+		priority: 4,
+		maxLogos: 4,
+		logoSize: "w-48 h-16 md:w-56 md:h-20 lg:w-64 lg:h-24",
+		containerBg: "bg-white",
+		borderColor: "border-[#F0F0F0]",
+		shadowColor: "shadow-lg",
+	},
+	bronze: {
+		priority: 5,
+		maxLogos: 6,
+		logoSize: "w-40 h-12 md:w-48 md:h-16 lg:w-56 lg:h-20",
+		containerBg: "bg-white",
+		borderColor: "border-[#FFEFD5]",
+		shadowColor: "shadow-lg",
+	},
+	partner: {
+		priority: 6,
+		maxLogos: 8,
+		logoSize: "w-32 h-10 md:w-40 md:h-12 lg:w-48 lg:h-16",
+		containerBg: "bg-white",
+		borderColor: "border-[#FFE4E6]",
+		shadowColor: "shadow-lg",
+	},
+};
+
+interface SponsorCardProps {
+	sponsor: SponsorEntity;
+	tierConfig: typeof TIER_CONFIG[keyof typeof TIER_CONFIG];
+	index: number;
+}
+
+const SponsorCard: React.FC<SponsorCardProps> = ({ sponsor, tierConfig, index }) => {
+	const handleClick = () => {
+		if (sponsor.link) {
+			window.open(sponsor.link, "_blank", "noopener,noreferrer");
+		}
+	};
+
+	return (
+		<motion.div
+			className={`
+				relative p-6 rounded-2xl border-2 ${tierConfig.borderColor} ${tierConfig.containerBg} 
+				${tierConfig.shadowColor} cursor-pointer transition-all duration-300
+				hover:shadow-xl hover:scale-105 active:scale-95
+			`}
+			onClick={handleClick}
+			initial={{ opacity: 0, y: 20, scale: 0.9 }}
+			animate={{ opacity: 1, y: 0, scale: 1 }}
+			transition={{ 
+				duration: 0.6, 
+				delay: index * 0.1,
+				type: "spring",
+				stiffness: 100
+			}}
+			whileHover={{ 
+				scale: 1.05,
+				transition: { duration: 0.3 }
+			}}
+			whileTap={{ scale: 0.95 }}
+		>
+			{/* Logo container */}
+			<div className="flex items-center justify-center h-full">
+				<div className={`relative ${tierConfig.logoSize} flex items-center justify-center`}>
+					<Image
+						src={sponsor.darkLogo || sponsor.lightLogo || ""}
+						alt={sponsor.name}
+						fill
+						className="object-contain drop-shadow-lg"
+						sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+					/>
+				</div>
+			</div>
+		</motion.div>
+	);
+};
+
+interface SponsorTierProps {
+	tierKey: keyof typeof TIER_CONFIG;
+	sponsors: SponsorEntity[];
+	index: number;
+}
+
+const SponsorTier: React.FC<SponsorTierProps> = ({ tierKey, sponsors, index }) => {
+	const tierConfig = TIER_CONFIG[tierKey];
+	
+	if (sponsors.length === 0) return null;
+
+	// Create grid layout based on number of sponsors and tier configuration
+	const getGridCols = () => {
+		const count = Math.min(sponsors.length, tierConfig.maxLogos);
+		if (count === 1) return "grid-cols-1";
+		if (count === 2) return "grid-cols-1 md:grid-cols-2";
+		if (count <= 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
+		if (count <= 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
+		if (count <= 6) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6";
+		return "grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8";
+	};
+
+	return (
+		<motion.div
+			className="w-full mb-16"
+			initial={{ opacity: 0, y: 30 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.8, delay: index * 0.2 }}
+		>
+			{/* Sponsors Grid */}
+			<div className={`grid ${getGridCols()} gap-8 justify-items-center max-w-7xl mx-auto`}>
+				{sponsors.slice(0, tierConfig.maxLogos).map((sponsor, sponsorIndex) => (
+					<SponsorCard
+						key={sponsor.id}
+						sponsor={sponsor}
+						tierConfig={tierConfig}
+						index={sponsorIndex}
+					/>
+				))}
+			</div>
+		</motion.div>
+	);
+};
+
+const Sponsors: React.FC = () => {
 	const { data: sponsors, isLoading, error } = useAllSponsors();
 
+	// Group sponsors by tier level
+	const sponsorsByTier = useMemo(() => {
+		if (!sponsors) return {};
+
+		const grouped: Record<string, SponsorEntity[]> = {};
+		
+		sponsors.forEach((sponsor) => {
+			const level = sponsor.level.toLowerCase();
+			if (!grouped[level]) {
+				grouped[level] = [];
+			}
+			grouped[level].push(sponsor);
+		});
+
+		// Sort each tier by order
+		Object.keys(grouped).forEach((tier) => {
+			grouped[tier].sort((a, b) => a.order - b.order);
+		});
+
+		return grouped;
+	}, [sponsors]);
+
 	if (isLoading) {
-		return <div>Loading sponsors...</div>;
+		return (
+			<section
+				id="sponsors"
+				className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] min-h-[20vh]"
+				style={{ backgroundColor: "white" }}
+			>
+				<motion.div
+					className="text-xl text-[#048A81] font-medium"
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+					animate={{ opacity: [0.5, 1, 0.5] }}
+					transition={{ duration: 2, repeat: Infinity }}
+				>
+					Loading...
+				</motion.div>
+			</section>
+		);
 	}
 
 	if (error || !sponsors) {
-		return <div>Error loading sponsors.</div>;
+		return null;
 	}
-
-	// Sort sponsors by the 'order' property.
-	const sortedSponsors = sponsors.sort((a, b) => a.order - b.order);
 
 	return (
 		<section
 			id="sponsors"
-			className="flex flex-col items-center w-full mt-20 font-['rye'] text-[#A20021] text-[4rem]"
+			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
+			style={{ backgroundColor: "#215172" }}
 		>
-			<div className="w-11/12 md:w-4/12 flex flex-col items-center">
-				<p>Sponsors</p>
-				<Divider />
-			</div>
-			<div className="bg-transparent mt-8">
-				<div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-10 items-center">
-					{sortedSponsors.map((sponsor) => (
-						<div key={sponsor.id} className="sponsor-container">
-							<a
-								href={sponsor.link}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="cursor-pointer"
-							>
-								<div className="sponsor-card">
-									<Image
-										className="object-contain"
-										src={sponsor.darkLogo || ""}
-										alt={sponsor.name}
-										width={458}
-										height={48}
-									/>
-								</div>
-							</a>
-						</div>
-					))}
+			{/* Main Content */}
+			<div className="w-full max-w-7xl mx-auto">
+				{/* Sponsor Pyramid */}
+				<div className="space-y-8">
+					{Object.entries(TIER_CONFIG).map(([tierKey, config], index) => {
+						const tierSponsors = sponsorsByTier[tierKey] || [];
+						return (
+							<SponsorTier
+								key={tierKey}
+								tierKey={tierKey as keyof typeof TIER_CONFIG}
+								sponsors={tierSponsors}
+								index={index}
+							/>
+						);
+					})}
 				</div>
+
+				{/* Call to Action */}
+				<motion.div
+					className="text-center mt-16"
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8, delay: 1 }}
+				>
+					<motion.button
+						className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
+						style={{ fontFamily: "Monomaniac One, monospace" }}
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.98 }}
+						onClick={() => window.open("https://sponsor.hackpsu.org", "_blank")}
+					>
+						Click here to become a sponsor!
+					</motion.button>
+				</motion.div>
 			</div>
 		</section>
 	);
-}
+};
+
+export default Sponsors;

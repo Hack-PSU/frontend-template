@@ -236,7 +236,7 @@ const EventItem: React.FC<EventItemProps> = ({
 
 	return (
 		<motion.div
-			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} ${colors.text} shadow-md overflow-hidden cursor-pointer`}
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} ${colors.text} shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
 			style={{
 				top: `${topPosition}px`,
 				left: leftOffset,
@@ -249,18 +249,12 @@ const EventItem: React.FC<EventItemProps> = ({
 			initial={{ opacity: 0, scale: 0.8 }}
 			animate={{ opacity: 1, scale: 1 }}
 			transition={{ duration: 0.3, delay: event.column * 0.1 }}
-			whileHover={{ scale: 1.05, zIndex: 10 }}
-			whileTap={{ scale: 0.95 }}
+			whileHover={{ scale: 1.01, zIndex: 10 }}
+			whileTap={{ scale: 0.99 }}
 			onClick={() => onEventClick(event)}
 		>
-			<div className="text-sm font-bold truncate">{event.name}</div>
-			<div className="text-xs opacity-75 truncate">{event.location}</div>
-			<div className="text-xs opacity-60 mt-1">
-				{event.startTime.toLocaleTimeString("en-US", {
-					hour: "numeric",
-					minute: "2-digit",
-					hour12: true,
-				})}
+			<div className="text-sm font-bold text-center leading-tight overflow-y-auto max-h-full w-full px-1" style={{ scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,0,0,0.3) transparent' }}>
+				{event.name}
 			</div>
 		</motion.div>
 	);
@@ -296,18 +290,18 @@ const DayColumn: React.FC<DayColumnProps> = ({
 		<div className="flex-1 min-w-0 relative">
 			{/* Day Header */}
 			<motion.div
-				className="sticky top-0 z-20 p-4 text-center bg-[#A8E6CF] border-b-4 border-[#88D8A3]"
+				className="sticky top-0 z-20 p-4 text-center bg-[#215172] border-b-4 border-[#1a3f5c]"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.5 }}
 			>
 				<h3
-					className="text-lg md:text-xl font-bold text-[#2D5016]"
+					className="text-lg md:text-xl font-bold text-white"
 					style={{ fontFamily: "Monomaniac One, monospace" }}
 				>
 					{day}
 				</h3>
-				<div className="text-sm text-[#2D5016]/70 font-medium">
+				<div className="text-sm text-white/70 font-medium">
 					{events.length} event{events.length !== 1 ? "s" : ""}
 				</div>
 			</motion.div>
@@ -746,7 +740,7 @@ const Schedule: React.FC = () => {
 
 			{/* Calendar Grid */}
 			<motion.div
-				className="w-full max-w-7xl bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-[#FFB6D9]"
+				className="w-full max-w-7xl bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8, delay: 0.3 }}

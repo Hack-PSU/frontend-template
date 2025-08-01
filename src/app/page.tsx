@@ -30,7 +30,7 @@ export default function Home() {
 					borderOffset={-30}
 					waveHeight={50}
 					waveDelta={50}
-					speed={0.2}
+					speed={0.15}
 					wavePoints={6}
 					className="w-full"
 					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
@@ -42,7 +42,7 @@ export default function Home() {
 					fill="#215172"
 					waveHeight={60}
 					waveDelta={20}
-					speed={0.3}
+					speed={0.15}
 					wavePoints={6}
 					className="w-full"
 					style={{ backgroundColor: "#D8FFFC" }}
@@ -63,6 +63,7 @@ export default function Home() {
 						"/event/event_12.jpg",
 					]}
 				/>
+				<Sponsors />
 				<Footer />
 			</main>
 		</>

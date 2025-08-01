@@ -204,8 +204,8 @@ const Navbar: React.FC = () => {
 									<Image
 										src="/logo.png"
 										alt="HackPSU Logo"
-										width={80}
-										height={80}
+										width={100}
+										height={100}
 										className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
 										priority
 									/>
