@@ -68,7 +68,7 @@ const InfoSections: React.FC = () => {
 		>
 			{/* Animated Float Elements */}
 			<motion.div
-				className="absolute z-10
+				className="absolute
 				left-[clamp(20px, 4vw, 80px)]
 				top-[clamp(100px, 15vw, 200px)]
 				md:left-[10px]

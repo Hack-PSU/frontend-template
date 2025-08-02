@@ -289,52 +289,6 @@ Happy hacking!
 		return metric.toString().padStart(2, "0");
 	};
 
-	if (hackathonLoading) {
-		return (
-			<section
-				className="flex items-center justify-center relative overflow-hidden"
-				style={{ 
-					height: "50vw", 
-					minHeight: "400px",
-					backgroundColor: "#FFEBB8"
-				}}
-			>
-				{/* Simple beach loading animation */}
-				<div className="text-center">
-					<motion.div
-						className="mb-4"
-						initial={{ rotate: 0 }}
-						transition={{
-							duration: 2,
-							ease: "linear",
-							repeat: Infinity,
-						}}
-						style={{
-							fontSize: "clamp(32px, 6vw, 64px)",
-						}}
-					>
-						🏖️
-					</motion.div>
-					<motion.div 
-						style={{ 
-							fontSize: "clamp(16px, 3vw, 24px)",
-							fontFamily: "Monomaniac One, monospace",
-							color: "#00DAB7"
-						}}
-						initial={{ opacity: 0.5 }}
-						animate={{ opacity: [0.5, 1, 0.5] }}
-						transition={{
-							duration: 1.5,
-							ease: "easeInOut",
-							repeat: Infinity,
-						}}
-					>
-						Loading the beach...
-					</motion.div>
-				</div>
-			</section>
-		);
-	}
 
 	if (hackathonError) {
 		return (
