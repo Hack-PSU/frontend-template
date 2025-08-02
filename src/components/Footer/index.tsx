@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import EmailIcon from "@mui/icons-material/Email";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import GitHubIcon from "@mui/icons-material/GitHub";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -136,6 +137,19 @@ const Footer = () => {
 							className="hover:scale-110 transition-transform duration-300"
 						>
 							<LinkedInIcon
+								style={{
+									fontSize: `clamp(32px, 4vw, 48px)`,
+									color: "#dbeafe",
+								}}
+							/>
+						</a>
+						<a
+							href="https://github.com/Hack-PSU"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:scale-110 transition-transform duration-300"
+						>
+							<GitHubIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
 									color: "#dbeafe",
