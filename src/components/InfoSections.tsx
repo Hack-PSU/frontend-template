@@ -302,7 +302,7 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 	const isSelected = slot === 0;
 
 	// Different scaling for desktop vs mobile
-	const desktopScale = isSelected ? 1.6 : 0.8;
+	const desktopScale = isSelected ? 1.6 : 1;
 	const mobileScale = isSelected ? 1.0 : 0.8;
 
 	const position = isMobile ? mobilePositions[slot] : desktopPositions[slot];
@@ -345,8 +345,8 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				style={{
 					color: "#000080",
 					fontSize: isSelected
-						? "clamp(12px, 2.5vw, 12px)"
-						: "clamp(12px, 2vw, 12px)",
+						? "clamp(17px, 2.5vw, 17px)"
+						: "clamp(13px, 2vw, 13px)",
 					fontFamily: "Monomaniac One, monospace",
 				}}
 				animate={{ rotate: -(position.rotation + containerRotation) }}
