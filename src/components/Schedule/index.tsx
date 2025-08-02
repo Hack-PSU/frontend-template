@@ -238,10 +238,11 @@ const EventItem: React.FC<EventItemProps> = ({
 	const leftOffset = `${(event.column * 100) / totalColumns}%`;
 
 	// Adjust positioning and sizing based on interval type
-	// For 2-hour intervals, use half the height to make it more compact
-	const pixelsPerMinute = useTwoHourIntervals ? 80 / 120 : 80 / 60; // pixels per minute
+	// 1-hour intervals: 80px per hour = 80/60 = 1.33px per minute
+	// 2-hour intervals: 120px per 2 hours = 120/120 = 1px per minute
+	const pixelsPerMinute = useTwoHourIntervals ? 120 / 120 : 80 / 60; // pixels per minute
 	const topPosition = event.startMinutes * pixelsPerMinute;
-	const height = Math.max(event.duration * pixelsPerMinute, 40); // minimum 40px height for 2-hour, 50px for 1-hour
+	const height = Math.max(event.duration * pixelsPerMinute, isMobile ? 40 : 60); // minimum height for readability
 
 	return (
 		<motion.div
@@ -263,13 +264,23 @@ const EventItem: React.FC<EventItemProps> = ({
 			onClick={() => onEventClick(event)}
 		>
 			<div
-				className={`font-bold text-center leading-tight overflow-y-auto max-h-full w-full px-1 ${isMobile ? "text-xs" : "text-sm"}`}
+				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 ${isMobile ? "text-xs" : "text-sm"}`}
 				style={{
 					scrollbarWidth: "thin",
 					scrollbarColor: "rgba(0,0,0,0.3) transparent",
 				}}
 			>
-				{event.name}
+				<div className="font-bold mb-1">{event.name}</div>
+				<div className={`text-xs opacity-80 font-medium ${isMobile ? "hidden" : ""}`}>
+					{event.startTime.toLocaleTimeString("en-US", {
+						hour: "numeric",
+						minute: "2-digit",
+						hour12: true,
+					})}
+				</div>
+				<div className={`text-xs opacity-70 ${isMobile ? "hidden" : ""}`}>
+					{event.location}
+				</div>
 			</div>
 		</motion.div>
 	);
@@ -285,6 +296,7 @@ interface DayColumnProps {
 	onEventClick: (event: ProcessedEvent) => void;
 	isMobile?: boolean;
 	allEvents?: { Saturday: ProcessedEvent[]; Sunday: ProcessedEvent[] };
+	isScrollable?: boolean;
 }
 
 const DayColumn: React.FC<DayColumnProps> = ({
@@ -297,6 +309,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 	onEventClick,
 	isMobile = false,
 	allEvents,
+	isScrollable = false,
 }) => {
 	const increment = useTwoHourIntervals ? 2 : 1;
 
@@ -337,46 +350,54 @@ const DayColumn: React.FC<DayColumnProps> = ({
 		hours.push(hour);
 	}
 
-	return (
-		<div className="flex-1 min-w-0 relative">
-			{/* Day Header */}
-			<motion.div
-				className={`sticky top-0 z-20 text-center bg-[#215172] border-b-4 border-[#1a3f5c] ${isMobile ? "p-3" : "p-4"}`}
-				initial={{ opacity: 0, y: -20 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.5 }}
-			>
-				<h3
-					className={`font-bold text-white ${isMobile ? "text-base" : "text-lg md:text-xl"}`}
-					style={{ fontFamily: "Monomaniac One, monospace" }}
-				>
-					{day}
-				</h3>
-				<div
-					className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"}`}
-				>
-					{events.length} event{events.length !== 1 ? "s" : ""}
-				</div>
-			</motion.div>
+	const timeAreaRef = useRef<HTMLDivElement>(null);
+	const eventsAreaRef = useRef<HTMLDivElement>(null);
 
-			{/* Time Grid */}
-			<div className="relative bg-[#F0F9FF]">
-				{/* Hour labels and grid lines */}
+	// Synchronize scrolling between time sidebar and events area
+	const handleTimeScroll = () => {
+		if (timeAreaRef.current && eventsAreaRef.current) {
+			eventsAreaRef.current.scrollTop = timeAreaRef.current.scrollTop;
+		}
+	};
+
+	const handleEventsScroll = () => {
+		if (timeAreaRef.current && eventsAreaRef.current) {
+			timeAreaRef.current.scrollTop = eventsAreaRef.current.scrollTop;
+		}
+	};
+
+	return (
+		<div className={`${isScrollable ? "h-full" : "flex-1 min-w-0"} relative flex`}>
+			{/* Time Sidebar */}
+			<div 
+				ref={timeAreaRef}
+				className={`${isMobile ? "w-16" : "w-20"} flex-shrink-0 bg-[#1a3f5c] ${isScrollable ? "overflow-y-auto" : ""}`}
+				onScroll={handleTimeScroll}
+				style={{
+					scrollbarWidth: 'none',
+					msOverflowStyle: 'none',
+				}}
+			>
+				<style jsx>{`
+					div::-webkit-scrollbar {
+						display: none;
+					}
+				`}</style>
 				{hours.map((hour, index) => {
-					const gridHeight = useTwoHourIntervals ? 80 : 80; // Same height for both intervals to make 2-hour more compact
+					const gridHeight = useTwoHourIntervals ? 120 : 80; // 2-hour gets more space
 
 					return (
 						<motion.div
 							key={hour}
-							className="relative border-b border-[#BFDBFE]"
+							className="relative border-b border-[#215172] flex items-start justify-center pt-2"
 							style={{ height: `${gridHeight}px` }}
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							transition={{ duration: 0.3, delay: index * 0.05 }}
 						>
-							{/* Hour label */}
 							<div
-								className={`absolute right-2 top-1 font-medium text-[#215172] bg-white/80 px-1 rounded z-30 ${isMobile ? "text-[10px]" : "text-xs"}`}
+								className={`font-medium text-white text-center ${isMobile ? "text-[10px]" : "text-xs"}`}
+								style={{ fontFamily: "Monomaniac One, monospace" }}
 							>
 								{hour === 0
 									? "12 AM"
@@ -386,22 +407,42 @@ const DayColumn: React.FC<DayColumnProps> = ({
 											? "12 PM"
 											: `${hour - 12} PM`}
 							</div>
+						</motion.div>
+					);
+				})}
+			</div>
 
+			{/* Events Area */}
+			<div 
+				ref={eventsAreaRef}
+				className={`flex-1 relative bg-[#F0F9FF] ${isScrollable ? "overflow-y-auto" : ""}`}
+				onScroll={handleEventsScroll}
+			>
+				{/* Grid lines */}
+				{hours.map((hour, index) => {
+					const gridHeight = useTwoHourIntervals ? 120 : 80; // 2-hour gets more space
+
+					return (
+						<div
+							key={hour}
+							className="relative border-b border-[#BFDBFE]"
+							style={{ height: `${gridHeight}px` }}
+						>
 							{/* Subdivisions based on interval type */}
 							{useTwoHourIntervals ? (
-								// 30-minute subdivisions for 2-hour intervals (compact)
+								// 30-minute subdivisions for 2-hour intervals
 								<>
 									<div
 										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
-										style={{ top: "20px" }}
-									></div>
-									<div
-										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
-										style={{ top: "40px" }}
+										style={{ top: "30px" }}
 									></div>
 									<div
 										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
 										style={{ top: "60px" }}
+									></div>
+									<div
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
+										style={{ top: "90px" }}
 									></div>
 								</>
 							) : (
@@ -412,7 +453,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 									<div className="absolute top-15 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
 								</>
 							)}
-						</motion.div>
+						</div>
 					);
 				})}
 
@@ -542,6 +583,9 @@ const Schedule: React.FC = () => {
 		null
 	);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	// State for active day tab
+	const [activeDay, setActiveDay] = useState<"Saturday" | "Sunday">("Saturday");
 
 	// Handle event click
 	const handleEventClick = (event: ProcessedEvent) => {
@@ -869,45 +913,84 @@ const Schedule: React.FC = () => {
 							: `Showing ${selectedCategories.size} of ${Object.keys(EventType).length} categories`}
 					</span>
 				</div>
+
 			</motion.div>
 
 			{/* Calendar Grid */}
 			<motion.div
-				className="w-full max-w-7xl bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
+				className="w-full max-w-5xl bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.8, delay: 0.3 }}
 			>
-				<div className="flex flex-col lg:flex-row min-h-96 gap-4 lg:gap-0">
-					<DayColumn
-						day="Saturday"
-						events={processedEvents.Saturday.events}
-						startHour={timeRange.start}
-						endHour={timeRange.end}
-						totalColumns={processedEvents.Saturday.totalColumns}
-						useTwoHourIntervals={useTwoHourIntervals}
-						onEventClick={handleEventClick}
-						isMobile={isMobile}
-						allEvents={{
-							Saturday: processedEvents.Saturday.events,
-							Sunday: processedEvents.Sunday.events,
-						}}
-					/>
-					<div className="w-1 bg-[#FFB6D9] hidden lg:block"></div>
-					<DayColumn
-						day="Sunday"
-						events={processedEvents.Sunday.events}
-						startHour={timeRange.start}
-						endHour={timeRange.end}
-						totalColumns={processedEvents.Sunday.totalColumns}
-						useTwoHourIntervals={useTwoHourIntervals}
-						onEventClick={handleEventClick}
-						isMobile={isMobile}
-						allEvents={{
-							Saturday: processedEvents.Saturday.events,
-							Sunday: processedEvents.Sunday.events,
-						}}
-					/>
+				{/* Day Tabs - Integrated Header */}
+				<div className="sticky top-0 z-20 bg-[#215172] border-b-4 border-[#1a3f5c]">
+					<div className="flex">
+						{(["Saturday", "Sunday"] as const).map((day) => (
+							<motion.button
+								key={day}
+								onClick={() => setActiveDay(day)}
+								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
+									activeDay === day
+										? "bg-[#215172] text-white"
+										: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
+								}`}
+								style={{ fontFamily: "Monomaniac One, monospace" }}
+								whileHover={{ scale: 1.02 }}
+								whileTap={{ scale: 0.98 }}
+								initial={{ opacity: 0, y: -20 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5 }}
+							>
+								<div className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}>
+									{day}
+								</div>
+								<div className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}>
+									{day === "Saturday" 
+										? `${processedEvents.Saturday.events.length} event${processedEvents.Saturday.events.length !== 1 ? "s" : ""}`
+										: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`
+									}
+								</div>
+							</motion.button>
+						))}
+					</div>
+				</div>
+
+				<div className="h-[600px] flex flex-col">
+					<AnimatePresence mode="wait">
+						<motion.div
+							key={activeDay}
+							initial={{ opacity: 0, x: 50 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -50 }}
+							transition={{ duration: 0.3 }}
+							className="h-full"
+						>
+							<DayColumn
+								day={activeDay}
+								events={
+									activeDay === "Saturday"
+										? processedEvents.Saturday.events
+										: processedEvents.Sunday.events
+								}
+								startHour={timeRange.start}
+								endHour={timeRange.end}
+								totalColumns={
+									activeDay === "Saturday"
+										? processedEvents.Saturday.totalColumns
+										: processedEvents.Sunday.totalColumns
+								}
+								useTwoHourIntervals={useTwoHourIntervals}
+								onEventClick={handleEventClick}
+								isMobile={isMobile}
+								allEvents={{
+									Saturday: processedEvents.Saturday.events,
+									Sunday: processedEvents.Sunday.events,
+								}}
+								isScrollable={true}
+							/>
+						</motion.div>
+					</AnimatePresence>
 				</div>
 			</motion.div>
 

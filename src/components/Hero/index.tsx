@@ -27,8 +27,16 @@ const Hero = () => {
 	const [bannerMessage, setBannerMessage] = useState<string>("");
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
+	const [crabClicked, setCrabClicked] = useState<boolean>(false);
 
 	const secondsControls = useAnimation();
+
+	// Handle crab click to animate it up and away
+	const handleCrabClick = useCallback(() => {
+		if (!crabClicked) {
+			setCrabClicked(true);
+		}
+	}, [crabClicked]);
 
 	// This function initializes the timer fields based on hackathon data.
 	const initializeFields = useCallback((data: any) => {
@@ -245,6 +253,7 @@ const Hero = () => {
 					height: "clamp(150px, 20vw, 1000px)",
 					bottom: "clamp(-40px, -100vw, 400px)",
 					left: "calc(0% - 25px)", // Center horizontally
+					pointerEvents: "none", // Make ball transparent for clicks
 				}}
 				initial={{
 					x: "calc(-10vw - 50px)",
@@ -321,18 +330,30 @@ const Hero = () => {
 				right-[clamp(15px, 3vw, 60px)]
 				md:right-[16vw]
 				top-[clamp(60px, 80vw, 200px)] 
-				md:top-[12vw]"
+				md:top-[12vw]
+				cursor-pointer"
 				initial={{ opacity: 1, scale: 1 }}
-				animate={{ rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }}
-				transition={{
-					duration: 3.5,
-					repeat: Infinity,
-					ease: "linear",
-				}}
+				animate={crabClicked 
+					? { 
+						y: -300, 
+						opacity: 1,
+						rotate: [5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5]
+					}
+					: { rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }
+				}
+				transition={crabClicked 
+					? { duration: 5, ease: "linear" }
+					: {
+						duration: 3.5,
+						repeat: Infinity,
+						ease: "linear",
+					}
+				}
 				style={{
 					width: "clamp(60px, 18vw, 100px)",
 					height: "clamp(60px, 18vw, 100px)",
 				}}
+				onClick={handleCrabClick}
 			>
 				<Image
 					src="/f25/5.png"

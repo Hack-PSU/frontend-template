@@ -98,16 +98,17 @@ const InfoSections: React.FC = () => {
 			</motion.div>
 
 			<motion.div
-				className="absolute"
+				className="absolute max-sm:hidden"
 				style={{
-					width: "clamp(70px, 10vw, 180px)",
-					height: "clamp(70px, 10vw, 180px)",
+					width: "clamp(80px, 30vw, 400px)",
+					height: "clamp(80px, 30vw, 400px)",
 					right: "clamp(20px, 4vw, 80px)",
-					top: "clamp(100px, 15vw, 200px)",
+					top: "clamp(0px, 1vw, 100px)",
 				}}
 				animate={{
-					rotate: [0, -30, 0],
-					x: [0, 10, 0],
+					rotate: [0, 15, 0],
+					y: [0, -20, 0],
+					scale: [1, 0.8, 1],
 				}}
 				transition={{
 					duration: 5,
@@ -287,9 +288,9 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 
 	// Desktop: triangle positions, Mobile: horizontal line
 	const desktopPositions = [
-		{ x: "-80%", y: "-60%", rotation: 0 }, // vertex 0: top-left
-		{ x: "80%", y: "-60%", rotation: 0 }, // vertex 1: top-right
-		{ x: "0%", y: "70%", rotation: 0 }, // vertex 2: bottom-center
+		{ x: "-50%", y: "-80%", rotation: 0 }, // vertex 0: top-left
+		{ x: "90%", y: "-80%", rotation: 0 }, // vertex 1: top-right
+		{ x: "30%", y: "30%", rotation: 0 }, // vertex 2: bottom-center
 	];
 
 	const mobilePositions = [
@@ -302,7 +303,7 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 
 	// Different scaling for desktop vs mobile
 	const desktopScale = isSelected ? 1.6 : 0.8;
-	const mobileScale = isSelected ? 1.2 : 0.8;
+	const mobileScale = isSelected ? 1.0 : 0.8;
 
 	const position = isMobile ? mobilePositions[slot] : desktopPositions[slot];
 	const scale = isMobile ? mobileScale : desktopScale;
