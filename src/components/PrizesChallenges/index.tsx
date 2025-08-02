@@ -135,7 +135,7 @@ const PrizesChallenges: React.FC = () => {
 									Coming Soon!
 								</h3>
 								<p className="text-sm text-gray-600">
-									Prizes & challenges will be announced soon 🌊
+									Prizes & challenges will be announced soon. Stay tuned!
 								</p>
 							</div>
 						</div>

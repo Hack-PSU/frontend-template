@@ -113,36 +113,38 @@ const Footer = () => {
 
 	return (
 		<footer className="relative w-full overflow-hidden bg-[#215172]">
-			{/* Floating Bubbles */}
-			<div className="absolute inset-0 pointer-events-none overflow-hidden">
-				{[...Array(120)].map((_, i) => {
-					const size = Math.random() * 12 + 6;
-					const leftPos = Math.random() * 100;
-					const delay = Math.random() * 15;
-					const duration = Math.random() * 10 + 15;
-					
-					return (
-						<div
-							key={i}
-							className="absolute rounded-full animate-float-up"
-							style={{
-								left: `${leftPos}%`,
-								width: `${size}px`,
-								height: `${size}px`,
-								background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1))`,
-								boxShadow: `
-									inset 0 0 ${size/3}px rgba(255,255,255,0.3),
-									0 0 ${size/2}px rgba(255,255,255,0.1)
-								`,
-								animationDelay: `${delay}s`,
-								animationDuration: `${duration}s`,
-								bottom: '-30px',
-								backdropFilter: 'blur(1px)',
-							}}
-						/>
-					);
-				})}
-			</div>
+			{/* Floating Bubbles - Disabled when fish is chasing */}
+			{!isChasing && (
+				<div className="absolute inset-0 pointer-events-none overflow-hidden">
+					{[...Array(120)].map((_, i) => {
+						const size = Math.random() * 12 + 6;
+						const leftPos = Math.random() * 100;
+						const delay = Math.random() * 15;
+						const duration = Math.random() * 10 + 15;
+						
+						return (
+							<div
+								key={i}
+								className="absolute rounded-full animate-float-up"
+								style={{
+									left: `${leftPos}%`,
+									width: `${size}px`,
+									height: `${size}px`,
+									background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1))`,
+									boxShadow: `
+										inset 0 0 ${size/3}px rgba(255,255,255,0.3),
+										0 0 ${size/2}px rgba(255,255,255,0.1)
+									`,
+									animationDelay: `${delay}s`,
+									animationDuration: `${duration}s`,
+									bottom: '-30px',
+									backdropFilter: 'blur(1px)',
+								}}
+							/>
+						);
+					})}
+				</div>
+			)}
 
 			{/* Social Links Section */}
 			<div className="relative z-20 flex flex-col items-center gap-4 pb-[12vw] md:pb-[8vw] pt-[4vw]">

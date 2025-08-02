@@ -552,7 +552,7 @@ const Schedule: React.FC = () => {
 	// State to track if component is mounted (client-side
 
 	const tempScroll = useScroll({
-		offset: ["1200px", "2000px"],
+		offset: ["1700px", "2500px"],
 	});
 
 	// pick the real scrollYProgress only after mount

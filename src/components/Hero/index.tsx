@@ -43,12 +43,7 @@ const Hero = () => {
 	const [showCrabArmy, setShowCrabArmy] = useState<boolean>(false);
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
 	const [crabRaveAudio, setCrabRaveAudio] = useState<HTMLAudioElement | null>(null);
-	const [chillHackyWalking, setChillHackyWalking] = useState<boolean>(false);
-	const [hackyPosition, setHackyPosition] = useState({ x: 0, y: 0, direction: 1 });
 	const [hackySpeech, setHackySpeech] = useState<string>("");
-	const [hackySpecialAnimation, setHackySpecialAnimation] = useState<string>("");
-	const walkingRef = useRef<boolean>(false);
-	const animationIdRef = useRef<number>(0);
 
 	const secondsControls = useAnimation();
 
@@ -102,26 +97,9 @@ const Hero = () => {
 		setShowMemoryGame(true);
 	}, []);
 
-	// Handle Chill Hacky click to start/stop walking
+	// Handle Chill Hacky click to show random quote
 	const handleChillHackyClick = useCallback(() => {
-		if (walkingRef.current) {
-			// Stop walking
-			walkingRef.current = false;
-			setChillHackyWalking(false);
-			setHackySpeech("");
-			setHackySpecialAnimation("");
-			setHackyPosition({ x: 0, y: 0, direction: 1 });
-			if (animationIdRef.current) {
-				cancelAnimationFrame(animationIdRef.current);
-			}
-			return;
-		}
-
-		// Start walking
-		walkingRef.current = true;
-		setChillHackyWalking(true);
-		
-		// Random hackPSU messages
+		// Random HackPSU messages
 		const speechMessages = [
 			"I'm so excited for HackPSU!",
 			"Hope to see you at HackPSU!",
@@ -133,69 +111,18 @@ const Hero = () => {
 			"Have you joined the HackPSU Discord?",
 			"Have you seen the HackPSU sponsors?",
 			"Have you applied to be an organizer for HackPSU?",
+			"Ready to dive into 24 hours of coding?",
+			"The beach vibes are perfect for hacking!",
+			"Let's make some waves at HackPSU!",
+			"Time to surf the code waves! 🏄‍♂️",
+			"Beach + Code = Perfect hackathon!",
 		];
 
-		// Start walking animation - runs continuously
-		let currentX = 2; // Start from left side
-		const walkingSpeed = 0.08; // vw per frame (much slower)
-		const screenWidth = 95; // Max position (leave small margin for character width)
-		let direction = 1; // 1 for right, -1 for left
-		let jumpCooldown = 0;
-		let speechCooldown = 0;
-		let specialAnimationCooldown = 0;
-
-		const animate = () => {
-			if (!walkingRef.current) return;
-
-			// Update position
-			currentX += walkingSpeed * direction;
-
-			// Bounce off screen edges
-			if (currentX >= screenWidth) {
-				currentX = screenWidth;
-				direction = -1;
-				console.log('Hit right edge, direction now:', direction);
-			} else if (currentX <= 2) {
-				currentX = 2;
-				direction = 1;
-				console.log('Hit left edge, direction now:', direction);
-			}
-
-			// Random jumping (much less frequent)
-			if (jumpCooldown <= 0 && Math.random() < 0.0005) {
-				jumpCooldown = 300; // Much longer cooldown
-			}
-			if (jumpCooldown > 0) jumpCooldown--;
-
-			// Random special animations (jump only)
-			if (specialAnimationCooldown <= 0 && Math.random() < 0.0008) {
-				specialAnimationCooldown = 400; // Cooldown frames
-				setHackySpecialAnimation('jump');
-				
-				// Clear animation after duration
-				setTimeout(() => setHackySpecialAnimation(""), 800);
-			}
-			if (specialAnimationCooldown > 0) specialAnimationCooldown--;
-
-			// Random speech bubbles
-			if (speechCooldown <= 0 && Math.random() < 0.002) {
-				speechCooldown = 200; // Cooldown frames
-				const message = speechMessages[Math.floor(Math.random() * speechMessages.length)];
-				setHackySpeech(message);
-				setTimeout(() => setHackySpeech(""), 3000);
-			}
-			if (speechCooldown > 0) speechCooldown--;
-
-			setHackyPosition({ x: currentX, y: 0, direction });
-			// Debug logging
-			if (Math.random() < 0.01) { // Only log occasionally to avoid spam
-				console.log('Position update:', { x: currentX, direction });
-			}
-
-			animationIdRef.current = requestAnimationFrame(animate);
-		};
-
-		animate();
+		const message = speechMessages[Math.floor(Math.random() * speechMessages.length)];
+		setHackySpeech(message);
+		
+		// Clear speech after 4 seconds
+		setTimeout(() => setHackySpeech(""), 4000);
 	}, []);
 
 	// This function initializes the timer fields based on hackathon data.
@@ -301,15 +228,6 @@ const Hero = () => {
 		};
 	}, []);
 
-	// Cleanup walking animation on unmount
-	useEffect(() => {
-		return () => {
-			walkingRef.current = false;
-			if (animationIdRef.current) {
-				cancelAnimationFrame(animationIdRef.current);
-			}
-		};
-	}, []);
 
 	// Console easter egg - show on component mount
 	useEffect(() => {
@@ -483,47 +401,31 @@ Happy hacking!
 
 			{/* Chill Hacky Character */}
 			<motion.div
-				className={`absolute cursor-pointer ${chillHackyWalking ? 'z-50' : ''}`}
-				style={chillHackyWalking ? {
-					left: `${hackyPosition.x}vw`,
-					bottom: '0px',
-					width: "clamp(25px, 4vw, 65px)",
-					height: "clamp(25px, 4vw, 65px)",
-					transform: hackyPosition.direction === -1 ? 'scaleX(-1)' : 'scaleX(1)',
-					position: 'fixed',
-				} : {
+				className="absolute cursor-pointer z-20"
+				style={{
 					left: "clamp(-15px, -15px, -15px)",
 					bottom: "clamp(60px, 80vw, 200px)",
 					width: "clamp(120px, 18vw, 300px)",
 					height: "clamp(120px, 18vw, 300px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
-				animate={chillHackyWalking ? 
-					hackySpecialAnimation === 'jump' ? {
-						y: [0, -40, 0],
-						transition: { duration: 0.8, ease: "easeInOut" }
-					} : {
-						y: [0, -5, 0], // Much smaller walking bounce
-					} : {
+				animate={{
 					opacity: 1,
+					y: [0, -8, 0], // Gentle floating animation
 				}}
-				transition={chillHackyWalking && !hackySpecialAnimation ? {
-					duration: 2.5, // Slower walking bounce
+				transition={{
+					duration: 3,
 					repeat: Infinity,
 					ease: "easeInOut",
-				} : !chillHackyWalking ? {
-					duration: 4,
-					repeat: Infinity,
-					ease: "easeInOut",
-				} : {}}
+				}}
 				onClick={handleChillHackyClick}
 				whileHover={{ scale: 1.1 }}
 				whileTap={{ scale: 0.9 }}
-				title={chillHackyWalking ? "Click to stop exploring!" : "Click to start exploring!"}
+				title="Click me for a random quote!"
 			>
 				<Image
 					src="/f25/chill_hacky.png"
-					alt="Chill Hacky - Click to start walking!"
+					alt="Chill Hacky - Click for a quote!"
 					fill
 					className="object-contain"
 				/>
@@ -533,21 +435,21 @@ Happy hacking!
 					<motion.div
 						className="absolute left-1/2 transform -translate-x-1/2 z-50"
 						style={{
-							bottom: chillHackyWalking ? '100%' : 'calc(100% + 8px)',
-							marginBottom: chillHackyWalking ? '8px' : '0px'
+							bottom: 'calc(100% + 8px)',
+							marginBottom: '0px'
 						}}
 						initial={{ opacity: 0, scale: 0.8, y: 10 }}
 						animate={{ opacity: 1, scale: 1, y: 0 }}
 						exit={{ opacity: 0, scale: 0.8, y: 10 }}
 						transition={{ duration: 0.3 }}
 					>
-						<div className="relative bg-white px-3 py-2 rounded-lg shadow-lg border-2 border-blue-200 max-w-[180px] min-w-[120px]">
-							<p className="text-xs font-bold text-blue-800 text-center break-words leading-tight">
+						<div className="relative bg-white px-4 py-3 rounded-lg shadow-lg border-2 border-[#0066CC] max-w-[200px] min-w-[140px]">
+							<p className="text-xs font-bold text-[#000080] text-center break-words leading-tight" style={{ fontFamily: "Monomaniac One, monospace" }}>
 								{hackySpeech}
 							</p>
 							{/* Speech bubble tail */}
 							<div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white"></div>
-							<div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-200"></div>
+							<div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-[#0066CC]"></div>
 						</div>
 					</motion.div>
 				)}
@@ -972,7 +874,28 @@ Happy hacking!
 							transform: "translate(-10px, 4px)",
 						}}
 					>
-						Discord
+						<div className="flex items-center gap-2">
+							<svg
+								width="clamp(24px, 4vw, 48px)"
+								height="clamp(24px, 4vw, 48px)"
+								viewBox="0 0 71 55"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<g clipPath="url(#clip0)">
+									<path
+										d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z"
+										fill="currentColor"
+									/>
+								</g>
+								<defs>
+									<clipPath id="clip0">
+										<rect width="71" height="55" fill="white" />
+									</clipPath>
+								</defs>
+							</svg>
+							Discord
+						</div>
 					</div>
 				</motion.button>
 			</motion.div>

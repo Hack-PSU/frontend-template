@@ -175,7 +175,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 							className="text-3xl font-bold text-[#215172]"
 							style={{ fontFamily: "Monomaniac One, monospace" }}
 						>
-							🌊 Memory Match 🌊
+							 Memory Match 
 						</h2>
 						<button
 							onClick={onClose}
@@ -267,7 +267,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 											>
 												<div className={`${
 													difficulty === 100 ? 'text-xs' : 'text-4xl'
-												}`}>🌊</div>
+												}`}></div>
 											</motion.div>
 											
 											{/* Card Front */}
