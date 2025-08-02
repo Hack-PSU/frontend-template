@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 type Section = {
 	id: string;
@@ -48,6 +49,7 @@ const STATS = [
 
 const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
+	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
 
 	function rotateLeft(steps: number) {
 		setOrder((prev) => {
@@ -238,32 +240,34 @@ const InfoSections: React.FC = () => {
 					</div>
 				</div>
 
-				{/* Stats Section */}
-				<div className="flex flex-wrap justify-center gap-[4vw] pt-4">
-					{STATS.map((s, i) => {
-						const colors = ["#86CFFC", "#048A81"];
-						return (
-							<div key={s.label} className="text-center">
-								<div
-									className="font-bold"
-									style={{
-										fontSize: "clamp(24px, 5vw, 48px)",
-										color: colors[i % colors.length],
-										fontFamily: "Monomaniac One, monospace",
-									}}
-								>
-									{s.value}
+				{/* Stats Section - Conditionally Rendered */}
+				{statsSectionFlag?.isEnabled && (
+					<div className="flex flex-wrap justify-center gap-[4vw] pt-4">
+						{STATS.map((s, i) => {
+							const colors = ["#86CFFC", "#048A81"];
+							return (
+								<div key={s.label} className="text-center">
+									<div
+										className="font-bold"
+										style={{
+											fontSize: "clamp(24px, 5vw, 48px)",
+											color: colors[i % colors.length],
+											fontFamily: "Monomaniac One, monospace",
+										}}
+									>
+										{s.value}
+									</div>
+									<p
+										className="uppercase mt-[0.5vw] text-gray-600"
+										style={{ fontSize: "clamp(10px, 1.5vw, 16px)" }}
+									>
+										{s.label}
+									</p>
 								</div>
-								<p
-									className="uppercase mt-[0.5vw] text-gray-600"
-									style={{ fontSize: "clamp(10px, 1.5vw, 16px)" }}
-								>
-									{s.label}
-								</p>
-							</div>
-						);
-					})}
-				</div>
+							);
+						})}
+					</div>
+				)}
 			</div>
 		</section>
 	);

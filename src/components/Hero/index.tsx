@@ -697,36 +697,46 @@ Happy hacking!
 
 			{/* Container for scaled content (title and countdown only) */}
 			<div style={{ transform: "scale(0.75) translateY(-5vw)", transformOrigin: "center" }}>
-				{/* Title */}
-				<motion.h1
-					className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200"
+				{/* Simple Border Container */}
+				<motion.div
+					className="relative px-[4vw] py-[3vw] mb-[1vw]"
 					style={{
-						fontSize: "clamp(32px, 8vw, 80px)",
-						fontFamily: "Monomaniac One, monospace",
-						color: "#000080",
+						backgroundColor: "#FFFFFF",
+						border: "4px solid #0066CC",
+						borderRadius: "15px",
+						position: "relative",
 					}}
-					initial={{ opacity: 0, y: -50 }}
-					animate={{ opacity: 1, y: 0 }}
-					transition={{ duration: 1 }}
-					onClick={handleTitleClick}
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
+					initial={{ opacity: 0, scale: 0.8 }}
+					animate={{ opacity: 1, scale: 1 }}
+					transition={{ duration: 1, delay: 0.3 }}
 				>
-					HackPSU Fall 2025
-				</motion.h1>
 
-				{/* Countdown Timer */}
-				{state !== 2 ? (
-					<motion.div
-						className="flex flex-col items-center mb-[2vw]"
-						initial={{ opacity: 0, scale: 0.8 }}
-						animate={{ opacity: 1, scale: 1 }}
-						transition={{ duration: 1, delay: 0.3 }}
+					{/* Title */}
+					<motion.h1
+						className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200 relative z-10"
+						style={{
+							fontSize: "clamp(32px, 8vw, 80px)",
+							fontFamily: "Monomaniac One, monospace",
+							color: "#000080",
+						}}
+						initial={{ opacity: 0, y: -50 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1 }}
+						onClick={handleTitleClick}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
 					>
-						{/* Countdown Numbers */}
-						<div
-							className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
-							style={{ fontFamily: "Monomaniac One, monospace" }}
+						HackPSU Fall 2025
+					</motion.h1>
+
+					{/* Countdown Timer */}
+					{state !== 2 ? (
+						<div className="flex flex-col items-center mb-[2vw] relative z-10">
+							
+							{/* Countdown Numbers */}
+							<div
+								className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
+								style={{ fontFamily: "Monomaniac One, monospace" }}
 						>
 							{/* Days */}
 							<div className="flex flex-col items-center">
@@ -851,49 +861,50 @@ Happy hacking!
 									{seconds === 1 ? "Second" : "Seconds"}
 								</div>
 							</div>
-						</div>
+							</div>
 
-						{/* Banner Message - only show when event is running or completed */}
-						{(state === 1 || state === 2) && (
-							<div
-								className="text-center font-bold mb-[1.5vw]"
+							{/* Banner Message - only show when event is running or completed */}
+							{(state === 1 || state === 2) && (
+								<div
+									className="text-center font-bold mb-[1.5vw]"
+									style={{
+										fontSize: "clamp(14px, 2.5vw, 32px)",
+										color: "#000080",
+										fontFamily: "Monomaniac One, monospace",
+									}}
+								>
+									{bannerMessage}
+								</div>
+							)}
+
+							{/* Date and Location */}
+							<motion.div
+								className="text-center font-semibold"
 								style={{
-									fontSize: "clamp(14px, 2.5vw, 32px)",
+									fontSize: "clamp(16px, 3vw, 24px)",
 									color: "#000080",
 									fontFamily: "Monomaniac One, monospace",
 								}}
+								initial={{ opacity: 0, y: -30 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 1, delay: 0.2 }}
 							>
-								{bannerMessage}
-							</div>
-						)}
-
-						{/* Date and Location */}
-						<motion.div
-							className="text-center font-semibold"
+								<div>{settings.hackathonDateRepr} • ECoRE Building, Penn State</div>
+							</motion.div>
+						</div>
+					) : (
+						<div
+							className="text-center font-bold mb-[2vw] relative z-10"
 							style={{
-								fontSize: "clamp(16px, 3vw, 24px)",
+								fontSize: "clamp(14px, 2.5vw, 32px)",
 								color: "#000080",
 								fontFamily: "Monomaniac One, monospace",
 							}}
-							initial={{ opacity: 0, y: -30 }}
-							animate={{ opacity: 1, y: 0 }}
-							transition={{ duration: 1, delay: 0.2 }}
 						>
-							<div>{settings.hackathonDateRepr} • ECoRE Building, Penn State</div>
-						</motion.div>
-					</motion.div>
-				) : (
-					<div
-						className="text-center font-bold mb-[2vw]"
-						style={{
-							fontSize: "clamp(14px, 2.5vw, 32px)",
-							color: "#000080",
-							fontFamily: "Monomaniac One, monospace",
-						}}
-					>
-						{bannerMessage}
-					</div>
-				)}
+							{bannerMessage}
+						</div>
+					)}
+				</motion.div>
 			</div>
 
 			{/* Register & Discord Buttons - kept at original size */}
