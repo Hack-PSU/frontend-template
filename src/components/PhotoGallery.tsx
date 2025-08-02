@@ -14,6 +14,16 @@ interface CarouselProps {
 
 const PhotoGallery: React.FC<CarouselProps> = ({ images }) => (
 	<div className="w-full overflow-hidden bg-[#215172] py-8 md:py-16">
+		{/* Header */}
+		<div className="text-center mb-8">
+			<h1
+				className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3"
+				style={{ fontFamily: "Monomaniac One, monospace" }}
+			>
+				Gallery
+			</h1>
+			<div className="w-16 h-1 bg-[#FFEBB8] rounded-full mx-auto"></div>
+		</div>
 		<Swiper
 			modules={[Pagination, Autoplay]}
 			slidesPerView={1}

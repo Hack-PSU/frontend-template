@@ -12,31 +12,35 @@ import { useAllEvents } from "@/lib/api/event/hook";
 import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
 import { useFlagState } from "@/lib/api/flag/hook";
 
-// Event type color mapping with pastel/cartoon theme
+// Event type color mapping with jellyfish assets
 const eventTypeColors = {
 	[EventType.activity]: {
-		bg: "bg-[#FFE4E6]",
-		border: "border-[#F87171]",
+		bg: "bg-[#f5b90c]",
+		border: "border-[#f5b90c]",
 		text: "text-[#DC2626]",
 		label: "Activity",
+		jellyfishAsset: "/f25/9.png",
 	},
 	[EventType.food]: {
-		bg: "bg-[#DCFCE7]",
-		border: "border-[#4ADE80]",
+		bg: "bg-[#7bccf0]",
+		border: "border-[#7bccf0]",
 		text: "text-[#16A34A]",
 		label: "Food",
+		jellyfishAsset: "/f25/10.png",
 	},
 	[EventType.workshop]: {
-		bg: "bg-[#FEF3C7]",
-		border: "border-[#FBBF24]",
+		bg: "bg-[#88d960]",
+		border: "border-[#88d960]",
 		text: "text-[#D97706]",
 		label: "Workshop",
+		jellyfishAsset: "/f25/11.png",
 	},
 	[EventType.checkIn]: {
-		bg: "bg-[#E0E7FF]",
-		border: "border-[#818CF8]",
+		bg: "bg-[#e295fd]",
+		border: "border-[#e295fd]",
 		text: "text-[#4338CA]",
 		label: "Check-in",
+		jellyfishAsset: "/f25/12.png",
 	},
 };
 
@@ -102,13 +106,13 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 						<div className="flex justify-between items-start">
 							<div>
 								<h3
-									className={`text-xl font-bold ${colors.text} mb-2`}
+									className="text-xl font-bold text-white mb-2"
 									style={{ fontFamily: "Monomaniac One, monospace" }}
 								>
 									{event.name}
 								</h3>
 								<span
-									className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${colors.text} bg-white/80`}
+									className="inline-block px-3 py-1 rounded-full text-sm font-medium text-white bg-black/20"
 									style={{ fontFamily: "Monomaniac One, monospace" }}
 								>
 									{colors.label}
@@ -246,7 +250,7 @@ const EventItem: React.FC<EventItemProps> = ({
 
 	return (
 		<motion.div
-			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} ${colors.text} shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
 			style={{
 				top: `${topPosition}px`,
 				left: leftOffset,
@@ -264,21 +268,21 @@ const EventItem: React.FC<EventItemProps> = ({
 			onClick={() => onEventClick(event)}
 		>
 			<div
-				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 ${isMobile ? "text-xs" : "text-sm"}`}
+				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 text-white ${isMobile ? "text-xs" : "text-sm"}`}
 				style={{
 					scrollbarWidth: "thin",
 					scrollbarColor: "rgba(0,0,0,0.3) transparent",
 				}}
 			>
-				<div className="font-bold mb-1">{event.name}</div>
-				<div className={`text-xs opacity-80 font-medium ${isMobile ? "hidden" : ""}`}>
+				<div className="font-bold mb-1 text-white">{event.name}</div>
+				<div className={`text-xs opacity-80 font-medium text-white ${isMobile ? "hidden" : ""}`}>
 					{event.startTime.toLocaleTimeString("en-US", {
 						hour: "numeric",
 						minute: "2-digit",
 						hour12: true,
 					})}
 				</div>
-				<div className={`text-xs opacity-70 ${isMobile ? "hidden" : ""}`}>
+				<div className={`text-xs opacity-70 text-white ${isMobile ? "hidden" : ""}`}>
 					{event.location}
 				</div>
 			</div>
@@ -846,61 +850,94 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#A20021] mb-6"
-					style={{ fontFamily: "Rye, serif" }}
+					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
+					style={{ fontFamily: "Monomaniac One, monospace" }}
 				>
 					Schedule
 				</h1>
+				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-6"></div>
 
-				{/* Legend - Clickable Category Filters */}
-				<div className="flex flex-wrap justify-center gap-4 mb-6">
-					{Object.entries(eventTypeColors).map(([type, colors], index) => {
-						const eventType = type as EventType;
-						const isSelected = selectedCategories.has(eventType);
+				{/* Legend - Conditional rendering based on screen size */}
+				{isMobile ? (
+					/* Mobile: Traditional Buttons */
+					<div className="flex flex-wrap justify-center gap-3 mb-6">
+						{Object.entries(eventTypeColors).map(([type, colors], index) => {
+							const eventType = type as EventType;
+							const isSelected = selectedCategories.has(eventType);
 
-						return (
-							<motion.button
-								key={type}
-								onClick={() => toggleCategory(eventType)}
-								className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 shadow-sm transition-all duration-200 cursor-pointer hover:scale-105 ${
-									isSelected
-										? `${colors.bg} ${colors.border}`
-										: "bg-gray-200 border-gray-400 opacity-50"
-								}`}
-								initial={{ opacity: 0, scale: 0.8 }}
-								animate={{ opacity: 1, scale: 1 }}
-								transition={{ duration: 0.4, delay: index * 0.1 }}
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-							>
-								<div
-									className={`w-3 h-3 rounded-full transition-colors ${
+							return (
+								<motion.button
+									key={type}
+									onClick={() => toggleCategory(eventType)}
+									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${
 										isSelected
-											? colors.border.replace("border-", "bg-")
-											: "bg-gray-400"
-									}`}
-								></div>
-								<span
-									className={`text-sm font-bold transition-colors ${
-										isSelected ? colors.text : "text-gray-500"
+											? `${colors.bg} ${colors.border} text-white`
+											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
 									}`}
 									style={{ fontFamily: "Monomaniac One, monospace" }}
+									initial={{ opacity: 0, scale: 0.8 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ duration: 0.4, delay: index * 0.1 }}
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
 								>
 									{colors.label}
-								</span>
-								{/* Visual indicator for selected state */}
-								{isSelected && (
-									<motion.div
-										className="w-2 h-2 bg-current rounded-full"
-										initial={{ scale: 0 }}
-										animate={{ scale: 1 }}
-										exit={{ scale: 0 }}
-									/>
-								)}
-							</motion.button>
-						);
-					})}
-				</div>
+								</motion.button>
+							);
+						})}
+					</div>
+				) : (
+					/* Desktop: Jellyfish Buttons */
+					<div className="flex flex-wrap justify-center gap-6 mb-6">
+						{Object.entries(eventTypeColors).map(([type, colors], index) => {
+							const eventType = type as EventType;
+							const isSelected = selectedCategories.has(eventType);
+
+							return (
+								<motion.button
+									key={type}
+									onClick={() => toggleCategory(eventType)}
+									className="relative flex flex-col items-center cursor-pointer group"
+									initial={{ opacity: 0, scale: 0.8 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ duration: 0.4 }}
+									whileHover={{ scale: 1 }}
+									whileTap={{ scale: 1 }}
+								>
+									{/* Jellyfish Image */}
+									<div className="relative w-60 h-60 mb-2">
+										<Image
+											src={colors.jellyfishAsset}
+											alt={`${colors.label} Jellyfish`}
+											fill
+											className={`object-contain transition-all duration-300 ${
+												isSelected ? "" : "grayscale"
+											} group-hover:scale-110`}
+										/>
+									</div>
+									
+									{/* Text Overlay - Positioned upward */}
+									<div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: "translateY(-70px) translateX(-5px)" }}>
+										<span
+											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${
+												isSelected 
+													? `text-white ${colors.bg} border-2 ${colors.border}` 
+													: "text-gray-600 bg-white/70"
+											}`}
+											style={{ 
+												fontFamily: "Monomaniac One, monospace",
+												fontSize: "clamp(12px, 2vw, 16px)",
+												
+											}}
+										>
+											{colors.label}
+										</span>
+									</div>
+								</motion.button>
+							);
+						})}
+					</div>
+				)}
 
 				{/* Show selected count */}
 				<div className="text-center mb-4">

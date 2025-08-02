@@ -63,12 +63,12 @@ const InfoSections: React.FC = () => {
 	return (
 		<section
 			id="info"
-			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] overflow-hidden"
+			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] "
 			style={{ minHeight: "60vw", backgroundColor: "#B1E8FF" }}
 		>
 			{/* Animated Float Elements */}
 			<motion.div
-				className="absolute
+				className="absolute z-10
 				left-[clamp(20px, 4vw, 80px)]
 				top-[clamp(100px, 15vw, 200px)]
 				md:left-[10px]
@@ -79,11 +79,11 @@ const InfoSections: React.FC = () => {
 				}}
 				animate={{
 					rotate: [0, 15, 0],
-					y: [0, -20, 0],
-					scale: [1, 0.8, 1],
+					y: [-130, -30, -130],
+					scale: [1, 0.9, 1],
 				}}
 				transition={{
-					duration: 6.67,
+					duration: 6,
 					repeat: Infinity,
 					ease: "easeInOut",
 					delay: 0,
@@ -127,10 +127,10 @@ const InfoSections: React.FC = () => {
 
 			<motion.div
 				className="absolute
-				left-[clamp(20px, 4vw, 80px)]
-				bottom-[clamp(100px, 15vw, 200px)]
-				md:left-[50vw]
-				md:bottom-[15vw]"
+				right-[clamp(20px, 4vw, 80px)]
+				top-[clamp(100px, 15vw, 200px)]
+				md:right-[20vw]
+				md:top-[0vw]"
 				style={{
 					width: "clamp(80px, 30vw, 300px)",
 					height: "clamp(80px, 30vw, 300px)",
@@ -164,12 +164,12 @@ const InfoSections: React.FC = () => {
 					className="text-center"
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#A20021] mb-3"
-						style={{ fontFamily: "Rye, serif" }}
+						className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
+						style={{ fontFamily: "Monomaniac One, monospace" }}
 					>
 						Info
 					</h1>
-					<div className="w-16 h-1 bg-[#A20021] rounded-full mx-auto"></div>
+					<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 
@@ -341,9 +341,9 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				/>
 			</svg>
 			<motion.span
-				className="relative z-10 font-medium text-center px-2 absolute inset-0 flex items-center justify-center"
+				className="relative z-10 font-bold text-center px-2 absolute inset-0 flex items-center justify-center"
 				style={{
-					color: section.textColor,
+					color: "#000080",
 					fontSize: isSelected
 						? "clamp(12px, 2.5vw, 12px)"
 						: "clamp(12px, 2vw, 12px)",

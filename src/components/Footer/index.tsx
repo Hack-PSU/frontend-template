@@ -5,8 +5,78 @@ import EmailIcon from "@mui/icons-material/Email";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
 const Footer = () => {
+	const [isChasing, setIsChasing] = useState(false);
+	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [fishPosition, setFishPosition] = useState({ x: 0, y: 0 });
+	const [fishRotation, setFishRotation] = useState(0);
+
+	useEffect(() => {
+		const handleMouseMove = (e: MouseEvent) => {
+			setMousePosition({ x: e.clientX, y: e.clientY });
+		};
+
+		const handleKeyPress = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isChasing) {
+				setIsChasing(false);
+			}
+		};
+
+		if (isChasing) {
+			document.addEventListener('mousemove', handleMouseMove);
+			document.addEventListener('keydown', handleKeyPress);
+			return () => {
+				document.removeEventListener('mousemove', handleMouseMove);
+				document.removeEventListener('keydown', handleKeyPress);
+			};
+		}
+	}, [isChasing]);
+
+	useEffect(() => {
+		if (isChasing) {
+			let animationId: number;
+			
+			const animate = () => {
+				setFishPosition(prev => {
+					const dx = mousePosition.x - prev.x;
+					const dy = mousePosition.y - prev.y;
+					
+					// Calculate rotation angle to point toward cursor
+					const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+					setFishRotation(angle);
+					
+					// Smooth chasing with slight lag
+					const speed = 0.08;
+					const newX = prev.x + dx * speed;
+					const newY = prev.y + dy * speed;
+					
+					return { x: newX, y: newY };
+				});
+				
+				animationId = requestAnimationFrame(animate);
+			};
+			
+			animationId = requestAnimationFrame(animate);
+			return () => cancelAnimationFrame(animationId);
+		}
+	}, [isChasing, mousePosition]);
+
+	const handleFishClick = () => {
+		if (!isChasing) {
+			const fishElement = document.querySelector('.scary-fish');
+			if (fishElement) {
+				const rect = fishElement.getBoundingClientRect();
+				setFishPosition({ 
+					x: rect.left + rect.width / 2, 
+					y: rect.top + rect.height / 2 
+				});
+			}
+		}
+		setIsChasing(!isChasing);
+	};
+
 	const leftRightSway = (delay: number = 0, distance: number = 10) => ({
 		x: [-distance, distance, -distance],
 		transition: {
@@ -55,7 +125,7 @@ const Footer = () => {
 							<InstagramIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#0077B5",
+									color: "#dbeafe",
 								}}
 							/>
 						</a>
@@ -68,7 +138,7 @@ const Footer = () => {
 							<LinkedInIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#0077B5",
+									color: "#dbeafe",
 								}}
 							/>
 						</a>
@@ -81,7 +151,7 @@ const Footer = () => {
 							<EmailIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#0077B5",
+									color: "#dbeafe",
 								}}
 							/>
 						</a>
@@ -89,9 +159,24 @@ const Footer = () => {
 
 					{/* Deep Fish - Bobbing animation on the right */}
 					<motion.div
-						animate={fishAnimation}
-						className="absolute right-[4vw] top-1/2 transform -translate-y-1/2"
-						style={{
+						animate={isChasing ? false : fishAnimation}
+						className={`scary-fish absolute ${isChasing ? 'cursor-pointer' : ''}`}
+						onClick={handleFishClick}
+						style={isChasing ? {
+							left: `${fishPosition.x - 60}px`,
+							top: `${fishPosition.y - 60}px`,
+							width: '120px',
+							height: '120px',
+							filter: "drop-shadow(0 0 12px rgba(255,255,255,0.9))",
+							position: 'fixed',
+							zIndex: 9999,
+							pointerEvents: 'auto',
+							transform: `rotate(${fishRotation}deg)`,
+							transition: 'none'
+						} : {
+							right: '4vw',
+							top: '50%',
+							transform: 'translateY(-50%)',
 							width: `clamp(60px, 8vw, 120px)`,
 							height: `clamp(60px, 8vw, 120px)`,
 							filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
@@ -102,16 +187,21 @@ const Footer = () => {
 							alt="Deep-sea fish"
 							width={120}
 							height={120}
-							className="w-full h-full object-contain"
+							className={`w-full h-full object-contain cursor-pointer ${isChasing ? '' : 'hover:scale-110 transition-transform'}`}
 							priority
 						/>
+						{isChasing && (
+							<div className="absolute inset-0 pointer-events-none">
+								<div className="w-full h-full animate-pulse bg-blue-400 opacity-20 rounded-full blur-sm"></div>
+							</div>
+						)}
 					</motion.div>
 				</div>
 
 				{/* Privacy Policy */}
 				<a
 					href="/privacy"
-					className="font-bold hover:underline transition-all duration-300"
+					className="font-bold hover:underline transition-all duration-300 text-blue-100"
 					style={{ fontSize: `clamp(14px, 2vw, 18px)` }}
 				>
 					Privacy Policy
@@ -128,7 +218,7 @@ const Footer = () => {
 
 			{/* Underwater Plants at Bottom */}
 			<div className="absolute bottom-0 left-0 w-full">
-				{/* Green Plants Background Layer - Individual positioned */}
+				{/* Green Plants with Varied Z-Index for Layering */}
 				<motion.div
 					animate={leftRightSway(0, 6)}
 					className="absolute bottom-[-2vw]"
@@ -136,9 +226,8 @@ const Footer = () => {
 						left: "0vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 3, // Behind some coral
 					}}
-					//style={{ left: "0vw", width: "12vw", height: "18vw", zIndex: 1 }}
 				>
 					<Image
 						src="/f25/8.png"
@@ -154,7 +243,7 @@ const Footer = () => {
 						left: "8vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 8, // In front of some coral
 					}}
 				>
 					<Image
@@ -171,7 +260,7 @@ const Footer = () => {
 						left: "16vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 2, // Behind most coral
 					}}
 				>
 					<Image
@@ -188,7 +277,7 @@ const Footer = () => {
 						left: "24vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 9, // In front of most coral
 					}}
 				>
 					<Image
@@ -205,7 +294,7 @@ const Footer = () => {
 						left: "32vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 4, // Mixed layering
 					}}
 				>
 					<Image
@@ -222,7 +311,7 @@ const Footer = () => {
 						left: "40vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 7, // In front of some coral
 					}}
 				>
 					<Image
@@ -239,7 +328,7 @@ const Footer = () => {
 						left: "48vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 1, // Behind all coral
 					}}
 				>
 					<Image
@@ -256,7 +345,7 @@ const Footer = () => {
 						left: "56vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 6, // Mixed layering
 					}}
 				>
 					<Image
@@ -273,7 +362,7 @@ const Footer = () => {
 						left: "64vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 11, // In front of all coral
 					}}
 				>
 					<Image
@@ -290,7 +379,7 @@ const Footer = () => {
 						left: "72vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 3, // Behind some coral
 					}}
 				>
 					<Image
@@ -307,7 +396,7 @@ const Footer = () => {
 						left: "80vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 8, // In front of some coral
 					}}
 				>
 					<Image
@@ -324,7 +413,7 @@ const Footer = () => {
 						left: "88vw",
 						width: "clamp(12vw, 16vw, 20vw)",
 						height: "clamp(18vw, 24vw, 18vw)",
-						zIndex: 1,
+						zIndex: 2, // Behind most coral
 					}}
 				>
 					<Image
@@ -335,7 +424,7 @@ const Footer = () => {
 					/>
 				</motion.div>
 
-				{/* Coral Plants Foreground Layer - Individual positioned */}
+				{/* Coral Plants with Varied Z-Index for Layering */}
 				<motion.div
 					animate={leftRightSway(0.5, 8)}
 					className="absolute"
@@ -344,7 +433,7 @@ const Footer = () => {
 						bottom: "1vw",
 						width: "15vw",
 						height: "12vw",
-						zIndex: 10,
+						zIndex: 5, // Behind some green seaweed
 					}}
 				>
 					<Image
@@ -362,7 +451,7 @@ const Footer = () => {
 						bottom: "1vw",
 						width: "15vw",
 						height: "12vw",
-						zIndex: 10,
+						zIndex: 10, // In front of most seaweed
 					}}
 				>
 					<Image
@@ -380,7 +469,7 @@ const Footer = () => {
 						bottom: "1vw",
 						width: "15vw",
 						height: "12vw",
-						zIndex: 10,
+						zIndex: 3, // Behind some green seaweed
 					}}
 				>
 					<Image
@@ -398,7 +487,7 @@ const Footer = () => {
 						bottom: "1vw",
 						width: "15vw",
 						height: "12vw",
-						zIndex: 10,
+						zIndex: 12, // In front of all seaweed
 					}}
 				>
 					<Image
@@ -416,7 +505,99 @@ const Footer = () => {
 						bottom: "1vw",
 						width: "15vw",
 						height: "12vw",
-						zIndex: 10,
+						zIndex: 4, // Behind some green seaweed
+					}}
+				>
+					<Image
+						src="/f25/7.png"
+						alt="Underwater coral plant"
+						fill
+						className="object-contain"
+					/>
+				</motion.div>
+
+				{/* Additional 5 Red Coral Plants */}
+				<motion.div
+					animate={leftRightSway(0.8, 7)}
+					className="absolute"
+					style={{
+						left: "12vw",
+						bottom: "0.5vw",
+						width: "12vw",
+						height: "10vw",
+						zIndex: 6, // Mixed layering
+					}}
+				>
+					<Image
+						src="/f25/7.png"
+						alt="Underwater coral plant"
+						fill
+						className="object-contain"
+					/>
+				</motion.div>
+				<motion.div
+					animate={leftRightSway(1.3, 4)}
+					className="absolute"
+					style={{
+						left: "35vw",
+						bottom: "1.5vw",
+						width: "13vw",
+						height: "11vw",
+						zIndex: 2, // Behind most seaweed
+					}}
+				>
+					<Image
+						src="/f25/7.png"
+						alt="Underwater coral plant"
+						fill
+						className="object-contain"
+					/>
+				</motion.div>
+				<motion.div
+					animate={leftRightSway(1.7, 6)}
+					className="absolute"
+					style={{
+						left: "52vw",
+						bottom: "0.8vw",
+						width: "14vw",
+						height: "11.5vw",
+						zIndex: 9, // In front of most seaweed
+					}}
+				>
+					<Image
+						src="/f25/7.png"
+						alt="Underwater coral plant"
+						fill
+						className="object-contain"
+					/>
+				</motion.div>
+				<motion.div
+					animate={leftRightSway(2.2, 8)}
+					className="absolute"
+					style={{
+						left: "75vw",
+						bottom: "1.2vw",
+						width: "13.5vw",
+						height: "10.5vw",
+						zIndex: 7, // Mixed layering
+					}}
+				>
+					<Image
+						src="/f25/7.png"
+						alt="Underwater coral plant"
+						fill
+						className="object-contain"
+					/>
+				</motion.div>
+				<motion.div
+					animate={leftRightSway(2.8, 5)}
+					className="absolute"
+					style={{
+						left: "92vw",
+						bottom: "0.3vw",
+						width: "11vw",
+						height: "9vw",
+						zIndex: 11, // In front of most elements
 					}}
 				>
 					<Image

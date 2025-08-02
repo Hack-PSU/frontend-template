@@ -357,6 +357,23 @@ const Sponsors: React.FC = () => {
 				/>
 			</motion.div>
 
+			{/* Header */}
+			<div className="text-center mb-8 z-10 relative">
+				<motion.div
+					initial={{ opacity: 0, y: -30 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8 }}
+				>
+					<h1
+						className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3"
+						style={{ fontFamily: "Monomaniac One, monospace" }}
+					>
+						Sponsors
+					</h1>
+					<div className="w-16 h-1 bg-[#FFEBB8] rounded-full mx-auto"></div>
+				</motion.div>
+			</div>
+
 			{/* Main Content */}
 			<div className="w-full max-w-7xl mx-auto">
 				{/* Sponsor Pyramid */}

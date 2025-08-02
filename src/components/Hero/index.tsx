@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import settings from "@/lib/config/settings.json";
+import MemoryGame from "@/components/MemoryGame";
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
@@ -28,6 +29,19 @@ const Hero = () => {
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 	const [crabClicked, setCrabClicked] = useState<boolean>(false);
+	const [crabArmy, setCrabArmy] = useState<
+		Array<{
+			id: number;
+			x: number;
+			y: number;
+			delay: number;
+			endX: number;
+			endY: number;
+			direction: number;
+		}>
+	>([]);
+	const [showCrabArmy, setShowCrabArmy] = useState<boolean>(false);
+	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
 
 	const secondsControls = useAnimation();
 
@@ -37,6 +51,39 @@ const Hero = () => {
 			setCrabClicked(true);
 		}
 	}, [crabClicked]);
+
+	// Handle HackPSU title click to spawn crab army
+	const handleTitleClick = useCallback(() => {
+		if (showCrabArmy) return; // Prevent multiple armies
+
+		// Generate 15-25 random crabs
+		const numCrabs = Math.floor(Math.random() * 11) + 45;
+		const newCrabs = Array.from({ length: numCrabs }, (_, i) => ({
+			id: i,
+			x: Math.random() * 100, // Random x position (0-100%)
+			y: Math.random() * 100, // Random y position (0-100%)
+			delay: Math.random() * 2, // Random animation delay (0-2s)
+			// Random walking path endpoints
+			endX: Math.random() * 100,
+			endY: Math.random() * 100,
+			// Random walking direction (for facing left/right)
+			direction: Math.random() > 0.5 ? 1 : -1,
+		}));
+
+		setCrabArmy(newCrabs);
+		setShowCrabArmy(true);
+
+		// Hide crabs after 15 seconds
+		setTimeout(() => {
+			setShowCrabArmy(false);
+			setCrabArmy([]);
+		}, 15000);
+	}, [showCrabArmy]);
+
+	// Handle starfish click to show memory game
+	const handleStarfishClick = useCallback(() => {
+		setShowMemoryGame(true);
+	}, []);
 
 	// This function initializes the timer fields based on hackathon data.
 	const initializeFields = useCallback((data: any) => {
@@ -128,6 +175,90 @@ const Hero = () => {
 		return () => clearInterval(interval);
 	}, [updateCountdown]);
 
+	// Console easter egg - show on component mount
+	useEffect(() => {
+		const showConsoleMessage = () => {
+			const asciiLogo = `                                                                  
+                               -#@@@@#-                               
+                            +@@@@@@@@@@@@+                            
+                        .*@@@@@@*-%@=#@@@@@@*.                        
+                     :*@@@@@%+.  .%%.  .*%@@@@@*:                     
+                  :#@@@@@%:      .%%.      -%@@@@@#:                  
+               :%@@@@@*.   .*    .%%.         :*@@@@@%:               
+            =%@@@@%@@    .%@@    .%%.    @%=     @@@@@@@%=            
+        .=@@@@@#:  @@    .%@@    .%%.    @@%.    @@  :#@@@@@=.        
+      +@@@@@@.     @@    .%@%    .%@:    @@@+    @@      @@@@@@+      
+   +@@@@%: @@      @@     :      .%%.    @@@@@@#-@@      @@:-%@@@@+   
+ :@@@*:    @@      @@      .+    .%%:    @@@@@@@@@@      @@    :*@@@: 
+:@@@@      @@      @@    .%@@    .%@:    @@@@@@@@@@      @@      @@@@:
+#@@@@      @@      @%    .%@@    .%@.    @@%=%@@@@@      @@      @@@@#
+%@@@@      %=      @@    .%@@    :@@:    .=#.  :*@@      =#      @@@@%
+%@@@@              @%    .%@@ :+@@@@@@*:         @@              @@@@%
+%@@@@      *@      @%    .%@@@@@@+  *@@@@%:      @@      @#   .+@@@@@%
+%@@@@      @@      @%   +@@@@%-        -%@@@@+   @@      @@.   :%@@@@%
+%@@@@      @@      @@*@@@@*:              :*@@@@%@@      @@.     @@@@%
+%@@@@      @@   .=%@@@@@:        .++.        :@@@@@%=.   @@      @@@@%
+%@@@@      @@ *@@@@%:@@%.      *@@@@@@*      :@@@@@@@@@*:@@      @@@@%
+%@@@@     =@@@@@=.   @@%.      @@@@@@@@      :@@@   .+@@@@@=     @@@@%
+%@@@@ :+@@@@#=       @@%.      @@@@@@@@      :@@@      :%@@@@@+: @@@@%
+%@@@@@@@@#.          @@%.      @@@@@@@@      :@@@      .%@@*#@@@@@@@@%
+%@@@@@-      -%%.    @@%.      @@@@@@@@+     :@@@      .%@@    =@@@@@%
+%@@@@      %@@@%.    @@%.      @@@@@@@@@@@*. :@@@      .%@@      @@@@%
+%@@@@      %@@@%.    @@%.       -#@@@@@@@@@@@%@@@      .%@@      @@@@%
+%@@@@        :%%.    @@%.          .*@@@@@@@@@@@@      .%@@      @@@@%
+%@@@@                @@@#:             -%@@@@@@@@      .%@@      @@@@%
+%@@@@      @%=       @@@@@@%=             :*@@@@@      .%@@      @@@@%
+%@@@@      @@@@@*:  .@@@@@@@@@@+:            :@@@      .%@@      @@@@%
+#@@@@      @@@@@@@@@@@@%.=@@@@@@@@%:         .%@@      .%@@      @@@@#
+:@@@@      @@@@@@@@@@@@%.   :#@@@@@@@%+      .%@@       :        @@@@:
+ :@@@%=.   @@@@@@@@@@@@%.      @@@@@@@@      .%@@               :@@@: 
+   *@@@@@*-@@@@@@@@@@@@%.      @@@@@@@@      .%@@            :*@@@*   
+      *@@@@@@@@@@@@@@@@%.      @@@@@@@@      .%@@         =@@@@*      
+        .=@@@@@@@@@@@@@%.      @@@@@@@@      .%@@     :*@@@@=.        
+            =%@@@@@@@@@%.       -#@@#-       .%@@  -#@@@%=            
+               -%@@@@@@@:                    :@@@@@@@%:               
+                  :%@@@@@@*.              .*@@@@@@%:                  
+                     :*@@@@@@#-        -#@@@@@@*:                     
+                        .*@@@@@@@=::=@@@@@@@*.                        
+                            *@@@@@@@@@@@@*                            
+                              .-#@@@@#-.                                                                                                                                 
+`;
+
+			const recruitmentMessage = `
+Hello from the Team at HackPSU!
+
+We see you poking around in the console... that's exactly the kind of
+curiosity and technical skills we love on the HackPSU organizing team!
+
+We're always looking for passionate developers, designers, and tech 
+enthusiasts to join our team and help create amazing experiences for 
+thousands of hackers.
+
+If you are interested in joining us, we would love to hear from you!
+Our applications can be found either by going to our instagram bio or shooting us an email.
+   • Email: team@hackpsu.org
+   • Discord: http://discord.hackpsu.org
+   • Mention you found this console message!
+
+Happy hacking!
+- The HackPSU Team
+`;
+
+			console.log(
+				"%c" + asciiLogo,
+				"color: #00DAB7; font-family: monospace; font-weight: bold;"
+			);
+			console.log(
+				"%c" + recruitmentMessage,
+				"color: #fffff; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.5;"
+			);
+		};
+
+		// Show message after a short delay to ensure console is ready
+		const timer = setTimeout(showConsoleMessage, 1000);
+		return () => clearTimeout(timer);
+	}, []);
+
 	// Utility: render the time or a blank if uninitialized.
 	const renderTime = (metric: number): string => {
 		if (Math.abs(metric) === Infinity) return "⠀";
@@ -137,10 +268,46 @@ const Hero = () => {
 	if (hackathonLoading) {
 		return (
 			<section
-				className="flex items-center justify-center"
-				style={{ height: "50vw", minHeight: "400px" }}
+				className="flex items-center justify-center relative overflow-hidden"
+				style={{ 
+					height: "50vw", 
+					minHeight: "400px",
+					backgroundColor: "#FFEBB8"
+				}}
 			>
-				<div style={{ fontSize: "clamp(16px, 3vw, 24px)" }}>Loading...</div>
+				{/* Simple beach loading animation */}
+				<div className="text-center">
+					<motion.div
+						className="mb-4"
+						initial={{ rotate: 0 }}
+						transition={{
+							duration: 2,
+							ease: "linear",
+							repeat: Infinity,
+						}}
+						style={{
+							fontSize: "clamp(32px, 6vw, 64px)",
+						}}
+					>
+						🏖️
+					</motion.div>
+					<motion.div 
+						style={{ 
+							fontSize: "clamp(16px, 3vw, 24px)",
+							fontFamily: "Monomaniac One, monospace",
+							color: "#00DAB7"
+						}}
+						initial={{ opacity: 0.5 }}
+						animate={{ opacity: [0.5, 1, 0.5] }}
+						transition={{
+							duration: 1.5,
+							ease: "easeInOut",
+							repeat: Infinity,
+						}}
+					>
+						Loading the beach...
+					</motion.div>
+				</div>
 			</section>
 		);
 	}
@@ -167,19 +334,19 @@ const Hero = () => {
 			{/* Decorative elements - kept at normal size */}
 			{/* Animated Starfish Elements */}
 			<motion.div
-				className="absolute hidden"
+				className="absolute z-10
+				top-[clamp(10px, 1.5vw, 20px)]
+				left-[0px]
+				md:left-[3vw]
+				md:top-[6vw]
+				"
 				style={{
-					width: "clamp(100px, 15vw, 400px)",
-					height: "clamp(100px, 15vw, 400px)",
-					left: "clamp(20px, 3vw, 60px)",
-					top: "clamp(10px, 1.5vw, 20px)",
+					width: "clamp(80px, 10vw, 150px)",
+					height: "clamp(80px, 10vw, 150px)",
 				}}
-				initial={{ opacity: 1, rotate: 0 }}
-				animate={{
-					opacity: 1,
-					rotate: [0, 10, -10, 0],
-					y: [0, -10, 0],
-				}}
+				initial={{ opacity: 0, scale: 0.8 }}
+				animate={{ opacity: 1, scale: 1 }}
+				transition={{ duration: 0.6, delay: 0.2 }}
 			>
 				<Image
 					src="/f25/2.png"
@@ -190,7 +357,7 @@ const Hero = () => {
 			</motion.div>
 
 			<motion.div
-				className="absolute
+				className="absolute cursor-pointer
 				top-[-3vw]
 				md:top-[1.8vw]
 				"
@@ -206,10 +373,17 @@ const Hero = () => {
 					rotate: [0, -15, 15, 0],
 					x: [0, 5, -5, 0],
 				}}
+				transition={{
+					duration: 2,
+					ease: "easeInOut",
+				}}
+				onClick={handleStarfishClick}
+				whileHover={{ scale: 1.1 }}
+				whileTap={{ scale: 0.9 }}
 			>
 				<Image
 					src="/f25/3.png"
-					alt="Starfish"
+					alt="Starfish - Click for Memory Game!"
 					fill
 					className="object-contain"
 				/>
@@ -305,6 +479,7 @@ const Hero = () => {
 				className="absolute z-10
 				right-[0px]
 				md:right-[5vw]
+				hidden
 				"
 				style={{
 					width: "clamp(80px, 10vw, 80px)",
@@ -333,21 +508,26 @@ const Hero = () => {
 				md:top-[12vw]
 				cursor-pointer"
 				initial={{ opacity: 1, scale: 1 }}
-				animate={crabClicked 
-					? { 
-						y: -300, 
-						opacity: 1,
-						rotate: [5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5]
-					}
-					: { rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }
+				animate={
+					crabClicked
+						? {
+								y: -300,
+								opacity: 1,
+								rotate: [
+									5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5,
+									5, -5, 5,
+								],
+							}
+						: { rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }
 				}
-				transition={crabClicked 
-					? { duration: 5, ease: "linear" }
-					: {
-						duration: 3.5,
-						repeat: Infinity,
-						ease: "linear",
-					}
+				transition={
+					crabClicked
+						? { duration: 5, ease: "linear" }
+						: {
+								duration: 3.5,
+								repeat: Infinity,
+								ease: "linear",
+							}
 				}
 				style={{
 					width: "clamp(60px, 18vw, 100px)",
@@ -382,18 +562,21 @@ const Hero = () => {
 			</motion.div>
 
 			{/* Container for scaled content (title and countdown only) */}
-			<div style={{ transform: "scale(0.75)", transformOrigin: "center" }}>
+			<div style={{ transform: "scale(0.75) translateY(-5vw)", transformOrigin: "center" }}>
 				{/* Title */}
 				<motion.h1
-					className="text-center mb-[2vw] font-bold"
+					className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200"
 					style={{
 						fontSize: "clamp(32px, 8vw, 80px)",
 						fontFamily: "Monomaniac One, monospace",
-						color: "#00DAB7",
+						color: "#000080",
 					}}
 					initial={{ opacity: 0, y: -50 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 1 }}
+					onClick={handleTitleClick}
+					whileHover={{ scale: 1.05 }}
+					whileTap={{ scale: 0.95 }}
 				>
 					HackPSU Fall 2025
 				</motion.h1>
@@ -417,7 +600,7 @@ const Hero = () => {
 									className="font-bold"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#00DAB7",
+										color: "#000080",
 									}}
 									initial={{ scaleY: 0 }}
 									animate={{ scaleY: 1 }}
@@ -428,7 +611,7 @@ const Hero = () => {
 									className="font-semibold"
 									style={{
 										fontSize: "clamp(10px, 1.5vw, 18px)",
-										color: "#00DAB7",
+										color: "#000080",
 										fontFamily: "Monomaniac One, monospace",
 									}}
 								>
@@ -439,7 +622,7 @@ const Hero = () => {
 							{/* Colon */}
 							<div
 								className="font-bold mb-[2vw]"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#000080" }}
 							>
 								:
 							</div>
@@ -450,7 +633,7 @@ const Hero = () => {
 									className="font-bold"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#00DAB7",
+										color: "#000080",
 									}}
 									initial={{ scaleY: 0 }}
 									animate={{ scaleY: 1 }}
@@ -461,7 +644,7 @@ const Hero = () => {
 									className="font-semibold"
 									style={{
 										fontSize: "clamp(10px, 1.5vw, 18px)",
-										color: "#00DAB7",
+										color: "#000080",
 										fontFamily: "Monomaniac One, monospace",
 									}}
 								>
@@ -472,7 +655,7 @@ const Hero = () => {
 							{/* Colon */}
 							<div
 								className="font-bold mb-[2vw]"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#000080" }}
 							>
 								:
 							</div>
@@ -483,7 +666,7 @@ const Hero = () => {
 									className="font-bold"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#00DAB7",
+										color: "#000080",
 									}}
 									initial={{ scaleY: 0 }}
 									animate={{ scaleY: 1 }}
@@ -494,7 +677,7 @@ const Hero = () => {
 									className="font-semibold"
 									style={{
 										fontSize: "clamp(10px, 1.5vw, 18px)",
-										color: "#00DAB7",
+										color: "#000080",
 										fontFamily: "Monomaniac One, monospace",
 									}}
 								>
@@ -505,7 +688,7 @@ const Hero = () => {
 							{/* Colon */}
 							<div
 								className="font-bold mb-[2vw]"
-								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#00DAB7" }}
+								style={{ fontSize: "clamp(24px, 6vw, 80px)", color: "#000080" }}
 							>
 								:
 							</div>
@@ -516,7 +699,7 @@ const Hero = () => {
 									className="font-bold"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#00DAB7",
+										color: "#000080",
 									}}
 									animate={secondsControls}
 									initial={{ scaleY: 1 }}
@@ -527,7 +710,7 @@ const Hero = () => {
 									className="font-semibold"
 									style={{
 										fontSize: "clamp(10px, 1.5vw, 18px)",
-										color: "#00DAB7",
+										color: "#000080",
 										fontFamily: "Monomaniac One, monospace",
 									}}
 								>
@@ -536,32 +719,33 @@ const Hero = () => {
 							</div>
 						</div>
 
-						{/* Banner Message */}
-						<div
-							className="text-center font-bold mb-[1.5vw]"
-							style={{
-								fontSize: "clamp(14px, 2.5vw, 32px)",
-								color: "#00DAB7",
-								fontFamily: "Monomaniac One, monospace",
-							}}
-						>
-							{bannerMessage}
-						</div>
+						{/* Banner Message - only show when event is running or completed */}
+						{(state === 1 || state === 2) && (
+							<div
+								className="text-center font-bold mb-[1.5vw]"
+								style={{
+									fontSize: "clamp(14px, 2.5vw, 32px)",
+									color: "#000080",
+									fontFamily: "Monomaniac One, monospace",
+								}}
+							>
+								{bannerMessage}
+							</div>
+						)}
 
 						{/* Date and Location */}
 						<motion.div
 							className="text-center font-semibold"
 							style={{
 								fontSize: "clamp(16px, 3vw, 24px)",
-								color: "#00DAB7",
+								color: "#000080",
 								fontFamily: "Monomaniac One, monospace",
 							}}
 							initial={{ opacity: 0, y: -30 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 1, delay: 0.2 }}
 						>
-							<div className="mb-[1vw]">{settings.hackathonDateRepr}</div>
-							<div>ECoRE Building, Penn State</div>
+							<div>{settings.hackathonDateRepr} • ECoRE Building, Penn State</div>
 						</motion.div>
 					</motion.div>
 				) : (
@@ -569,7 +753,7 @@ const Hero = () => {
 						className="text-center font-bold mb-[2vw]"
 						style={{
 							fontSize: "clamp(14px, 2.5vw, 32px)",
-							color: "#00DAB7",
+							color: "#000080",
 							fontFamily: "Monomaniac One, monospace",
 						}}
 					>
@@ -647,6 +831,65 @@ const Hero = () => {
 					</div>
 				</motion.button>
 			</motion.div>
+
+			{/* Crab Army Easter Egg */}
+			{showCrabArmy &&
+				crabArmy.map((crab) => (
+					<motion.div
+						key={crab.id}
+						className="absolute z-50 pointer-events-none"
+						style={{
+							width: "clamp(40px, 8vw, 80px)",
+							height: "clamp(40px, 8vw, 80px)",
+							left: `${crab.x}%`,
+							top: `${crab.y}%`,
+							transform: `scaleX(${crab.direction})`, // Flip crab based on direction
+						}}
+						initial={{
+							opacity: 0,
+							scale: 0,
+						}}
+						animate={{
+							opacity: [0, 1, 1, 1, 0],
+							scale: [0, 1, 1, 1, 0],
+							// Walking animation - same as existing crab
+							rotate: [5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5],
+							y: [0, 20, -20, 20, -20, 20, -20, 20, -20, 20, -20, 20, 0],
+							// Movement across screen
+							left: [`${crab.x}%`, `${crab.endX}%`],
+							top: [`${crab.y}%`, `${crab.endY}%`],
+						}}
+						transition={{
+							duration: 15,
+							delay: crab.delay,
+							ease: "linear",
+							times: [0, 0.05, 0.1, 0.9, 1],
+							rotate: {
+								duration: 1.5,
+								repeat: 10,
+								ease: "linear",
+							},
+							y: {
+								duration: 1.5,
+								repeat: 10,
+								ease: "linear",
+							},
+						}}
+					>
+						<Image
+							src="/f25/5.png"
+							alt="Crab Army"
+							fill
+							className="object-contain"
+						/>
+					</motion.div>
+				))}
+
+			{/* Memory Game Modal */}
+			<MemoryGame 
+				isOpen={showMemoryGame} 
+				onClose={() => setShowMemoryGame(false)} 
+			/>
 		</section>
 	);
 };

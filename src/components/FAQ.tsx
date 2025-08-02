@@ -200,12 +200,12 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#A20021] mb-6"
-						style={{ fontFamily: "Rye, serif" }}
+						className="text-5xl md:text-6xl font-bold text-[#000080] mb-6"
+						style={{ fontFamily: "Monomaniac One, monospace" }}
 					>
 						FAQ
 					</h1>
-					<div className="w-20 h-1 bg-[#A20021] rounded-full mx-auto"></div>
+					<div className="w-20 h-1 bg-[#000080] rounded-full mx-auto"></div>
 				</motion.div>
 
 				{/* Fish Animation */}
@@ -265,7 +265,7 @@ const FAQ: React.FC = () => {
 							width: "clamp(200px, 50vw, 800px)",
 							height: "clamp(200px, 50vw, 800px)",
 						}}
-						initial={{ opacity: 1, scale: 1, rotate: -90 }}
+						initial={{ opacity: 1, scale: 1, rotate: 0 }}
 						animate={{ scale: [0.9, 1, 0.9], opacity: [0.8, 1, 0.8] }}
 						transition={{
 							duration: 6,

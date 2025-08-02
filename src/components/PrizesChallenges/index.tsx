@@ -23,7 +23,7 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 	return (
 		<div className="p-6 rounded-xl text-center bg-white/30 backdrop-blur-sm border-2 border-[#EFA00B] shadow-lg transition-transform hover:scale-105">
 			<div className="mx-4 py-6">
-				<h2 className="text-2xl md:text-3xl font-bold text-[#A20021] mb-3">
+				<h2 className="text-2xl md:text-3xl font-bold text-[#000080] mb-3">
 					{title}
 				</h2>
 				{description && (
@@ -36,7 +36,7 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 						<tbody>
 							{prizes.map((prize, index) => (
 								<tr key={index}>
-									<td className="text-base md:text-lg px-4 py-1 font-semibold text-[#A20021]">
+									<td className="text-base md:text-lg px-4 py-1 font-semibold text-[#000080]">
 										{prize.place}:
 									</td>
 									<td className="text-base md:text-lg px-4 py-1 text-gray-900">
@@ -69,7 +69,7 @@ const PrizesChallenges: React.FC = () => {
 			className="flex flex-col items-center w-full mt-20 px-4"
 		>
 			<div className="w-full max-w-6xl flex flex-col items-center">
-				<h1 className="md:text-5xl font-['rye'] text-[#A20021] text-[4rem] mb-3">
+				<h1 className="text-4xl md:text-5xl font-bold text-[#000080] mb-3" style={{ fontFamily: "Monomaniac One, monospace" }}>
 					Prizes & Challenges
 				</h1>
 				<Divider />
