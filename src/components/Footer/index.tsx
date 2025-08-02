@@ -20,17 +20,17 @@ const Footer = () => {
 		};
 
 		const handleKeyPress = (e: KeyboardEvent) => {
-			if (e.key === 'Escape' && isChasing) {
+			if (e.key === "Escape" && isChasing) {
 				setIsChasing(false);
 			}
 		};
 
 		if (isChasing) {
-			document.addEventListener('mousemove', handleMouseMove);
-			document.addEventListener('keydown', handleKeyPress);
+			document.addEventListener("mousemove", handleMouseMove);
+			document.addEventListener("keydown", handleKeyPress);
 			return () => {
-				document.removeEventListener('mousemove', handleMouseMove);
-				document.removeEventListener('keydown', handleKeyPress);
+				document.removeEventListener("mousemove", handleMouseMove);
+				document.removeEventListener("keydown", handleKeyPress);
 			};
 		}
 	}, [isChasing]);
@@ -38,27 +38,27 @@ const Footer = () => {
 	useEffect(() => {
 		if (isChasing) {
 			let animationId: number;
-			
+
 			const animate = () => {
-				setFishPosition(prev => {
+				setFishPosition((prev) => {
 					const dx = mousePosition.x - prev.x;
 					const dy = mousePosition.y - prev.y;
-					
+
 					// Calculate rotation angle to point toward cursor
 					const angle = Math.atan2(dy, dx) * (180 / Math.PI);
 					setFishRotation(angle);
-					
+
 					// Smooth chasing with slight lag
 					const speed = 0.08;
 					const newX = prev.x + dx * speed;
 					const newY = prev.y + dy * speed;
-					
+
 					return { x: newX, y: newY };
 				});
-				
+
 				animationId = requestAnimationFrame(animate);
 			};
-			
+
 			animationId = requestAnimationFrame(animate);
 			return () => cancelAnimationFrame(animationId);
 		}
@@ -66,12 +66,12 @@ const Footer = () => {
 
 	const handleFishClick = () => {
 		if (!isChasing) {
-			const fishElement = document.querySelector('.scary-fish');
+			const fishElement = document.querySelector(".scary-fish");
 			if (fishElement) {
 				const rect = fishElement.getBoundingClientRect();
-				setFishPosition({ 
-					x: rect.left + rect.width / 2, 
-					y: rect.top + rect.height / 2 
+				setFishPosition({
+					x: rect.left + rect.width / 2,
+					y: rect.top + rect.height / 2,
 				});
 			}
 		}
@@ -121,7 +121,7 @@ const Footer = () => {
 						const leftPos = Math.random() * 100;
 						const delay = Math.random() * 15;
 						const duration = Math.random() * 10 + 15;
-						
+
 						return (
 							<div
 								key={i}
@@ -132,13 +132,13 @@ const Footer = () => {
 									height: `${size}px`,
 									background: `radial-gradient(circle at 30% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0.1))`,
 									boxShadow: `
-										inset 0 0 ${size/3}px rgba(255,255,255,0.3),
-										0 0 ${size/2}px rgba(255,255,255,0.1)
+										inset 0 0 ${size / 3}px rgba(255,255,255,0.3),
+										0 0 ${size / 2}px rgba(255,255,255,0.1)
 									`,
 									animationDelay: `${delay}s`,
 									animationDuration: `${duration}s`,
-									bottom: '-30px',
-									backdropFilter: 'blur(1px)',
+									bottom: "-30px",
+									backdropFilter: "blur(1px)",
 								}}
 							/>
 						);
@@ -207,34 +207,38 @@ const Footer = () => {
 					{/* Deep Fish - Bobbing animation on the right */}
 					<motion.div
 						animate={isChasing ? false : fishAnimation}
-						className={`scary-fish absolute ${isChasing ? 'cursor-pointer' : ''}`}
+						className={`scary-fish absolute ${isChasing ? "cursor-pointer" : ""}`}
 						onClick={handleFishClick}
-						style={isChasing ? {
-							left: `${fishPosition.x - 60}px`,
-							top: `${fishPosition.y - 60}px`,
-							width: '120px',
-							height: '120px',
-							filter: "drop-shadow(0 0 12px rgba(255,255,255,0.9))",
-							position: 'fixed',
-							zIndex: 9999,
-							pointerEvents: 'auto',
-							transform: `rotate(${fishRotation}deg)`,
-							transition: 'none'
-						} : {
-							right: '4vw',
-							top: '50%',
-							transform: 'translateY(-50%)',
-							width: `clamp(60px, 8vw, 120px)`,
-							height: `clamp(60px, 8vw, 120px)`,
-							filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-						}}
+						style={
+							isChasing
+								? {
+										left: `${fishPosition.x - 60}px`,
+										top: `${fishPosition.y - 60}px`,
+										width: "120px",
+										height: "120px",
+										filter: "drop-shadow(0 0 12px rgba(255,255,255,0.9))",
+										position: "fixed",
+										zIndex: 9999,
+										pointerEvents: "auto",
+										transform: `rotate(${fishRotation}deg)`,
+										transition: "none",
+									}
+								: {
+										right: "4vw",
+										top: "50%",
+										transform: "translateY(-50%)",
+										width: `clamp(60px, 8vw, 120px)`,
+										height: `clamp(60px, 8vw, 120px)`,
+										filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
+									}
+						}
 					>
 						<Image
 							src="/f25/deepfish.png"
 							alt="Deep-sea fish"
 							width={120}
 							height={120}
-							className={`w-full h-full object-contain cursor-pointer ${isChasing ? '' : 'hover:scale-110 transition-transform'}`}
+							className={`w-full h-full object-contain cursor-pointer ${isChasing ? "" : "hover:scale-110 transition-transform"}`}
 							priority
 						/>
 						{isChasing && (

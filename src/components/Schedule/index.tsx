@@ -275,14 +275,18 @@ const EventItem: React.FC<EventItemProps> = ({
 				}}
 			>
 				<div className="font-bold mb-1 text-white">{event.name}</div>
-				<div className={`text-xs opacity-80 font-medium text-white ${isMobile ? "hidden" : ""}`}>
+				<div
+					className={`text-xs opacity-80 font-medium text-white ${isMobile ? "hidden" : ""}`}
+				>
 					{event.startTime.toLocaleTimeString("en-US", {
 						hour: "numeric",
 						minute: "2-digit",
 						hour12: true,
 					})}
 				</div>
-				<div className={`text-xs opacity-70 text-white ${isMobile ? "hidden" : ""}`}>
+				<div
+					className={`text-xs opacity-70 text-white ${isMobile ? "hidden" : ""}`}
+				>
 					{event.location}
 				</div>
 			</div>
@@ -371,15 +375,17 @@ const DayColumn: React.FC<DayColumnProps> = ({
 	};
 
 	return (
-		<div className={`${isScrollable ? "h-full" : "flex-1 min-w-0"} relative flex`}>
+		<div
+			className={`${isScrollable ? "h-full" : "flex-1 min-w-0"} relative flex`}
+		>
 			{/* Time Sidebar */}
-			<div 
+			<div
 				ref={timeAreaRef}
 				className={`${isMobile ? "w-16" : "w-20"} flex-shrink-0 bg-[#1a3f5c] ${isScrollable ? "overflow-y-auto" : ""}`}
 				onScroll={handleTimeScroll}
 				style={{
-					scrollbarWidth: 'none',
-					msOverflowStyle: 'none',
+					scrollbarWidth: "none",
+					msOverflowStyle: "none",
 				}}
 			>
 				<style jsx>{`
@@ -417,7 +423,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 			</div>
 
 			{/* Events Area */}
-			<div 
+			<div
 				ref={eventsAreaRef}
 				className={`flex-1 relative bg-[#F0F9FF] ${isScrollable ? "overflow-y-auto" : ""}`}
 				onScroll={handleEventsScroll}
@@ -915,19 +921,21 @@ const Schedule: React.FC = () => {
 											} group-hover:scale-110`}
 										/>
 									</div>
-									
+
 									{/* Text Overlay - Positioned upward */}
-									<div className="absolute inset-0 flex items-center justify-center pointer-events-none" style={{ transform: "translateY(-70px) translateX(-5px)" }}>
+									<div
+										className="absolute inset-0 flex items-center justify-center pointer-events-none"
+										style={{ transform: "translateY(-70px) translateX(-5px)" }}
+									>
 										<span
 											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${
-												isSelected 
-													? `text-white ${colors.bg} border-2 ${colors.border}` 
+												isSelected
+													? `text-white ${colors.bg} border-2 ${colors.border}`
 													: "text-gray-600 bg-white/70"
 											}`}
-											style={{ 
+											style={{
 												fontFamily: "Monomaniac One, monospace",
 												fontSize: "clamp(12px, 2vw, 16px)",
-												
 											}}
 										>
 											{colors.label}
@@ -950,7 +958,6 @@ const Schedule: React.FC = () => {
 							: `Showing ${selectedCategories.size} of ${Object.keys(EventType).length} categories`}
 					</span>
 				</div>
-
 			</motion.div>
 
 			{/* Calendar Grid */}
@@ -979,14 +986,17 @@ const Schedule: React.FC = () => {
 								animate={{ opacity: 1, y: 0 }}
 								transition={{ duration: 0.5 }}
 							>
-								<div className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}>
+								<div
+									className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}
+								>
 									{day}
 								</div>
-								<div className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}>
-									{day === "Saturday" 
+								<div
+									className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}
+								>
+									{day === "Saturday"
 										? `${processedEvents.Saturday.events.length} event${processedEvents.Saturday.events.length !== 1 ? "s" : ""}`
-										: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`
-									}
+										: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`}
 								</div>
 							</motion.button>
 						))}

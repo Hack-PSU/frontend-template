@@ -400,14 +400,16 @@ const Sponsors: React.FC = () => {
 				>
 					<motion.button
 						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
-						style={{ 
+						style={{
 							fontFamily: "Monomaniac One, monospace",
 							background: "",
-							boxShadow: "0 10px 25px rgba(0, 102, 204, 0.3), 0 0 20px rgba(255, 235, 184, 0.2)"
+							boxShadow:
+								"0 10px 25px rgba(0, 102, 204, 0.3), 0 0 20px rgba(255, 235, 184, 0.2)",
 						}}
-						whileHover={{ 
+						whileHover={{
 							scale: 1.05,
-							boxShadow: "0 15px 35px rgba(0, 102, 204, 0.4), 0 0 30px rgba(255, 235, 184, 0.3)"
+							boxShadow:
+								"0 15px 35px rgba(0, 102, 204, 0.4), 0 0 30px rgba(255, 235, 184, 0.3)",
 						}}
 						whileTap={{ scale: 0.95 }}
 						onClick={() => window.open("https://sponsor.hackpsu.org", "_blank")}
@@ -420,12 +422,13 @@ const Sponsors: React.FC = () => {
 						>
 							Interested in Sponsoring Us? Click Here!
 						</motion.span>
-						
+
 						{/* Animated wave effect */}
 						<motion.div
 							className="absolute inset-0 rounded-2xl opacity-20 hover:opacity-30 transition-opacity duration-300"
 							style={{
-								background: "linear-gradient(45deg, rgba(0, 102, 204, 0.1), rgba(255, 235, 184, 0.1))",
+								background:
+									"linear-gradient(45deg, rgba(0, 102, 204, 0.1), rgba(255, 235, 184, 0.1))",
 							}}
 							animate={{
 								background: [
