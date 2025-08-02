@@ -42,6 +42,7 @@ const Hero = () => {
 	>([]);
 	const [showCrabArmy, setShowCrabArmy] = useState<boolean>(false);
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
+	const [crabRaveAudio, setCrabRaveAudio] = useState<HTMLAudioElement | null>(null);
 
 	const secondsControls = useAnimation();
 
@@ -73,12 +74,22 @@ const Hero = () => {
 		setCrabArmy(newCrabs);
 		setShowCrabArmy(true);
 
-		// Hide crabs after 15 seconds
+		// Play crab rave audio
+		if (crabRaveAudio) {
+			crabRaveAudio.currentTime = 0;
+			crabRaveAudio.play().catch(console.error);
+		}
+
+		// Hide crabs and stop audio after 15 seconds
 		setTimeout(() => {
 			setShowCrabArmy(false);
 			setCrabArmy([]);
+			if (crabRaveAudio) {
+				crabRaveAudio.pause();
+				crabRaveAudio.currentTime = 0;
+			}
 		}, 15000);
-	}, [showCrabArmy]);
+	}, [showCrabArmy, crabRaveAudio]);
 
 	// Handle starfish click to show memory game
 	const handleStarfishClick = useCallback(() => {
@@ -174,6 +185,19 @@ const Hero = () => {
 		const interval = setInterval(updateCountdown, 1000);
 		return () => clearInterval(interval);
 	}, [updateCountdown]);
+
+	// Initialize crab rave audio
+	useEffect(() => {
+		const audio = new Audio('/f25/crab_rave.mp3');
+		audio.loop = true;
+		audio.volume = 0.7;
+		setCrabRaveAudio(audio);
+
+		return () => {
+			audio.pause();
+			audio.src = '';
+		};
+	}, []);
 
 	// Console easter egg - show on component mount
 	useEffect(() => {
