@@ -399,13 +399,47 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8, delay: 1 }}
 				>
 					<motion.button
-						className="px-6 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-all duration-200"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
-						whileHover={{ scale: 1.02 }}
-						whileTap={{ scale: 0.98 }}
+						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
+						style={{ 
+							fontFamily: "Monomaniac One, monospace",
+							background: "",
+							boxShadow: "0 10px 25px rgba(0, 102, 204, 0.3), 0 0 20px rgba(255, 235, 184, 0.2)"
+						}}
+						whileHover={{ 
+							scale: 1.05,
+							boxShadow: "0 15px 35px rgba(0, 102, 204, 0.4), 0 0 30px rgba(255, 235, 184, 0.3)"
+						}}
+						whileTap={{ scale: 0.95 }}
 						onClick={() => window.open("https://sponsor.hackpsu.org", "_blank")}
 					>
-						Click here to become a sponsor!
+						<motion.span
+							className="relative z-10 flex items-center justify-center gap-2 text-lg"
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ delay: 1.2 }}
+						>
+							Interested in Sponsoring Us? Click Here!
+						</motion.span>
+						
+						{/* Animated wave effect */}
+						<motion.div
+							className="absolute inset-0 rounded-2xl opacity-20 hover:opacity-30 transition-opacity duration-300"
+							style={{
+								background: "linear-gradient(45deg, rgba(0, 102, 204, 0.1), rgba(255, 235, 184, 0.1))",
+							}}
+							animate={{
+								background: [
+									"linear-gradient(45deg, rgba(0, 102, 204, 0.1), rgba(255, 235, 184, 0.1))",
+									"linear-gradient(225deg, rgba(0, 128, 128, 0.15), rgba(255, 235, 184, 0.15))",
+									"linear-gradient(45deg, rgba(0, 102, 204, 0.1), rgba(255, 235, 184, 0.1))",
+								],
+							}}
+							transition={{
+								duration: 4,
+								repeat: Infinity,
+								ease: "easeInOut",
+							}}
+						/>
 					</motion.button>
 				</motion.div>
 			</div>
