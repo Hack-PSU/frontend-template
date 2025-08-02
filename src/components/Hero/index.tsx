@@ -367,6 +367,7 @@ Happy hacking!
 				style={{
 					width: "clamp(80px, 10vw, 150px)",
 					height: "clamp(80px, 10vw, 150px)",
+					pointerEvents: "none"
 				}}
 				initial={{ opacity: 0, scale: 0.8 }}
 				animate={{ opacity: 1, scale: 1 }}
@@ -377,6 +378,7 @@ Happy hacking!
 					alt="Starfish"
 					fill
 					className="object-contain"
+					
 				/>
 			</motion.div>
 
