@@ -83,10 +83,7 @@ export default function RootLayout({
 		<html lang="en">
 			<GoogleAnalytics gaId="G-C6W09RB27P" />
 			<body className={inter.className}>
-				<LayoutProvider>
-					<Navbar />
-					{children}
-				</LayoutProvider>
+				<LayoutProvider>{children}</LayoutProvider>
 				<Analytics />
 				<SpeedInsights />
 			</body>
