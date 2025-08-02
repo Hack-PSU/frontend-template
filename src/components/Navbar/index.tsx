@@ -161,6 +161,7 @@ const Navbar: React.FC = () => {
 		const baseItems = [
 			{ href: isHome ? "#info" : "/#info", text: "About" },
 			{ href: isHome ? "#schedule" : "/#schedule", text: "Schedule" },
+			{ href: isHome ? "#prizes" : "/#prizes", text: "Prizes" },
 			{ href: isHome ? "#sponsors" : "/#sponsors", text: "Sponsors" },
 			{ href: isHome ? "#faq" : "/#faq", text: "FAQ" },
 		];
@@ -296,13 +297,13 @@ const Navbar: React.FC = () => {
 
 						{/* Menu Content */}
 						<motion.div
-							className="absolute top-24 left-0 right-0 bg-[#FFEBB8] border-t-4 border-[#FFB6D9] shadow-2xl"
+							className="absolute top-24 left-0 right-0 bottom-0 bg-[#FFEBB8] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
 							initial={{ y: -20, opacity: 0 }}
 							animate={{ y: 0, opacity: 1 }}
 							exit={{ y: -20, opacity: 0 }}
 							transition={{ duration: 0.3 }}
 						>
-							<div className="px-6 py-8 space-y-4">
+							<div className="px-6 py-8 space-y-4 min-h-full">
 								{navItems.map((item, index) => (
 									<motion.div
 										key={index}

@@ -49,6 +49,7 @@ export default function Home() {
 					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
 				/>
 				<InfoSections />
+				<PrizesChallenges />
 				<Wave
 					height={200}
 					fill="#84cefe"
