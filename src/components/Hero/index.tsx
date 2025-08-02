@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -43,6 +43,12 @@ const Hero = () => {
 	const [showCrabArmy, setShowCrabArmy] = useState<boolean>(false);
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
 	const [crabRaveAudio, setCrabRaveAudio] = useState<HTMLAudioElement | null>(null);
+	const [chillHackyWalking, setChillHackyWalking] = useState<boolean>(false);
+	const [hackyPosition, setHackyPosition] = useState({ x: 0, y: 0, direction: 1 });
+	const [hackySpeech, setHackySpeech] = useState<string>("");
+	const [hackySpecialAnimation, setHackySpecialAnimation] = useState<string>("");
+	const walkingRef = useRef<boolean>(false);
+	const animationIdRef = useRef<number>(0);
 
 	const secondsControls = useAnimation();
 
@@ -94,6 +100,102 @@ const Hero = () => {
 	// Handle starfish click to show memory game
 	const handleStarfishClick = useCallback(() => {
 		setShowMemoryGame(true);
+	}, []);
+
+	// Handle Chill Hacky click to start/stop walking
+	const handleChillHackyClick = useCallback(() => {
+		if (walkingRef.current) {
+			// Stop walking
+			walkingRef.current = false;
+			setChillHackyWalking(false);
+			setHackySpeech("");
+			setHackySpecialAnimation("");
+			setHackyPosition({ x: 0, y: 0, direction: 1 });
+			if (animationIdRef.current) {
+				cancelAnimationFrame(animationIdRef.current);
+			}
+			return;
+		}
+
+		// Start walking
+		walkingRef.current = true;
+		setChillHackyWalking(true);
+		
+		// Random hackPSU messages
+		const speechMessages = [
+			"I'm so excited for HackPSU!",
+			"Hope to see you at HackPSU!",
+			"Have you registered for HackPSU yet?",
+			"I can't wait for HackPSU!",
+			"What are you most excited for at HackPSU?",
+			"Have you checked out the schedule for HackPSU?",
+			"Don't forget to register for HackPSU!",
+			"Have you joined the HackPSU Discord?",
+			"Have you seen the HackPSU sponsors?",
+			"Have you applied to be an organizer for HackPSU?",
+		];
+
+		// Start walking animation - runs continuously
+		let currentX = 2; // Start from left side
+		const walkingSpeed = 0.08; // vw per frame (much slower)
+		const screenWidth = 95; // Max position (leave small margin for character width)
+		let direction = 1; // 1 for right, -1 for left
+		let jumpCooldown = 0;
+		let speechCooldown = 0;
+		let specialAnimationCooldown = 0;
+
+		const animate = () => {
+			if (!walkingRef.current) return;
+
+			// Update position
+			currentX += walkingSpeed * direction;
+
+			// Bounce off screen edges
+			if (currentX >= screenWidth) {
+				currentX = screenWidth;
+				direction = -1;
+				console.log('Hit right edge, direction now:', direction);
+			} else if (currentX <= 2) {
+				currentX = 2;
+				direction = 1;
+				console.log('Hit left edge, direction now:', direction);
+			}
+
+			// Random jumping (much less frequent)
+			if (jumpCooldown <= 0 && Math.random() < 0.0005) {
+				jumpCooldown = 300; // Much longer cooldown
+			}
+			if (jumpCooldown > 0) jumpCooldown--;
+
+			// Random special animations (jump only)
+			if (specialAnimationCooldown <= 0 && Math.random() < 0.0008) {
+				specialAnimationCooldown = 400; // Cooldown frames
+				setHackySpecialAnimation('jump');
+				
+				// Clear animation after duration
+				setTimeout(() => setHackySpecialAnimation(""), 800);
+			}
+			if (specialAnimationCooldown > 0) specialAnimationCooldown--;
+
+			// Random speech bubbles
+			if (speechCooldown <= 0 && Math.random() < 0.002) {
+				speechCooldown = 200; // Cooldown frames
+				const message = speechMessages[Math.floor(Math.random() * speechMessages.length)];
+				setHackySpeech(message);
+				setTimeout(() => setHackySpeech(""), 3000);
+			}
+			if (speechCooldown > 0) speechCooldown--;
+
+			setHackyPosition({ x: currentX, y: 0, direction });
+			// Debug logging
+			if (Math.random() < 0.01) { // Only log occasionally to avoid spam
+				console.log('Position update:', { x: currentX, direction });
+			}
+
+			animationIdRef.current = requestAnimationFrame(animate);
+		};
+
+		animate();
 	}, []);
 
 	// This function initializes the timer fields based on hackathon data.
@@ -196,6 +298,16 @@ const Hero = () => {
 		return () => {
 			audio.pause();
 			audio.src = '';
+		};
+	}, []);
+
+	// Cleanup walking animation on unmount
+	useEffect(() => {
+		return () => {
+			walkingRef.current = false;
+			if (animationIdRef.current) {
+				cancelAnimationFrame(animationIdRef.current);
+			}
 		};
 	}, []);
 
@@ -371,32 +483,74 @@ Happy hacking!
 
 			{/* Chill Hacky Character */}
 			<motion.div
-				className="absolute 
-				left-[-15px]
-				md:left-[3vw]
-				"
-				style={{
+				className={`absolute cursor-pointer ${chillHackyWalking ? 'z-50' : ''}`}
+				style={chillHackyWalking ? {
+					left: `${hackyPosition.x}vw`,
+					bottom: '0px',
+					width: "clamp(25px, 4vw, 65px)",
+					height: "clamp(25px, 4vw, 65px)",
+					transform: hackyPosition.direction === -1 ? 'scaleX(-1)' : 'scaleX(1)',
+					position: 'fixed',
+				} : {
+					left: "clamp(-15px, -15px, -15px)",
+					bottom: "clamp(60px, 80vw, 200px)",
 					width: "clamp(120px, 18vw, 300px)",
 					height: "clamp(120px, 18vw, 300px)",
-					//left: "clamp(15px, 3vw, 60px)",
-					bottom: "clamp(60px, 80vw, 200px)",
 				}}
 				initial={{ opacity: 1, rotate: 0 }}
-				animate={{
+				animate={chillHackyWalking ? 
+					hackySpecialAnimation === 'jump' ? {
+						y: [0, -40, 0],
+						transition: { duration: 0.8, ease: "easeInOut" }
+					} : {
+						y: [0, -5, 0], // Much smaller walking bounce
+					} : {
 					opacity: 1,
 				}}
-				transition={{
+				transition={chillHackyWalking && !hackySpecialAnimation ? {
+					duration: 2.5, // Slower walking bounce
+					repeat: Infinity,
+					ease: "easeInOut",
+				} : !chillHackyWalking ? {
 					duration: 4,
 					repeat: Infinity,
 					ease: "easeInOut",
-				}}
+				} : {}}
+				onClick={handleChillHackyClick}
+				whileHover={{ scale: 1.1 }}
+				whileTap={{ scale: 0.9 }}
+				title={chillHackyWalking ? "Click to stop exploring!" : "Click to start exploring!"}
 			>
 				<Image
 					src="/f25/chill_hacky.png"
-					alt="Chill Hacky"
+					alt="Chill Hacky - Click to start walking!"
 					fill
 					className="object-contain"
 				/>
+				
+				{/* Speech Bubble */}
+				{hackySpeech && (
+					<motion.div
+						className="absolute left-1/2 transform -translate-x-1/2 z-50"
+						style={{
+							bottom: chillHackyWalking ? '100%' : 'calc(100% + 8px)',
+							marginBottom: chillHackyWalking ? '8px' : '0px'
+						}}
+						initial={{ opacity: 0, scale: 0.8, y: 10 }}
+						animate={{ opacity: 1, scale: 1, y: 0 }}
+						exit={{ opacity: 0, scale: 0.8, y: 10 }}
+						transition={{ duration: 0.3 }}
+					>
+						<div className="relative bg-white px-3 py-2 rounded-lg shadow-lg border-2 border-blue-200 max-w-[180px] min-w-[120px]">
+							<p className="text-xs font-bold text-blue-800 text-center break-words leading-tight">
+								{hackySpeech}
+							</p>
+							{/* Speech bubble tail */}
+							<div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white"></div>
+							<div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-blue-200"></div>
+						</div>
+					</motion.div>
+				)}
 			</motion.div>
 
 			{/* Rotating Beach Ball */}
