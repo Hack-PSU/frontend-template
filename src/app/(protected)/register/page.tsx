@@ -14,6 +14,7 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { PhoneInput } from "@/components/ui/phone-input";
 import { Label } from "@/components/ui/label";
 import {
 	Select,
@@ -559,11 +560,9 @@ export default function RegistrationPage() {
 
 											<div className="space-y-2">
 												<Label htmlFor="phone">Phone Number</Label>
-												<Input
+												<PhoneInput
 													id="phone"
 													name="phone"
-													type="tel"
-													placeholder="(123) 456-7890"
 													value={formData.phone}
 													onChange={handleChange}
 													required
