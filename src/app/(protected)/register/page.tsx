@@ -414,7 +414,7 @@ export default function RegistrationPage() {
 	return (
 		<>
 			<Toaster richColors />
-			<div className="text-foreground min-h-screen">
+			<div className="text-foreground min-h-screen bg-transparent">
 				<div className="flex">
 					{/* Sidebar - Hidden on mobile, floating and vertically centered */}
 					<div className="hidden xl:block fixed left-4 top-1/2 -translate-y-1/2 w-80 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-6 z-40 max-h-[80vh] overflow-y-auto">
