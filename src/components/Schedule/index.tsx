@@ -1,178 +1,1056 @@
-import React, { useMemo } from "react";
-import { Tab } from "@headlessui/react";
-import clsx from "clsx";
+"use client";
+import React, { useMemo, useState, useEffect, useRef } from "react";
+import {
+	motion,
+	AnimatePresence,
+	useScroll,
+	useTransform,
+	useMotionValue,
+} from "framer-motion";
+import Image from "next/image";
 import { useAllEvents } from "@/lib/api/event/hook";
-import { EventEntityResponse } from "@/lib/api/event/entity";
+import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
+import { useFlagState } from "@/lib/api/flag/hook";
 
-const DayIndicator: React.FC<{ day: string }> = ({ day }) => (
-	<div className="my-4">
-		<h2 className="text-2xl font-bold bg-[#EFA00B] text-[#A20021] inline-block px-4 py-1 rounded-md border border-[#A20021]">
-			{day}
-		</h2>
-	</div>
-);
+// Event type color mapping with jellyfish assets
+const eventTypeColors = {
+	[EventType.activity]: {
+		bg: "bg-[#f5b90c]",
+		border: "border-[#f5b90c]",
+		text: "text-[#DC2626]",
+		label: "Activity",
+		jellyfishAsset: "/f25/9.png",
+	},
+	[EventType.food]: {
+		bg: "bg-[#7bccf0]",
+		border: "border-[#7bccf0]",
+		text: "text-[#16A34A]",
+		label: "Food",
+		jellyfishAsset: "/f25/10.png",
+	},
+	[EventType.workshop]: {
+		bg: "bg-[#88d960]",
+		border: "border-[#88d960]",
+		text: "text-[#D97706]",
+		label: "Workshop",
+		jellyfishAsset: "/f25/11.png",
+	},
+	[EventType.checkIn]: {
+		bg: "bg-[#e295fd]",
+		border: "border-[#e295fd]",
+		text: "text-[#4338CA]",
+		label: "Check-in",
+		jellyfishAsset: "/f25/12.png",
+	},
+};
 
-const EventItem: React.FC<{ name: string; time: string }> = ({
-	name,
-	time,
-}) => (
-	<li className="flex justify-between items-center py-2 border-b border-gray-300">
-		<span className="text-lg font-medium">{name}</span>
-		<span className="text-lg font-medium">{time}</span>
-	</li>
-);
-
-interface ScheduleEventDetails {
+interface ProcessedEvent {
+	id: string;
 	name: string;
-	time: string;
-	day: string;
-	sortKey: Date;
+	type: EventType;
+	location: string;
+	startTime: Date;
+	endTime: Date;
+	day: "Saturday" | "Sunday";
+	duration: number; // in minutes
+	startMinutes: number; // minutes from midnight
+	endMinutes: number; // end time in minutes from midnight
+	column: number; // which column this event should be in
 }
 
-interface ScheduleByCategory {
-	[category: string]: ScheduleEventDetails[];
+interface EventItemProps {
+	event: ProcessedEvent;
+	totalColumns: number;
+	useTwoHourIntervals: boolean;
+	onEventClick: (event: ProcessedEvent) => void;
+	isMobile?: boolean;
 }
 
-/**
- * Converts an array of events into an object keyed by event type (category)
- * with each value being an array of event details sorted by start time.
- */
-const convertEventsToSchedule = (
-	events: EventEntityResponse[]
-): ScheduleByCategory => {
-	const schedule = events.reduce(
-		(acc: ScheduleByCategory, event: EventEntityResponse) => {
-			const startTime = new Date(event.startTime);
-			const day = startTime.toLocaleDateString("en-US", {
-				weekday: "long",
-				month: "long",
-				day: "numeric",
-			});
+interface EventDetailsModalProps {
+	event: ProcessedEvent | null;
+	isOpen: boolean;
+	onClose: () => void;
+	originalEvent?: EventEntityResponse;
+}
 
-			const formattedStartTime = startTime.toLocaleTimeString("en-US", {
-				hour: "numeric",
-				minute: "2-digit",
-			});
-			const endTime = new Date(event.endTime);
-			const formattedEndTime = endTime.toLocaleTimeString("en-US", {
-				hour: "numeric",
-				minute: "2-digit",
-			});
+const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
+	event,
+	isOpen,
+	onClose,
+	originalEvent,
+}) => {
+	if (!event || !isOpen) return null;
 
-			// Capitalize the first letter of the event type.
-			const eventType =
-				event.type.charAt(0).toUpperCase() + event.type.slice(1);
-			const eventName = event.name;
-			const eventLocation = event.location.name;
-			const timeRange = `${formattedStartTime} - ${formattedEndTime}`;
+	const colors = eventTypeColors[event.type];
 
-			const eventDetails: ScheduleEventDetails = {
-				name: `${eventName} @ ${eventLocation}`,
-				time: timeRange,
-				day,
-				sortKey: startTime,
-			};
+	return (
+		<AnimatePresence>
+			<motion.div
+				className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				onClick={onClose}
+			>
+				<motion.div
+					className={`bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 border-4 ${colors.border}`}
+					initial={{ scale: 0.8, opacity: 0 }}
+					animate={{ scale: 1, opacity: 1 }}
+					exit={{ scale: 0.8, opacity: 0 }}
+					onClick={(e) => e.stopPropagation()}
+				>
+					{/* Header */}
+					<div
+						className={`${colors.bg} rounded-xl p-4 mb-4 border-2 ${colors.border}`}
+					>
+						<div className="flex justify-between items-start">
+							<div>
+								<h3
+									className="text-xl font-bold text-white mb-2"
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+								>
+									{event.name}
+								</h3>
+								<span
+									className="inline-block px-3 py-1 rounded-full text-sm font-medium text-white bg-black/20"
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+								>
+									{colors.label}
+								</span>
+							</div>
+							<button
+								onClick={onClose}
+								className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+							>
+								×
+							</button>
+						</div>
+					</div>
 
-			if (!acc[eventType]) {
-				acc[eventType] = [eventDetails];
-			} else {
-				acc[eventType].push(eventDetails);
-			}
-			return acc;
-		},
-		{}
+					{/* Details */}
+					<div className="space-y-4">
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Time</h4>
+							<p className="text-gray-600">
+								{event.startTime.toLocaleTimeString("en-US", {
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+								})}{" "}
+								-{" "}
+								{event.endTime.toLocaleTimeString("en-US", {
+									hour: "numeric",
+									minute: "2-digit",
+									hour12: true,
+								})}
+							</p>
+							<p className="text-sm text-gray-500">
+								{event.startTime.toLocaleDateString("en-US", {
+									weekday: "long",
+									month: "long",
+									day: "numeric",
+								})}
+							</p>
+						</div>
+
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Location</h4>
+							<p className="text-gray-600">{event.location}</p>
+						</div>
+
+						<div>
+							<h4 className="font-semibold text-gray-700 mb-1">Duration</h4>
+							<p className="text-gray-600">
+								{Math.round(event.duration)} minutes
+							</p>
+						</div>
+
+						{originalEvent?.description && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Description
+								</h4>
+								<p className="text-gray-600">{originalEvent.description}</p>
+							</div>
+						)}
+
+						{originalEvent?.wsPresenterNames && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Presenter(s)
+								</h4>
+								<p className="text-gray-600">
+									{originalEvent.wsPresenterNames}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsRelevantSkills && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">Skills</h4>
+								<p className="text-gray-600">
+									{originalEvent.wsRelevantSkills}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsSkillLevel && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">
+									Skill Level
+								</h4>
+								<p className="text-gray-600 capitalize">
+									{originalEvent.wsSkillLevel}
+								</p>
+							</div>
+						)}
+
+						{originalEvent?.wsUrls && originalEvent.wsUrls.length > 0 && (
+							<div>
+								<h4 className="font-semibold text-gray-700 mb-1">Resources</h4>
+								<div className="space-y-1">
+									{originalEvent.wsUrls.map((url, index) => (
+										<a
+											key={index}
+											href={url}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-blue-600 hover:text-blue-800 block text-sm underline"
+										>
+											{url}
+										</a>
+									))}
+								</div>
+							</div>
+						)}
+					</div>
+				</motion.div>
+			</motion.div>
+		</AnimatePresence>
 	);
+};
 
-	// Sort each category’s events by start time.
-	Object.keys(schedule).forEach((category) => {
-		schedule[category].sort(
-			(a, b) => a.sortKey.getTime() - b.sortKey.getTime()
-		);
+const EventItem: React.FC<EventItemProps> = ({
+	event,
+	totalColumns,
+	useTwoHourIntervals,
+	onEventClick,
+	isMobile = false,
+}) => {
+	const colors = eventTypeColors[event.type];
+	const columnWidth = `${100 / totalColumns}%`;
+	const leftOffset = `${(event.column * 100) / totalColumns}%`;
+
+	// Adjust positioning and sizing based on interval type
+	// 1-hour intervals: 80px per hour = 80/60 = 1.33px per minute
+	// 2-hour intervals: 120px per 2 hours = 120/120 = 1px per minute
+	const pixelsPerMinute = useTwoHourIntervals ? 120 / 120 : 80 / 60; // pixels per minute
+	const topPosition = event.startMinutes * pixelsPerMinute;
+	const height = Math.max(event.duration * pixelsPerMinute, isMobile ? 40 : 60); // minimum height for readability
+
+	return (
+		<motion.div
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
+			style={{
+				top: `${topPosition}px`,
+				left: leftOffset,
+				width: `calc(${columnWidth} - 8px)`, // More margin between columns
+				height: `${height}px`,
+				fontFamily: "Monomaniac One, monospace",
+				marginLeft: "4px",
+				marginRight: "4px",
+			}}
+			initial={{ opacity: 0, scale: 0.8 }}
+			animate={{ opacity: 1, scale: 1 }}
+			transition={{ duration: 0.3, delay: event.column * 0.1 }}
+			whileHover={{ scale: 1.01, zIndex: 10 }}
+			whileTap={{ scale: 0.99 }}
+			onClick={() => onEventClick(event)}
+		>
+			<div
+				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 text-white ${isMobile ? "text-xs" : "text-sm"}`}
+				style={{
+					scrollbarWidth: "thin",
+					scrollbarColor: "rgba(0,0,0,0.3) transparent",
+				}}
+			>
+				<div className="font-bold mb-1 text-white">{event.name}</div>
+				<div
+					className={`text-xs opacity-80 font-medium text-white ${isMobile ? "hidden" : ""}`}
+				>
+					{event.startTime.toLocaleTimeString("en-US", {
+						hour: "numeric",
+						minute: "2-digit",
+						hour12: true,
+					})}
+				</div>
+				<div
+					className={`text-xs opacity-70 text-white ${isMobile ? "hidden" : ""}`}
+				>
+					{event.location}
+				</div>
+			</div>
+		</motion.div>
+	);
+};
+
+interface DayColumnProps {
+	day: "Saturday" | "Sunday";
+	events: ProcessedEvent[];
+	startHour: number;
+	endHour: number;
+	totalColumns: number;
+	useTwoHourIntervals: boolean;
+	onEventClick: (event: ProcessedEvent) => void;
+	isMobile?: boolean;
+	allEvents?: { Saturday: ProcessedEvent[]; Sunday: ProcessedEvent[] };
+	isScrollable?: boolean;
+}
+
+const DayColumn: React.FC<DayColumnProps> = ({
+	day,
+	events,
+	startHour,
+	endHour,
+	totalColumns,
+	useTwoHourIntervals,
+	onEventClick,
+	isMobile = false,
+	allEvents,
+	isScrollable = false,
+}) => {
+	const increment = useTwoHourIntervals ? 2 : 1;
+
+	let adjustedStartHour = startHour;
+	let adjustedEndHour = endHour;
+
+	// On mobile, trim empty hours at start/end of weekend
+	if (isMobile && allEvents) {
+		if (day === "Saturday" && allEvents.Saturday.length > 0) {
+			// Find first event on Saturday
+			const firstEventHour = Math.min(
+				...allEvents.Saturday.map((e) => Math.floor(e.startMinutes / 60))
+			);
+			adjustedStartHour = Math.max(
+				startHour,
+				Math.floor(firstEventHour / increment) * increment
+			);
+		}
+
+		if (day === "Sunday" && allEvents.Sunday.length > 0) {
+			// Find last event on Sunday
+			const lastEventHour = Math.max(
+				...allEvents.Sunday.map((e) => Math.ceil(e.endMinutes / 60))
+			);
+			adjustedEndHour = Math.min(
+				endHour,
+				Math.ceil(lastEventHour / increment) * increment
+			);
+		}
+	}
+
+	const hours = [];
+	for (
+		let hour = adjustedStartHour;
+		hour <= adjustedEndHour;
+		hour += increment
+	) {
+		hours.push(hour);
+	}
+
+	const timeAreaRef = useRef<HTMLDivElement>(null);
+	const eventsAreaRef = useRef<HTMLDivElement>(null);
+
+	// Synchronize scrolling between time sidebar and events area
+	const handleTimeScroll = () => {
+		if (timeAreaRef.current && eventsAreaRef.current) {
+			eventsAreaRef.current.scrollTop = timeAreaRef.current.scrollTop;
+		}
+	};
+
+	const handleEventsScroll = () => {
+		if (timeAreaRef.current && eventsAreaRef.current) {
+			timeAreaRef.current.scrollTop = eventsAreaRef.current.scrollTop;
+		}
+	};
+
+	return (
+		<div
+			className={`${isScrollable ? "h-full" : "flex-1 min-w-0"} relative flex`}
+		>
+			{/* Time Sidebar */}
+			<div
+				ref={timeAreaRef}
+				className={`${isMobile ? "w-16" : "w-20"} flex-shrink-0 bg-[#1a3f5c] ${isScrollable ? "overflow-y-auto" : ""}`}
+				onScroll={handleTimeScroll}
+				style={{
+					scrollbarWidth: "none",
+					msOverflowStyle: "none",
+				}}
+			>
+				<style jsx>{`
+					div::-webkit-scrollbar {
+						display: none;
+					}
+				`}</style>
+				{hours.map((hour, index) => {
+					const gridHeight = useTwoHourIntervals ? 120 : 80; // 2-hour gets more space
+
+					return (
+						<motion.div
+							key={hour}
+							className="relative border-b border-[#215172] flex items-start justify-center pt-2"
+							style={{ height: `${gridHeight}px` }}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+							transition={{ duration: 0.3, delay: index * 0.05 }}
+						>
+							<div
+								className={`font-medium text-white text-center ${isMobile ? "text-[10px]" : "text-xs"}`}
+								style={{ fontFamily: "Monomaniac One, monospace" }}
+							>
+								{hour === 0
+									? "12 AM"
+									: hour < 12
+										? `${hour} AM`
+										: hour === 12
+											? "12 PM"
+											: `${hour - 12} PM`}
+							</div>
+						</motion.div>
+					);
+				})}
+			</div>
+
+			{/* Events Area */}
+			<div
+				ref={eventsAreaRef}
+				className={`flex-1 relative bg-[#F0F9FF] ${isScrollable ? "overflow-y-auto" : ""}`}
+				onScroll={handleEventsScroll}
+			>
+				{/* Grid lines */}
+				{hours.map((hour, index) => {
+					const gridHeight = useTwoHourIntervals ? 120 : 80; // 2-hour gets more space
+
+					return (
+						<div
+							key={hour}
+							className="relative border-b border-[#BFDBFE]"
+							style={{ height: `${gridHeight}px` }}
+						>
+							{/* Subdivisions based on interval type */}
+							{useTwoHourIntervals ? (
+								// 30-minute subdivisions for 2-hour intervals
+								<>
+									<div
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
+										style={{ top: "30px" }}
+									></div>
+									<div
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
+										style={{ top: "60px" }}
+									></div>
+									<div
+										className="absolute left-0 right-0 border-b border-[#E0F2FE] border-dashed"
+										style={{ top: "90px" }}
+									></div>
+								</>
+							) : (
+								// 15-minute subdivisions for 1-hour intervals
+								<>
+									<div className="absolute top-5 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+									<div className="absolute top-10 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+									<div className="absolute top-15 left-0 right-0 border-b border-[#E0F2FE] border-dashed"></div>
+								</>
+							)}
+						</div>
+					);
+				})}
+
+				{/* Events Container */}
+				<div className="absolute inset-0 px-4">
+					{events.map((event) => {
+						// Adjust event positioning based on trimmed hours
+						const adjustedEvent = isMobile
+							? {
+									...event,
+									startMinutes: event.startMinutes - adjustedStartHour * 60,
+								}
+							: event;
+
+						return (
+							<EventItem
+								key={event.id}
+								event={adjustedEvent}
+								totalColumns={totalColumns}
+								useTwoHourIntervals={useTwoHourIntervals}
+								onEventClick={onEventClick}
+								isMobile={isMobile}
+							/>
+						);
+					})}
+				</div>
+			</div>
+		</div>
+	);
+};
+
+// Function to assign columns to events to prevent overlapping
+const assignColumns = (
+	events: Omit<ProcessedEvent, "column">[]
+): { events: ProcessedEvent[]; totalColumns: number } => {
+	if (events.length === 0) return { events: [], totalColumns: 1 };
+
+	// Sort events by start time, then by duration (longer events first for better packing)
+	const sortedEvents = [...events].sort((a, b) => {
+		if (a.startMinutes !== b.startMinutes) {
+			return a.startMinutes - b.startMinutes;
+		}
+		return b.duration - a.duration;
 	});
 
-	return schedule;
+	// Track which columns are occupied at what times
+	const columns: { endTime: number }[] = [];
+	const eventsWithColumns: ProcessedEvent[] = [];
+	const MAX_COLUMNS = 4; // Limit to 4 columns for readability
+
+	sortedEvents.forEach((event) => {
+		// Find the first available column
+		let columnIndex = 0;
+		while (columnIndex < columns.length && columnIndex < MAX_COLUMNS) {
+			// Add 15-minute buffer to prevent tight overlaps
+			if (columns[columnIndex].endTime <= event.startMinutes + 15) {
+				break;
+			}
+			columnIndex++;
+		}
+
+		// If no available column and we haven't reached max, create a new one
+		if (columnIndex === columns.length && columnIndex < MAX_COLUMNS) {
+			columns.push({ endTime: event.endMinutes });
+		} else if (columnIndex < columns.length) {
+			columns[columnIndex].endTime = event.endMinutes;
+		} else {
+			// If we've reached max columns, put in the first available column (may overlap)
+			columnIndex = 0;
+			columns[0].endTime = Math.max(columns[0].endTime, event.endMinutes);
+		}
+
+		eventsWithColumns.push({
+			...event,
+			column: columnIndex,
+		});
+	});
+
+	return {
+		events: eventsWithColumns,
+		totalColumns: Math.min(columns.length, MAX_COLUMNS),
+	};
 };
 
 const Schedule: React.FC = () => {
 	const { data: events, isLoading, error } = useAllEvents();
+	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
 
-	const schedule = useMemo(
-		() => (events ? convertEventsToSchedule(events) : {}),
-		[events]
+	// Ref for tracking scroll position of schedule section
+	const scheduleRef = useRef<HTMLDivElement>(null);
+
+	// State to track if component is mounted (client-side
+
+	const tempScroll = useScroll({
+		offset: ["1700px", "2500px"],
+	});
+
+	// pick the real scrollYProgress only after mount
+	const scrollYProgress = tempScroll.scrollYProgress;
+	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "70vw"]);
+
+	// Mobile detection
+	const [isMobile, setIsMobile] = useState(false);
+
+	useEffect(() => {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 1024); // lg breakpoint
+		};
+
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+		return () => window.removeEventListener("resize", checkMobile);
+	}, []);
+
+	// Determine if we should use 2-hour intervals (default to 1-hour if flag not found)
+	const useTwoHourIntervals = twoHourFlag?.isEnabled ?? false;
+
+	// State for category filtering - all categories selected by default
+	const [selectedCategories, setSelectedCategories] = useState<Set<EventType>>(
+		new Set(
+			Object.values(EventType).filter((type) => type !== EventType.checkIn)
+		) // Exclude check-in from default selection
 	);
+
+	// State for event details modal
+	const [selectedEvent, setSelectedEvent] = useState<ProcessedEvent | null>(
+		null
+	);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+
+	// State for active day tab
+	const [activeDay, setActiveDay] = useState<"Saturday" | "Sunday">("Saturday");
+
+	// Handle event click
+	const handleEventClick = (event: ProcessedEvent) => {
+		setSelectedEvent(event);
+		setIsModalOpen(true);
+	};
+
+	// Get original event data for modal
+	const getOriginalEvent = (
+		processedEvent: ProcessedEvent
+	): EventEntityResponse | undefined => {
+		if (!events) return undefined;
+		// Handle split events (those with "-part1" or "-part2" suffix)
+		const baseId = processedEvent.id.replace(/-part[12]$/, "");
+		return events.find((e) => e.id === baseId || e.id === processedEvent.id);
+	};
+
+	// Handle modal close
+	const handleModalClose = () => {
+		setIsModalOpen(false);
+		setSelectedEvent(null);
+	};
+
+	// Toggle category selection
+	const toggleCategory = (category: EventType) => {
+		setSelectedCategories((prev) => {
+			const newSet = new Set(prev);
+			if (newSet.has(category)) {
+				newSet.delete(category);
+			} else {
+				newSet.add(category);
+			}
+			return newSet;
+		});
+	};
+
+	const processedEvents = useMemo(() => {
+		if (!events)
+			return {
+				Saturday: { events: [], totalColumns: 1 },
+				Sunday: { events: [], totalColumns: 1 },
+			};
+
+		// Filter events by selected categories
+		const filteredEvents = events.filter((event) =>
+			selectedCategories.has(event.type)
+		);
+
+		const eventsByDay: {
+			Saturday: Omit<ProcessedEvent, "column">[];
+			Sunday: Omit<ProcessedEvent, "column">[];
+		} = {
+			Saturday: [],
+			Sunday: [],
+		};
+
+		filteredEvents.forEach((event) => {
+			const startTime = new Date(event.startTime);
+			const endTime = new Date(event.endTime);
+			const startDayOfWeek = startTime.getDay(); // 0 = Sunday, 6 = Saturday
+			const endDayOfWeek = endTime.getDay();
+
+			// Only process Saturday (6) and Sunday (0) events
+			if (
+				startDayOfWeek !== 0 &&
+				startDayOfWeek !== 6 &&
+				endDayOfWeek !== 0 &&
+				endDayOfWeek !== 6
+			)
+				return;
+
+			// Check if event crosses midnight (spans multiple days)
+			const crossesMidnight = startTime.getDate() !== endTime.getDate();
+
+			if (crossesMidnight) {
+				// Split event into two parts
+
+				// First part: from start time to end of day (23:59:59)
+				if (startDayOfWeek === 6 || startDayOfWeek === 0) {
+					const endOfDay = new Date(startTime);
+					endOfDay.setHours(23, 59, 59, 999);
+
+					const startDay = startDayOfWeek === 6 ? "Saturday" : "Sunday";
+					const firstPartDuration =
+						(endOfDay.getTime() - startTime.getTime()) / (1000 * 60);
+					const startMinutes =
+						startTime.getHours() * 60 + startTime.getMinutes();
+					const endMinutes = 23 * 60 + 59; // End of day
+
+					const firstPart: Omit<ProcessedEvent, "column"> = {
+						id: `${event.id}-part1`,
+						name: `${event.name} (Part 1)`,
+						type: event.type,
+						location: event.location.name,
+						startTime,
+						endTime: endOfDay,
+						day: startDay,
+						duration: firstPartDuration,
+						startMinutes,
+						endMinutes,
+					};
+
+					eventsByDay[startDay].push(firstPart);
+				}
+
+				// Second part: from start of next day (00:00) to end time
+				if (endDayOfWeek === 6 || endDayOfWeek === 0) {
+					const startOfDay = new Date(endTime);
+					startOfDay.setHours(0, 0, 0, 0);
+
+					const endDay = endDayOfWeek === 6 ? "Saturday" : "Sunday";
+					const secondPartDuration =
+						(endTime.getTime() - startOfDay.getTime()) / (1000 * 60);
+					const startMinutes = 0; // Start of day
+					const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+
+					const secondPart: Omit<ProcessedEvent, "column"> = {
+						id: `${event.id}-part2`,
+						name: `${event.name} (Part 2)`,
+						type: event.type,
+						location: event.location.name,
+						startTime: startOfDay,
+						endTime,
+						day: endDay,
+						duration: secondPartDuration,
+						startMinutes,
+						endMinutes,
+					};
+
+					eventsByDay[endDay].push(secondPart);
+				}
+			} else {
+				// Event doesn't cross midnight, process normally
+				const day = startDayOfWeek === 6 ? "Saturday" : "Sunday";
+				const duration =
+					(endTime.getTime() - startTime.getTime()) / (1000 * 60); // minutes
+				const startMinutes = startTime.getHours() * 60 + startTime.getMinutes();
+				const endMinutes = endTime.getHours() * 60 + endTime.getMinutes();
+
+				const processedEvent: Omit<ProcessedEvent, "column"> = {
+					id: event.id,
+					name: event.name,
+					type: event.type,
+					location: event.location.name,
+					startTime,
+					endTime,
+					day,
+					duration,
+					startMinutes,
+					endMinutes,
+				};
+
+				eventsByDay[day].push(processedEvent);
+			}
+		});
+
+		// Assign columns to prevent overlapping
+		const saturdayResult = assignColumns(eventsByDay.Saturday);
+		const sundayResult = assignColumns(eventsByDay.Sunday);
+
+		return {
+			Saturday: saturdayResult,
+			Sunday: sundayResult,
+		};
+	}, [events, selectedCategories]);
+
+	// Calculate time range to show
+	const timeRange = useMemo(() => {
+		if (!events || events.length === 0) return { start: 8, end: 22 }; // default 8 AM to 10 PM
+
+		let earliestHour = 23;
+		let latestHour = 0;
+
+		events.forEach((event) => {
+			const startHour = new Date(event.startTime).getHours();
+			const endHour = new Date(event.endTime).getHours();
+
+			earliestHour = Math.min(earliestHour, startHour);
+			latestHour = Math.max(latestHour, endHour);
+		});
+
+		// Add 1 hour padding on each side
+		return {
+			start: Math.max(0, earliestHour - 1),
+			end: Math.min(23, latestHour + 1),
+		};
+	}, [events]);
 
 	if (isLoading) {
 		return (
-			<div className="w-full flex justify-center items-center py-20">
-				<p className="text-xl text-white">Loading events...</p>
+			<div
+				ref={scheduleRef}
+				className="w-full flex justify-center items-center py-20"
+			>
+				<motion.p
+					className="text-xl text-[#048A81]"
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+					animate={{ opacity: [0.5, 1, 0.5] }}
+					transition={{ duration: 2, repeat: Infinity }}
+				>
+					Loading schedule...
+				</motion.p>
 			</div>
 		);
 	}
 
 	if (error || !events) {
 		return (
-			<div className="w-full flex justify-center items-center py-20">
-				<p className="text-xl text-red-500">Error loading events.</p>
+			<div
+				ref={scheduleRef}
+				className="w-full flex justify-center items-center py-20"
+			>
+				<p
+					className="text-xl text-[#A20021]"
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+				>
+					Error loading schedule.
+				</p>
 			</div>
 		);
 	}
 
-	// Filter out "CheckIn" and sort categories with "Food" first.
-	const categories = Object.keys(schedule)
-		.filter((category) => category !== "CheckIn")
-		.sort((a, b) => {
-			if (a === "Food") return -1;
-			if (b === "Food") return 1;
-			return a.localeCompare(b);
-		});
-
 	return (
-		<div
-			className="w-full max-w-5xl mx-auto px-4 pt-12 mt-16 rounded-2xl"
+		<section
+			ref={scheduleRef}
+			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
+			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
 			id="schedule"
 		>
-			<div className="text-center mb-8">
-				<h1 className="text-4xl md:text-5xl font-['Rye'] text-[#A20021]">
+			{/* Animated Surfboard - Scroll-linked */}
+			<motion.div
+				className="absolute z-50
+				md:top-[-300px]
+				top-[0px]
+				"
+				style={{
+					left: surfboardX,
+					width: "clamp(120px, 15vw, 250px)",
+					height: "clamp(80px, 15vw, 250px)",
+				}}
+				initial={{ opacity: 1, rotate: -15 }}
+				animate={{ opacity: 1, y: [-20, 20, -20] }}
+				transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+			>
+				<Image
+					src="/f25/surfboard.png"
+					alt="Surfboard"
+					className="object-contain"
+					fill
+				/>
+			</motion.div>
+
+			{/* Header */}
+			<motion.div
+				className="text-center mb-8 z-10 relative"
+				initial={{ opacity: 0, y: -30 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8 }}
+			>
+				<h1
+					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+				>
 					Schedule
 				</h1>
-			</div>
-			<Tab.Group>
-				<Tab.List className="flex justify-center items-center mx-auto space-x-1 md:space-x-2 w-full max-w-md pb-2 border-b border-gray-300">
-					{categories.map((category) => (
-						<Tab
-							key={category}
-							className={({ selected }) =>
-								clsx(
-									"whitespace-nowrap px-4 py-2 md:px-8 md:py-4 rounded-t-lg font-semibold text-base md:text-xl transition-colors duration-300",
-									selected
-										? "bg-[#A20021] text-white border-b-4 border-[#EFA00B]"
-										: "bg-white/80 text-[#A20021] border border-[#A20021]"
-								)
-							}
+				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-6"></div>
+
+				{/* Legend - Conditional rendering based on screen size */}
+				{isMobile ? (
+					/* Mobile: Traditional Buttons */
+					<div className="flex flex-wrap justify-center gap-3 mb-6">
+						{Object.entries(eventTypeColors).map(([type, colors], index) => {
+							const eventType = type as EventType;
+							const isSelected = selectedCategories.has(eventType);
+
+							return (
+								<motion.button
+									key={type}
+									onClick={() => toggleCategory(eventType)}
+									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${
+										isSelected
+											? `${colors.bg} ${colors.border} text-white`
+											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
+									}`}
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+									initial={{ opacity: 0, scale: 0.8 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ duration: 0.4, delay: index * 0.1 }}
+									whileHover={{ scale: 1.05 }}
+									whileTap={{ scale: 0.95 }}
+								>
+									{colors.label}
+								</motion.button>
+							);
+						})}
+					</div>
+				) : (
+					/* Desktop: Jellyfish Buttons */
+					<div className="flex flex-wrap justify-center gap-6 mb-6">
+						{Object.entries(eventTypeColors).map(([type, colors], index) => {
+							const eventType = type as EventType;
+							const isSelected = selectedCategories.has(eventType);
+
+							return (
+								<motion.button
+									key={type}
+									onClick={() => toggleCategory(eventType)}
+									className="relative flex flex-col items-center cursor-pointer group"
+									initial={{ opacity: 0, scale: 0.8 }}
+									animate={{ opacity: 1, scale: 1 }}
+									transition={{ duration: 0.4 }}
+									whileHover={{ scale: 1 }}
+									whileTap={{ scale: 1 }}
+								>
+									{/* Jellyfish Image */}
+									<div className="relative w-60 h-60 mb-2">
+										<Image
+											src={colors.jellyfishAsset}
+											alt={`${colors.label} Jellyfish`}
+											fill
+											className={`object-contain transition-all duration-300 ${
+												isSelected ? "" : "grayscale"
+											} group-hover:scale-110`}
+										/>
+									</div>
+
+									{/* Text Overlay - Positioned upward */}
+									<div
+										className="absolute inset-0 flex items-center justify-center pointer-events-none"
+										style={{ transform: "translateY(-70px) translateX(-5px)" }}
+									>
+										<span
+											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${
+												isSelected
+													? `text-white ${colors.bg} border-2 ${colors.border}`
+													: "text-gray-600 bg-white/70"
+											}`}
+											style={{
+												fontFamily: "Monomaniac One, monospace",
+												fontSize: "clamp(12px, 2vw, 16px)",
+											}}
+										>
+											{colors.label}
+										</span>
+									</div>
+								</motion.button>
+							);
+						})}
+					</div>
+				)}
+
+				{/* Show selected count */}
+				<div className="text-center mb-4">
+					<span
+						className="text-sm text-[#A20021]/70 font-medium"
+						style={{ fontFamily: "Monomaniac One, monospace" }}
+					>
+						{selectedCategories.size === Object.keys(EventType).length
+							? "Showing all categories"
+							: `Showing ${selectedCategories.size} of ${Object.keys(EventType).length} categories`}
+					</span>
+				</div>
+			</motion.div>
+
+			{/* Calendar Grid */}
+			<motion.div
+				className="w-full max-w-5xl bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
+				initial={{ opacity: 0, y: 50 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 0.8, delay: 0.3 }}
+			>
+				{/* Day Tabs - Integrated Header */}
+				<div className="sticky top-0 z-20 bg-[#215172] border-b-4 border-[#1a3f5c]">
+					<div className="flex">
+						{(["Saturday", "Sunday"] as const).map((day) => (
+							<motion.button
+								key={day}
+								onClick={() => setActiveDay(day)}
+								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
+									activeDay === day
+										? "bg-[#215172] text-white"
+										: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
+								}`}
+								style={{ fontFamily: "Monomaniac One, monospace" }}
+								whileHover={{ scale: 1.02 }}
+								whileTap={{ scale: 0.98 }}
+								initial={{ opacity: 0, y: -20 }}
+								animate={{ opacity: 1, y: 0 }}
+								transition={{ duration: 0.5 }}
+							>
+								<div
+									className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}
+								>
+									{day}
+								</div>
+								<div
+									className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}
+								>
+									{day === "Saturday"
+										? `${processedEvents.Saturday.events.length} event${processedEvents.Saturday.events.length !== 1 ? "s" : ""}`
+										: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`}
+								</div>
+							</motion.button>
+						))}
+					</div>
+				</div>
+
+				<div className="h-[600px] flex flex-col">
+					<AnimatePresence mode="wait">
+						<motion.div
+							key={activeDay}
+							initial={{ opacity: 0, x: 50 }}
+							animate={{ opacity: 1, x: 0 }}
+							exit={{ opacity: 0, x: -50 }}
+							transition={{ duration: 0.3 }}
+							className="h-full"
 						>
-							{category === "Food" ? "General" : category}
-						</Tab>
-					))}
-				</Tab.List>
-				<Tab.Panels className="mt-4">
-					{categories.map((category, idx) => (
-						<Tab.Panel
-							key={idx}
-							className="bg-white/25 backdrop-blur-sm p-6 rounded-xl shadow-md border-2 border-[#EFA00B]"
-						>
-							{schedule[category].map((item, itemIdx, arr) => (
-								<React.Fragment key={itemIdx}>
-									{(itemIdx === 0 || item.day !== arr[itemIdx - 1].day) && (
-										<DayIndicator day={item.day} />
-									)}
-									<EventItem name={item.name} time={item.time} />
-								</React.Fragment>
-							))}
-						</Tab.Panel>
-					))}
-				</Tab.Panels>
-			</Tab.Group>
-		</div>
+							<DayColumn
+								day={activeDay}
+								events={
+									activeDay === "Saturday"
+										? processedEvents.Saturday.events
+										: processedEvents.Sunday.events
+								}
+								startHour={timeRange.start}
+								endHour={timeRange.end}
+								totalColumns={
+									activeDay === "Saturday"
+										? processedEvents.Saturday.totalColumns
+										: processedEvents.Sunday.totalColumns
+								}
+								useTwoHourIntervals={useTwoHourIntervals}
+								onEventClick={handleEventClick}
+								isMobile={isMobile}
+								allEvents={{
+									Saturday: processedEvents.Saturday.events,
+									Sunday: processedEvents.Sunday.events,
+								}}
+								isScrollable={true}
+							/>
+						</motion.div>
+					</AnimatePresence>
+				</div>
+			</motion.div>
+
+			{/* Event Details Modal */}
+			<EventDetailsModal
+				event={selectedEvent}
+				isOpen={isModalOpen}
+				onClose={handleModalClose}
+				originalEvent={
+					selectedEvent ? getOriginalEvent(selectedEvent) : undefined
+				}
+			/>
+		</section>
 	);
 };
 
