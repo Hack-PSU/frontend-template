@@ -141,7 +141,7 @@ export default function Profile() {
 	}
 
 	return (
-		<div className="min-h-screen bg-gradient-to-br py-8 px-4">
+		<div className="min-h-screen bg-transparent py-8 px-4">
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
 				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
