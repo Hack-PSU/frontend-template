@@ -297,7 +297,8 @@ enthusiasts to join our team and help create amazing experiences for
 thousands of hackers.
 
 If you are interested in joining us, we would love to hear from you!
-Our applications can be found either by going to our instagram bio or shooting us an email.
+Our applications can by going to https://go.hackpsu.org/apply
+You can also reach out to us directly:
    • Email: team@hackpsu.org
    • Discord: http://discord.hackpsu.org
    • Mention you found this console message!
