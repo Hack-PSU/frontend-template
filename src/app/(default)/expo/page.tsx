@@ -179,14 +179,6 @@ export default function ExpoPage() {
 									</CardTitle>
 								</CardHeader>
 								<CardContent className="space-y-3">
-									<div className="space-y-2">
-										<Label className="text-sm font-medium text-gray-600">
-											Project ID
-										</Label>
-										<p className="text-sm font-mono bg-gray-100 px-2 py-1 rounded">
-											{project.id}
-										</p>
-									</div>
 									{project.categories && (
 										<div className="space-y-2">
 											<Label className="text-sm font-medium text-gray-600">
