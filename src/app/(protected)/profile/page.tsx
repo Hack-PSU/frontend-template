@@ -31,6 +31,7 @@ import {
 	Eye,
 	EyeOff,
 	Loader2,
+	FolderOpen,
 } from "lucide-react";
 
 export default function Profile() {
@@ -122,6 +123,10 @@ export default function Profile() {
 			router.push("/");
 			toast.error("Please sign in to submit a reimbursement form.");
 		}
+	};
+
+	const handleExpo = () => {
+		router.push("/expo");
 	};
 
 	if (isLoading) {
@@ -275,6 +280,16 @@ export default function Profile() {
 						<CardDescription>Manage your HackPSU experience</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
+						<Button
+							onClick={handleExpo}
+							className="w-full"
+							variant="default"
+							size="lg"
+						>
+							<FolderOpen className="mr-2 h-4 w-4" />
+							View Project Expo
+						</Button>
+
 						<Button
 							onClick={handleReimbursement}
 							className="w-full"
