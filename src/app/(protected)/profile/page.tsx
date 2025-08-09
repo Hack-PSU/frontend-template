@@ -32,7 +32,6 @@ import {
 	EyeOff,
 	Loader2,
 	FolderOpen,
-	Users,
 } from "lucide-react";
 
 export default function Profile() {
@@ -128,10 +127,6 @@ export default function Profile() {
 
 	const handleExpo = () => {
 		router.push("/expo");
-	};
-
-	const handleTeamManagement = () => {
-		router.push("/teams");
 	};
 
 	if (isLoading) {
@@ -285,16 +280,6 @@ export default function Profile() {
 						<CardDescription>Manage your HackPSU experience</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
-						<Button
-							onClick={handleTeamManagement}
-							className="w-full"
-							variant="default"
-							size="lg"
-						>
-							<Users className="mr-2 h-4 w-4" />
-							Team Management
-						</Button>
-
 						<Button
 							onClick={handleExpo}
 							className="w-full"
