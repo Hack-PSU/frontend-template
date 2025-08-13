@@ -2166,9 +2166,9 @@
     rimraf "^6.0.1"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.1.1.tgz#5e4beae4e7c1c8f6aa38b88dd3c9b1b8c382c035"
-  integrity sha512-HPqIYZWwnMYQoSaodzVtTiIKYfGJzcOJm2dnfGvPP37Ke3UBMZhHiLtDtQK844nc7tW9YnroBZROXxCmxzy0yw==
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.1.2.tgz#96edcd25e554cc256c018f9cc10321b5a9ce6681"
+  integrity sha512-ZKn2Ic/CFxrHL0Rjc6a+Qea8q1N0DzDZcRf5LHA1PQdP79dlxq9UuzMPeOJk320zALpd5X8lTx+Hog0LZoD1KQ==
   dependencies:
     "@posthog/cli" "^0.3.6"
 
