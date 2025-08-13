@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 			"Join HackPSU Fall 2025 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
 		images: [
 			{
-				url: "/logo.png",
+				url: "/logo.svg",
 				alt: "HackPSU Fall 2025 Logo",
 			},
 		],
