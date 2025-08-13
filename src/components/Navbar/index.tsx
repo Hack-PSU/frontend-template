@@ -203,7 +203,7 @@ const Navbar: React.FC = () => {
 									whileTap={{ scale: 0.95 }}
 								>
 									<Image
-										src="/logo.png"
+										src="/logo.svg"
 										alt="HackPSU Logo"
 										width={100}
 										height={100}
