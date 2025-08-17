@@ -54,7 +54,7 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 		| "hackathonId"
 		| "time"
 		| "shareAddressSponsors"
-		| "travelReimbursement"
+		| "driving"
 		| "shareAddressMlh"
 	> & {
 		resume: File | null;
@@ -125,7 +125,7 @@ export default function RegistrationPage() {
 		academicYear: "",
 		codingExperience: "",
 		expectations: "",
-		driving: false,
+		travelReimbursement: false,
 		firstHackathon: false,
 		mlhCoc: false,
 		mlhDcp: false,
@@ -363,7 +363,7 @@ export default function RegistrationPage() {
 			academicYear: formData.academicYear,
 			codingExperience: formData.codingExperience,
 			expectations: formData.expectations,
-			driving: formData.driving,
+			travelReimbursement: formData.travelReimbursement,
 			firstHackathon: formData.firstHackathon,
 			mlhCoc: formData.mlhCoc,
 			mlhDcp: formData.mlhDcp,
@@ -707,13 +707,30 @@ export default function RegistrationPage() {
 
 													<div className="flex items-center justify-between rounded-lg border p-4">
 														<div className="space-y-0.5">
-															<Label>Will you be driving to the event?</Label>
+															<Label>
+																Will you be requesting travel reimbursement?
+															</Label>
+															<p className="text-sm text-muted-foreground">
+																Please review our{" "}
+																<a
+																	href="/travel"
+																	target="_blank"
+																	rel="noopener noreferrer"
+																	className="text-primary underline"
+																>
+																	travel policy
+																</a>{" "}
+																if you will be requesting travel reimbursement.
+															</p>
 														</div>
 														<Switch
-															name="driving"
-															checked={formData.driving}
+															name="travelReimbursement"
+															checked={formData.travelReimbursement}
 															onCheckedChange={(checked) =>
-																handleSwitchChange("driving", checked)
+																handleSwitchChange(
+																	"travelReimbursement",
+																	checked
+																)
 															}
 														/>
 													</div>
