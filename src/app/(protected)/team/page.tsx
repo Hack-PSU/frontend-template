@@ -46,7 +46,7 @@ export default function Team() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams } = useAllTeams();
+	const { data: teams, error: teamsError } = useAllTeams();
 
 	const { mutateAsync: createTeam, isPending: isCreating } = useCreateTeam();
 	const { mutateAsync: updateTeam, isPending: isUpdating } = useUpdateTeam();
@@ -71,13 +71,30 @@ export default function Team() {
 	);
 
 	// Check if team has submitted a project (which locks the team)
-	const { data: teamProjects } = useProjectsByTeamId(userTeam?.id || "");
+	const { data: teamProjects, error: projectsError } = useProjectsByTeamId(
+		userTeam?.id || ""
+	);
 	const hasSubmittedProject = teamProjects && teamProjects.length > 0;
 
 	useEffect(() => {
 		if (isUserLoading) return;
 		if (!userData || !userData.registration) router.push("/register");
 	}, [userData, router, isUserLoading]);
+
+	// Show error toasts for API failures
+	useEffect(() => {
+		if (teamsError) {
+			toast.error("Failed to load teams. Please refresh the page.");
+		}
+	}, [teamsError]);
+
+	useEffect(() => {
+		if (projectsError) {
+			toast.error(
+				"Failed to check project status. Some features may not work correctly."
+			);
+		}
+	}, [projectsError]);
 
 	const handleCreateTeam = async () => {
 		if (!teamName.trim()) {
@@ -125,6 +142,20 @@ export default function Team() {
 			return;
 		}
 
+		// Basic email validation
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(userEmail)) {
+			toast.error("Please enter a valid email address");
+			return;
+		}
+
+		// Check team capacity
+		const currentMembers = getTeamMembers(userTeam).length;
+		if (currentMembers >= 5) {
+			toast.error("Team is already at maximum capacity (5 members)");
+			return;
+		}
+
 		try {
 			await addUserByEmail({
 				id: userTeam.id,
@@ -133,7 +164,7 @@ export default function Team() {
 			toast.success("User added to team successfully!");
 			setShowAddUserDialog(false);
 			setUserEmail("");
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Error adding user:", error);
 			toast.error("Failed to add user. Please check the email and try again.");
 		}

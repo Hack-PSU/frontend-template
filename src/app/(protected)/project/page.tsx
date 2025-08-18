@@ -39,7 +39,7 @@ export default function Project() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams } = useAllTeams();
+	const { data: teams, error: teamsError } = useAllTeams();
 
 	const [projectName, setProjectName] = useState("");
 	const [devpostLink, setDevpostLink] = useState("");
@@ -58,8 +58,11 @@ export default function Project() {
 		].includes(userData?.id)
 	);
 
-	const { data: teamProjects, isLoading: isProjectsLoading } =
-		useProjectsByTeamId(userTeam?.id || "");
+	const {
+		data: teamProjects,
+		isLoading: isProjectsLoading,
+		error: projectsError,
+	} = useProjectsByTeamId(userTeam?.id || "");
 	const existingProject = teamProjects?.[0]; // Teams can only have one project
 
 	const { mutateAsync: createProject, isPending: isCreating } =
@@ -68,13 +71,37 @@ export default function Project() {
 		usePatchProject();
 
 	// Feature flag check - use same flag as reimbursement for now
-	const { data: projectSubmissionFlag, isLoading: flagLoading } =
-		useFlagState("ProjectSubmission");
+	const {
+		data: projectSubmissionFlag,
+		isLoading: flagLoading,
+		error: flagError,
+	} = useFlagState("ProjectSubmission");
 
 	useEffect(() => {
 		if (isUserLoading) return;
 		if (!userData || !userData.registration) router.push("/register");
 	}, [userData, router, isUserLoading]);
+
+	// Show error toasts for API failures
+	useEffect(() => {
+		if (teamsError) {
+			toast.error("Failed to load team data. Please refresh the page.");
+		}
+	}, [teamsError]);
+
+	useEffect(() => {
+		if (projectsError) {
+			toast.error("Failed to load project data. Please refresh the page.");
+		}
+	}, [projectsError]);
+
+	useEffect(() => {
+		if (flagError) {
+			toast.error(
+				"Failed to check submission status. Please refresh the page."
+			);
+		}
+	}, [flagError]);
 
 	// Initialize form with existing project data
 	useEffect(() => {
@@ -122,6 +149,12 @@ export default function Project() {
 		// Validate devpost link if provided
 		if (devpostLink && !isValidUrl(devpostLink)) {
 			toast.error("Please enter a valid Devpost URL");
+			return;
+		}
+
+		// Additional validation
+		if (!userTeam?.isActive && !hasSubmittedProject) {
+			toast.error("Your team is not active. Cannot submit project.");
 			return;
 		}
 
@@ -235,7 +268,9 @@ export default function Project() {
 								{!isProjectSubmissionEnabled ? (
 									<>
 										<Schedule className="h-5 w-5" />
-										<span className="text-sm font-medium">Project submissions not yet open</span>
+										<span className="text-sm font-medium">
+											Project submissions not yet open
+										</span>
 									</>
 								) : (
 									<>
@@ -362,11 +397,14 @@ export default function Project() {
 										<p className="text-sm text-yellow-800">
 											{!isProjectSubmissionEnabled ? (
 												<>
-													<strong>Project submissions closed:</strong> Project submissions are not yet open. They will be available during the hackathon event.
+													<strong>Project submissions closed:</strong> Project
+													submissions are not yet open. They will be available
+													during the hackathon event.
 												</>
 											) : (
 												<>
-													<strong>Team is locked:</strong> Your team has been locked and project submissions are no longer allowed.
+													<strong>Team is locked:</strong> Your team has been
+													locked and project submissions are no longer allowed.
 												</>
 											)}
 										</p>
@@ -392,8 +430,8 @@ export default function Project() {
 								</p>
 								<p className="text-sm text-gray-600">
 									Your project &quot;{existingProject.name}&quot; has been
-									submitted for judging. You can update the project name and categories, but
-									other details are final.
+									submitted for judging. You can update the project name and
+									categories, but other details are final.
 								</p>
 							</div>
 						</CardContent>
