@@ -7,8 +7,10 @@ import {
 	deleteScore,
 	getAllProjects,
 	getProject,
+	getProjectsByTeamId,
 	createProject,
-	updateProject,
+	patchProject,
+	replaceProject,
 	deleteProject,
 	getProjectBreakdown,
 	assignJudging,
@@ -18,6 +20,8 @@ import {
 	ScoreCreateEntity,
 	ScoreUpdateEntity,
 	ProjectEntity,
+	ProjectCreateEntity,
+	ProjectPatchEntity,
 	ProjectBreakdownEntity,
 	JudgingAssignmentEntity,
 } from "./entity";
@@ -27,6 +31,8 @@ export const judgingQueryKeys = {
 	scoreDetail: (id: number) => ["judging", "score", id] as const,
 	allProjects: ["judging", "projects"] as const,
 	projectDetail: (id: number) => ["judging", "project", id] as const,
+	projectsByTeam: (teamId: string) =>
+		["judging", "projects", "team", teamId] as const,
 	projectBreakdown: ["judging", "breakdown"] as const,
 };
 
@@ -91,23 +97,48 @@ export function useProject(id: number) {
 	});
 }
 
+export function useProjectsByTeamId(teamId: string) {
+	return useQuery<ProjectEntity[]>({
+		queryKey: judgingQueryKeys.projectsByTeam(teamId),
+		queryFn: () => getProjectsByTeamId(teamId),
+		enabled: Boolean(teamId),
+	});
+}
+
 export function useCreateProject() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: (data: Omit<ProjectEntity, "id">) => createProject(data),
+		mutationFn: (data: ProjectCreateEntity) => createProject(data),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: judgingQueryKeys.allProjects });
 		},
 	});
 }
 
-export function useUpdateProject() {
+export function usePatchProject() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: ({ id, data }: { id: number; data: Partial<ProjectEntity> }) =>
-			updateProject(id, data),
-		onSuccess: () => {
+		mutationFn: ({ id, data }: { id: number; data: ProjectPatchEntity }) =>
+			patchProject(id, data),
+		onSuccess: (updated) => {
 			queryClient.invalidateQueries({ queryKey: judgingQueryKeys.allProjects });
+			queryClient.invalidateQueries({
+				queryKey: judgingQueryKeys.projectDetail(updated.id),
+			});
+		},
+	});
+}
+
+export function useReplaceProject() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: ({ id, data }: { id: number; data: ProjectCreateEntity }) =>
+			replaceProject(id, data),
+		onSuccess: (updated) => {
+			queryClient.invalidateQueries({ queryKey: judgingQueryKeys.allProjects });
+			queryClient.invalidateQueries({
+				queryKey: judgingQueryKeys.projectDetail(updated.id),
+			});
 		},
 	});
 }

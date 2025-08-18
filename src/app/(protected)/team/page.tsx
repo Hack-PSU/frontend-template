@@ -11,6 +11,7 @@ import {
 	useAddUserToTeamByEmail,
 	TeamEntity,
 } from "@/lib/api/team";
+import { useProjectsByTeamId } from "@/lib/api/judging";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -68,6 +69,10 @@ export default function Team() {
 			team.member5,
 		].includes(userData?.id)
 	);
+
+	// Check if team has submitted a project (which locks the team)
+	const { data: teamProjects } = useProjectsByTeamId(userTeam?.id || "");
+	const hasSubmittedProject = teamProjects && teamProjects.length > 0;
 
 	useEffect(() => {
 		if (isUserLoading) return;
@@ -195,6 +200,7 @@ export default function Team() {
 
 	const canModifyTeam =
 		userTeam?.isActive &&
+		!hasSubmittedProject &&
 		[
 			userTeam.member1,
 			userTeam.member2,
@@ -283,10 +289,14 @@ export default function Team() {
 								? "Team management and member overview"
 								: "Create or join a team for HackPSU"}
 						</CardDescription>
-						{userTeam && !userTeam.isActive && (
+						{userTeam && (!userTeam.isActive || hasSubmittedProject) && (
 							<div className="flex items-center justify-center space-x-2 mt-2 text-yellow-400">
 								<Lock className="h-5 w-5" />
-								<span className="text-sm font-medium">Team is locked</span>
+								<span className="text-sm font-medium">
+									{hasSubmittedProject
+										? "Team locked - Project submitted"
+										: "Team is locked"}
+								</span>
 							</div>
 						)}
 					</CardHeader>
@@ -357,7 +367,7 @@ export default function Team() {
 									</Button>
 								)}
 
-								{userTeam.isActive && (
+								{userTeam.isActive && !hasSubmittedProject && (
 									<>
 										<Separator />
 										<Button
@@ -377,11 +387,13 @@ export default function Team() {
 									</>
 								)}
 
-								{!userTeam.isActive && (
+								{(!userTeam.isActive || hasSubmittedProject) && (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
-											<strong>Team is locked:</strong> Your team has been locked
-											and no further changes can be made.
+											<strong>Team is locked:</strong>
+											{hasSubmittedProject
+												? " Your team has been locked because a project has been submitted. No further changes can be made."
+												: " Your team has been locked and no further changes can be made."}
 										</p>
 									</div>
 								)}

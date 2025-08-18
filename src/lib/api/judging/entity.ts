@@ -20,7 +20,24 @@ export interface ProjectEntity {
 	name: string;
 	hackathonId: string;
 	categories?: string;
+	teamId?: string;
+	devpostLink?: string;
 }
+
+export interface ProjectCreateEntity
+	extends Omit<ProjectEntity, "id" | "hackathonId"> {
+	hackathonId?: string;
+}
+
+export interface ProjectPatchEntity extends Partial<ProjectCreateEntity> {}
+
+export const PROJECT_CATEGORIES = [
+	"Machine Learning",
+	"Entrepreneurship",
+	"10th Anniversary: Timeless Tech",
+] as const;
+
+export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
 
 export interface ScoreCreateEntity extends Omit<ScoreEntity, "id"> {}
 
