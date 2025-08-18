@@ -8,6 +8,7 @@ import {
 	useCreateWalletPass,
 	useCreateAppleWalletPass,
 } from "@/lib/api/wallet/hook";
+import { useAllTeams } from "@/lib/api/team";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
@@ -32,12 +33,15 @@ import {
 	EyeOff,
 	Loader2,
 	FolderOpen,
+	Users,
+	Lock,
 } from "lucide-react";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
+	const { data: teams } = useAllTeams();
 
 	// Mutations for wallet integration
 	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
@@ -127,6 +131,32 @@ export default function Profile() {
 
 	const handleExpo = () => {
 		router.push("/expo");
+	};
+
+	const handleTeam = () => {
+		router.push("/team");
+	};
+
+	// Find user's team
+	const userTeam = teams?.find((team) =>
+		[
+			team.member1,
+			team.member2,
+			team.member3,
+			team.member4,
+			team.member5,
+		].includes(userData?.id)
+	);
+
+	const getTeamMembers = () => {
+		if (!userTeam) return [];
+		return [
+			userTeam.member1,
+			userTeam.member2,
+			userTeam.member3,
+			userTeam.member4,
+			userTeam.member5,
+		].filter(Boolean);
 	};
 
 	if (isLoading) {
@@ -270,6 +300,79 @@ export default function Profile() {
 								)}
 							</div>
 						</div>
+					</CardContent>
+				</Card>
+
+				{/* Team Section */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center space-x-2">
+							<Users className="h-6 w-6" />
+							<span>Your Team</span>
+						</CardTitle>
+						<CardDescription>
+							{userTeam
+								? "Team information and management"
+								: "Create or join a team for HackPSU"}
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						{userTeam ? (
+							<>
+								<div className="flex items-center justify-between">
+									<div>
+										<h3 className="font-semibold text-lg">{userTeam.name}</h3>
+										<p className="text-sm text-gray-500">
+											Team ID: {userTeam.id}
+										</p>
+									</div>
+									{!userTeam.isActive && (
+										<div className="flex items-center space-x-2 text-yellow-600">
+											<Lock className="h-4 w-4" />
+											<span className="text-sm font-medium">Locked</span>
+										</div>
+									)}
+								</div>
+								<div className="space-y-2">
+									<p className="text-sm font-medium">
+										Members ({getTeamMembers().length}/5):
+									</p>
+									<div className="space-y-1">
+										{getTeamMembers().map((memberId) => (
+											<div key={memberId} className="text-sm text-gray-600">
+												{memberId === userData?.id
+													? `${memberId} (You)`
+													: memberId}
+											</div>
+										))}
+									</div>
+								</div>
+								<Button
+									onClick={handleTeam}
+									className="w-full"
+									variant="default"
+									size="lg"
+								>
+									<Users className="mr-2 h-4 w-4" />
+									Manage Team
+								</Button>
+							</>
+						) : (
+							<>
+								<p className="text-gray-600">
+									You're not part of any team yet.
+								</p>
+								<Button
+									onClick={handleTeam}
+									className="w-full"
+									variant="default"
+									size="lg"
+								>
+									<Users className="mr-2 h-4 w-4" />
+									Create or Join Team
+								</Button>
+							</>
+						)}
 					</CardContent>
 				</Card>
 
