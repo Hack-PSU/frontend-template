@@ -1,4 +1,5 @@
 import { AuthGuard, Role } from "@/lib/providers/AuthGuard";
+import { Toaster } from "sonner";
 
 export default function DashboardLayout({
 	children,
@@ -8,7 +9,10 @@ export default function DashboardLayout({
 	return (
 		<>
 			{" "}
-			<AuthGuard config={{ minimumRole: Role.NONE }}>{children}</AuthGuard>{" "}
+			<Toaster richColors />
+			<AuthGuard config={{ minimumRole: Role.NONE }}>{children}</AuthGuard>
+			<Toaster />
+			{" "}
 		</>
 	);
 }
