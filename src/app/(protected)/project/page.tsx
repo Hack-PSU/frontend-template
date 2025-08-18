@@ -141,10 +141,6 @@ export default function Project() {
 			return;
 		}
 
-		if (selectedCategories.length === 0) {
-			toast.error("Please select at least one category");
-			return;
-		}
 
 		// Validate Devpost link - now required
 		if (!devpostLink.trim()) {
@@ -168,7 +164,7 @@ export default function Project() {
 		try {
 			const projectData = {
 				name: projectName.trim(),
-				categories: selectedCategories.join(", "),
+				categories: selectedCategories.length > 0 ? selectedCategories.join(", ") : undefined,
 				teamId: userTeam.id,
 				devpostLink: devpostLink.trim(),
 			};
@@ -203,6 +199,7 @@ export default function Project() {
 
 	const isProjectSubmissionEnabled = projectSubmissionFlag?.isEnabled ?? false;
 	const canSubmitProject = userTeam?.isActive && isProjectSubmissionEnabled;
+	const canUpdateProject = userTeam?.isActive && isProjectSubmissionEnabled;
 	const hasSubmittedProject = !!existingProject;
 
 	if (isLoading || flagLoading) {
@@ -302,8 +299,8 @@ export default function Project() {
 						</CardTitle>
 						<CardDescription>
 							{hasSubmittedProject
-								? "Update your project information. Ensure categories match your Devpost submission."
-								: "Enter your project information. Categories must match your Devpost submission."}
+								? "Update your project information."
+								: "Enter your project information."}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-6">
@@ -322,7 +319,7 @@ export default function Project() {
 										placeholder="Enter your project name"
 										value={projectName}
 										onChange={(e) => setProjectName(e.target.value)}
-										disabled={!canSubmitProject && !hasSubmittedProject}
+										disabled={!canUpdateProject}
 									/>
 								</div>
 
@@ -335,13 +332,13 @@ export default function Project() {
 										placeholder="https://devpost.com/software/your-project"
 										value={devpostLink}
 										onChange={(e) => setDevpostLink(e.target.value)}
-										disabled={!canSubmitProject && !hasSubmittedProject}
+										disabled={!canUpdateProject}
 									/>
 								</div>
 
 								{/* Categories */}
 								<div className="space-y-4">
-									<Label>Categories * (Select all that apply)</Label>
+									<Label>Categories (Optional - Select if applicable)</Label>
 									<div className="space-y-3">
 										{PROJECT_CATEGORIES.map((category) => (
 											<div
@@ -354,7 +351,7 @@ export default function Project() {
 													onCheckedChange={(checked) =>
 														handleCategoryChange(category, checked as boolean)
 													}
-													disabled={!canSubmitProject}
+													disabled={!canUpdateProject}
 												/>
 												<Label
 													htmlFor={category}
@@ -380,7 +377,7 @@ export default function Project() {
 									</div>
 								</div>
 
-								{(canSubmitProject || hasSubmittedProject) && (
+								{(canSubmitProject || (hasSubmittedProject && canUpdateProject)) && (
 									<>
 										<Separator />
 										<Button
@@ -399,13 +396,13 @@ export default function Project() {
 									</>
 								)}
 
-								{!canSubmitProject && !hasSubmittedProject && (
+								{(!canSubmitProject && !hasSubmittedProject) || (hasSubmittedProject && !canUpdateProject) ? (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
 											{!isProjectSubmissionEnabled ? (
 												<>
 													<strong>Project submissions closed:</strong> Project
-													submissions are not yet open.
+													submissions and updates are not available.
 												</>
 											) : (
 												<>
@@ -415,7 +412,7 @@ export default function Project() {
 											)}
 										</p>
 									</div>
-								)}
+								) : null}
 							</>
 						)}
 					</CardContent>
