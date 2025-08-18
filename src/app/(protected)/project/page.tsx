@@ -32,7 +32,7 @@ import {
 	Lock,
 	CheckCircle,
 	AlertCircle,
-	Schedule,
+	Calendar,
 } from "lucide-react";
 
 export default function Project() {
@@ -267,7 +267,7 @@ export default function Project() {
 							<div className="flex items-center justify-center space-x-2 mt-2 text-yellow-400">
 								{!isProjectSubmissionEnabled ? (
 									<>
-										<Schedule className="h-5 w-5" />
+										<Calendar className="h-5 w-5" />
 										<span className="text-sm font-medium">
 											Project submissions not yet open
 										</span>
