@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe } from "@/lib/api/user/hook";
+import { useUserInfoMe, useUser } from "@/lib/api/user/hook";
 import {
 	useCreateWalletPass,
 	useCreateAppleWalletPass,
@@ -157,6 +157,27 @@ export default function Profile() {
 			userTeam.member4,
 			userTeam.member5,
 		].filter(Boolean);
+	};
+
+	const TeamMemberDisplay = ({ memberId }: { memberId: string }) => {
+		const { data: memberData, isLoading } = useUser(memberId);
+
+		if (isLoading) {
+			return <span className="text-sm text-gray-600">Loading...</span>;
+		}
+
+		if (!memberData) {
+			return <span className="text-sm text-gray-600">Unknown User</span>;
+		}
+
+		const displayName = `${memberData.firstName} ${memberData.lastName}`;
+		const isCurrentUser = memberId === userData?.id;
+
+		return (
+			<div className="text-sm text-gray-600">
+				{isCurrentUser ? `${displayName} (You)` : displayName}
+			</div>
+		);
 	};
 
 	if (isLoading) {
@@ -322,9 +343,6 @@ export default function Profile() {
 								<div className="flex items-center justify-between">
 									<div>
 										<h3 className="font-semibold text-lg">{userTeam.name}</h3>
-										<p className="text-sm text-gray-500">
-											Team ID: {userTeam.id}
-										</p>
 									</div>
 									{!userTeam.isActive && (
 										<div className="flex items-center space-x-2 text-yellow-600">
@@ -339,11 +357,7 @@ export default function Profile() {
 									</p>
 									<div className="space-y-1">
 										{getTeamMembers().map((memberId) => (
-											<div key={memberId} className="text-sm text-gray-600">
-												{memberId === userData?.id
-													? `${memberId} (You)`
-													: memberId}
-											</div>
+											<TeamMemberDisplay key={memberId} memberId={memberId!} />
 										))}
 									</div>
 								</div>

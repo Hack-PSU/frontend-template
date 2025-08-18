@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe } from "@/lib/api/user/hook";
+import { useUserInfoMe, useUser } from "@/lib/api/user/hook";
 import {
 	useAllTeams,
 	useCreateTeam,
@@ -31,6 +31,7 @@ import {
 	UserMinus,
 	Loader2,
 	Lock,
+	LogOut,
 } from "lucide-react";
 import {
 	Dialog,
@@ -148,6 +149,28 @@ export default function Team() {
 		}
 	};
 
+	const handleLeaveTeam = async () => {
+		if (!userTeam || !userData?.id) return;
+
+		const memberField = getTeamMembers(userTeam).find(
+			(member) => member.isCurrentUser
+		)?.field;
+
+		if (!memberField) return;
+
+		try {
+			await updateTeam({
+				id: userTeam.id,
+				data: { [memberField]: null },
+			});
+			toast.success("You have left the team successfully!");
+			router.push("/profile");
+		} catch (error) {
+			console.error("Error leaving team:", error);
+			toast.error("Failed to leave team. Please try again.");
+		}
+	};
+
 	const getTeamMembers = (team: TeamEntity) => {
 		return [
 			team.member1,
@@ -156,12 +179,18 @@ export default function Team() {
 			team.member4,
 			team.member5,
 		]
-			.filter(Boolean)
 			.map((memberId, index) => ({
 				id: memberId,
 				field: `member${index + 1}` as keyof TeamEntity,
 				isCurrentUser: memberId === userData?.id,
-			}));
+			}))
+			.filter(
+				(member) => member.id !== null && member.id !== undefined
+			) as Array<{
+			id: string;
+			field: keyof TeamEntity;
+			isCurrentUser: boolean;
+		}>;
 	};
 
 	const canModifyTeam =
@@ -173,6 +202,53 @@ export default function Team() {
 			userTeam.member4,
 			userTeam.member5,
 		].includes(userData?.id);
+
+	const TeamMemberDisplay = ({
+		member,
+	}: {
+		member: { id: string; field: keyof TeamEntity; isCurrentUser: boolean };
+	}) => {
+		const { data: memberData, isLoading } = useUser(member.id);
+
+		if (isLoading) {
+			return (
+				<div className="flex items-center justify-between p-3 border rounded-lg">
+					<div className="flex items-center space-x-3">
+						<div>
+							<p className="font-medium">Loading...</p>
+						</div>
+					</div>
+				</div>
+			);
+		}
+
+		const displayName = memberData
+			? `${memberData.firstName} ${memberData.lastName}`
+			: "Unknown User";
+
+		return (
+			<div className="flex items-center justify-between p-3 border rounded-lg">
+				<div className="flex items-center space-x-3">
+					<div>
+						<p className="font-medium">{displayName}</p>
+						{member.isCurrentUser && (
+							<p className="text-sm text-gray-500">You</p>
+						)}
+					</div>
+				</div>
+				{canModifyTeam && !member.isCurrentUser && (
+					<Button
+						variant="outline"
+						size="sm"
+						onClick={() => handleRemoveUser(member.field)}
+						className="text-red-600 hover:text-red-700"
+					>
+						<UserMinus className="h-4 w-4" />
+					</Button>
+				)}
+			</div>
+		);
+	};
 
 	if (isLoading) {
 		return (
@@ -204,7 +280,7 @@ export default function Team() {
 						</CardTitle>
 						<CardDescription className="text-slate-300">
 							{userTeam
-								? `Team ID: ${userTeam.id}`
+								? "Team management and member overview"
 								: "Create or join a team for HackPSU"}
 						</CardDescription>
 						{userTeam && !userTeam.isActive && (
@@ -234,29 +310,7 @@ export default function Team() {
 							</CardHeader>
 							<CardContent className="space-y-4">
 								{getTeamMembers(userTeam).map((member) => (
-									<div
-										key={member.id}
-										className="flex items-center justify-between p-3 border rounded-lg"
-									>
-										<div className="flex items-center space-x-3">
-											<div>
-												<p className="font-medium">User ID: {member.id}</p>
-												{member.isCurrentUser && (
-													<p className="text-sm text-gray-500">You</p>
-												)}
-											</div>
-										</div>
-										{canModifyTeam && !member.isCurrentUser && (
-											<Button
-												variant="outline"
-												size="sm"
-												onClick={() => handleRemoveUser(member.field)}
-												className="text-red-600 hover:text-red-700"
-											>
-												<UserMinus className="h-4 w-4" />
-											</Button>
-										)}
-									</div>
+									<TeamMemberDisplay key={member.id} member={member} />
 								))}
 								{getTeamMembers(userTeam).length < 5 && canModifyTeam && (
 									<Button
@@ -302,6 +356,27 @@ export default function Team() {
 										Rename Team
 									</Button>
 								)}
+
+								{userTeam.isActive && (
+									<>
+										<Separator />
+										<Button
+											onClick={handleLeaveTeam}
+											variant="destructive"
+											className="w-full"
+											size="lg"
+											disabled={isUpdating}
+										>
+											{isUpdating ? (
+												<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											) : (
+												<LogOut className="mr-2 h-4 w-4" />
+											)}
+											Leave Team
+										</Button>
+									</>
+								)}
+
 								{!userTeam.isActive && (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
