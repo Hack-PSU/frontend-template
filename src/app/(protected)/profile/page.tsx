@@ -360,7 +360,7 @@ export default function Profile() {
 						) : (
 							<>
 								<p className="text-gray-600">
-									You're not part of any team yet.
+									You&apos;re not part of any team yet.
 								</p>
 								<Button
 									onClick={handleTeam}
