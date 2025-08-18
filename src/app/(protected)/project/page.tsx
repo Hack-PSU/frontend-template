@@ -12,6 +12,7 @@ import {
 	PROJECT_CATEGORIES,
 	ProjectCategory,
 } from "@/lib/api/judging";
+import { useFlagState } from "@/lib/api/flag/hook";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -31,6 +32,7 @@ import {
 	Lock,
 	CheckCircle,
 	AlertCircle,
+	Schedule,
 } from "lucide-react";
 
 export default function Project() {
@@ -64,6 +66,10 @@ export default function Project() {
 		useCreateProject();
 	const { mutateAsync: patchProject, isPending: isUpdating } =
 		usePatchProject();
+
+	// Feature flag check - use same flag as reimbursement for now
+	const { data: projectSubmissionFlag, isLoading: flagLoading } =
+		useFlagState("ProjectSubmission");
 
 	useEffect(() => {
 		if (isUserLoading) return;
@@ -152,10 +158,11 @@ export default function Project() {
 		}
 	};
 
-	const canSubmitProject = userTeam?.isActive;
+	const isProjectSubmissionEnabled = projectSubmissionFlag?.isEnabled ?? false;
+	const canSubmitProject = userTeam?.isActive && isProjectSubmissionEnabled;
 	const hasSubmittedProject = !!existingProject;
 
-	if (isLoading) {
+	if (isLoading || flagLoading) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
 				<div className="flex items-center space-x-2">
@@ -225,8 +232,17 @@ export default function Project() {
 						</CardDescription>
 						{!canSubmitProject && (
 							<div className="flex items-center justify-center space-x-2 mt-2 text-yellow-400">
-								<Lock className="h-5 w-5" />
-								<span className="text-sm font-medium">Team is locked</span>
+								{!isProjectSubmissionEnabled ? (
+									<>
+										<Schedule className="h-5 w-5" />
+										<span className="text-sm font-medium">Project submissions not yet open</span>
+									</>
+								) : (
+									<>
+										<Lock className="h-5 w-5" />
+										<span className="text-sm font-medium">Team is locked</span>
+									</>
+								)}
 							</div>
 						)}
 					</CardHeader>
@@ -241,7 +257,7 @@ export default function Project() {
 						</CardTitle>
 						<CardDescription>
 							{hasSubmittedProject
-								? "You can update your project categories, but other changes are final"
+								? "You can update your project name and categories, but other changes are final"
 								: "Enter your project information for submission"}
 						</CardDescription>
 					</CardHeader>
@@ -261,10 +277,7 @@ export default function Project() {
 										placeholder="Enter your project name"
 										value={projectName}
 										onChange={(e) => setProjectName(e.target.value)}
-										disabled={
-											!canSubmitProject ||
-											(hasSubmittedProject && !canSubmitProject)
-										}
+										disabled={!canSubmitProject && !hasSubmittedProject}
 									/>
 								</div>
 
@@ -325,7 +338,7 @@ export default function Project() {
 									</div>
 								</div>
 
-								{canSubmitProject && (
+								{(canSubmitProject || hasSubmittedProject) && (
 									<>
 										<Separator />
 										<Button
@@ -344,11 +357,18 @@ export default function Project() {
 									</>
 								)}
 
-								{!canSubmitProject && (
+								{!canSubmitProject && !hasSubmittedProject && (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
-											<strong>Team is locked:</strong> Your team has been locked
-											and project submissions are no longer allowed.
+											{!isProjectSubmissionEnabled ? (
+												<>
+													<strong>Project submissions closed:</strong> Project submissions are not yet open. They will be available during the hackathon event.
+												</>
+											) : (
+												<>
+													<strong>Team is locked:</strong> Your team has been locked and project submissions are no longer allowed.
+												</>
+											)}
 										</p>
 									</div>
 								)}
@@ -372,8 +392,8 @@ export default function Project() {
 								</p>
 								<p className="text-sm text-gray-600">
 									Your project &quot;{existingProject.name}&quot; has been
-									submitted for judging. You can only update the categories, but
-									all other details are final.
+									submitted for judging. You can update the project name and categories, but
+									other details are final.
 								</p>
 							</div>
 						</CardContent>
