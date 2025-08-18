@@ -146,9 +146,16 @@ export default function Project() {
 			return;
 		}
 
-		// Validate devpost link if provided
-		if (devpostLink && !isValidUrl(devpostLink)) {
-			toast.error("Please enter a valid Devpost URL");
+		// Validate Devpost link - now required
+		if (!devpostLink.trim()) {
+			toast.error("Devpost link is required");
+			return;
+		}
+
+		if (!isValidDevpostUrl(devpostLink)) {
+			toast.error(
+				"Please enter a valid Devpost URL (must be from devpost.com)"
+			);
 			return;
 		}
 
@@ -163,7 +170,7 @@ export default function Project() {
 				name: projectName.trim(),
 				categories: selectedCategories.join(", "),
 				teamId: userTeam.id,
-				devpostLink: devpostLink.trim() || undefined,
+				devpostLink: devpostLink.trim(),
 			};
 
 			if (existingProject) {
@@ -182,10 +189,13 @@ export default function Project() {
 		}
 	};
 
-	const isValidUrl = (string: string) => {
+	const isValidDevpostUrl = (url: string) => {
 		try {
-			new URL(string);
-			return true;
+			const parsedUrl = new URL(url);
+			return (
+				parsedUrl.hostname === "devpost.com" ||
+				parsedUrl.hostname === "www.devpost.com"
+			);
 		} catch (_) {
 			return false;
 		}
@@ -260,8 +270,8 @@ export default function Project() {
 						</CardTitle>
 						<CardDescription className="text-slate-300">
 							{hasSubmittedProject
-								? "Modify your project submission details"
-								: "Submit your project for HackPSU judging"}
+								? "Update your project information"
+								: "Submit your project for judging"}
 						</CardDescription>
 						{!canSubmitProject && (
 							<div className="flex items-center justify-center space-x-2 mt-2 text-yellow-400">
@@ -292,8 +302,8 @@ export default function Project() {
 						</CardTitle>
 						<CardDescription>
 							{hasSubmittedProject
-								? "You can update your project name and categories, but other changes are final"
-								: "Enter your project information for submission"}
+								? "Update your project information. Ensure categories match your Devpost submission."
+								: "Enter your project information. Categories must match your Devpost submission."}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-6">
@@ -318,17 +328,14 @@ export default function Project() {
 
 								{/* Devpost Link */}
 								<div className="space-y-2">
-									<Label htmlFor="devpost-link">Devpost Link (optional)</Label>
+									<Label htmlFor="devpost-link">Devpost Link *</Label>
 									<Input
 										id="devpost-link"
 										type="url"
 										placeholder="https://devpost.com/software/your-project"
 										value={devpostLink}
 										onChange={(e) => setDevpostLink(e.target.value)}
-										disabled={
-											!canSubmitProject ||
-											(hasSubmittedProject && !canSubmitProject)
-										}
+										disabled={!canSubmitProject && !hasSubmittedProject}
 									/>
 								</div>
 
@@ -367,7 +374,7 @@ export default function Project() {
 										<p className="font-medium">{userTeam.name}</p>
 										<p className="text-sm text-gray-600">
 											{hasSubmittedProject
-												? "⚠️ Team membership is now locked due to project submission"
+												? "Team membership is locked after project submission"
 												: "Team membership will be locked after project submission"}
 										</p>
 									</div>
@@ -398,8 +405,7 @@ export default function Project() {
 											{!isProjectSubmissionEnabled ? (
 												<>
 													<strong>Project submissions closed:</strong> Project
-													submissions are not yet open. They will be available
-													during the hackathon event.
+													submissions are not yet open.
 												</>
 											) : (
 												<>
@@ -426,12 +432,12 @@ export default function Project() {
 						<CardContent>
 							<div className="space-y-2">
 								<p className="text-green-600 font-medium">
-									✅ Project successfully submitted!
+									Project successfully submitted!
 								</p>
 								<p className="text-sm text-gray-600">
 									Your project &quot;{existingProject.name}&quot; has been
-									submitted for judging. You can update the project name and
-									categories, but other details are final.
+									submitted for judging. You can update project details as
+									needed.
 								</p>
 							</div>
 						</CardContent>
