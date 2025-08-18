@@ -322,7 +322,7 @@ export default function Team() {
 								<span>Create a Team</span>
 							</CardTitle>
 							<CardDescription>
-								You're not part of any team yet. Create one to get started!
+								You&apos;re not part of any team yet. Create one to get started!
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
@@ -349,7 +349,7 @@ export default function Team() {
 						<DialogHeader>
 							<DialogTitle>Create New Team</DialogTitle>
 							<DialogDescription>
-								Enter a name for your new team. You'll be the team leader.
+								Enter a name for your new team. You&apos;ll be the team leader.
 							</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4">
