@@ -141,7 +141,6 @@ export default function Project() {
 			return;
 		}
 
-
 		// Validate Devpost link - now required
 		if (!devpostLink.trim()) {
 			toast.error("Devpost link is required");
@@ -164,7 +163,10 @@ export default function Project() {
 		try {
 			const projectData = {
 				name: projectName.trim(),
-				categories: selectedCategories.length > 0 ? selectedCategories.join(", ") : undefined,
+				categories:
+					selectedCategories.length > 0
+						? selectedCategories.join(", ")
+						: undefined,
 				teamId: userTeam.id,
 				devpostLink: devpostLink.trim(),
 			};
@@ -377,7 +379,8 @@ export default function Project() {
 									</div>
 								</div>
 
-								{(canSubmitProject || (hasSubmittedProject && canUpdateProject)) && (
+								{(canSubmitProject ||
+									(hasSubmittedProject && canUpdateProject)) && (
 									<>
 										<Separator />
 										<Button
@@ -396,7 +399,8 @@ export default function Project() {
 									</>
 								)}
 
-								{(!canSubmitProject && !hasSubmittedProject) || (hasSubmittedProject && !canUpdateProject) ? (
+								{(!canSubmitProject && !hasSubmittedProject) ||
+								(hasSubmittedProject && !canUpdateProject) ? (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
 											{!isProjectSubmissionEnabled ? (

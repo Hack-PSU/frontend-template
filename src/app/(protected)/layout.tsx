@@ -11,8 +11,7 @@ export default function DashboardLayout({
 			{" "}
 			<Toaster richColors />
 			<AuthGuard config={{ minimumRole: Role.NONE }}>{children}</AuthGuard>
-			<Toaster />
-			{" "}
+			<Toaster />{" "}
 		</>
 	);
 }

@@ -13,7 +13,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Search, Filter, Folder } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Search, Filter, Folder, ExternalLink } from "lucide-react";
 import { Loader2 } from "lucide-react";
 
 export default function ExpoPage() {
@@ -197,6 +198,22 @@ export default function ExpoPage() {
 														</Badge>
 													))}
 											</div>
+										</div>
+									)}
+
+									{project.devpostLink && (
+										<div className="pt-2">
+											<Button
+												variant="outline"
+												size="sm"
+												className="w-full"
+												onClick={() =>
+													window.open(project.devpostLink, "_blank")
+												}
+											>
+												<ExternalLink className="mr-2 h-4 w-4" />
+												View on Devpost
+											</Button>
 										</div>
 									)}
 								</CardContent>
