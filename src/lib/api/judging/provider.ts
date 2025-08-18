@@ -4,6 +4,8 @@ import {
 	ScoreCreateEntity,
 	ScoreUpdateEntity,
 	ProjectEntity,
+	ProjectCreateEntity,
+	ProjectPatchEntity,
 	ProjectBreakdownEntity,
 	JudgingAssignmentEntity,
 } from "./entity";
@@ -44,11 +46,12 @@ export async function getAllProjects(): Promise<ProjectEntity[]> {
 }
 
 export async function createProject(
-	data: Omit<ProjectEntity, "id">
+	data: ProjectCreateEntity
 ): Promise<ProjectEntity> {
 	return apiFetch<ProjectEntity>("/judging/projects", {
 		method: "POST",
 		body: JSON.stringify(data),
+		headers: { "Content-Type": "application/json" },
 	});
 }
 
@@ -56,13 +59,33 @@ export async function getProject(id: number): Promise<ProjectEntity> {
 	return apiFetch<ProjectEntity>(`/judging/projects/${id}`, { method: "GET" });
 }
 
-export async function updateProject(
+export async function getProjectsByTeamId(
+	teamId: string
+): Promise<ProjectEntity[]> {
+	return apiFetch<ProjectEntity[]>(`/judging/projects/team/${teamId}`, {
+		method: "GET",
+	});
+}
+
+export async function patchProject(
 	id: number,
-	data: Partial<ProjectEntity>
+	data: ProjectPatchEntity
 ): Promise<ProjectEntity> {
 	return apiFetch<ProjectEntity>(`/judging/projects/${id}`, {
 		method: "PATCH",
 		body: JSON.stringify(data),
+		headers: { "Content-Type": "application/json" },
+	});
+}
+
+export async function replaceProject(
+	id: number,
+	data: ProjectCreateEntity
+): Promise<ProjectEntity> {
+	return apiFetch<ProjectEntity>(`/judging/projects/${id}`, {
+		method: "PUT",
+		body: JSON.stringify(data),
+		headers: { "Content-Type": "application/json" },
 	});
 }
 

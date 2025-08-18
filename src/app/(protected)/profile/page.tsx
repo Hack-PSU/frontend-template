@@ -137,6 +137,10 @@ export default function Profile() {
 		router.push("/team");
 	};
 
+	const handleProject = () => {
+		router.push("/project");
+	};
+
 	// Find user's team
 	const userTeam = teams?.find((team) =>
 		[
@@ -397,6 +401,16 @@ export default function Profile() {
 						<CardDescription>Manage your HackPSU experience</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
+						<Button
+							onClick={handleProject}
+							className="w-full"
+							variant="default"
+							size="lg"
+						>
+							<FileText className="mr-2 h-4 w-4" />
+							Submit Project
+						</Button>
+
 						<Button
 							onClick={handleExpo}
 							className="w-full"

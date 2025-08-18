@@ -11,6 +11,7 @@ import {
 	useAddUserToTeamByEmail,
 	TeamEntity,
 } from "@/lib/api/team";
+import { useProjectsByTeamId } from "@/lib/api/judging";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -45,7 +46,7 @@ export default function Team() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams } = useAllTeams();
+	const { data: teams, error: teamsError } = useAllTeams();
 
 	const { mutateAsync: createTeam, isPending: isCreating } = useCreateTeam();
 	const { mutateAsync: updateTeam, isPending: isUpdating } = useUpdateTeam();
@@ -69,10 +70,31 @@ export default function Team() {
 		].includes(userData?.id)
 	);
 
+	// Check if team has submitted a project (which locks the team)
+	const { data: teamProjects, error: projectsError } = useProjectsByTeamId(
+		userTeam?.id || ""
+	);
+	const hasSubmittedProject = teamProjects && teamProjects.length > 0;
+
 	useEffect(() => {
 		if (isUserLoading) return;
 		if (!userData || !userData.registration) router.push("/register");
 	}, [userData, router, isUserLoading]);
+
+	// Show error toasts for API failures
+	useEffect(() => {
+		if (teamsError) {
+			toast.error("Failed to load teams. Please refresh the page.");
+		}
+	}, [teamsError]);
+
+	useEffect(() => {
+		if (projectsError) {
+			toast.error(
+				"Failed to check project status. Some features may not work correctly."
+			);
+		}
+	}, [projectsError]);
 
 	const handleCreateTeam = async () => {
 		if (!teamName.trim()) {
@@ -120,6 +142,20 @@ export default function Team() {
 			return;
 		}
 
+		// Basic email validation
+		const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		if (!emailRegex.test(userEmail)) {
+			toast.error("Please enter a valid email address");
+			return;
+		}
+
+		// Check team capacity
+		const currentMembers = getTeamMembers(userTeam).length;
+		if (currentMembers >= 5) {
+			toast.error("Team is already at maximum capacity (5 members)");
+			return;
+		}
+
 		try {
 			await addUserByEmail({
 				id: userTeam.id,
@@ -128,7 +164,7 @@ export default function Team() {
 			toast.success("User added to team successfully!");
 			setShowAddUserDialog(false);
 			setUserEmail("");
-		} catch (error) {
+		} catch (error: any) {
 			console.error("Error adding user:", error);
 			toast.error("Failed to add user. Please check the email and try again.");
 		}
@@ -195,6 +231,7 @@ export default function Team() {
 
 	const canModifyTeam =
 		userTeam?.isActive &&
+		!hasSubmittedProject &&
 		[
 			userTeam.member1,
 			userTeam.member2,
@@ -283,10 +320,14 @@ export default function Team() {
 								? "Team management and member overview"
 								: "Create or join a team for HackPSU"}
 						</CardDescription>
-						{userTeam && !userTeam.isActive && (
+						{userTeam && (!userTeam.isActive || hasSubmittedProject) && (
 							<div className="flex items-center justify-center space-x-2 mt-2 text-yellow-400">
 								<Lock className="h-5 w-5" />
-								<span className="text-sm font-medium">Team is locked</span>
+								<span className="text-sm font-medium">
+									{hasSubmittedProject
+										? "Team locked - Project submitted"
+										: "Team is locked"}
+								</span>
 							</div>
 						)}
 					</CardHeader>
@@ -357,7 +398,7 @@ export default function Team() {
 									</Button>
 								)}
 
-								{userTeam.isActive && (
+								{userTeam.isActive && !hasSubmittedProject && (
 									<>
 										<Separator />
 										<Button
@@ -377,11 +418,13 @@ export default function Team() {
 									</>
 								)}
 
-								{!userTeam.isActive && (
+								{(!userTeam.isActive || hasSubmittedProject) && (
 									<div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
 										<p className="text-sm text-yellow-800">
-											<strong>Team is locked:</strong> Your team has been locked
-											and no further changes can be made.
+											<strong>Team is locked:</strong>
+											{hasSubmittedProject
+												? " Your team has been locked because a project has been submitted. No further changes can be made."
+												: " Your team has been locked and no further changes can be made."}
 										</p>
 									</div>
 								)}
