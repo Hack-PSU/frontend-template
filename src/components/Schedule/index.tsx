@@ -325,28 +325,24 @@ const DayColumn: React.FC<DayColumnProps> = ({
 	let adjustedEndHour = endHour;
 
 	// On mobile, trim empty hours at start/end of weekend
-	if (isMobile && allEvents) {
-		if (day === "Saturday" && allEvents.Saturday.length > 0) {
-			// Find first event on Saturday
-			const firstEventHour = Math.min(
-				...allEvents.Saturday.map((e) => Math.floor(e.startMinutes / 60))
-			);
-			adjustedStartHour = Math.max(
-				startHour,
-				Math.floor(firstEventHour / increment) * increment
-			);
-		}
+	// Trim empty hours at the top/bottom based on this day's events
+	if (events.length > 0) {
+		const firstEventHour = Math.min(
+			...events.map((e) => Math.floor(e.startMinutes / 60))
+		);
+		const lastEventHour = Math.max(
+			...events.map((e) => Math.ceil(e.endMinutes / 60))
+		);
 
-		if (day === "Sunday" && allEvents.Sunday.length > 0) {
-			// Find last event on Sunday
-			const lastEventHour = Math.max(
-				...allEvents.Sunday.map((e) => Math.ceil(e.endMinutes / 60))
-			);
-			adjustedEndHour = Math.min(
-				endHour,
-				Math.ceil(lastEventHour / increment) * increment
-			);
-		}
+		// Round to the current grid increment (1-hr or 2-hr)
+		adjustedStartHour = Math.max(
+			startHour,
+			Math.floor(firstEventHour / increment) * increment
+		);
+		adjustedEndHour = Math.min(
+			endHour,
+			Math.ceil(lastEventHour / increment) * increment
+		);
 	}
 
 	const hours = [];
@@ -471,12 +467,11 @@ const DayColumn: React.FC<DayColumnProps> = ({
 				<div className="absolute inset-0 px-4">
 					{events.map((event) => {
 						// Adjust event positioning based on trimmed hours
-						const adjustedEvent = isMobile
-							? {
-									...event,
-									startMinutes: event.startMinutes - adjustedStartHour * 60,
-								}
-							: event;
+						const offsetMinutes = adjustedStartHour * 60;
+						const adjustedEvent = {
+							...event,
+							startMinutes: event.startMinutes - offsetMinutes,
+						};
 
 						return (
 							<EventItem
@@ -875,11 +870,10 @@ const Schedule: React.FC = () => {
 								<motion.button
 									key={type}
 									onClick={() => toggleCategory(eventType)}
-									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${
-										isSelected
-											? `${colors.bg} ${colors.border} text-white`
-											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
-									}`}
+									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${isSelected
+										? `${colors.bg} ${colors.border} text-white`
+										: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
+										}`}
 									style={{ fontFamily: "Monomaniac One, monospace" }}
 									initial={{ opacity: 0, scale: 0.8 }}
 									animate={{ opacity: 1, scale: 1 }}
@@ -916,9 +910,8 @@ const Schedule: React.FC = () => {
 											src={colors.jellyfishAsset}
 											alt={`${colors.label} Jellyfish`}
 											fill
-											className={`object-contain transition-all duration-300 ${
-												isSelected ? "" : "grayscale"
-											} group-hover:scale-110`}
+											className={`object-contain transition-all duration-300 ${isSelected ? "" : "grayscale"
+												} group-hover:scale-110`}
 										/>
 									</div>
 
@@ -928,11 +921,10 @@ const Schedule: React.FC = () => {
 										style={{ transform: "translateY(-70px) translateX(-5px)" }}
 									>
 										<span
-											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${
-												isSelected
-													? `text-white ${colors.bg} border-2 ${colors.border}`
-													: "text-gray-600 bg-white/70"
-											}`}
+											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${isSelected
+												? `text-white ${colors.bg} border-2 ${colors.border}`
+												: "text-gray-600 bg-white/70"
+												}`}
 											style={{
 												fontFamily: "Monomaniac One, monospace",
 												fontSize: "clamp(12px, 2vw, 16px)",
@@ -974,11 +966,10 @@ const Schedule: React.FC = () => {
 							<motion.button
 								key={day}
 								onClick={() => setActiveDay(day)}
-								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
-									activeDay === day
-										? "bg-[#215172] text-white"
-										: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
-								}`}
+								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${activeDay === day
+									? "bg-[#215172] text-white"
+									: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
+									}`}
 								style={{ fontFamily: "Monomaniac One, monospace" }}
 								whileHover={{ scale: 1.02 }}
 								whileTap={{ scale: 0.98 }}
