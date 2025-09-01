@@ -53,7 +53,7 @@
 		"lint-staged": "^16.0.0",
 		"lucide-react": "^0.542.0",
 		"luxon": "^3.4.2",
-		"next": "15.4.7",
+		"next": "15.5.2",
 		"posthog-js": "^1.257.0",
 		"posthog-node": "^5.5.1",
 		"prettier": "^3.3.3",
