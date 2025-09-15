@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo, useState, useEffect, useRef } from "react";
+import { createEvents, EventAttributes } from "ics";
 import {
 	motion,
 	AnimatePresence,
@@ -610,8 +611,55 @@ const Schedule: React.FC = () => {
 
 	// Handle modal close
 	const handleModalClose = () => {
-		setIsModalOpen(false);
-		setSelectedEvent(null);
+	  setIsModalOpen(false);
+	  setSelectedEvent(null);
+	};
+
+	// Download .ics handler
+	const handleDownloadIcs = async () => {
+	  // Combine all currently displayed events (respects filters)
+	  const saturdayEvents = processedEvents.Saturday.events;
+	  const sundayEvents = processedEvents.Sunday.events;
+	  const allEvents: ProcessedEvent[] = [...saturdayEvents, ...sundayEvents];
+
+	  // Map to ICS Event Format
+	  const icsEvents: EventAttributes[] = allEvents.map((event) => ({
+	    title: event.name,
+	    description: undefined,
+	    location: event.location,
+	    start: [
+	      event.startTime.getFullYear(),
+	      event.startTime.getMonth() + 1,
+	      event.startTime.getDate(),
+	      event.startTime.getHours(),
+	      event.startTime.getMinutes(),
+	    ],
+	    end: [
+	      event.endTime.getFullYear(),
+	      event.endTime.getMonth() + 1,
+	      event.endTime.getDate(),
+	      event.endTime.getHours(),
+	      event.endTime.getMinutes(),
+	    ],
+	  }));
+
+	  // Use ics package to create the ICS text
+	  createEvents(icsEvents, (error, value) => {
+	    if (error || !value) {
+	      alert("There was a problem exporting the .ics file.");
+	      return;
+	    }
+	    // Download as file
+	    const blob = new Blob([value], { type: "text/calendar" });
+	    const url = URL.createObjectURL(blob);
+	    const link = document.createElement("a");
+	    link.href = url;
+	    link.download = `schedule.ics`;
+	    document.body.appendChild(link);
+	    link.click();
+	    document.body.removeChild(link);
+	    URL.revokeObjectURL(url);
+	  });
 	};
 
 	// Toggle category selection
@@ -1031,6 +1079,20 @@ const Schedule: React.FC = () => {
 					</AnimatePresence>
 				</div>
 			</motion.div>
+
+			{/* Download .ics Button */}
+			<div className="w-full max-w-5xl flex justify-center mt-6">
+			  <button
+			              className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-400 to-blue-600 text-white font-semibold rounded-xl shadow-md hover:from-blue-500 hover:to-blue-700 transition-colors"
+			              style={{ fontFamily: "Monomaniac One, monospace" }}
+			              onClick={handleDownloadIcs}
+			            >
+			    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20" className="w-5 h-5" stroke="currentColor">
+			      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 4v8m0 0L6.5 8.5M10 12l3.5-3.5M19 15a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2" />
+			    </svg>
+			    Download schedule
+			  </button>
+			</div>
 
 			{/* Event Details Modal */}
 			<EventDetailsModal
