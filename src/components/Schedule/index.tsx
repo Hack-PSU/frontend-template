@@ -1,5 +1,6 @@
 "use client";
 import React, { useMemo, useState, useEffect, useRef } from "react";
+import { createEvents, EventAttributes } from "ics";
 import {
 	motion,
 	AnimatePresence,
@@ -614,6 +615,53 @@ const Schedule: React.FC = () => {
 		setSelectedEvent(null);
 	};
 
+	// Download .ics handler
+	const handleDownloadIcs = async () => {
+		// Combine all currently displayed events (respects filters)
+		const saturdayEvents = processedEvents.Saturday.events;
+		const sundayEvents = processedEvents.Sunday.events;
+		const allEvents: ProcessedEvent[] = [...saturdayEvents, ...sundayEvents];
+
+		// Map to ICS Event Format
+		const icsEvents: EventAttributes[] = allEvents.map((event) => ({
+			title: event.name,
+			description: undefined,
+			location: event.location,
+			start: [
+				event.startTime.getFullYear(),
+				event.startTime.getMonth() + 1,
+				event.startTime.getDate(),
+				event.startTime.getHours(),
+				event.startTime.getMinutes(),
+			],
+			end: [
+				event.endTime.getFullYear(),
+				event.endTime.getMonth() + 1,
+				event.endTime.getDate(),
+				event.endTime.getHours(),
+				event.endTime.getMinutes(),
+			],
+		}));
+
+		// Use ics package to create the ICS text
+		createEvents(icsEvents, (error, value) => {
+			if (error || !value) {
+				alert("There was a problem exporting the .ics file.");
+				return;
+			}
+			// Download as file
+			const blob = new Blob([value], { type: "text/calendar" });
+			const url = URL.createObjectURL(blob);
+			const link = document.createElement("a");
+			link.href = url;
+			link.download = `schedule.ics`;
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+			URL.revokeObjectURL(url);
+		});
+	};
+
 	// Toggle category selection
 	const toggleCategory = (category: EventType) => {
 		setSelectedCategories((prev) => {
@@ -870,10 +918,11 @@ const Schedule: React.FC = () => {
 								<motion.button
 									key={type}
 									onClick={() => toggleCategory(eventType)}
-									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${isSelected
-										? `${colors.bg} ${colors.border} text-white`
-										: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
-										}`}
+									className={`px-4 py-2 rounded-lg font-medium text-sm border-2 transition-all duration-300 ${
+										isSelected
+											? `${colors.bg} ${colors.border} text-white`
+											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
+									}`}
 									style={{ fontFamily: "Monomaniac One, monospace" }}
 									initial={{ opacity: 0, scale: 0.8 }}
 									animate={{ opacity: 1, scale: 1 }}
@@ -910,8 +959,9 @@ const Schedule: React.FC = () => {
 											src={colors.jellyfishAsset}
 											alt={`${colors.label} Jellyfish`}
 											fill
-											className={`object-contain transition-all duration-300 ${isSelected ? "" : "grayscale"
-												} group-hover:scale-110`}
+											className={`object-contain transition-all duration-300 ${
+												isSelected ? "" : "grayscale"
+											} group-hover:scale-110`}
 										/>
 									</div>
 
@@ -921,10 +971,11 @@ const Schedule: React.FC = () => {
 										style={{ transform: "translateY(-70px) translateX(-5px)" }}
 									>
 										<span
-											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${isSelected
-												? `text-white ${colors.bg} border-2 ${colors.border}`
-												: "text-gray-600 bg-white/70"
-												}`}
+											className={`font-bold text-center rounded-lg backdrop-blur-sm transition-all duration-300 ${
+												isSelected
+													? `text-white ${colors.bg} border-2 ${colors.border}`
+													: "text-gray-600 bg-white/70"
+											}`}
 											style={{
 												fontFamily: "Monomaniac One, monospace",
 												fontSize: "clamp(12px, 2vw, 16px)",
@@ -966,10 +1017,11 @@ const Schedule: React.FC = () => {
 							<motion.button
 								key={day}
 								onClick={() => setActiveDay(day)}
-								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${activeDay === day
-									? "bg-[#215172] text-white"
-									: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
-									}`}
+								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
+									activeDay === day
+										? "bg-[#215172] text-white"
+										: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
+								}`}
 								style={{ fontFamily: "Monomaniac One, monospace" }}
 								whileHover={{ scale: 1.02 }}
 								whileTap={{ scale: 0.98 }}
@@ -1031,6 +1083,31 @@ const Schedule: React.FC = () => {
 					</AnimatePresence>
 				</div>
 			</motion.div>
+
+			{/* Download .ics Button */}
+			<div className="w-full max-w-5xl flex justify-center mt-6">
+				<button
+					className="flex items-center gap-2 px-5 py-3 bg-[#215172] text-white font-semibold rounded-xl shadow-md hover:bg-[#1a3f5c] transition-colors "
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+					onClick={handleDownloadIcs}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 20 20"
+						className="w-5 h-5"
+						stroke="currentColor"
+					>
+						<path
+							strokeLinecap="round"
+							strokeLinejoin="round"
+							strokeWidth={1.5}
+							d="M10 4v8m0 0L6.5 8.5M10 12l3.5-3.5M19 15a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2"
+						/>
+					</svg>
+					Download schedule
+				</button>
+			</div>
 
 			{/* Event Details Modal */}
 			<EventDetailsModal
