@@ -2178,11 +2178,6 @@
     detect-libc "^2.0.4"
     rimraf "^6.0.1"
 
-"@posthog/core@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.0.2.tgz#8e6125d271348f646f51269c0b7b9bbf6549f984"
-  integrity sha512-hWk3rUtJl2crQK0WNmwg13n82hnTwB99BT99/XI5gZSvIlYZ1TPmMZE8H2dhJJ98J/rm9vYJ/UXNzw3RV5HTpQ==
-
 "@posthog/core@1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.1.0.tgz#bf9e3fa76c6e05daad09eceb07b04c7e3b1b346a"
@@ -5710,9 +5705,9 @@ posthog-js@^1.257.0:
     web-vitals "^4.2.4"
 
 posthog-node@^5.5.1:
-  version "5.8.5"
-  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.8.5.tgz#4238fbf03439ca45bfe98d6f63ede82fa4bd1669"
-  integrity sha512-qX/Oq6vTQZvlkieYxyzuWUaFoOgHATdxxqK6iRqTYiS02PotQ2S7iDUMQoj6yZ7McN4OJbN3/VxUU3pkORqlLg==
+  version "5.8.6"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.8.6.tgz#72329f33d6d237afbde46362002942ea096df32f"
+  integrity sha512-iQFj/cop5yZONzorCF35m9GgXHH0wSkDikJ/DNVBvY7Kbh+1oX1C0x20EsGMi/eJBWskdqyu4a+GuTIjeEpSrw==
   dependencies:
     "@posthog/core" "1.1.0"
 
