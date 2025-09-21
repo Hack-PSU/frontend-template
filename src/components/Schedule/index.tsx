@@ -23,8 +23,8 @@ const eventTypeColors = {
 		jellyfishAsset: "/f25/9.png",
 	},
 	[EventType.food]: {
-		bg: "bg-[#7bccf0]",
-		border: "border-[#7bccf0]",
+		bg: "bg-[#2b98a1]",
+		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
 		label: "Food",
 		jellyfishAsset: "/f25/10.png",
