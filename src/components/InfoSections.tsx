@@ -51,6 +51,17 @@ const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
 	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
 
+	// Easter egg; throwing floating objects around
+	const [lastMousePosition, setLastMousePosition] = useState({ lastX: 0, lastY: 0 });
+	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [floatingObjectPositions, setFloatingObjectPositions] = useState<
+		Array<{ 
+			id: number,
+			x: number; 
+			y: number 
+		}>
+	>([]);
+
 	function rotateLeft(steps: number) {
 		setOrder((prev) => {
 			const k = steps % prev.length;
@@ -61,6 +72,7 @@ const InfoSections: React.FC = () => {
 	function onClickSection(idx: number) {
 		if (idx !== 0) rotateLeft(idx);
 	}
+	
 
 	return (
 		<section
