@@ -9,14 +9,23 @@ import {
 	deleteUser,
 	getUserResume,
 	getUserInfoMe,
+	getUserExtraCreditClasses,
+	assignExtraCreditClass,
+	unassignExtraCreditClass,
 } from "./provider";
-import { UserCreateEntity, UserEntity, UserInfoMe } from "./entity";
+import {
+	UserCreateEntity,
+	UserEntity,
+	UserInfoMe,
+	ExtraCreditClass,
+} from "./entity";
 
 export const userQueryKeys = {
 	all: ["users"] as const,
 	detail: (id: string) => ["user", id] as const,
 	resume: (id: string) => ["user", id, "resume"] as const,
 	me: ["user", "info", "me"] as const,
+	extraCredit: (id: string) => ["user", id, "extra-credit"] as const,
 };
 
 export function useAllUsers(active?: boolean) {
@@ -103,5 +112,39 @@ export function useUserInfoMe() {
 		queryFn: getUserInfoMe,
 		retry: 2,
 		retryDelay: 1000,
+	});
+}
+
+export function useUserExtraCreditClasses(userId: string) {
+	return useQuery<ExtraCreditClass[]>({
+		queryKey: userQueryKeys.extraCredit(userId),
+		queryFn: () => getUserExtraCreditClasses(userId),
+		enabled: Boolean(userId),
+	});
+}
+
+export function useAssignExtraCreditClass() {
+	const qc = useQueryClient();
+	return useMutation({
+		mutationFn: (opts: { userId: string; classId: number }) =>
+			assignExtraCreditClass(opts.userId, opts.classId),
+		onSuccess: (_, variables) => {
+			qc.invalidateQueries({
+				queryKey: userQueryKeys.extraCredit(variables.userId),
+			});
+		},
+	});
+}
+
+export function useUnassignExtraCreditClass() {
+	const qc = useQueryClient();
+	return useMutation({
+		mutationFn: (opts: { userId: string; classId: number }) =>
+			unassignExtraCreditClass(opts.userId, opts.classId),
+		onSuccess: (_, variables) => {
+			qc.invalidateQueries({
+				queryKey: userQueryKeys.extraCredit(variables.userId),
+			});
+		},
 	});
 }
