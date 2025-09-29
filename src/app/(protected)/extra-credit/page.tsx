@@ -101,10 +101,12 @@ export default function ExtraCredit() {
 				</Button>
 
 				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
-					<CardHeader>
-						<CardTitle className="text-2xl md:text-3xl font-bold flex items-center space-x-2">
-							<GraduationCap className="h-8 w-8" />
-							<span>Extra Credit Classes</span>
+					<CardHeader className="text-center">
+						<div className="flex justify-center mb-4">
+							<GraduationCap className="h-16 w-16 text-red-400" />
+						</div>
+						<CardTitle className="text-2xl md:text-3xl font-bold">
+							Extra Credit Classes
 						</CardTitle>
 						<CardDescription className="text-slate-300">
 							Select the classes you want to receive extra credit for attending
@@ -115,7 +117,10 @@ export default function ExtraCredit() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle>Available Classes</CardTitle>
+						<CardTitle className="flex items-center space-x-2">
+							<GraduationCap className="h-6 w-6" />
+							<span>Available Classes</span>
+						</CardTitle>
 						<CardDescription>
 							Check the classes you&apos;re enrolled in to receive extra credit
 						</CardDescription>
@@ -175,26 +180,31 @@ export default function ExtraCredit() {
 				{assignedClasses && assignedClasses.length > 0 && (
 					<Card>
 						<CardHeader>
-							<CardTitle>Your Selected Classes</CardTitle>
+							<CardTitle className="flex items-center space-x-2">
+								<GraduationCap className="h-6 w-6 text-green-600" />
+								<span>Your Selected Classes</span>
+							</CardTitle>
 							<CardDescription>
 								Classes you&apos;ve selected for extra credit
 							</CardDescription>
 						</CardHeader>
 						<CardContent>
-							<div className="space-y-2">
+							<div className="space-y-3">
 								{assignedClasses.map((classItem) => (
 									<div
 										key={classItem.id}
-										className="p-3 bg-green-50 border border-green-200 rounded-lg"
+										className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg"
 									>
-										<div className="font-medium text-green-900">
-											{classItem.name}
-										</div>
-										{classItem.hackathonId && (
-											<div className="text-sm text-green-700">
-												Hackathon: {classItem.hackathonId}
+										<div>
+											<div className="font-medium text-green-900">
+												{classItem.name}
 											</div>
-										)}
+											{classItem.hackathonId && (
+												<div className="text-sm text-green-700">
+													Hackathon: {classItem.hackathonId}
+												</div>
+											)}
+										</div>
 									</div>
 								))}
 							</div>
