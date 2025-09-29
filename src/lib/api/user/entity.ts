@@ -24,3 +24,14 @@ export interface UserCreateEntity extends Omit<UserEntity, "id" | "resume"> {
 export interface UserInfoMe extends UserEntity {
 	registration: RegistrationEntity;
 }
+
+export interface ExtraCreditClass {
+	id: number;
+	name: string;
+	hackathonId: string | null;
+}
+
+export interface ExtraCreditAssignment {
+	userId: string;
+	classId: number;
+}

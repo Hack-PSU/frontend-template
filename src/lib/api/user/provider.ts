@@ -1,6 +1,12 @@
 // src/common/api/user/provider.ts
 import { apiFetch } from "@/lib/api/apiClient";
-import { UserCreateEntity, UserEntity, UserInfoMe } from "./entity";
+import {
+	UserCreateEntity,
+	UserEntity,
+	UserInfoMe,
+	ExtraCreditClass,
+	ExtraCreditAssignment,
+} from "./entity";
 
 function isFile(x: any): x is File {
 	return typeof File !== "undefined" && x instanceof File;
@@ -81,4 +87,31 @@ export async function getUserResume(id: string): Promise<Blob> {
 
 export async function getUserInfoMe(): Promise<UserInfoMe> {
 	return apiFetch<UserInfoMe>("/users/info/me", { method: "GET" });
+}
+
+export async function getUserExtraCreditClasses(
+	userId: string
+): Promise<ExtraCreditClass[]> {
+	return apiFetch<ExtraCreditClass[]>(`/users/${userId}/extra-credit/classes`, {
+		method: "GET",
+	});
+}
+
+export async function assignExtraCreditClass(
+	userId: string,
+	classId: number
+): Promise<ExtraCreditAssignment> {
+	return apiFetch<ExtraCreditAssignment>(
+		`/users/${userId}/extra-credit/assign/${classId}`,
+		{ method: "POST" }
+	);
+}
+
+export async function unassignExtraCreditClass(
+	userId: string,
+	classId: number
+): Promise<void> {
+	return apiFetch<void>(`/users/${userId}/extra-credit/unassign/${classId}`, {
+		method: "POST",
+	});
 }
