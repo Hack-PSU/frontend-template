@@ -18,9 +18,9 @@ import {
 	CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { GraduationCap, Loader2, ArrowLeft } from "lucide-react";
+import { GraduationCap, Loader2, ArrowLeft, Check, Plus, X } from "lucide-react";
 
 export default function ExtraCredit() {
 	const { user, isAuthenticated, isLoading: authLoading } = useFirebase();
@@ -117,13 +117,22 @@ export default function ExtraCredit() {
 
 				<Card>
 					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<GraduationCap className="h-6 w-6" />
-							<span>Available Classes</span>
-						</CardTitle>
-						<CardDescription>
-							Check the classes you&apos;re enrolled in to receive extra credit
-						</CardDescription>
+						<div className="flex items-center justify-between">
+							<div>
+								<CardTitle className="flex items-center space-x-2">
+									<GraduationCap className="h-6 w-6" />
+									<span>Extra Credit Classes</span>
+								</CardTitle>
+								<CardDescription>
+									Click to add or remove classes for extra credit
+								</CardDescription>
+							</div>
+							{assignedClasses && assignedClasses.length > 0 && (
+								<Badge variant="secondary" className="text-sm">
+									{assignedClasses.length} selected
+								</Badge>
+							)}
+						</div>
 					</CardHeader>
 					<CardContent>
 						{allClassesLoading || assignedClassesLoading ? (
@@ -132,7 +141,7 @@ export default function ExtraCredit() {
 								<span className="ml-2">Loading classes...</span>
 							</div>
 						) : allClasses && allClasses.length > 0 ? (
-							<div className="space-y-4">
+							<div className="space-y-3">
 								{allClasses.map((classItem) => {
 									const assigned = isClassAssigned(classItem.id);
 									const isProcessing = processingClassId === classItem.id;
@@ -140,30 +149,69 @@ export default function ExtraCredit() {
 									return (
 										<div
 											key={classItem.id}
-											className="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+											className={`flex items-center justify-between p-4 border-2 rounded-lg transition-all cursor-pointer ${
+												assigned
+													? "border-green-500 bg-green-50 hover:bg-green-100"
+													: "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
+											} ${
+												isProcessing || isAssigning || isUnassigning
+													? "opacity-50 cursor-not-allowed"
+													: ""
+											}`}
+											onClick={() =>
+												!isProcessing &&
+												!isAssigning &&
+												!isUnassigning &&
+												handleToggleClass(classItem.id, assigned)
+											}
 										>
-											<Checkbox
-												id={`class-${classItem.id}`}
-												checked={assigned}
-												disabled={isProcessing || isAssigning || isUnassigning}
-												onCheckedChange={() =>
-													handleToggleClass(classItem.id, assigned)
-												}
-											/>
-											<label
-												htmlFor={`class-${classItem.id}`}
-												className="flex-1 cursor-pointer"
-											>
-												<div className="font-medium">{classItem.name}</div>
-												{classItem.hackathonId && (
-													<div className="text-sm text-gray-500">
-														Hackathon: {classItem.hackathonId}
+											<div className="flex items-center space-x-3">
+												<div
+													className={`flex items-center justify-center w-6 h-6 rounded-full border-2 ${
+														assigned
+															? "border-green-600 bg-green-600"
+															: "border-gray-300"
+													}`}
+												>
+													{assigned && <Check className="h-4 w-4 text-white" />}
+												</div>
+												<div>
+													<div
+														className={`font-medium ${
+															assigned ? "text-green-900" : "text-gray-900"
+														}`}
+													>
+														{classItem.name}
 													</div>
+												</div>
+											</div>
+											<div className="flex items-center space-x-2">
+												{isProcessing ? (
+													<Loader2 className="h-5 w-5 animate-spin text-gray-400" />
+												) : (
+													<Button
+														variant={assigned ? "destructive" : "default"}
+														size="sm"
+														onClick={(e) => {
+															e.stopPropagation();
+															handleToggleClass(classItem.id, assigned);
+														}}
+														disabled={isAssigning || isUnassigning}
+													>
+														{assigned ? (
+															<>
+																<X className="h-4 w-4 mr-1" />
+																Remove
+															</>
+														) : (
+															<>
+																<Plus className="h-4 w-4 mr-1" />
+																Add
+															</>
+														)}
+													</Button>
 												)}
-											</label>
-											{isProcessing && (
-												<Loader2 className="h-4 w-4 animate-spin text-gray-400" />
-											)}
+											</div>
 										</div>
 									);
 								})}
@@ -176,41 +224,6 @@ export default function ExtraCredit() {
 						)}
 					</CardContent>
 				</Card>
-
-				{assignedClasses && assignedClasses.length > 0 && (
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center space-x-2">
-								<GraduationCap className="h-6 w-6 text-green-600" />
-								<span>Your Selected Classes</span>
-							</CardTitle>
-							<CardDescription>
-								Classes you&apos;ve selected for extra credit
-							</CardDescription>
-						</CardHeader>
-						<CardContent>
-							<div className="space-y-3">
-								{assignedClasses.map((classItem) => (
-									<div
-										key={classItem.id}
-										className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg"
-									>
-										<div>
-											<div className="font-medium text-green-900">
-												{classItem.name}
-											</div>
-											{classItem.hackathonId && (
-												<div className="text-sm text-green-700">
-													Hackathon: {classItem.hackathonId}
-												</div>
-											)}
-										</div>
-									</div>
-								))}
-							</div>
-						</CardContent>
-					</Card>
-				)}
 			</div>
 		</div>
 	);
