@@ -65,6 +65,12 @@ export async function apiFetch<T>(
 	if (responseType === "blob") {
 		return (await response.blob()) as unknown as T;
 	}
+
+	// Handle 204 No Content responses
+	if (response.status === 204) {
+		return undefined as unknown as T;
+	}
+
 	return (await response.json()) as T;
 }
 
