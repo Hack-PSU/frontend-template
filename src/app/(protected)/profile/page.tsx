@@ -35,6 +35,7 @@ import {
 	FolderOpen,
 	Users,
 	Lock,
+	GraduationCap,
 } from "lucide-react";
 
 export default function Profile() {
@@ -139,6 +140,10 @@ export default function Profile() {
 
 	const handleProject = () => {
 		router.push("/project");
+	};
+
+	const handleExtraCredit = () => {
+		router.push("/extra-credit");
 	};
 
 	// Find user's team
@@ -429,6 +434,16 @@ export default function Profile() {
 						>
 							<FileText className="mr-2 h-4 w-4" />
 							Submit Reimbursement Form
+						</Button>
+
+						<Button
+							onClick={handleExtraCredit}
+							className="w-full"
+							variant="default"
+							size="lg"
+						>
+							<GraduationCap className="mr-2 h-4 w-4" />
+							Manage Extra Credit
 						</Button>
 
 						<Separator />
