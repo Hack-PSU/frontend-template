@@ -5699,11 +5699,11 @@ postcss@^8.4.47:
     source-map-js "^1.2.1"
 
 posthog-js@^1.257.0:
-  version "1.266.3"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.266.3.tgz#3ea835b42b7ce7002b5364ef7c19ab71f3b59c4b"
-  integrity sha512-LZdNkx4TH6GOYa7ekWQecRfOna1dnY4fmFoB1vYrPIepnQW3su9sgpH1rWpKSj61rCFTukpqXDKoqH8IW1vQDA==
+  version "1.268.8"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.268.8.tgz#2d2f77aa46a926fa43f93d14573a3087c0ecf956"
+  integrity sha512-BJiKK4MlUvs7ybnQcy1KkwAz+SZkE/wRLotetIoank5kbqZs8FLbeyozFvmmgx4aoMmaVymYBSmYphYjYQeidw==
   dependencies:
-    "@posthog/core" "1.1.0"
+    "@posthog/core" "1.2.2"
     core-js "^3.38.1"
     fflate "^0.4.8"
     preact "^10.19.3"
