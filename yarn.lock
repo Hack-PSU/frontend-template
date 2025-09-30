@@ -2178,11 +2178,6 @@
     detect-libc "^2.0.4"
     rimraf "^6.0.1"
 
-"@posthog/core@1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.1.0.tgz#bf9e3fa76c6e05daad09eceb07b04c7e3b1b346a"
-  integrity sha512-igElrcnRPJh2nWYACschjH4OwGwzSa6xVFzRDVzpnjirUivdJ8nv4hE+H31nvwE56MFhvvglfHuotnWLMcRW7w==
-
 "@posthog/core@1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.2.2.tgz#63382e2e208f501b2c22246ccaae55052f77ac1d"
@@ -6918,12 +6913,7 @@ yup@^1.2.0:
     toposort "^2.0.2"
     type-fest "^2.19.0"
 
-zod@^3.24.2:
-  version "3.25.76"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.25.76.tgz#26841c3f6fd22a6a2760e7ccb719179768471e34"
-  integrity sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==
-
-zod@^4.1.11:
+zod@^4.0.0, zod@^4.1.11:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/zod/-/zod-4.1.11.tgz#4aab62f76cfd45e6c6166519ba31b2ea019f75f5"
   integrity sha512-WPsqwxITS2tzx1bzhIKsEs19ABD5vmCVa4xBo2tq/SrV4RNZtfws1EnCWQXM6yh8bD08a1idvkB5MZSBiZsjwg==
