@@ -51,20 +51,10 @@ const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
 	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
 
-	// Easter egg; throwing floating objects around
-	const [holdingObject, setHoldingObject] = useState(false);
-	const [lastMousePosition, setLastMousePosition] = useState({ lastX: 0, lastY: 0 });
-	const [lastTimestamp, setLastTimestamp] = useState(0);
-	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-	const [floatingObjectPositions, setFloatingObjectPositions] = useState<
-		Array<{ 
-			id: number,
-			x: number,
-			y: number,
-			dx: number,
-			dy: number
-		}>
-	>([]);
+	// Easter egg; spinning the floaties
+	const [clicked1, setClicked1] = useState(false);
+	const [clicked2, setClicked2] = useState(false);
+	const [clicked3, setClicked3] = useState(false);
 
 	function rotateLeft(steps: number) {
 		setOrder((prev) => {
@@ -76,17 +66,6 @@ const InfoSections: React.FC = () => {
 	function onClickSection(idx: number) {
 		if (idx !== 0) rotateLeft(idx);
 	}
-	
-	useEffect(() => {
-
-		const handleMouseDown = (e: MouseEvent) => {
-			setLastMousePosition({ lastX: mousePosition.x, lastY: mousePosition.y });
-			setMousePosition({ x: e.clientX, y: e.clientY });
-			setLastTimestamp(e.timeStamp);
-			setHoldingObject(true);
-		};
-
-	}, [holdingObject]);
 
 	return (
 		<section
@@ -106,16 +85,32 @@ const InfoSections: React.FC = () => {
 					width: "clamp(80px, 30vw, 400px)",
 					height: "clamp(80px, 30vw, 400px)",
 				}}
-				animate={{
-					rotate: [0, 15, 0],
-					y: [-130, -30, -130],
-					scale: [1, 0.9, 1],
-				}}
+				animate={
+					clicked1 ? {
+						rotate: [0, 360, 0], y: [-130, -30, -130], scale: [1, 0.9, 1],
+						transition: {
+							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					} : { 
+						rotate: [0, 15, 0], y: [-130, -30, -130], scale: [1, 0.9, 1],
+						transition: {
+							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					}
+				}
 				transition={{
 					duration: 6,
 					repeat: Infinity,
 					ease: "easeInOut",
 					delay: 0,
+				}}
+				onClick={() => {
+					setClicked1(true)
+					setTimeout(() => setClicked1(false), 1000)
 				}}
 			>
 				<Image
@@ -135,16 +130,32 @@ const InfoSections: React.FC = () => {
 					right: "clamp(20px, 4vw, 80px)",
 					top: "clamp(0px, 1vw, 100px)",
 				}}
-				animate={{
-					rotate: [0, 15, 0],
-					y: [0, -20, 0],
-					scale: [1, 0.8, 1],
-				}}
+				animate={
+					clicked2 ? {
+						rotate: [0, 360, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
+						transition: {
+							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					} : { 
+						rotate: [0, 15, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
+						transition: {
+							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					}
+				}
 				transition={{
 					duration: 5,
 					repeat: Infinity,
 					ease: "easeInOut",
 					delay: 1,
+				}}
+				onClick={() => {
+					setClicked2(true)
+					setTimeout(() => setClicked2(false), 1000)
 				}}
 			>
 				<Image
@@ -166,16 +177,32 @@ const InfoSections: React.FC = () => {
 					width: "clamp(80px, 30vw, 300px)",
 					height: "clamp(80px, 30vw, 300px)",
 				}}
-				animate={{
-					rotate: [0, 15, 0],
-					y: [0, -20, 0],
-					scale: [1, 0.8, 1],
-				}}
+				animate={
+					clicked3 ? {
+						rotate: [0, 360, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
+						transition: {
+							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					} : { 
+						rotate: [0, 15, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
+						transition: {
+							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
+						}
+					}
+				}
 				transition={{
 					duration: 6.67,
 					repeat: Infinity,
 					ease: "linear",
 					delay: 3,
+				}}
+				onClick={() => {
+					setClicked3(true)
+					setTimeout(() => setClicked3(false), 1000)
 				}}
 			>
 				<Image
