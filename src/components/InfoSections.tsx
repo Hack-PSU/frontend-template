@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { m, motion } from "framer-motion";
 import Image from "next/image";
 import { useFlagState } from "@/lib/api/flag/hook";
 
@@ -52,13 +52,17 @@ const InfoSections: React.FC = () => {
 	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
 
 	// Easter egg; throwing floating objects around
+	const [holdingObject, setHoldingObject] = useState(false);
 	const [lastMousePosition, setLastMousePosition] = useState({ lastX: 0, lastY: 0 });
+	const [lastTimestamp, setLastTimestamp] = useState(0);
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [floatingObjectPositions, setFloatingObjectPositions] = useState<
 		Array<{ 
 			id: number,
-			x: number; 
-			y: number 
+			x: number,
+			y: number,
+			dx: number,
+			dy: number
 		}>
 	>([]);
 
@@ -73,6 +77,16 @@ const InfoSections: React.FC = () => {
 		if (idx !== 0) rotateLeft(idx);
 	}
 	
+	useEffect(() => {
+
+		const handleMouseDown = (e: MouseEvent) => {
+			setLastMousePosition({ lastX: mousePosition.x, lastY: mousePosition.y });
+			setMousePosition({ x: e.clientX, y: e.clientY });
+			setLastTimestamp(e.timeStamp);
+			setHoldingObject(true);
+		};
+
+	}, [holdingObject]);
 
 	return (
 		<section
@@ -82,6 +96,7 @@ const InfoSections: React.FC = () => {
 		>
 			{/* Animated Float Elements */}
 			<motion.div
+				key={1}
 				className="absolute
 				left-[clamp(20px, 4vw, 80px)]
 				top-[clamp(100px, 15vw, 200px)]
@@ -112,6 +127,7 @@ const InfoSections: React.FC = () => {
 			</motion.div>
 
 			<motion.div
+				key={2}
 				className="absolute max-sm:hidden"
 				style={{
 					width: "clamp(80px, 30vw, 400px)",
@@ -140,6 +156,7 @@ const InfoSections: React.FC = () => {
 			</motion.div>
 
 			<motion.div
+				key={3}
 				className="absolute
 				right-[clamp(20px, 4vw, 80px)]
 				top-[clamp(100px, 15vw, 200px)]
