@@ -211,16 +211,24 @@ const ReservationSystem: React.FC = () => {
                   </div>
                   <div className="flex gap-3 mt-2">
                     {room.hasAccessibility && (
-                      <Accessibility size={20} className="text-gray-600" title="Accessible" />
+                      <span title="Accessible">
+                        <Accessibility size={20} className="text-gray-600" />
+                      </span>
                     )}
                     {room.hasProjector && (
-                      <Projector size={20} className="text-gray-600" title="Projector" />
+                      <span title="Projector">
+                        <Projector size={20} className="text-gray-600" />
+                      </span>
                     )}
                     {room.hasMonitor && (
-                      <Monitor size={20} className="text-gray-600" title="Monitor" />
+                      <span title="Monitor">
+                        <Monitor size={20} className="text-gray-600" />
+                      </span>
                     )}
                     {room.hasWhiteboard && (
-                      <PenTool size={20} className="text-gray-600" title="Whiteboard" />
+                      <span title="Whiteboard">
+                        <PenTool size={20} className="text-gray-600" />
+                      </span>
                     )}
                   </div>
                 </div>
