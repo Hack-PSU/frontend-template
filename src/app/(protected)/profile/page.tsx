@@ -36,6 +36,7 @@ import {
 	Users,
 	Lock,
 	GraduationCap,
+	HelpCircle,
 } from "lucide-react";
 
 export default function Profile() {
@@ -444,6 +445,16 @@ export default function Profile() {
 						>
 							<GraduationCap className="mr-2 h-4 w-4" />
 							Manage Extra Credit
+						</Button>
+
+						<Button
+							onClick={() => window.open("https://qstack.hackpsu.org", "_blank")}
+							className="w-full"
+							variant="default"
+							size="lg"
+						>
+							<HelpCircle className="mr-2 h-4 w-4" />
+							Get Help / Submit a Ticket
 						</Button>
 
 						<Separator />
