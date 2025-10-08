@@ -544,6 +544,80 @@ const assignColumns = (
 	};
 };
 
+// PreHackathonList: Renders a scrollable list of pre-hackathon events
+interface PreHackathonEvent {
+	id: string;
+	name: string;
+	type: EventType;
+	location: string;
+	startTime: Date;
+	endTime: Date;
+	duration: number;
+}
+
+const PreHackathonList: React.FC<{
+	events: PreHackathonEvent[];
+	onEventClick: (event: PreHackathonEvent) => void;
+	isMobile: boolean;
+}> = ({ events, onEventClick, isMobile }) => {
+	return (
+		<div
+			className={`bg-white/80 border-r-2 border-[#E0F2FE] rounded-2xl shadow-md p-4 flex flex-col gap-4
+				${isMobile ? "w-full mb-4 border-r-0 border-b-2 rounded-b-2xl rounded-t-2xl" : "w-64 mr-6 min-w-[220px] max-h-[600px] overflow-y-auto"}
+			`}
+			style={{
+				fontFamily: "Monomaniac One, monospace",
+			}}
+		>
+			<div className="mb-2 text-center">
+			<h2 className="text-lg font-bold text-[#215172]">Pre-Hackathon Events</h2>
+			<div className="h-1 w-10 bg-[#215172] rounded-full mt-1 mb-2 mx-auto"></div>
+			</div>
+			{events.length === 0 ? (
+				<p className="text-gray-500 text-sm">No pre-hackathon events at this time.</p>
+			) : (
+				<ul className="flex flex-col gap-3">
+					{events
+						.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
+						.map((event) => (
+							<li
+								key={event.id}
+								className={`cursor-pointer rounded-lg border-l-4 px-3 py-2 shadow-sm transition-colors
+									hover:bg-[#F0F9FF]`}
+								style={{
+									borderColor: eventTypeColors[event.type]?.border ?? "#888",
+								}}
+								onClick={() => onEventClick(event)}
+							>
+								<div className="font-semibold text-[#215172]">{event.name}</div>
+								<div className="text-xs text-gray-600">
+									{event.startTime.toLocaleDateString("en-US", {
+										weekday: "short",
+										month: "short",
+										day: "numeric",
+									})}
+									{" · "}
+									{event.startTime.toLocaleTimeString("en-US", {
+										hour: "numeric",
+										minute: "2-digit",
+										hour12: true,
+									})}
+									{" - "}
+									{event.endTime.toLocaleTimeString("en-US", {
+										hour: "numeric",
+										minute: "2-digit",
+										hour12: true,
+									})}
+								</div>
+								<div className="text-xs text-gray-500">{event.location}</div>
+							</li>
+						))}
+				</ul>
+			)}
+		</div>
+	);
+};
+
 const Schedule: React.FC = () => {
 	const { data: events, isLoading, error } = useAllEvents();
 	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
@@ -680,6 +754,7 @@ const Schedule: React.FC = () => {
 			return {
 				Saturday: { events: [], totalColumns: 1 },
 				Sunday: { events: [], totalColumns: 1 },
+				PreHackathon: [],
 			};
 
 		// Filter events by selected categories
@@ -690,25 +765,46 @@ const Schedule: React.FC = () => {
 		const eventsByDay: {
 			Saturday: Omit<ProcessedEvent, "column">[];
 			Sunday: Omit<ProcessedEvent, "column">[];
+			PreHackathon: PreHackathonEvent[];
 		} = {
 			Saturday: [],
 			Sunday: [],
+			PreHackathon: [],
 		};
 
+		// Helper to determine if a date is on the weekend
+		const isWeekend = (date: Date) => {
+			const d = date.getDay();
+			return d === 6 || d === 0;
+		};
+
+		// Saturday = 6, Sunday = 0
 		filteredEvents.forEach((event) => {
 			const startTime = new Date(event.startTime);
 			const endTime = new Date(event.endTime);
-			const startDayOfWeek = startTime.getDay(); // 0 = Sunday, 6 = Saturday
+			const startDayOfWeek = startTime.getDay();
 			const endDayOfWeek = endTime.getDay();
 
-			// Only process Saturday (6) and Sunday (0) events
-			if (
-				startDayOfWeek !== 0 &&
-				startDayOfWeek !== 6 &&
-				endDayOfWeek !== 0 &&
-				endDayOfWeek !== 6
-			)
+			// Adds event to PreHackathon if begins before hackathon weekend
+			const isPreHackathon =
+				(startDayOfWeek !== 6 && startDayOfWeek !== 0) &&
+				(endDayOfWeek !== 6 && endDayOfWeek !== 0);
+
+			// Checks if event ends, or starts and ends, before Saturday
+			if (isPreHackathon) {
+				const duration =
+					(endTime.getTime() - startTime.getTime()) / (1000 * 60); // minutes
+				eventsByDay.PreHackathon.push({
+					id: event.id,
+					name: event.name,
+					type: event.type,
+					location: event.location.name,
+					startTime,
+					endTime,
+					duration,
+				});
 				return;
+			}
 
 			// Check if event crosses midnight (spans multiple days)
 			const crossesMidnight = startTime.getDate() !== endTime.getDate();
@@ -802,6 +898,7 @@ const Schedule: React.FC = () => {
 		return {
 			Saturday: saturdayResult,
 			Sunday: sundayResult,
+			PreHackathon: eventsByDay.PreHackathon,
 		};
 	}, [events, selectedCategories]);
 
@@ -1004,85 +1101,113 @@ const Schedule: React.FC = () => {
 			</motion.div>
 
 			{/* Calendar Grid */}
-			<motion.div
-				className="w-full max-w-5xl bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
-				initial={{ opacity: 0, y: 50 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 0.8, delay: 0.3 }}
+			<div
+				className={`w-full max-w-5xl flex ${
+					isMobile ? "flex-col" : "flex-row"
+				} items-stretch gap-0`}
 			>
-				{/* Day Tabs - Integrated Header */}
-				<div className="sticky top-0 z-20 bg-[#215172] border-b-4 border-[#1a3f5c]">
-					<div className="flex">
-						{(["Saturday", "Sunday"] as const).map((day) => (
-							<motion.button
-								key={day}
-								onClick={() => setActiveDay(day)}
-								className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
-									activeDay === day
-										? "bg-[#215172] text-white"
-										: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
-								}`}
-								style={{ fontFamily: "Monomaniac One, monospace" }}
-								whileHover={{ scale: 1.02 }}
-								whileTap={{ scale: 0.98 }}
-								initial={{ opacity: 0, y: -20 }}
-								animate={{ opacity: 1, y: 0 }}
-								transition={{ duration: 0.5 }}
-							>
-								<div
-									className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}
+				{/* PreHackathonList: Displayed left of calendar on desktop, above on mobile */}
+				<PreHackathonList
+					events={processedEvents.PreHackathon}
+					onEventClick={(event) => {
+						// Open modal with minimal event info
+						setSelectedEvent({
+							id: event.id,
+							name: event.name,
+							type: event.type,
+							location: event.location,
+							startTime: event.startTime,
+							endTime: event.endTime,
+							day: "Saturday", // Not used for modal
+							duration: event.duration,
+							startMinutes: event.startTime.getHours() * 60 + event.startTime.getMinutes(),
+							endMinutes: event.endTime.getHours() * 60 + event.endTime.getMinutes(),
+							column: 0,
+						});
+						setIsModalOpen(true);
+					}}
+					isMobile={isMobile}
+				/>
+				<motion.div
+					className="flex-1 bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 0.8, delay: 0.3 }}
+				>
+					{/* Day Tabs */}
+					<div className="sticky top-0 z-20 bg-[#215172] border-b-4 border-[#1a3f5c]">
+						<div className="flex">
+							{(["Saturday", "Sunday"] as const).map((day) => (
+								<motion.button
+									key={day}
+									onClick={() => setActiveDay(day)}
+									className={`flex-1 py-4 px-6 font-bold transition-all duration-300 ${
+										activeDay === day
+											? "bg-[#215172] text-white"
+											: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
+									}`}
+									style={{ fontFamily: "Monomaniac One, monospace" }}
+									whileHover={{ scale: 1.02 }}
+									whileTap={{ scale: 0.98 }}
+									initial={{ opacity: 0, y: -20 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{ duration: 0.5 }}
 								>
-									{day}
-								</div>
-								<div
-									className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}
-								>
-									{day === "Saturday"
-										? `${processedEvents.Saturday.events.length} event${processedEvents.Saturday.events.length !== 1 ? "s" : ""}`
-										: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`}
-								</div>
-							</motion.button>
-						))}
+									<div
+										className={`${isMobile ? "text-base" : "text-lg md:text-xl"}`}
+									>
+										{day}
+									</div>
+									<div
+										className={`text-white/70 font-medium ${isMobile ? "text-xs" : "text-sm"} mt-1`}
+									>
+										{day === "Saturday"
+											? `${processedEvents.Saturday.events.length} event${processedEvents.Saturday.events.length !== 1 ? "s" : ""}`
+											: `${processedEvents.Sunday.events.length} event${processedEvents.Sunday.events.length !== 1 ? "s" : ""}`}
+									</div>
+								</motion.button>
+							))}
+						</div>
 					</div>
-				</div>
 
-				<div className="h-[600px] flex flex-col">
-					<AnimatePresence mode="wait">
-						<motion.div
-							key={activeDay}
-							initial={{ opacity: 0, x: 50 }}
-							animate={{ opacity: 1, x: 0 }}
-							exit={{ opacity: 0, x: -50 }}
-							transition={{ duration: 0.3 }}
-							className="h-full"
-						>
-							<DayColumn
-								day={activeDay}
-								events={
-									activeDay === "Saturday"
-										? processedEvents.Saturday.events
-										: processedEvents.Sunday.events
-								}
-								startHour={timeRange.start}
-								endHour={timeRange.end}
-								totalColumns={
-									activeDay === "Saturday"
-										? processedEvents.Saturday.totalColumns
-										: processedEvents.Sunday.totalColumns
-								}
-								useTwoHourIntervals={useTwoHourIntervals}
-								onEventClick={handleEventClick}
-								isMobile={isMobile}
-								allEvents={{
-									Saturday: processedEvents.Saturday.events,
-									Sunday: processedEvents.Sunday.events,
-								}}
-								isScrollable={true}
-							/>
-						</motion.div>
-					</AnimatePresence>
-				</div>
-			</motion.div>
+					<div className="h-[600px] flex flex-col">
+						<AnimatePresence mode="wait">
+							<motion.div
+								key={activeDay}
+								initial={{ opacity: 0, x: 50 }}
+								animate={{ opacity: 1, x: 0 }}
+								exit={{ opacity: 0, x: -50 }}
+								transition={{ duration: 0.3 }}
+								className="h-full"
+							>
+								<DayColumn
+									day={activeDay}
+									events={
+										activeDay === "Saturday"
+											? processedEvents.Saturday.events
+											: processedEvents.Sunday.events
+									}
+									startHour={timeRange.start}
+									endHour={timeRange.end}
+									totalColumns={
+										activeDay === "Saturday"
+											? processedEvents.Saturday.totalColumns
+											: processedEvents.Sunday.totalColumns
+									}
+									useTwoHourIntervals={useTwoHourIntervals}
+									onEventClick={handleEventClick}
+									isMobile={isMobile}
+									allEvents={{
+										Saturday: processedEvents.Saturday.events,
+										Sunday: processedEvents.Sunday.events,
+									}}
+									isScrollable={true}
+								/>
+							</motion.div>
+						</AnimatePresence>
+					</div>
+				</motion.div>
+			</div>
 
 			{/* Download .ics Button */}
 			<div className="w-full max-w-5xl flex justify-center mt-6">
