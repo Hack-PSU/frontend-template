@@ -9,6 +9,7 @@ import {
 	useCreateAppleWalletPass,
 } from "@/lib/api/wallet/hook";
 import { useAllTeams } from "@/lib/api/team";
+import { useFlagState } from "@/lib/api/flag/hook";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
@@ -54,6 +55,9 @@ export default function Profile() {
 	} = useCreateAppleWalletPass();
 
 	const [showQRCode, setShowQRCode] = useState(false);
+
+	// Feature flag check for HelpDesk
+	const { data: helpDeskFlag } = useFlagState("HelpDesk");
 
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
@@ -447,15 +451,17 @@ export default function Profile() {
 							Manage Extra Credit
 						</Button>
 
-						<Button
-							onClick={() => window.open("https://qstack.hackpsu.org", "_blank")}
-							className="w-full"
-							variant="default"
-							size="lg"
-						>
-							<HelpCircle className="mr-2 h-4 w-4" />
-							Get Help / Submit a Ticket
-						</Button>
+						{helpDeskFlag?.isEnabled && (
+							<Button
+								onClick={() => window.open("https://qstack.hackpsu.org", "_blank")}
+								className="w-full"
+								variant="default"
+								size="lg"
+							>
+								<HelpCircle className="mr-2 h-4 w-4" />
+								Get Help / Submit a Ticket
+							</Button>
+						)}
 
 						<Separator />
 
