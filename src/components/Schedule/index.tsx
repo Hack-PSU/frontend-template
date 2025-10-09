@@ -562,56 +562,56 @@ const PreHackathonList: React.FC<{
 }> = ({ events, onEventClick, isMobile }) => {
 	return (
 		<div
-			className={`bg-white/80 border-r-2 border-[#E0F2FE] rounded-2xl shadow-md p-4 flex flex-col gap-4
-				${isMobile ? "w-full mb-4 border-r-0 border-b-2 rounded-b-2xl rounded-t-2xl" : "w-64 mr-6 min-w-[220px] max-h-[600px] overflow-y-auto"}
+			className={`bg-white/90 border-4 border-[#215172] rounded-3xl shadow-xl p-4 flex flex-col gap-4
+				${isMobile ? "w-full mb-4 rounded-3xl" : "w-64 mr-6 min-w-[220px] max-h-[600px] overflow-y-auto"}
 			`}
 			style={{
 				fontFamily: "Monomaniac One, monospace",
 			}}
 		>
-			<div className="mb-2 text-center">
-			<h2 className="text-lg font-bold text-[#215172]">Pre-Hackathon Events</h2>
-			<div className="h-1 w-10 bg-[#215172] rounded-full mt-1 mb-2 mx-auto"></div>
+			<div className="text-center bg-[#215172] rounded-xl p-3 -m-4 mb-2">
+			<h2 className="text-lg font-bold text-white">Pre-Hackathon Events</h2>
+			<div className="h-1 w-16 bg-white/80 rounded-full mt-1 mx-auto"></div>
 			</div>
 			{events.length === 0 ? (
-				<p className="text-gray-500 text-sm">No pre-hackathon events at this time.</p>
+				<p className="text-gray-500 text-sm text-center py-4">No pre-hackathon events at this time.</p>
 			) : (
 				<ul className="flex flex-col gap-3">
 					{events
 						.sort((a, b) => a.startTime.getTime() - b.startTime.getTime())
-						.map((event) => (
-							<li
-								key={event.id}
-								className={`cursor-pointer rounded-lg border-l-4 px-3 py-2 shadow-sm transition-colors
-									hover:bg-[#F0F9FF]`}
-								style={{
-									borderColor: eventTypeColors[event.type]?.border ?? "#888",
-								}}
-								onClick={() => onEventClick(event)}
-							>
-								<div className="font-semibold text-[#215172]">{event.name}</div>
-								<div className="text-xs text-gray-600">
-									{event.startTime.toLocaleDateString("en-US", {
-										weekday: "short",
-										month: "short",
-										day: "numeric",
-									})}
-									{" · "}
-									{event.startTime.toLocaleTimeString("en-US", {
-										hour: "numeric",
-										minute: "2-digit",
-										hour12: true,
-									})}
-									{" - "}
-									{event.endTime.toLocaleTimeString("en-US", {
-										hour: "numeric",
-										minute: "2-digit",
-										hour12: true,
-									})}
-								</div>
-								<div className="text-xs text-gray-500">{event.location}</div>
-							</li>
-						))}
+						.map((event) => {
+							const colors = eventTypeColors[event.type];
+							return (
+								<li
+									key={event.id}
+									className={`cursor-pointer rounded-xl border-3 ${colors.border} ${colors.bg} px-3 py-3 shadow-md transition-all duration-300 hover:scale-105`}
+									onClick={() => onEventClick(event)}
+								>
+									<div className="font-bold text-white mb-1">{event.name}</div>
+									<div className="text-xs text-white/90 font-medium mb-1">
+										{event.startTime.toLocaleDateString("en-US", {
+											weekday: "short",
+											month: "short",
+											day: "numeric",
+										})}
+									</div>
+									<div className="text-xs text-white/80">
+										{event.startTime.toLocaleTimeString("en-US", {
+											hour: "numeric",
+											minute: "2-digit",
+											hour12: true,
+										})}
+										{" - "}
+										{event.endTime.toLocaleTimeString("en-US", {
+											hour: "numeric",
+											minute: "2-digit",
+											hour12: true,
+										})}
+									</div>
+									<div className="text-xs text-white/80 mt-1">{event.location}</div>
+								</li>
+							);
+						})}
 				</ul>
 			)}
 		</div>
@@ -666,6 +666,9 @@ const Schedule: React.FC = () => {
 
 	// State for active day tab
 	const [activeDay, setActiveDay] = useState<"Saturday" | "Sunday">("Saturday");
+
+	// State for toggling pre-hackathon events visibility
+	const [showPreEvents, setShowPreEvents] = useState(true);
 
 	// Handle event click
 	const handleEventClick = (event: ProcessedEvent) => {
@@ -902,6 +905,13 @@ const Schedule: React.FC = () => {
 		};
 	}, [events, selectedCategories]);
 
+	// Check if there are any upcoming pre-hackathon events
+	const hasUpcomingPreEvents = useMemo(() => {
+		if (processedEvents.PreHackathon.length === 0) return false;
+		const now = new Date();
+		return processedEvents.PreHackathon.some(event => event.endTime > now);
+	}, [processedEvents.PreHackathon]);
+
 	// Calculate time range to show
 	const timeRange = useMemo(() => {
 		if (!events || events.length === 0) return { start: 8, end: 22 }; // default 8 AM to 10 PM
@@ -1098,41 +1108,70 @@ const Schedule: React.FC = () => {
 							: `Showing ${selectedCategories.size} of ${Object.keys(EventType).length} categories`}
 					</span>
 				</div>
+
+				{/* Toggle for Pre-Hackathon Events */}
+				{hasUpcomingPreEvents && (
+					<div className="flex justify-center mb-4">
+						<motion.button
+							onClick={() => setShowPreEvents(!showPreEvents)}
+							className={`px-6 py-3 rounded-xl font-bold text-sm border-3 transition-all duration-300 ${
+								showPreEvents
+									? "bg-[#215172] border-[#215172] text-white"
+									: "bg-white/80 border-[#215172] text-[#215172] hover:bg-white"
+							}`}
+							style={{ fontFamily: "Monomaniac One, monospace" }}
+							whileHover={{ scale: 1.05 }}
+							whileTap={{ scale: 0.95 }}
+						>
+							{showPreEvents ? "Hide" : "Show"} Pre-Hackathon Events
+						</motion.button>
+					</div>
+				)}
 			</motion.div>
 
 			{/* Calendar Grid */}
 			<div
-				className={`w-full max-w-5xl flex ${
+				className={`w-full ${showPreEvents && hasUpcomingPreEvents ? "max-w-5xl" : "max-w-4xl"} flex ${
 					isMobile ? "flex-col" : "flex-row"
 				} items-stretch gap-0`}
 			>
 				{/* PreHackathonList: Displayed left of calendar on desktop, above on mobile */}
-				<PreHackathonList
-					events={processedEvents.PreHackathon}
-					onEventClick={(event) => {
-						// Open modal with minimal event info
-						setSelectedEvent({
-							id: event.id,
-							name: event.name,
-							type: event.type,
-							location: event.location,
-							startTime: event.startTime,
-							endTime: event.endTime,
-							day: "Saturday", // Not used for modal
-							duration: event.duration,
-							startMinutes: event.startTime.getHours() * 60 + event.startTime.getMinutes(),
-							endMinutes: event.endTime.getHours() * 60 + event.endTime.getMinutes(),
-							column: 0,
-						});
-						setIsModalOpen(true);
-					}}
-					isMobile={isMobile}
-				/>
+				{showPreEvents && hasUpcomingPreEvents && (
+					<motion.div
+						initial={{ opacity: 0, x: -50 }}
+						animate={{ opacity: 1, x: 0 }}
+						exit={{ opacity: 0, x: -50 }}
+						transition={{ duration: 0.4 }}
+					>
+						<PreHackathonList
+							events={processedEvents.PreHackathon}
+							onEventClick={(event) => {
+								// Open modal with minimal event info
+								setSelectedEvent({
+									id: event.id,
+									name: event.name,
+									type: event.type,
+									location: event.location,
+									startTime: event.startTime,
+									endTime: event.endTime,
+									day: "Saturday", // Not used for modal
+									duration: event.duration,
+									startMinutes: event.startTime.getHours() * 60 + event.startTime.getMinutes(),
+									endMinutes: event.endTime.getHours() * 60 + event.endTime.getMinutes(),
+									column: 0,
+								});
+								setIsModalOpen(true);
+							}}
+							isMobile={isMobile}
+						/>
+					</motion.div>
+				)}
 				<motion.div
 					className="flex-1 bg-white/90 rounded-3xl shadow-xl overflow-hidden backdrop-blur-sm"
 					initial={{ opacity: 0, y: 50 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8, delay: 0.3 }}
+					layout
 				>
 					{/* Day Tabs */}
 					<div className="sticky top-0 z-20 bg-[#215172] border-b-4 border-[#1a3f5c]">
