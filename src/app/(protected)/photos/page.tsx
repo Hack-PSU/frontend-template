@@ -67,7 +67,7 @@ export default function PhotosPage() {
 					<div className="py-12 text-center">Loading photos...</div>
 				) : (
 					<PhotoGallery
-						images={(data || []).map((p: any) => p.url || p.photoUrl || p.name)}
+						images={Array.isArray(data) ? data.map((p: any) => p.url || p.photoUrl || p.name) : []}
 						variant="photos"
 					/>
 				)}
