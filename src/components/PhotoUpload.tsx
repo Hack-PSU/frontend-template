@@ -58,7 +58,7 @@ export default function PhotoUpload({
 				onDragEnter={() => setIsDragging(true)}
 				onDragLeave={() => setIsDragging(false)}
 				onDrop={handleDrop}
-				className={`p-4 border-2 rounded-md ${isDragging ? "border-blue-400 bg-blue-50" : "border-dashed"}`}
+				className={`p-4 border-2 border-[#215172] rounded-md ${isDragging ? "border-[#215172]-400 bg-blue-50" : "border-dashed"}`}
 			>
 				<input
 					ref={inputRef}
@@ -74,7 +74,7 @@ export default function PhotoUpload({
 							className="text-sm text-blue-600 underline"
 							onClick={() => inputRef.current?.click()}
 						>
-							select a file
+							Select a file
 						</button>
 					</div>
 					{preview && (
@@ -88,7 +88,7 @@ export default function PhotoUpload({
 			</div>
 
 			<div className="mt-3 flex space-x-2">
-				<Button onClick={startUpload} disabled={!file || isUploading}>
+				<Button onClick={startUpload} disabled={!file || isUploading} style={{ backgroundColor: "#215172", color: "white" }}>
 					{isUploading ? "Uploading..." : "Upload"}
 				</Button>
 				<Button
@@ -97,6 +97,7 @@ export default function PhotoUpload({
 						setFile(null);
 						setPreview(null);
 					}}
+					style={{ backgroundColor: "#215172", color: "white" }}
 				>
 					Cancel
 				</Button>
