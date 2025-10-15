@@ -39,6 +39,7 @@ import {
 	GraduationCap,
 	HelpCircle,
 } from "lucide-react";
+import { Roofing, Room } from "@mui/icons-material";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
@@ -142,6 +143,10 @@ export default function Profile() {
 	const handleTeam = () => {
 		router.push("/team");
 	};
+
+	const handleReserve = () => {
+		router.push("/reservation")
+	}
 
 	const handleProject = () => {
 		router.push("/project");
@@ -383,6 +388,15 @@ export default function Profile() {
 								>
 									<Users className="mr-2 h-4 w-4" />
 									Manage Team
+								</Button>
+								<Button
+									onClick={handleReserve}
+									className="w-full"
+									variant="default"
+									size="lg"
+								>
+									<Room className="mr-2 h-4 w-4" />
+									Reserve Room
 								</Button>
 							</>
 						) : (
