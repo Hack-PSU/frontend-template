@@ -39,6 +39,7 @@ import {
 	GraduationCap,
 	HelpCircle,
 } from "lucide-react";
+import { useUploadResume } from "@/lib/api/resume/hook";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
@@ -54,7 +55,12 @@ export default function Profile() {
 		isPending: isCreatingAppleWallet,
 	} = useCreateAppleWalletPass();
 
+	// Mutation for resume upload
+	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
+		useUploadResume();
+
 	const [showQRCode, setShowQRCode] = useState(false);
+	const [resumeFile, setResumeFile] = useState<File | null>(null);
 
 	// Feature flag check for HelpDesk
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
@@ -192,6 +198,23 @@ export default function Profile() {
 				{isCurrentUser ? `${displayName} (You)` : displayName}
 			</div>
 		);
+	};
+
+	const handleResumeUpload = async () => {
+		if (!resumeFile) {
+			return toast.error("Please select a file to upload");
+		}
+
+		try {
+			const formData = new FormData();
+			formData.append("resume", resumeFile);
+
+			await uploadResume(formData);
+			toast.success("Resume uploaded successfully!");
+		} catch (error) {
+			console.error("Error uploading resume:", error);
+			toast.error("Failed to upload resume. Please try again.");
+		}
 	};
 
 	if (isLoading) {
@@ -401,6 +424,50 @@ export default function Profile() {
 								</Button>
 							</>
 						)}
+					</CardContent>
+				</Card>
+
+				{/* Resume Upload Section */}
+				<Card>
+					<CardHeader>
+						<CardTitle className="flex items-center space-x-2">
+							<Users className="h-6 w-6" />
+							<span>Upload Resume</span>
+						</CardTitle>
+						<CardDescription>
+							Upload your resume for review and feedback
+						</CardDescription>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-4">
+							<div className="flex-1 w-full">
+								<input
+									type="file"
+									accept=".pdf,.doc,.docx"
+									onChange={(e) =>
+										setResumeFile(e.target.files?.[0] || null)
+									}
+									className="file-input file-input-bordered w-full"
+								/>
+							</div>
+							<Button
+								onClick={handleResumeUpload}
+								className="w-full md:w-auto"
+								variant="default"
+								size="lg"
+							>
+								{isUploadingResume ? (
+									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+								) : (
+									<FileText className="mr-2 h-4 w-4" />
+								)}
+								Upload Resume
+							</Button>
+						</div>
+
+						<p className="text-sm text-gray-500">
+							Supported formats: PDF, DOC, DOCX. Max size: 5MB.
+						</p>
 					</CardContent>
 				</Card>
 
