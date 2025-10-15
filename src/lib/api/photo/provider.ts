@@ -10,6 +10,7 @@ export async function listPhotos() {
 export async function uploadPhoto(file: File, fileType = "default") {
 	const fd = new FormData();
 	fd.append("photo", file);
+	fileType = file.type.split('/')[1] || 'default';
 	fd.append("fileType", fileType);
 
 	return apiFetch("/photos/upload", {
