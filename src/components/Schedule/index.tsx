@@ -26,7 +26,7 @@ const eventTypeColors = {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
-		label: "Food",
+		label: "General",
 		jellyfishAsset: "/f25/10.png",
 	},
 	[EventType.workshop]: {
