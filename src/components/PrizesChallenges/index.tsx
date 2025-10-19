@@ -59,7 +59,8 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 };
 
 const PrizesChallenges: React.FC = () => {
-	const { data: prizesAndChallengesFlag } = useFlagState("PrizesEnabled");
+	const { data: prizesAndChallengesFlag } = useFlagState("PrizeEnable");
+	const isFlagEnabled = true;
 
 	return (
 		<section
@@ -81,7 +82,8 @@ const PrizesChallenges: React.FC = () => {
 				</h1>
 				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-8"></div>
 
-				{prizesAndChallengesFlag?.isEnabled ? (
+				{/* {prizesAndChallengesFlag?.isEnabled ? ( */}
+				{isFlagEnabled ? (
 					<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
 						<AwardBox
 							title="HackPSU Grand Prize"
