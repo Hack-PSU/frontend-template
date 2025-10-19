@@ -47,7 +47,7 @@ interface FormData {
 export default function OrganizerApplicationPage() {
 	const router = useRouter();
 	const submitApplicationMutation = useSubmitOrganizerApplication();
-	const [isSubmitted, setIsSubmitted] = useState(true);
+	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
