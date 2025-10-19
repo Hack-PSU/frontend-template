@@ -86,21 +86,52 @@ const InfoSections: React.FC = () => {
 					height: "clamp(80px, 30vw, 400px)",
 				}}
 				animate={
-					clicked1 ? {
-						rotate: [0, 360, 0], y: [-130, -30, -130], scale: [1, 0.9, 1],
-						transition: {
-							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					} : { 
-						rotate: [0, 15, 0], y: [-130, -30, -130], scale: [1, 0.9, 1],
-						transition: {
-							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					}
+					clicked1
+						? {
+								rotate: [0, 360, 0],
+								y: [-130, -30, -130],
+								scale: [1, 0.9, 1],
+								transition: {
+									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
+						: {
+								rotate: [0, 15, 0],
+								y: [-130, -30, -130],
+								scale: [1, 0.9, 1],
+								transition: {
+									rotate: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
 				}
 				transition={{
 					duration: 6,
@@ -109,8 +140,8 @@ const InfoSections: React.FC = () => {
 					delay: 0,
 				}}
 				onClick={() => {
-					setClicked1(true)
-					setTimeout(() => setClicked1(false), 1000)
+					setClicked1(true);
+					setTimeout(() => setClicked1(false), 1000);
 				}}
 			>
 				<Image
@@ -131,21 +162,52 @@ const InfoSections: React.FC = () => {
 					top: "clamp(0px, 1vw, 100px)",
 				}}
 				animate={
-					clicked2 ? {
-						rotate: [0, 360, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
-						transition: {
-							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					} : { 
-						rotate: [0, 15, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
-						transition: {
-							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					}
+					clicked2
+						? {
+								rotate: [0, 360, 0],
+								y: [0, -20, 0],
+								scale: [1, 0.8, 1],
+								transition: {
+									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
+						: {
+								rotate: [0, 15, 0],
+								y: [0, -20, 0],
+								scale: [1, 0.8, 1],
+								transition: {
+									rotate: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
 				}
 				transition={{
 					duration: 5,
@@ -154,8 +216,8 @@ const InfoSections: React.FC = () => {
 					delay: 1,
 				}}
 				onClick={() => {
-					setClicked2(true)
-					setTimeout(() => setClicked2(false), 1000)
+					setClicked2(true);
+					setTimeout(() => setClicked2(false), 1000);
 				}}
 			>
 				<Image
@@ -178,21 +240,52 @@ const InfoSections: React.FC = () => {
 					height: "clamp(80px, 30vw, 300px)",
 				}}
 				animate={
-					clicked3 ? {
-						rotate: [0, 360, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
-						transition: {
-							rotate: { duration: 1, ease: "easeInOut" },   // one-off spin
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					} : { 
-						rotate: [0, 15, 0], y: [0, -20, 0], scale: [1, 0.8, 1],
-						transition: {
-							rotate	: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							y: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-							scale: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 },
-						}
-					}
+					clicked3
+						? {
+								rotate: [0, 360, 0],
+								y: [0, -20, 0],
+								scale: [1, 0.8, 1],
+								transition: {
+									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
+						: {
+								rotate: [0, 15, 0],
+								y: [0, -20, 0],
+								scale: [1, 0.8, 1],
+								transition: {
+									rotate: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									y: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+									scale: {
+										duration: 5,
+										repeat: Infinity,
+										ease: "easeInOut",
+										delay: 1,
+									},
+								},
+							}
 				}
 				transition={{
 					duration: 6.67,
@@ -201,8 +294,8 @@ const InfoSections: React.FC = () => {
 					delay: 3,
 				}}
 				onClick={() => {
-					setClicked3(true)
-					setTimeout(() => setClicked3(false), 1000)
+					setClicked3(true);
+					setTimeout(() => setClicked3(false), 1000);
 				}}
 			>
 				<Image

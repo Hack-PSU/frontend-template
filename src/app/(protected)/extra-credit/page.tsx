@@ -20,7 +20,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
-import { GraduationCap, Loader2, ArrowLeft, Check, Plus, X } from "lucide-react";
+import {
+	GraduationCap,
+	Loader2,
+	ArrowLeft,
+	Check,
+	Plus,
+	X,
+} from "lucide-react";
 
 export default function ExtraCredit() {
 	const { user, isAuthenticated, isLoading: authLoading } = useFirebase();

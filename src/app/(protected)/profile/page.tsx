@@ -453,7 +453,9 @@ export default function Profile() {
 
 						{helpDeskFlag?.isEnabled && (
 							<Button
-								onClick={() => window.open("https://qstack.hackpsu.org", "_blank")}
+								onClick={() =>
+									window.open("https://qstack.hackpsu.org", "_blank")
+								}
 								className="w-full"
 								variant="default"
 								size="lg"
