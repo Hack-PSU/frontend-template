@@ -26,7 +26,7 @@ const eventTypeColors = {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
-		label: "Food",
+		label: "General",
 		jellyfishAsset: "/f25/10.png",
 	},
 	[EventType.workshop]: {
@@ -570,11 +570,13 @@ const PreHackathonList: React.FC<{
 			}}
 		>
 			<div className="text-center bg-[#215172] rounded-xl p-3 -m-4 mb-2">
-			<h2 className="text-lg font-bold text-white">Pre-Hackathon Events</h2>
-			<div className="h-1 w-16 bg-white/80 rounded-full mt-1 mx-auto"></div>
+				<h2 className="text-lg font-bold text-white">Pre-Hackathon Events</h2>
+				<div className="h-1 w-16 bg-white/80 rounded-full mt-1 mx-auto"></div>
 			</div>
 			{events.length === 0 ? (
-				<p className="text-gray-500 text-sm text-center py-4">No pre-hackathon events at this time.</p>
+				<p className="text-gray-500 text-sm text-center py-4">
+					No pre-hackathon events at this time.
+				</p>
 			) : (
 				<ul className="flex flex-col gap-3">
 					{events
@@ -608,7 +610,9 @@ const PreHackathonList: React.FC<{
 											hour12: true,
 										})}
 									</div>
-									<div className="text-xs text-white/80 mt-1">{event.location}</div>
+									<div className="text-xs text-white/80 mt-1">
+										{event.location}
+									</div>
 								</li>
 							);
 						})}
@@ -790,8 +794,10 @@ const Schedule: React.FC = () => {
 
 			// Adds event to PreHackathon if begins before hackathon weekend
 			const isPreHackathon =
-				(startDayOfWeek !== 6 && startDayOfWeek !== 0) &&
-				(endDayOfWeek !== 6 && endDayOfWeek !== 0);
+				startDayOfWeek !== 6 &&
+				startDayOfWeek !== 0 &&
+				endDayOfWeek !== 6 &&
+				endDayOfWeek !== 0;
 
 			// Checks if event ends, or starts and ends, before Saturday
 			if (isPreHackathon) {
@@ -909,7 +915,7 @@ const Schedule: React.FC = () => {
 	const hasUpcomingPreEvents = useMemo(() => {
 		if (processedEvents.PreHackathon.length === 0) return false;
 		const now = new Date();
-		return processedEvents.PreHackathon.some(event => event.endTime > now);
+		return processedEvents.PreHackathon.some((event) => event.endTime > now);
 	}, [processedEvents.PreHackathon]);
 
 	// Calculate time range to show
@@ -1156,8 +1162,11 @@ const Schedule: React.FC = () => {
 									endTime: event.endTime,
 									day: "Saturday", // Not used for modal
 									duration: event.duration,
-									startMinutes: event.startTime.getHours() * 60 + event.startTime.getMinutes(),
-									endMinutes: event.endTime.getHours() * 60 + event.endTime.getMinutes(),
+									startMinutes:
+										event.startTime.getHours() * 60 +
+										event.startTime.getMinutes(),
+									endMinutes:
+										event.endTime.getHours() * 60 + event.endTime.getMinutes(),
 									column: 0,
 								});
 								setIsModalOpen(true);
