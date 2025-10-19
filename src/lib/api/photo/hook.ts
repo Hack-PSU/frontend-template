@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listPhotos, uploadPhoto, deletePhoto } from "./provider";
 
-export function usePhotos() {
+export function usePhotos(photoType?: string) {
 	return useQuery({
-		queryKey: ["photos"],
-		queryFn: () => listPhotos(),
+		queryKey: ["photos", photoType],
+		queryFn: () => listPhotos(photoType),
 		staleTime: 1000 * 60, // 1 minute
 	});
 }
