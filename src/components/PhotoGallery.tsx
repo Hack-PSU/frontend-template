@@ -10,20 +10,31 @@ import Image from "next/image";
 interface CarouselProps {
 	/** Array of image URLs (e.g. ['/images/carousel/1.jpg', '/images/carousel/2.jpg', ...]) */
 	images: string[];
+	/** Variant for different styling - 'default' for home page, 'photos' for photos page */
+	variant?: 'default' | 'photos';
 }
 
-const PhotoGallery: React.FC<CarouselProps> = ({ images }) => (
-	<div className="w-full overflow-hidden bg-[#215172] py-8 md:py-16">
-		{/* Header */}
-		<div className="text-center mb-8">
-			<h1
-				className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3"
-				style={{ fontFamily: "Monomaniac One, monospace" }}
-			>
-				Gallery
-			</h1>
-			<div className="w-16 h-1 bg-[#FFEBB8] rounded-full mx-auto"></div>
-		</div>
+const PhotoGallery: React.FC<CarouselProps> = ({ images, variant = 'default' }) => {
+	const isPhotosPage = variant === 'photos';
+	
+	return (
+		<div className={`w-full overflow-hidden py-8 md:py-16 ${
+			isPhotosPage ? 'bg-[#ffebb8]' : 'bg-[#215172]'
+		}`}>
+			{/* Header */}
+			<div className="text-center mb-8">
+				<h1
+					className={`text-4xl md:text-5xl font-bold mb-3 ${
+						isPhotosPage ? 'text-[#215172]' : 'text-[#FFEBB8]'
+					}`}
+					style={{ fontFamily: "Monomaniac One, monospace" }}
+				>
+					Gallery
+				</h1>
+				<div className={`w-16 h-1 rounded-full mx-auto ${
+					isPhotosPage ? 'bg-[#215172]' : 'bg-[#FFEBB8]'
+				}`}></div>
+			</div>
 		<Swiper
 			modules={[Pagination, Autoplay]}
 			slidesPerView={1}
@@ -104,6 +115,7 @@ const PhotoGallery: React.FC<CarouselProps> = ({ images }) => (
 			}
 		`}</style>
 	</div>
-);
+	);
+};
 
 export default PhotoGallery;
