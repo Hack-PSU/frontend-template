@@ -242,6 +242,24 @@ const EventItem: React.FC<EventItemProps> = ({
 	const columnWidth = `${100 / totalColumns}%`;
 	const leftOffset = `${(event.column * 100) / totalColumns}%`;
 
+	// Add state for current time and update it every minute
+	const [isHappening, setIsHappening] = useState(false);
+
+	useEffect(() => {
+		const checkIfHappening = () => {
+			const now = new Date();
+			setIsHappening(now >= event.startTime && now <= event.endTime);
+		};
+
+		// Check initially
+		checkIfHappening();
+
+		// Update every minute
+		const interval = setInterval(checkIfHappening, 60000);
+
+		return () => clearInterval(interval);
+	}, [event.startTime, event.endTime]);
+
 	// Adjust positioning and sizing based on interval type
 	// 1-hour intervals: 80px per hour = 80/60 = 1.33px per minute
 	// 2-hour intervals: 120px per 2 hours = 120/120 = 1px per minute
@@ -251,7 +269,7 @@ const EventItem: React.FC<EventItemProps> = ({
 
 	return (
 		<motion.div
-			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer`}
 			style={{
 				top: `${topPosition}px`,
 				left: leftOffset,
@@ -268,6 +286,16 @@ const EventItem: React.FC<EventItemProps> = ({
 			whileTap={{ scale: 0.99 }}
 			onClick={() => onEventClick(event)}
 		>
+			{isHappening && (
+				<div
+					className="absolute w-2 h-2 rounded-full bg-red-500 animate-pulse"
+					style={{
+						top: "8px",
+						left: "8px",
+						zIndex: 2,
+					}}
+				/>
+			)}
 			<div
 				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 text-white ${isMobile ? "text-xs" : "text-sm"}`}
 				style={{
@@ -586,9 +614,26 @@ const PreHackathonList: React.FC<{
 							return (
 								<li
 									key={event.id}
-									className={`cursor-pointer rounded-xl border-3 ${colors.border} ${colors.bg} px-3 py-3 shadow-md transition-all duration-300 hover:scale-105`}
+									className={`cursor-pointer rounded-xl border-3 ${colors.border} ${colors.bg} px-3 py-3 shadow-md transition-all duration-300 hover:scale-105 relative`}
 									onClick={() => onEventClick(event)}
 								>
+									{(() => {
+										const now = new Date();
+										const isHappening =
+											now >= event.startTime && now <= event.endTime;
+										return (
+											isHappening && (
+												<div
+													className="absolute w-2 h-2 rounded-full bg-red-500 animate-pulse"
+													style={{
+														top: "8px",
+														right: "8px",
+														zIndex: 2,
+													}}
+												/>
+											)
+										);
+									})()}
 									<div className="font-bold text-white mb-1">{event.name}</div>
 									<div className="text-xs text-white/90 font-medium mb-1">
 										{event.startTime.toLocaleDateString("en-US", {
