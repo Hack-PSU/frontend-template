@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Calendar, Clock, Users, MapPin, X } from "lucide-react";
 import {
 	useReservations,
 	useLocations,
@@ -12,6 +12,14 @@ import { useAllTeams } from "@/lib/api/team/hook";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { toast } from "sonner";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Room {
 	id: number;
@@ -80,12 +88,12 @@ const ReservationSystem: React.FC = () => {
 		}
 	}, [hackathon, initialDate]);
 
-	// Fetch data using hackathon ID from user's team
+	// Fetch data using hackathon ID from active hackathon
 	const {
 		data: reservations,
 		isLoading: reservationsLoading,
 		error: reservationsError,
-	} = useReservations(userTeam?.hackathonId || "");
+	} = useReservations(hackathon?.id || "");
 	const {
 		data: locations,
 		isLoading: locationsLoading,
@@ -94,12 +102,15 @@ const ReservationSystem: React.FC = () => {
 	const { mutateAsync: createReservation, isPending: isCreating } =
 		useCreateReservation();
 	const { mutateAsync: cancelReservation, isPending: isCanceling } =
-		useCancelReservation(userTeam?.hackathonId || "");
+		useCancelReservation(hackathon?.id || "");
 
-	const [selectedSlot, setSelectedSlot] = useState<{
+	const [selectedSlots, setSelectedSlots] = useState<{
 		roomId: number;
-		time: string;
+		times: string[];
 	} | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [cancelModalOpen, setCancelModalOpen] = useState(false);
+	const [reservationToCancel, setReservationToCancel] = useState<string | null>(null);
 
 	// Get valid date range for the hackathon (normalize to ms)
 	const dateRange = useMemo(() => {
@@ -134,7 +145,7 @@ const ReservationSystem: React.FC = () => {
 		console.log("=== Reservation System Debug ===");
 		console.log("User:", user?.uid);
 		console.log("User Team:", userTeam);
-		console.log("Hackathon ID:", userTeam?.hackathonId);
+		console.log("Hackathon ID:", hackathon?.id);
 		console.log("Hackathon Data:", hackathon);
 		if (hackathon) {
 			const startMs =
@@ -295,16 +306,11 @@ const ReservationSystem: React.FC = () => {
 			return;
 		}
 
-		// If clicking an existing reservation by this team, cancel it
+		// If clicking an existing reservation by this team, open cancel modal
 		if (slotInfo.reservationId) {
-			try {
-				await cancelReservation(slotInfo.reservationId);
-				toast.success("Reservation canceled");
-				setSelectedSlot(null);
-			} catch (error) {
-				console.error("Cancel error:", error);
-				toast.error("Failed to cancel reservation");
-			}
+			setReservationToCancel(slotInfo.reservationId);
+			setSelectedSlots({ roomId, times: [time] });
+			setCancelModalOpen(true);
 			return;
 		}
 
@@ -314,17 +320,31 @@ const ReservationSystem: React.FC = () => {
 			return;
 		}
 
-		setSelectedSlot({ roomId, time });
+		// Toggle slot selection
+		if (selectedSlots?.roomId === roomId) {
+			const timeIndex = selectedSlots.times.indexOf(time);
+			if (timeIndex > -1) {
+				// Deselect this time
+				const newTimes = selectedSlots.times.filter((t) => t !== time);
+				if (newTimes.length === 0) {
+					setSelectedSlots(null);
+				} else {
+					setSelectedSlots({ roomId, times: newTimes });
+				}
+			} else {
+				// Add this time
+				setSelectedSlots({ roomId, times: [...selectedSlots.times, time].sort() });
+			}
+		} else {
+			// New room selection
+			setSelectedSlots({ roomId, times: [time] });
+		}
 	};
 
 	const handleConfirmReservation = async () => {
-		if (!selectedSlot || !userTeam || !hackathon) return;
+		if (!selectedSlots || !userTeam || !hackathon) return;
 
 		try {
-			// ms throughout
-			const startTimeMs = timeToTimestamp(selectedSlot.time, selectedDate);
-			const endTimeMs = startTimeMs + 60 * 60 * 1000; // 1 hour
-
 			const hackathonStartMs =
 				hackathon.startTime > 9999999999
 					? hackathon.startTime
@@ -334,25 +354,57 @@ const ReservationSystem: React.FC = () => {
 					? hackathon.endTime
 					: hackathon.endTime * 1000;
 
-			// Validate within bounds (ms)
-			if (startTimeMs < hackathonStartMs || endTimeMs > hackathonEndMs) {
-				toast.error("Reservation time must be within the hackathon period");
-				return;
-			}
-
-			await createReservation({
-				locationId: selectedSlot.roomId,
-				teamId: userTeam.id,
-				startTime: startTimeMs, // ms
-				endTime: endTimeMs, // ms
-				hackathonId: userTeam.hackathonId,
+			// Sort times to create consecutive reservations
+			const sortedTimes = [...selectedSlots.times].sort((a, b) => {
+				const aMs = timeToTimestamp(a, selectedDate);
+				const bMs = timeToTimestamp(b, selectedDate);
+				return aMs - bMs;
 			});
 
-			toast.success("Reservation created successfully!");
-			setSelectedSlot(null);
+			// Create reservations for each selected slot
+			const reservationPromises = sortedTimes.map(async (time) => {
+				const startTimeMs = timeToTimestamp(time, selectedDate);
+				const endTimeMs = startTimeMs + 60 * 60 * 1000; // 1 hour
+
+				// Validate within bounds (ms)
+				if (startTimeMs < hackathonStartMs || endTimeMs > hackathonEndMs) {
+					throw new Error("Reservation time must be within the hackathon period");
+				}
+
+				return createReservation({
+					locationId: selectedSlots.roomId,
+					teamId: userTeam.id,
+					startTime: startTimeMs, // ms
+					endTime: endTimeMs, // ms
+					hackathonId: hackathon.id,
+				});
+			});
+
+			await Promise.all(reservationPromises);
+
+			toast.success(
+				`${sortedTimes.length} reservation${sortedTimes.length > 1 ? "s" : ""} created successfully!`
+			);
+			setSelectedSlots(null);
+			setIsModalOpen(false);
 		} catch (error: any) {
 			console.error("Create reservation error:", error);
 			toast.error(error?.message || "Failed to create reservation");
+		}
+	};
+
+	const handleCancelReservation = async () => {
+		if (!reservationToCancel) return;
+
+		try {
+			await cancelReservation(reservationToCancel);
+			toast.success("Reservation canceled successfully!");
+			setReservationToCancel(null);
+			setSelectedSlots(null);
+			setCancelModalOpen(false);
+		} catch (error) {
+			console.error("Cancel error:", error);
+			toast.error("Failed to cancel reservation");
 		}
 	};
 
@@ -365,10 +417,10 @@ const ReservationSystem: React.FC = () => {
 
 		if (direction === "next" && currentIndex < dateRange.dates.length - 1) {
 			setSelectedDate(dateRange.dates[currentIndex + 1]);
-			setSelectedSlot(null);
+			setSelectedSlots(null);
 		} else if (direction === "prev" && currentIndex > 0) {
 			setSelectedDate(dateRange.dates[currentIndex - 1]);
-			setSelectedSlot(null);
+			setSelectedSlots(null);
 		}
 	};
 
@@ -482,39 +534,66 @@ const ReservationSystem: React.FC = () => {
 	return (
 		<section className="py-12 px-4 md:px-8">
 			<div className="max-w-7xl mx-auto">
-				<div className="mb-8">
+				<div className="mb-6">
 					<h1
-						className="text-5xl font-bold mb-6 text-gray-800"
+						className="text-4xl font-bold mb-4 text-gray-800"
 						style={{ fontFamily: "TiltNeon, sans-serif" }}
 					>
 						Room Reservations
 					</h1>
-					<div className="flex flex-wrap items-center gap-3 mb-6">
-						<span className="text-xl font-semibold text-gray-700">
-							{currentDate}
-						</span>
-						<button
-							onClick={() => handleDateChange("prev")}
-							disabled={!canNavigate.prev}
-							className={`px-4 py-2 bg-white border-2 border-gray-300 rounded-lg transition-all shadow-sm ${
-								canNavigate.prev
-									? "hover:bg-gray-50"
-									: "opacity-50 cursor-not-allowed"
-							}`}
-						>
-							<ChevronLeft size={18} />
-						</button>
-						<button
-							onClick={() => handleDateChange("next")}
-							disabled={!canNavigate.next}
-							className={`px-4 py-2 bg-white border-2 border-gray-300 rounded-lg transition-all shadow-sm ${
-								canNavigate.next
-									? "hover:bg-gray-50"
-									: "opacity-50 cursor-not-allowed"
-							}`}
-						>
-							<ChevronRight size={18} />
-						</button>
+
+					<div className="flex flex-wrap items-center justify-between gap-4">
+						<div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-fit">
+							<button
+								onClick={() => handleDateChange("prev")}
+								disabled={!canNavigate.prev}
+								className={`p-2 rounded-lg transition-all ${
+									canNavigate.prev
+										? "hover:bg-gray-100 text-gray-700"
+										: "opacity-30 cursor-not-allowed text-gray-400"
+								}`}
+								title="Previous day"
+							>
+								<ChevronLeft size={20} />
+							</button>
+							<div className="flex items-center gap-2 px-3">
+								<Calendar className="h-4 w-4 text-blue-600" />
+								<span className="text-base font-semibold text-gray-800 min-w-[200px] text-center">
+									{currentDate}
+								</span>
+							</div>
+							<button
+								onClick={() => handleDateChange("next")}
+								disabled={!canNavigate.next}
+								className={`p-2 rounded-lg transition-all ${
+									canNavigate.next
+										? "hover:bg-gray-100 text-gray-700"
+										: "opacity-30 cursor-not-allowed text-gray-400"
+								}`}
+								title="Next day"
+							>
+								<ChevronRight size={20} />
+							</button>
+						</div>
+
+						<div className="flex flex-wrap gap-3 text-xs bg-white p-2.5 rounded-lg shadow-sm border border-gray-200">
+							<div className="flex items-center gap-1.5">
+								<div className="w-4 h-4 bg-green-400 border border-gray-300 rounded"></div>
+								<span className="text-gray-600">Available</span>
+							</div>
+							<div className="flex items-center gap-1.5">
+								<div className="w-4 h-4 bg-blue-500 border border-gray-300 rounded"></div>
+								<span className="text-gray-600">Selected</span>
+							</div>
+							<div className="flex items-center gap-1.5">
+								<div className="w-4 h-4 bg-gray-300 border border-gray-300 rounded"></div>
+								<span className="text-gray-600">Unavailable</span>
+							</div>
+							<div className="flex items-center gap-1.5">
+								<div className="w-4 h-4 bg-purple-400 border border-gray-300 rounded"></div>
+								<span className="text-gray-600">Your Reservation</span>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -526,24 +605,24 @@ const ReservationSystem: React.FC = () => {
 					</div>
 				) : (
 					<>
-						<div className="bg-white rounded-2xl shadow-xl overflow-hidden border-2 border-gray-2 00">
+						<div className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
 							{/* Unified Grid Container */}
 							<div className="overflow-x-auto">
 								<div
 									className="grid"
 									style={{
-										gridTemplateColumns: `192px repeat(${timeSlots.length}, 1fr)`,
-										gridTemplateRows: `56px repeat(${rooms.length}, 56px)`,
+										gridTemplateColumns: `140px repeat(${timeSlots.length}, 1fr)`,
+										gridTemplateRows: `40px repeat(${rooms.length}, 40px)`,
 									}}
 								>
 									{/* Header Row */}
-									<div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b-2 border-r-2 border-gray-200 flex items-center px-3 font-bold text-gray-700">
+									<div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b-2 border-r-2 border-gray-200 flex items-center px-3 font-bold text-gray-700 text-sm">
 										Space
 									</div>
 									{timeSlots.map((time) => (
 										<div
 											key={time}
-											className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b-2 border-r border-gray-200 flex items-center justify-center font-semibold text-gray-700 text-sm"
+											className="bg-gradient-to-r from-blue-50 to-indigo-50 border-b-2 border-r border-gray-200 flex items-center justify-center font-semibold text-gray-700 text-xs"
 										>
 											{time}
 										</div>
@@ -554,11 +633,11 @@ const ReservationSystem: React.FC = () => {
 										<React.Fragment key={room.id}>
 											{/* Room Name Cell */}
 											<div
-												className={`border-r-2 border-b border-gray-200 flex items-center px-3 ${
+												className={`border-r-2 border-b border-gray-200 flex items-center px-2 ${
 													rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"
 												}`}
 											>
-												<span className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer transition-colors text-sm">
+												<span className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer transition-colors text-xs">
 													{room.name}
 												</span>
 											</div>
@@ -569,8 +648,8 @@ const ReservationSystem: React.FC = () => {
 													available: true,
 												};
 												const isSelected =
-													selectedSlot?.roomId === room.id &&
-													selectedSlot?.time === time;
+													selectedSlots?.roomId === room.id &&
+													selectedSlots?.times.includes(time);
 												const isUserReservation = Boolean(
 													slotInfo.reservationId
 												);
@@ -578,14 +657,14 @@ const ReservationSystem: React.FC = () => {
 												return (
 													<div
 														key={`${room.id}-${time}`}
-														className={`border-r border-b border-gray-200 transition-all ${
+														className={`border-r border-b border-gray-200 transition-all cursor-pointer ${
 															isUserReservation
-																? "bg-purple-400 hover:bg-purple-500 hover:shadow-lg hover:scale-105 cursor-pointer"
+																? "bg-purple-400 hover:bg-purple-500"
 																: slotInfo.available
 																	? isSelected
-																		? "bg-blue-500 hover:bg-blue-600 shadow-inner cursor-pointer"
-																		: "bg-green-400 hover:bg-green-500 hover:shadow-lg hover:scale-105 cursor-pointer"
-																	: "bg-gray-300 cursor-not-allowed"
+																		? "bg-blue-500 hover:bg-blue-600 ring-2 ring-blue-700 ring-inset"
+																		: "bg-green-400 hover:bg-green-500 hover:ring-2 hover:ring-green-600 hover:ring-inset"
+																	: "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
 														}`}
 														onClick={() =>
 															handleSlotClick(room.id, time, slotInfo)
@@ -594,7 +673,9 @@ const ReservationSystem: React.FC = () => {
 															isUserReservation
 																? `Your reservation at ${room.name} - Click to cancel`
 																: slotInfo.available
-																	? `Reserve ${room.name} at ${time}`
+																	? isSelected
+																		? `Deselect ${time}`
+																		: `Select ${time} at ${room.name}`
 																	: "Not available"
 														}
 													/>
@@ -606,79 +687,183 @@ const ReservationSystem: React.FC = () => {
 							</div>
 						</div>
 
-						<div className="mt-6 flex flex-wrap gap-6 text-base bg-white p-4 rounded-xl shadow-md border-2 border-gray-200">
-							<div className="flex items-center gap-3">
-								<div className="w-8 h-8 bg-green-400 border-2 border-gray-300 rounded shadow-sm"></div>
-								<span className="font-semibold text-gray-700">Available</span>
-							</div>
-							<div className="flex items-center gap-3">
-								<div className="w-8 h-8 bg-gray-300 border-2 border-gray-300 rounded shadow-sm"></div>
-								<span className="font-semibold text-gray-700">Unavailable</span>
-							</div>
-							<div className="flex items-center gap-3">
-								<div className="w-8 h-8 bg-blue-500 border-2 border-gray-300 rounded shadow-sm"></div>
-								<span className="font-semibold text-gray-700">Selected</span>
-							</div>
-							<div className="flex items-center gap-3">
-								<div className="w-8 h-8 bg-purple-400 border-2 border-gray-300 rounded shadow-sm"></div>
-								<span className="font-semibold text-gray-700">
-									Your Reservation (Click to Cancel)
-								</span>
-							</div>
-						</div>
-
-						{selectedSlot && (
-							<div className="mt-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl shadow-xl">
-								<h3
-									className="font-bold text-2xl mb-4 text-gray-800"
-									style={{ fontFamily: "TiltNeon, sans-serif" }}
-								>
-									Selected Reservation
-								</h3>
-								<div className="space-y-2 mb-4">
-									<p className="text-lg">
-										<span className="font-semibold text-gray-700">Room:</span>{" "}
-										<span className="text-blue-600 font-bold">
-											{rooms.find((r) => r.id === selectedSlot.roomId)?.name}
-										</span>
-									</p>
-									<p className="text-lg">
-										<span className="font-semibold text-gray-700">
-											Date & Time:
-										</span>{" "}
-										<span className="text-blue-600 font-bold">
-											{selectedDate.toLocaleDateString()} at {selectedSlot.time}
-										</span>
-									</p>
-									<p className="text-lg">
-										<span className="font-semibold text-gray-700">
-											Duration:
-										</span>{" "}
-										<span className="text-blue-600 font-bold">1 hour</span>
-									</p>
-									<p className="text-lg">
-										<span className="font-semibold text-gray-700">Team:</span>{" "}
-										<span className="text-blue-600 font-bold">
-											{userTeam?.name || "No Team"}
-										</span>
-									</p>
-								</div>
+						{selectedSlots && selectedSlots.times.length > 0 && (
+							<div className="mt-6 flex justify-center">
 								<button
-									onClick={handleConfirmReservation}
-									disabled={isCreating}
-									className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg hover:shadow-xl font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+									onClick={() => setIsModalOpen(true)}
+									className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center gap-2 text-lg"
 								>
-									{isCreating ? (
-										<>
-											<Loader2 className="h-5 w-5 animate-spin" />
-											Creating...
-										</>
-									) : (
-										"Confirm Reservation"
-									)}
+									<Calendar className="h-5 w-5" />
+									Review & Confirm ({selectedSlots.times.length} slot{selectedSlots.times.length > 1 ? 's' : ''})
 								</button>
 							</div>
 						)}
+
+						{/* Booking Modal */}
+						<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+							<DialogContent className="sm:max-w-lg">
+								<DialogHeader>
+									<DialogTitle className="text-2xl font-bold text-gray-800">
+										Confirm Reservation{selectedSlots && selectedSlots.times.length > 1 ? 's' : ''}
+									</DialogTitle>
+									<DialogDescription className="text-gray-600">
+										Review your reservation details before confirming.
+									</DialogDescription>
+								</DialogHeader>
+
+								<div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+									<p className="text-xs text-blue-900">
+										<span className="font-semibold">Note:</span> Reserving a room does not guarantee exclusive use.
+										Larger rooms are shared hacking spaces. This system ensures your team has a designated spot
+										and helps manage room capacity to keep everyone comfortable and productive.
+									</p>
+								</div>
+
+								{selectedSlots && (
+									<div className="space-y-4 py-2">
+										<div className="flex items-start gap-3">
+											<MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
+											<div>
+												<p className="text-sm font-medium text-gray-500">Room</p>
+												<p className="text-lg font-semibold text-gray-800">
+													{rooms.find((r) => r.id === selectedSlots.roomId)?.name}
+												</p>
+											</div>
+										</div>
+
+										<div className="flex items-start gap-3">
+											<Calendar className="h-5 w-5 text-blue-600 mt-0.5" />
+											<div>
+												<p className="text-sm font-medium text-gray-500">Date</p>
+												<p className="text-lg font-semibold text-gray-800">
+													{selectedDate.toLocaleDateString("en-US", {
+														weekday: "long",
+														month: "long",
+														day: "numeric",
+													})}
+												</p>
+											</div>
+										</div>
+
+										<div className="flex items-start gap-3">
+											<Clock className="h-5 w-5 text-blue-600 mt-0.5" />
+											<div className="flex-1">
+												<p className="text-sm font-medium text-gray-500 mb-2">
+													Time Slots ({selectedSlots.times.length} hour{selectedSlots.times.length > 1 ? 's' : ''})
+												</p>
+												<div className="flex flex-wrap gap-2">
+													{selectedSlots.times.map((time) => (
+														<span
+															key={time}
+															className="px-3 py-1 bg-blue-100 text-blue-800 rounded-md text-sm font-semibold"
+														>
+															{time}
+														</span>
+													))}
+												</div>
+											</div>
+										</div>
+
+										<div className="flex items-start gap-3">
+											<Users className="h-5 w-5 text-blue-600 mt-0.5" />
+											<div>
+												<p className="text-sm font-medium text-gray-500">Team</p>
+												<p className="text-lg font-semibold text-gray-800">
+													{userTeam?.name || "No Team"}
+												</p>
+											</div>
+										</div>
+									</div>
+								)}
+
+								<DialogFooter className="gap-2">
+									<button
+										onClick={() => setIsModalOpen(false)}
+										className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+									>
+										Cancel
+									</button>
+									<button
+										onClick={handleConfirmReservation}
+										disabled={isCreating}
+										className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+									>
+										{isCreating ? (
+											<>
+												<Loader2 className="h-4 w-4 animate-spin" />
+												Confirming...
+											</>
+										) : (
+											"Confirm Reservation"
+										)}
+									</button>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
+
+						{/* Cancel Modal */}
+						<Dialog open={cancelModalOpen} onOpenChange={setCancelModalOpen}>
+							<DialogContent className="sm:max-w-md">
+								<DialogHeader>
+									<DialogTitle className="text-2xl font-bold text-gray-800">
+										Cancel Reservation
+									</DialogTitle>
+									<DialogDescription className="text-gray-600">
+										Are you sure you want to cancel this reservation?
+									</DialogDescription>
+								</DialogHeader>
+
+								{selectedSlots && (
+									<div className="space-y-3 py-4">
+										<div className="flex items-center gap-3">
+											<MapPin className="h-5 w-5 text-red-600" />
+											<div>
+												<p className="text-sm text-gray-500">Room</p>
+												<p className="font-semibold text-gray-800">
+													{rooms.find((r) => r.id === selectedSlots.roomId)?.name}
+												</p>
+											</div>
+										</div>
+
+										<div className="flex items-center gap-3">
+											<Clock className="h-5 w-5 text-red-600" />
+											<div>
+												<p className="text-sm text-gray-500">Time</p>
+												<p className="font-semibold text-gray-800">
+													{selectedDate.toLocaleDateString()} at {selectedSlots.times[0]}
+												</p>
+											</div>
+										</div>
+									</div>
+								)}
+
+								<DialogFooter className="gap-2">
+									<button
+										onClick={() => setCancelModalOpen(false)}
+										className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-gray-700"
+									>
+										Keep Reservation
+									</button>
+									<button
+										onClick={handleCancelReservation}
+										disabled={isCanceling}
+										className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+									>
+										{isCanceling ? (
+											<>
+												<Loader2 className="h-4 w-4 animate-spin" />
+												Canceling...
+											</>
+										) : (
+											<>
+												<X className="h-4 w-4" />
+												Cancel Reservation
+											</>
+										)}
+									</button>
+								</DialogFooter>
+							</DialogContent>
+						</Dialog>
 					</>
 				)}
 			</div>
