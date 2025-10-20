@@ -23,7 +23,7 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 }) => {
 	return (
 		<div className="p-6 rounded-xl text-center bg-white/90 backdrop-blur-sm border-4 border-[#0066CC] shadow-lg transition-transform hover:scale-105">
-			<div className="mx-4 py-6">
+			<div className="mx-4 py-6" style={{ fontFamily: "Monomaniac One, monospace" }}>
 				<h2 className="text-2xl md:text-3xl font-bold text-[#000080] mb-3">
 					{title}
 				</h2>
@@ -59,8 +59,9 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 };
 
 const PrizesChallenges: React.FC = () => {
-	const { data: prizesAndChallengesFlag } = useFlagState("PrizeEnable");
-	const isFlagEnabled = true;
+	// const { data: prizesAndChallengesFlag } = useFlagState("PrizeEnable");
+	const { data: prizesAndChallengesFlag } = {data: {isEnabled: true}};  
+	// const isFlagEnabled = true;
 
 	return (
 		<section
@@ -83,7 +84,7 @@ const PrizesChallenges: React.FC = () => {
 				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-8"></div>
 
 				{/* {prizesAndChallengesFlag?.isEnabled ? ( */}
-				{isFlagEnabled ? (
+				{prizesAndChallengesFlag?.isEnabled ? (
 					<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
 						<AwardBox
 							title="HackPSU Grand Prize"
