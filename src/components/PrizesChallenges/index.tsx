@@ -57,9 +57,7 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 };
 
 const PrizesChallenges: React.FC = () => {
-	// const { data: prizesAndChallengesFlag } = useFlagState("PrizeEnable");
-	const { data: prizesAndChallengesFlag } = {data: {isEnabled: true}};  
-	// const isFlagEnabled = true;
+	const { data: prizesAndChallengesFlag } = useFlagState("PrizeEnable");
 
 	return (
 		<section
