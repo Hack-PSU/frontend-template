@@ -2169,12 +2169,12 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@^0.4.7":
-  version "0.4.8"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.4.8.tgz#d6d6ec14bfbde4a637785ffae9059d55ec3ea333"
-  integrity sha512-LdPMD9vppl8TOMeG+sYsKDgs3dK8cA8vvgG65i0DrXlCPt2+lpRINtQJ+M7Bm8VZFUpzMieNOl+/o7axwxwXlw==
+"@posthog/cli@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.1.tgz#a7f2110466bcec78738d9c69b34cec463b0303f2"
+  integrity sha512-1a3zcLyP7fJp+IJ+jmodZ9poaQwGXJuz1/N9vEquudHqXi8cnhPy4OrbBoY3y1wZN4doYTwGqbfbts0662OUEw==
   dependencies:
-    axios "^1.10.0"
+    axios "^1.11.0"
     axios-proxy-builder "^0.1.2"
     console.table "^0.10.0"
     detect-libc "^2.0.4"
@@ -2191,11 +2191,12 @@
   integrity sha512-hxLL8kZNHH098geedcxCz8y6xojkNYbmJEW+1vFXsmPcExyCXIUUJ/34X6xa9GcprKxd0Wsx3vfJQLQX4iVPhw==
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.3.1.tgz#cc934e18cb5327cd8176cfe85b4ef3d907577bb8"
-  integrity sha512-0CKzXX7Oh9tgFdqTQMq9FUMDIBhu0td9NYsyU20y+pu4meh9xSCcJI7GIcwxRTBoDIJvR//YU98niMlnu+uObQ==
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.3.4.tgz#2b1a80cbdba09ecbde10502000be54cf8a56632d"
+  integrity sha512-cf1XIkK28y/5qL/as/IutH0EwysWy1gKdGM/xETZ0l25jTTN9wASx1ucP/BeE3dOYAVF039zlU9WNCFbIxW4Uw==
   dependencies:
-    "@posthog/cli" "^0.4.7"
+    "@posthog/cli" "^0.5.1"
+    "@posthog/core" "1.3.0"
     semver "^7.7.2"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -3261,7 +3262,7 @@ axios-proxy-builder@^0.1.2:
   dependencies:
     tunnel "^0.0.6"
 
-axios@^1.10.0:
+axios@^1.11.0:
   version "1.12.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.12.2.tgz#6c307390136cf7a2278d09cec63b136dfc6e6da7"
   integrity sha512-vMJzPewAlRyOgxV2dU0Cuz2O8zzzx9VYtbJOaBgXFeLc4IV/Eg50n4LowmehOOR61S8ZMpc2K5Sa7g6A4jfkUw==
@@ -3750,7 +3751,12 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
-detect-libc@^2.0.4, detect-libc@^2.1.0:
+detect-libc@^2.0.4:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.1.2.tgz#689c5dcdc1900ef5583a4cb9f6d7b473742074ad"
+  integrity sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==
+
+detect-libc@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.1.0.tgz#3ca811f60a7b504b0480e5008adacc660b0b8c4f"
   integrity sha512-vEtk+OcP7VBRtQZ1EJ3bdgzSfBjgnEalLTp5zjJrS+2Z1w2KZly4SBdac/WDU3hhsNAZ9E8SC96ME4Ey8MZ7cg==
@@ -5179,9 +5185,9 @@ lru-cache@^10.2.0:
   integrity sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==
 
 lru-cache@^11.0.0:
-  version "11.2.1"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.1.tgz#d426ac471521729c6c1acda5f7a633eadaa28db2"
-  integrity sha512-r8LA6i4LP4EeWOhqBaZZjDWwehd1xUJPCJd9Sv300H0ZmcUER4+JPh7bqqZeqs1o5pgtgvXm+d9UGrB5zZGDiQ==
+  version "11.2.2"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.2.tgz#40fd37edffcfae4b2940379c0722dc6eeaa75f24"
+  integrity sha512-F9ODfyqML2coTIsQpSkRHnLSZMtkU8Q+mSfcaIyKwy58u+8k5nvAYeiNhsyMARvzNcXJ9QfWVrcPsC9e9rAxtg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -6088,9 +6094,9 @@ semver@^7.6.0, semver@^7.6.3:
   integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
 
 semver@^7.7.2:
-  version "7.7.2"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
-  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
+  version "7.7.3"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.3.tgz#4b5f4143d007633a8dc671cd0a6ef9147b8bb946"
+  integrity sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==
 
 set-function-length@^1.2.2:
   version "1.2.2"
