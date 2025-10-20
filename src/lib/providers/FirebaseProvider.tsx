@@ -65,14 +65,6 @@ export const FirebaseProvider: FC<Props> = ({ children }) => {
 
 			console.log("Session verification response:", response.status);
 
-			if (response.status === 401) {
-				// No session or session invalid - redirect to login
-				console.log("No valid session, redirecting to login");
-				const currentUrl = encodeURIComponent(window.location.href);
-				window.location.href = `${authServiceURL}/login?returnTo=${currentUrl}`;
-				return;
-			}
-
 			if (!response.ok) {
 				throw new Error(`Session verification failed: ${response.status}`);
 			}
