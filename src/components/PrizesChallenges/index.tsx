@@ -22,34 +22,32 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 	extra,
 }) => {
 	return (
-		<div className="p-6 rounded-xl text-center bg-white/90 backdrop-blur-sm border-4 border-[#0066CC] shadow-lg transition-transform hover:scale-105">
-			<div className="mx-4 py-6" style={{ fontFamily: "Monomaniac One, monospace" }}>
-				<h2 className="text-2xl md:text-3xl font-bold text-[#000080] mb-3">
+		<div className="p-6 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-[#0066CC] shadow-md hover:shadow-xl transition-all hover:-translate-y-1">
+			<div style={{ fontFamily: "Monomaniac One, monospace" }}>
+				<h2 className="text-xl md:text-2xl font-bold text-[#000080] mb-4 text-center">
 					{title}
 				</h2>
 				{description && (
-					<p className="text-base md:text-lg text-gray-800 mb-3">
+					<p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed text-left">
 						{description}
 					</p>
 				)}
 				{prizes.length > 0 && (
-					<table className="table-auto mt-4 w-full">
-						<tbody>
-							{prizes.map((prize, index) => (
-								<tr key={index}>
-									<td className="text-base md:text-lg px-4 py-1 font-semibold text-[#000080]">
-										{prize.place}:
-									</td>
-									<td className="text-base md:text-lg px-4 py-1 text-gray-900">
-										{prize.amount}
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+					<div className="mt-4 space-y-2">
+						{prizes.map((prize, index) => (
+							<div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+								<div className="text-sm md:text-base font-semibold text-[#000080] mb-1">
+									{prize.place}
+								</div>
+								<div className="text-sm md:text-base text-gray-900 font-medium">
+									{prize.amount}
+								</div>
+							</div>
+						))}
+					</div>
 				)}
 				{extra && (
-					<div className="text-base md:text-lg text-gray-800 mt-3 whitespace-pre-line">
+					<div className="text-sm md:text-base text-gray-700 mt-4 leading-relaxed text-left whitespace-pre-line">
 						{extra}
 					</div>
 				)}
@@ -66,26 +64,26 @@ const PrizesChallenges: React.FC = () => {
 	return (
 		<section
 			id="prizes"
-			className="flex flex-col items-center w-full px-4"
+			className="flex flex-col items-center w-full px-4 md:px-8"
 			style={{
 				backgroundColor: "#B1E8FF",
 				minHeight: "50vh",
-				paddingTop: "4rem",
-				paddingBottom: "4rem",
+				paddingTop: "5rem",
+				paddingBottom: "5rem",
 			}}
 		>
-			<div className="w-full max-w-6xl flex flex-col items-center">
+			<div className="w-full max-w-7xl flex flex-col items-center">
 				<h1
 					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
 					style={{ fontFamily: "Monomaniac One, monospace" }}
 				>
 					Prizes & Challenges
 				</h1>
-				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-8"></div>
+				<div className="w-20 h-1.5 bg-[#000080] rounded-full mx-auto mb-10"></div>
 
 				{/* {prizesAndChallengesFlag?.isEnabled ? ( */}
 				{prizesAndChallengesFlag?.isEnabled ? (
-					<div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+					<div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 						<AwardBox
 							title="HackPSU Grand Prize"
 							description="The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally."
@@ -97,23 +95,12 @@ const PrizesChallenges: React.FC = () => {
 						/>
 						<AwardBox
 							title="Best UX/UI Design"
-							description="Best UX/UI Design 
-										(Pages present information that can be perceived in different ways, 
-										where a user can adjust color contrast or font size, 
-										or view captions for videos)
-
-										User interface components and navigation are functional for users in ways they can operate.
-
-										Information and user interface operation are understandable.
-
-										Content is robust enough that it can be interpreted reliably 
-										by a wide variety of users and assistive technologies.
-										"
+							description="Create an accessible and user-friendly interface that presents information in ways that can be perceived, operated, and understood by a wide variety of users and assistive technologies. Consider adjustable color contrast, font sizes, video captions, and robust content interpretation."
 							prizes={[
 								{
 									place: "Prize",
 									amount:
-										"A bag of Peraton swag plus a pair of Beats Headphones for each team member",
+										"Peraton swag + Beats Headphones per team member",
 								},
 							]}
 						/>
@@ -122,9 +109,16 @@ const PrizesChallenges: React.FC = () => {
 							description="Use the power of artificial intelligence to address a problem in the fields of Health, Humanitarianism, Education, Environment, and/or Agriculture."
 							prizes={[
 								{
-									place: "Prize",
-									amount:
-										"$870 in cash",
+									place: "1st Place",
+									amount: "$99 Amazon Gift Card per team member (up to 5)",
+								},
+								{
+									place: "2nd Place",
+									amount: "$50 Amazon Gift Card per team member (up to 5)",
+								},
+								{
+									place: "3rd Place",
+									amount: "$25 Amazon Gift Card per team member (up to 5)",
 								},
 							]}
 						/>
