@@ -171,7 +171,15 @@ const Navbar: React.FC = () => {
 				? { href: "/profile", text: "Profile" }
 				: { href: "/profile", text: "Register" };
 
-		return [...baseItems, authItem];
+		// Only show photos link for authenticated users (keeps homepage clean for guests)
+		const photosItem =
+			!isLoading && isAuthenticated
+				? { href: "/photos", text: "Photos" }
+				: null;
+
+		return photosItem
+			? [...baseItems, photosItem, authItem]
+			: [...baseItems, authItem];
 	};
 
 	const navItems = getNavItems();
