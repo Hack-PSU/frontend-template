@@ -1,33 +1,32 @@
 import { apiFetch } from "../apiClient";
+import type { PhotoEntity, PhotoUploadResponse } from "./entity";
 
-// Backend exposes routes under /photos (see apiv3 PhotoController)
-export async function listPhotos(photoType?: string) {
-	const params = new URLSearchParams();
-	if (photoType) {
-		params.append("photoType", photoType);
-	}
-	const queryString = params.toString();
-	const url = queryString ? `/photos?${queryString}` : "/photos";
-
-	return apiFetch(url, {
+/**
+ * Get all approved photos from the gallery
+ * Only returns photos with approvalStatus === "approved"
+ */
+export async function listPhotos(): Promise<PhotoEntity[]> {
+	return apiFetch<PhotoEntity[]>("/photos", {
 		method: "GET",
 	});
 }
 
-export async function uploadPhoto(file: File, fileType = "default") {
+/**
+ * Upload a photo or video to the gallery
+ * @param file - The image or video file to upload
+ * @param fileType - The milestone/reason for the photo (e.g., "check-in", "lunch", "midnight-snack")
+ * @returns Upload response with photoId and photoUrl
+ */
+export async function uploadPhoto(
+	file: File,
+	fileType: string = "other"
+): Promise<PhotoUploadResponse> {
 	const fd = new FormData();
 	fd.append("photo", file);
-	fileType = file.type.split("/")[1] || "default";
 	fd.append("fileType", fileType);
 
-	return apiFetch("/photos/upload", {
+	return apiFetch<PhotoUploadResponse>("/photos/upload", {
 		method: "POST",
 		body: fd,
-	});
-}
-
-export async function deletePhoto(photoId: string) {
-	return apiFetch(`/photos/${encodeURIComponent(photoId)}`, {
-		method: "DELETE",
 	});
 }

@@ -1,27 +1,32 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { listPhotos, uploadPhoto, deletePhoto } from "./provider";
+import { listPhotos, uploadPhoto } from "./provider";
+import type { PhotoEntity, PhotoUploadResponse } from "./entity";
 
-export function usePhotos(photoType?: string) {
-	return useQuery({
-		queryKey: ["photos", photoType],
-		queryFn: () => listPhotos(photoType),
-		staleTime: 1000 * 60, // 1 minute
+/**
+ * Hook to fetch all approved photos from the gallery
+ */
+export function usePhotos() {
+	return useQuery<PhotoEntity[]>({
+		queryKey: ["photos"],
+		queryFn: () => listPhotos(),
+		staleTime: 1000 * 30, // 30 seconds
+		refetchOnWindowFocus: true,
 	});
 }
 
+/**
+ * Hook to upload a photo with a milestone/reason
+ */
 export function useUploadPhoto() {
 	const qc = useQueryClient();
-	return useMutation({
-		mutationFn: ({ file, fileType }: { file: File; fileType?: string }) =>
-			uploadPhoto(file, fileType),
-		onSuccess: () => qc.invalidateQueries({ queryKey: ["photos"] }),
-	});
-}
-
-export function useDeletePhoto() {
-	const qc = useQueryClient();
-	return useMutation({
-		mutationFn: (photoId: string) => deletePhoto(photoId),
-		onSuccess: () => qc.invalidateQueries({ queryKey: ["photos"] }),
+	return useMutation<
+		PhotoUploadResponse,
+		Error,
+		{ file: File; fileType: string }
+	>({
+		mutationFn: ({ file, fileType }) => uploadPhoto(file, fileType),
+		onSuccess: () => {
+			qc.invalidateQueries({ queryKey: ["photos"] });
+		},
 	});
 }
