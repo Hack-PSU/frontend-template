@@ -111,6 +111,13 @@ const ReservationSystem: React.FC = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [cancelModalOpen, setCancelModalOpen] = useState(false);
 	const [reservationToCancel, setReservationToCancel] = useState<string | null>(null);
+	
+	const [tab, setTab] = useState<"all" | "mine">("all");
+	
+	const myTeamReservations = useMemo(() => {
+		if (!userTeam || !reservations) return [];
+		return reservations.filter((r) => r.teamId === userTeam.id);
+	}, [userTeam, reservations]);
 
 	// Get valid date range for the hackathon (normalize to ms)
 	const dateRange = useMemo(() => {
@@ -541,7 +548,28 @@ const ReservationSystem: React.FC = () => {
 					>
 						Room Reservations
 					</h1>
-
+	
+					{/* Tabs */}
+					<div className="flex space-x-4 mb-6">
+					  <button
+					    className={`px-4 py-2 rounded-lg font-semibold ${
+					      tab === "all" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800"
+					    }`}
+					    onClick={() => setTab("all")}
+					  >
+					    All Rooms
+					  </button>
+					  <button
+					    className={`px-4 py-2 rounded-lg font-semibold ${
+					      tab === "mine" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-800"
+					    }`}
+					    onClick={() => setTab("mine")}
+					    disabled={!userTeam}
+					  >
+					    My Reservations
+					  </button>
+					</div>
+					{/* /Tabs */}
 					<div className="flex flex-wrap items-center justify-between gap-4">
 						<div className="flex items-center gap-3 bg-white p-3 rounded-lg shadow-sm border border-gray-200 w-fit">
 							<button
