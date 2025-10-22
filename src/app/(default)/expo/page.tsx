@@ -14,8 +14,11 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, Folder, ExternalLink } from "lucide-react";
+import { Search, Filter, Folder, ExternalLink, Github } from "lucide-react";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
+import Devpost from "../../../../public/devpost.svg";
+import { m } from "framer-motion";
 
 export default function ExpoPage() {
 	const { data: projects, isLoading, error } = useAllProjects();
@@ -207,12 +210,24 @@ export default function ExpoPage() {
 												variant="outline"
 												size="sm"
 												className="w-full"
+												style={{ marginBottom: "6px" }}
 												onClick={() =>
 													window.open(project.devpostLink, "_blank")
 												}
 											>
-												<ExternalLink className="mr-2 h-4 w-4" />
+												<Image src={Devpost} alt="" className="mr-2 h-4 w-4" />
 												View on Devpost
+											</Button>
+											<Button
+												variant="outline"
+												size="sm"
+												className="w-full"
+												onClick={() =>
+													window.open(project.githubLink, "_blank")
+												}
+											>
+												<Github className="mr-2 h-4 w-4" />
+												View on Github
 											</Button>
 										</div>
 									)}
