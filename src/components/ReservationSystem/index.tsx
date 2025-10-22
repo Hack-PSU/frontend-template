@@ -265,32 +265,55 @@ const ReservationSystem: React.FC = () => {
 			}));
 	}, [locations]);
 
-	// Build availability map (normalize incoming reservation times)
+	// Build availability map with capacity tracking (normalize incoming reservation times)
 	const availability = useMemo(() => {
 		const availabilityMap: {
-			[key: string]: { available: boolean; reservationId?: string };
+			[key: string]: {
+				available: boolean;
+				reservationId?: string;
+				currentOccupancy: number;
+				maxCapacity: number;
+			};
 		} = {};
 
 		if (!reservations || !rooms) return availabilityMap;
 
-		// Initialize all slots as available
+		// Initialize all slots with capacity information
 		rooms.forEach((room) => {
 			timeSlots.forEach((time) => {
-				availabilityMap[`${room.id}-${time}`] = { available: true };
+				availabilityMap[`${room.id}-${time}`] = {
+					available: true,
+					currentOccupancy: 0,
+					maxCapacity: room.capacity,
+				};
 			});
 		});
 
-		// Mark reserved slots
+		// Count participant reservations per slot
 		reservations.forEach((reservation) => {
+			// Only count participant reservations toward capacity
+			if (reservation.reservationType !== 'participant') return;
+
 			const startLabel = timestampToTime(reservation.startTime);
 			const key = `${reservation.locationId}-${startLabel}`;
 
+			if (!availabilityMap[key]) return;
+
 			const isUserTeamReservation = reservation.teamId === userTeam?.id;
 
-			availabilityMap[key] = {
-				available: false,
-				reservationId: isUserTeamReservation ? reservation.id : undefined,
-			};
+			// Increment occupancy count
+			availabilityMap[key].currentOccupancy += 1;
+
+			// Store user's own reservation ID
+			if (isUserTeamReservation) {
+				availabilityMap[key].reservationId = reservation.id;
+			}
+
+			// Mark as unavailable if at capacity (capacity > 0 means limited, 0 means unlimited)
+			const room = rooms.find(r => r.id === reservation.locationId);
+			if (room && room.capacity > 0 && availabilityMap[key].currentOccupancy >= room.capacity) {
+				availabilityMap[key].available = false;
+			}
 		});
 
 		return availabilityMap;
@@ -299,7 +322,12 @@ const ReservationSystem: React.FC = () => {
 	const handleSlotClick = async (
 		roomId: number,
 		time: string,
-		slotInfo: { available: boolean; reservationId?: string }
+		slotInfo: {
+			available: boolean;
+			reservationId?: string;
+			currentOccupancy: number;
+			maxCapacity: number;
+		}
 	) => {
 		if (!userTeam) {
 			toast.error("You must be part of a team to make reservations");
@@ -314,9 +342,10 @@ const ReservationSystem: React.FC = () => {
 			return;
 		}
 
-		// If slot is not available, do nothing
+		// If slot is not available (at capacity), show detailed message
 		if (!slotInfo.available) {
-			toast.error("This time slot is not available");
+			const capacityText = slotInfo.maxCapacity === 0 ? 'unlimited' : slotInfo.maxCapacity;
+			toast.error(`This time slot is at full capacity (${slotInfo.currentOccupancy}/${capacityText})`);
 			return;
 		}
 
@@ -579,7 +608,11 @@ const ReservationSystem: React.FC = () => {
 						<div className="flex flex-wrap gap-3 text-xs bg-white p-2.5 rounded-lg shadow-sm border border-gray-200">
 							<div className="flex items-center gap-1.5">
 								<div className="w-4 h-4 bg-green-400 border border-gray-300 rounded"></div>
-								<span className="text-gray-600">Available</span>
+								<span className="text-gray-600">Available (Low occupancy)</span>
+							</div>
+							<div className="flex items-center gap-1.5">
+								<div className="w-4 h-4 bg-yellow-300 border border-gray-300 rounded"></div>
+								<span className="text-gray-600">Filling up (75%+)</span>
 							</div>
 							<div className="flex items-center gap-1.5">
 								<div className="w-4 h-4 bg-blue-500 border border-gray-300 rounded"></div>
@@ -587,7 +620,7 @@ const ReservationSystem: React.FC = () => {
 							</div>
 							<div className="flex items-center gap-1.5">
 								<div className="w-4 h-4 bg-gray-300 border border-gray-300 rounded"></div>
-								<span className="text-gray-600">Unavailable</span>
+								<span className="text-gray-600">Full</span>
 							</div>
 							<div className="flex items-center gap-1.5">
 								<div className="w-4 h-4 bg-purple-400 border border-gray-300 rounded"></div>
@@ -633,12 +666,15 @@ const ReservationSystem: React.FC = () => {
 										<React.Fragment key={room.id}>
 											{/* Room Name Cell */}
 											<div
-												className={`border-r-2 border-b border-gray-200 flex items-center px-2 ${
+												className={`border-r-2 border-b border-gray-200 flex flex-col justify-center px-2 py-1 ${
 													rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"
 												}`}
 											>
-												<span className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer transition-colors text-xs">
+												<span className="text-blue-600 hover:text-blue-800 font-semibold cursor-pointer transition-colors text-xs leading-tight">
 													{room.name}
+												</span>
+												<span className="text-[10px] text-gray-500 mt-0.5">
+													{room.capacity === 0 ? 'Unlimited' : `Cap: ${room.capacity}`}
 												</span>
 											</div>
 
@@ -646,6 +682,8 @@ const ReservationSystem: React.FC = () => {
 											{timeSlots.map((time) => {
 												const slotInfo = availability[`${room.id}-${time}`] || {
 													available: true,
+													currentOccupancy: 0,
+													maxCapacity: room.capacity,
 												};
 												const isSelected =
 													selectedSlots?.roomId === room.id &&
@@ -654,31 +692,64 @@ const ReservationSystem: React.FC = () => {
 													slotInfo.reservationId
 												);
 
+												// Calculate fill percentage for visual indicator
+												const fillPercentage = slotInfo.maxCapacity > 0
+													? (slotInfo.currentOccupancy / slotInfo.maxCapacity) * 100
+													: 0;
+
+												// Determine background color based on occupancy
+												let bgColor = "bg-green-400 hover:bg-green-500 hover:ring-2 hover:ring-green-600 hover:ring-inset";
+												if (isUserReservation) {
+													bgColor = "bg-purple-400 hover:bg-purple-500";
+												} else if (isSelected) {
+													bgColor = "bg-blue-500 hover:bg-blue-600 ring-2 ring-blue-700 ring-inset";
+												} else if (!slotInfo.available) {
+													bgColor = "bg-gray-300 cursor-not-allowed hover:bg-gray-300";
+												} else if (slotInfo.maxCapacity > 0) {
+													// Show color gradient based on occupancy
+													if (fillPercentage >= 75) {
+														bgColor = "bg-yellow-300 hover:bg-yellow-400 hover:ring-2 hover:ring-yellow-500 hover:ring-inset";
+													} else if (fillPercentage >= 50) {
+														bgColor = "bg-green-300 hover:bg-green-400 hover:ring-2 hover:ring-green-500 hover:ring-inset";
+													}
+												}
+
+												// Build tooltip text
+												let tooltipText = "";
+												if (isUserReservation) {
+													tooltipText = `Your reservation at ${room.name} - Click to cancel`;
+												} else if (slotInfo.available) {
+													const capacityText = slotInfo.maxCapacity === 0
+														? 'Unlimited capacity'
+														: `${slotInfo.currentOccupancy}/${slotInfo.maxCapacity} spots filled`;
+													if (isSelected) {
+														tooltipText = `Deselect ${time} (${capacityText})`;
+													} else {
+														tooltipText = `Select ${time} at ${room.name} (${capacityText})`;
+													}
+												} else {
+													const capacityText = slotInfo.maxCapacity === 0 ? 'unlimited' : slotInfo.maxCapacity;
+													tooltipText = `Full capacity (${slotInfo.currentOccupancy}/${capacityText})`;
+												}
+
 												return (
 													<div
 														key={`${room.id}-${time}`}
-														className={`border-r border-b border-gray-200 transition-all cursor-pointer ${
-															isUserReservation
-																? "bg-purple-400 hover:bg-purple-500"
-																: slotInfo.available
-																	? isSelected
-																		? "bg-blue-500 hover:bg-blue-600 ring-2 ring-blue-700 ring-inset"
-																		: "bg-green-400 hover:bg-green-500 hover:ring-2 hover:ring-green-600 hover:ring-inset"
-																	: "bg-gray-300 cursor-not-allowed hover:bg-gray-300"
-														}`}
+														className={`border-r border-b border-gray-200 transition-all cursor-pointer relative group ${bgColor}`}
 														onClick={() =>
 															handleSlotClick(room.id, time, slotInfo)
 														}
-														title={
-															isUserReservation
-																? `Your reservation at ${room.name} - Click to cancel`
-																: slotInfo.available
-																	? isSelected
-																		? `Deselect ${time}`
-																		: `Select ${time} at ${room.name}`
-																	: "Not available"
-														}
-													/>
+														title={tooltipText}
+													>
+														{/* Show occupancy indicator for non-empty slots */}
+														{!isUserReservation && !isSelected && slotInfo.currentOccupancy > 0 && slotInfo.maxCapacity > 0 && (
+															<div className="absolute inset-0 flex items-center justify-center">
+																<span className="text-[10px] font-bold text-gray-700 opacity-70">
+																	{slotInfo.currentOccupancy}/{slotInfo.maxCapacity}
+																</span>
+															</div>
+														)}
+													</div>
 												);
 											})}
 										</React.Fragment>
