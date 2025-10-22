@@ -21,6 +21,7 @@ export interface ProjectEntity {
 	hackathonId: string;
 	categories?: string;
 	teamId?: string;
+	githubLink?: string;
 	devpostLink?: string;
 }
 

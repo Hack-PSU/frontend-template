@@ -220,7 +220,7 @@ export default function PhotosPage() {
 												No Community Photos Yet
 											</h3>
 											<p className="text-muted-foreground">
-												Be the first to share a public photo with the HackPSU community! Upload a photo above and select "Public" to get started.
+												Be the first to share a public photo with the HackPSU community! Upload a photo above and select &quot;Public&quot; to get started.
 											</p>
 										</div>
 									</CardContent>
