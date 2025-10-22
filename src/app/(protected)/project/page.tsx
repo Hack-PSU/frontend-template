@@ -42,6 +42,7 @@ export default function Project() {
 	const { data: teams, error: teamsError } = useAllTeams();
 
 	const [projectName, setProjectName] = useState("");
+	const [githubLink, setGithubLink] = useState ("");
 	const [devpostLink, setDevpostLink] = useState("");
 	const [selectedCategories, setSelectedCategories] = useState<
 		ProjectCategory[]
@@ -107,6 +108,7 @@ export default function Project() {
 	useEffect(() => {
 		if (existingProject) {
 			setProjectName(existingProject.name);
+			setGithubLink(existingProject.githubLink || "");
 			setDevpostLink(existingProject.devpostLink || "");
 			if (existingProject.categories) {
 				const categories = existingProject.categories
@@ -141,6 +143,19 @@ export default function Project() {
 			return;
 		}
 
+		// Validate Github Link - required
+		if (!githubLink.trim()) {
+			toast.error("Github link is required");
+			return;
+		}
+
+		if (!isValidGithubUrl(githubLink)) {
+			toast.error(
+				"Please enter a valid Github URL (must be from github.com)"
+			);
+			return;
+		}
+
 		// Validate Devpost link - now required
 		if (!devpostLink.trim()) {
 			toast.error("Devpost link is required");
@@ -168,6 +183,7 @@ export default function Project() {
 						? selectedCategories.join(", ")
 						: undefined,
 				teamId: userTeam.id,
+				githubLink: githubLink.trim(),
 				devpostLink: devpostLink.trim(),
 			};
 
@@ -184,6 +200,18 @@ export default function Project() {
 		} catch (error) {
 			console.error("Error submitting project:", error);
 			toast.error("Failed to submit project. Please try again.");
+		}
+	};
+
+	const isValidGithubUrl = (url: string) => {
+		try {
+			const parsedUrl = new URL(url);
+			return (
+				parsedUrl.hostname === "github.com" ||
+				parsedUrl.hostname === "www.github.com"
+			);
+		} catch (_) {
+			return false;
 		}
 	};
 
@@ -321,6 +349,19 @@ export default function Project() {
 										placeholder="Enter your project name"
 										value={projectName}
 										onChange={(e) => setProjectName(e.target.value)}
+										disabled={!canUpdateProject}
+									/>
+								</div>
+
+								{/* Github Link */}
+								<div className="space-y-2">
+									<Label htmlFor="github-link">Github Link *</Label>
+									<Input
+										id="github-link"
+										type="url"
+										placeholder="https://github.com/your-profile/your-project"
+										value={githubLink}
+										onChange={(e) => setGithubLink(e.target.value)}
 										disabled={!canUpdateProject}
 									/>
 								</div>
