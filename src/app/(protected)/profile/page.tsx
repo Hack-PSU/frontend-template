@@ -113,8 +113,9 @@ export default function Profile() {
 	const [showResumeModal, setShowResumeModal] = useState(false);
 	const [resumeFile, setResumeFile] = useState<File | null>(null);
 
-	// Feature flag check for HelpDesk
+	// Feature flag checks
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
+	const { data: roomReservationFlag } = useFlagState("RoomReservation");
 
 	// Check if user is an organizer (role > 0)
 	const userRole = getUserRole(token);
@@ -502,16 +503,18 @@ export default function Profile() {
 									<Users className="mr-2 h-4 w-4" />
 									Manage Team
 								</Button>
-								<Button
-									onClick={handleReserve}
-									className="w-full"
-									variant="default"
-									size="lg"
-									disabled={isOrganizer}
-								>
-									<Room className="mr-2 h-4 w-4" />
-									Reserve Room
-								</Button>
+								{roomReservationFlag?.isEnabled && (
+									<Button
+										onClick={handleReserve}
+										className="w-full"
+										variant="default"
+										size="lg"
+										disabled={isOrganizer}
+									>
+										<Room className="mr-2 h-4 w-4" />
+										Reserve Room
+									</Button>
+								)}
 							</>
 						) : (
 							<>
