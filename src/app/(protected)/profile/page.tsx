@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
 	User,
@@ -39,9 +40,18 @@ import {
 	GraduationCap,
 	HelpCircle,
 	Shield,
+	Upload,
 } from "lucide-react";
+import { useUpdateUser } from "@/lib/api/user/hook";
 import { Roofing, Room } from "@mui/icons-material";
 import { jwtDecode } from "jwt-decode";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 
 // Role definitions matching AuthGuard
 enum Role {
@@ -95,7 +105,13 @@ export default function Profile() {
 		isPending: isCreatingAppleWallet,
 	} = useCreateAppleWalletPass();
 
+	// Mutation for resume upload
+	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
+		useUpdateUser();
+
 	const [showQRCode, setShowQRCode] = useState(false);
+	const [showResumeModal, setShowResumeModal] = useState(false);
+	const [resumeFile, setResumeFile] = useState<File | null>(null);
 
 	// Feature flag check for HelpDesk
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
@@ -244,6 +260,39 @@ export default function Profile() {
 				{isCurrentUser ? `${displayName} (You)` : displayName}
 			</div>
 		);
+	};
+
+	const handleResumeUpload = async () => {
+		if (!resumeFile) {
+			return toast.error("Please select a PDF file to upload");
+		}
+
+		// Validate file type
+		if (resumeFile.type !== "application/pdf") {
+			return toast.error("Only PDF files are accepted");
+		}
+
+		// Validate file size (5MB max)
+		if (resumeFile.size > 5 * 1024 * 1024) {
+			return toast.error("File size must be less than 5MB");
+		}
+
+		if (!userData?.id) {
+			return toast.error("User ID not found");
+		}
+
+		try {
+			await uploadResume({
+				id: userData.id,
+				data: { resume: resumeFile } as any,
+			});
+			toast.success("Resume uploaded successfully!");
+			setResumeFile(null);
+			setShowResumeModal(false);
+		} catch (error) {
+			console.error("Error uploading resume:", error);
+			toast.error("Failed to upload resume. Please try again.");
+		}
 	};
 
 	if (isLoading) {
@@ -486,6 +535,7 @@ export default function Profile() {
 					</CardContent>
 				</Card>
 
+
 				{/* Actions */}
 				<Card>
 					<CardHeader>
@@ -540,6 +590,17 @@ export default function Profile() {
 							Manage Extra Credit
 						</Button>
 
+						<Button
+							onClick={() => setShowResumeModal(true)}
+							className="w-full"
+							variant="default"
+							size="lg"
+							disabled={isOrganizer}
+						>
+							<Upload className="mr-2 h-4 w-4" />
+							Upload Resume
+						</Button>
+
 						{helpDeskFlag?.isEnabled && (
 							<Button
 								onClick={() =>
@@ -567,6 +628,79 @@ export default function Profile() {
 						</Button>
 					</CardContent>
 				</Card>
+
+				{/* Resume Upload Modal */}
+				<Dialog open={showResumeModal} onOpenChange={setShowResumeModal}>
+					<DialogContent className="sm:max-w-md">
+						<DialogHeader>
+							<DialogTitle>Upload Resume</DialogTitle>
+							<DialogDescription>
+								Upload your resume in PDF format (max 5MB)
+							</DialogDescription>
+						</DialogHeader>
+						<div className="space-y-4 py-4">
+							<div className="space-y-2">
+								<Label htmlFor="resume-file">Select PDF File</Label>
+								<input
+									id="resume-file"
+									type="file"
+									accept=".pdf"
+									onChange={(e) => {
+										const file = e.target.files?.[0] || null;
+										if (file && file.type !== "application/pdf") {
+											toast.error("Only PDF files are accepted");
+											e.target.value = "";
+											setResumeFile(null);
+											return;
+										}
+										setResumeFile(file);
+									}}
+									className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+								/>
+							</div>
+
+							{resumeFile && (
+								<div className="rounded-md bg-green-50 p-3 border border-green-200">
+									<p className="text-sm text-green-700 font-medium">
+										Selected: {resumeFile.name}
+									</p>
+									<p className="text-xs text-green-600 mt-1">
+										Size: {(resumeFile.size / 1024).toFixed(1)} KB
+									</p>
+								</div>
+							)}
+
+							<div className="flex justify-end space-x-2 pt-2">
+								<Button
+									variant="outline"
+									onClick={() => {
+										setShowResumeModal(false);
+										setResumeFile(null);
+									}}
+									disabled={isUploadingResume}
+								>
+									Cancel
+								</Button>
+								<Button
+									onClick={handleResumeUpload}
+									disabled={!resumeFile || isUploadingResume}
+								>
+									{isUploadingResume ? (
+										<>
+											<Loader2 className="mr-2 h-4 w-4 animate-spin" />
+											Uploading...
+										</>
+									) : (
+										<>
+											<Upload className="mr-2 h-4 w-4" />
+											Upload
+										</>
+									)}
+								</Button>
+							</div>
+						</div>
+					</DialogContent>
+				</Dialog>
 			</div>
 		</div>
 	);
