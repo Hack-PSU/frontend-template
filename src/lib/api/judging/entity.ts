@@ -21,6 +21,7 @@ export interface ProjectEntity {
 	hackathonId: string;
 	categories?: string;
 	teamId?: string;
+	githubLink?: string;
 	devpostLink?: string;
 }
 
@@ -32,9 +33,7 @@ export interface ProjectCreateEntity
 export interface ProjectPatchEntity extends Partial<ProjectCreateEntity> {}
 
 export const PROJECT_CATEGORIES = [
-	"Machine Learning",
-	"Entrepreneurship",
-	"10th Anniversary: Timeless Tech",
+	"Beginner Track",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];

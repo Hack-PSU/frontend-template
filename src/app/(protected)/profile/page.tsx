@@ -38,11 +38,52 @@ import {
 	Lock,
 	GraduationCap,
 	HelpCircle,
+	Shield,
 } from "lucide-react";
 import { useUpdateUser } from "@/lib/api/user/hook";
+import { Roofing, Room } from "@mui/icons-material";
+import { jwtDecode } from "jwt-decode";
+
+// Role definitions matching AuthGuard
+enum Role {
+	NONE = 0,
+	VOLUNTEER = 1,
+	TEAM = 2,
+	EXEC = 3,
+	TECH = 4,
+	FINANCE = 5,
+}
+
+// Utility to get user role from token
+function getUserRole(token: string | undefined): number {
+	if (!token) return Role.NONE;
+
+	try {
+		const decoded: any = jwtDecode(token);
+		const productionRole = decoded.claims?.production;
+		const stagingRole = decoded.claims?.staging;
+		return productionRole ?? stagingRole ?? Role.NONE;
+	} catch (error) {
+		console.error("Error decoding token:", error);
+		return Role.NONE;
+	}
+}
+
+// Get role name for display
+function getRoleName(role: number): string {
+	const roleNames: { [key: number]: string } = {
+		[Role.NONE]: "Participant",
+		[Role.VOLUNTEER]: "Volunteer",
+		[Role.TEAM]: "Team Member",
+		[Role.EXEC]: "Executive",
+		[Role.TECH]: "Tech Team",
+		[Role.FINANCE]: "Finance",
+	};
+	return roleNames[role] || "Unknown";
+}
 
 export default function Profile() {
-	const { isAuthenticated, user, logout, isLoading } = useFirebase();
+	const { isAuthenticated, user, logout, isLoading, token } = useFirebase();
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
 	const { data: teams } = useAllTeams();
@@ -65,14 +106,21 @@ export default function Profile() {
 	// Feature flag check for HelpDesk
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
 
+	// Check if user is an organizer (role > 0)
+	const userRole = getUserRole(token);
+	const isOrganizer = userRole > Role.NONE;
+
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
 		if (isUserLoading) return;
 
-		if (!userData || !userData.registration) router.push("/register");
-	}, [userData, router]);
+		// Only redirect to registration if user is a participant (not an organizer) and not registered
+		if (!isOrganizer && (!userData || !userData.registration)) {
+			router.push("/register");
+		}
+	}, [userData, router, isUserLoading, isOrganizer]);
 
 	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
@@ -148,6 +196,10 @@ export default function Profile() {
 	const handleTeam = () => {
 		router.push("/team");
 	};
+
+	const handleReserve = () => {
+		router.push("/reservation")
+	}
 
 	const handleProject = () => {
 		router.push("/project");
@@ -255,10 +307,11 @@ export default function Profile() {
 						<CardTitle className="text-2xl md:text-3xl font-bold">
 							{userData?.firstName && userData?.lastName
 								? `${userData.firstName} ${userData.lastName}`
-								: "Profile"}
+								: user.email || "Profile"}
 						</CardTitle>
-						<CardDescription className="text-slate-300">
-							HackPSU Participant
+						<CardDescription className="text-slate-300 flex items-center justify-center gap-2">
+							{isOrganizer && <Shield className="h-4 w-4" />}
+							{isOrganizer ? `HackPSU ${getRoleName(userRole)}` : "HackPSU Participant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -266,6 +319,13 @@ export default function Profile() {
 							<Mail className="h-5 w-5" />
 							<span className="text-sm md:text-base">{user.email}</span>
 						</div>
+						{isOrganizer && (
+							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
+								<p className="text-sm text-slate-200 text-center">
+									You are viewing this profile as an organizer. Participant actions are disabled.
+								</p>
+							</div>
+						)}
 					</CardContent>
 				</Card>
 
@@ -338,8 +398,12 @@ export default function Profile() {
 										alt="Add to Google Wallet"
 										width={200}
 										height={60}
-										className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
-										onClick={handleAddToGoogleWallet}
+										className={`transition-opacity duration-200 ${
+											isOrganizer
+												? "opacity-30 cursor-not-allowed"
+												: "cursor-pointer hover:opacity-80"
+										}`}
+										onClick={isOrganizer ? undefined : handleAddToGoogleWallet}
 										priority
 									/>
 								)}
@@ -356,8 +420,12 @@ export default function Profile() {
 										alt="Add to Apple Wallet"
 										width={200}
 										height={60}
-										className="cursor-pointer hover:opacity-80 transition-opacity duration-200"
-										onClick={handleAddToAppleWallet}
+										className={`transition-opacity duration-200 ${
+											isOrganizer
+												? "opacity-30 cursor-not-allowed"
+												: "cursor-pointer hover:opacity-80"
+										}`}
+										onClick={isOrganizer ? undefined : handleAddToAppleWallet}
 										priority
 									/>
 								)}
@@ -408,21 +476,35 @@ export default function Profile() {
 									className="w-full"
 									variant="default"
 									size="lg"
+									disabled={isOrganizer}
 								>
 									<Users className="mr-2 h-4 w-4" />
 									Manage Team
+								</Button>
+								<Button
+									onClick={handleReserve}
+									className="w-full"
+									variant="default"
+									size="lg"
+									disabled={isOrganizer}
+								>
+									<Room className="mr-2 h-4 w-4" />
+									Reserve Room
 								</Button>
 							</>
 						) : (
 							<>
 								<p className="text-gray-600">
-									You&apos;re not part of any team yet.
+									{isOrganizer
+										? "Team management is for participants only."
+										: "You're not part of any team yet."}
 								</p>
 								<Button
 									onClick={handleTeam}
 									className="w-full"
 									variant="default"
 									size="lg"
+									disabled={isOrganizer}
 								>
 									<Users className="mr-2 h-4 w-4" />
 									Create or Join Team
@@ -485,7 +567,11 @@ export default function Profile() {
 				<Card>
 					<CardHeader>
 						<CardTitle>Quick Actions</CardTitle>
-						<CardDescription>Manage your HackPSU experience</CardDescription>
+						<CardDescription>
+							{isOrganizer
+								? "View-only organizer access"
+								: "Manage your HackPSU experience"}
+						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
 						<Button
@@ -493,6 +579,7 @@ export default function Profile() {
 							className="w-full"
 							variant="default"
 							size="lg"
+							disabled={isOrganizer}
 						>
 							<FileText className="mr-2 h-4 w-4" />
 							Submit Project
@@ -513,6 +600,7 @@ export default function Profile() {
 							className="w-full"
 							variant="default"
 							size="lg"
+							disabled={isOrganizer}
 						>
 							<FileText className="mr-2 h-4 w-4" />
 							Submit Reimbursement Form
@@ -523,6 +611,7 @@ export default function Profile() {
 							className="w-full"
 							variant="default"
 							size="lg"
+							disabled={isOrganizer}
 						>
 							<GraduationCap className="mr-2 h-4 w-4" />
 							Manage Extra Credit

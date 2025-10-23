@@ -26,7 +26,7 @@ const eventTypeColors = {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
-		label: "Food",
+		label: "General",
 		jellyfishAsset: "/f25/10.png",
 	},
 	[EventType.workshop]: {
@@ -242,6 +242,24 @@ const EventItem: React.FC<EventItemProps> = ({
 	const columnWidth = `${100 / totalColumns}%`;
 	const leftOffset = `${(event.column * 100) / totalColumns}%`;
 
+	// Add state for current time and update it every minute
+	const [isHappening, setIsHappening] = useState(false);
+
+	useEffect(() => {
+		const checkIfHappening = () => {
+			const now = new Date();
+			setIsHappening(now >= event.startTime && now <= event.endTime);
+		};
+
+		// Check initially
+		checkIfHappening();
+
+		// Update every minute
+		const interval = setInterval(checkIfHappening, 60000);
+
+		return () => clearInterval(interval);
+	}, [event.startTime, event.endTime]);
+
 	// Adjust positioning and sizing based on interval type
 	// 1-hour intervals: 80px per hour = 80/60 = 1.33px per minute
 	// 2-hour intervals: 120px per 2 hours = 120/120 = 1px per minute
@@ -251,7 +269,7 @@ const EventItem: React.FC<EventItemProps> = ({
 
 	return (
 		<motion.div
-			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer flex items-center justify-center`}
+			className={`absolute p-3 rounded-xl border-3 ${colors.bg} ${colors.border} text-white shadow-md overflow-hidden cursor-pointer`}
 			style={{
 				top: `${topPosition}px`,
 				left: leftOffset,
@@ -268,6 +286,16 @@ const EventItem: React.FC<EventItemProps> = ({
 			whileTap={{ scale: 0.99 }}
 			onClick={() => onEventClick(event)}
 		>
+			{isHappening && (
+				<div
+					className="absolute w-2 h-2 rounded-full bg-red-500 animate-pulse"
+					style={{
+						top: "8px",
+						left: "8px",
+						zIndex: 2,
+					}}
+				/>
+			)}
 			<div
 				className={`text-center leading-tight overflow-y-auto max-h-full w-full px-2 text-white ${isMobile ? "text-xs" : "text-sm"}`}
 				style={{
@@ -570,11 +598,13 @@ const PreHackathonList: React.FC<{
 			}}
 		>
 			<div className="text-center bg-[#215172] rounded-xl p-3 -m-4 mb-2">
-			<h2 className="text-lg font-bold text-white">Pre-Hackathon Events</h2>
-			<div className="h-1 w-16 bg-white/80 rounded-full mt-1 mx-auto"></div>
+				<h2 className="text-lg font-bold text-white">Pre-Hackathon Events</h2>
+				<div className="h-1 w-16 bg-white/80 rounded-full mt-1 mx-auto"></div>
 			</div>
 			{events.length === 0 ? (
-				<p className="text-gray-500 text-sm text-center py-4">No pre-hackathon events at this time.</p>
+				<p className="text-gray-500 text-sm text-center py-4">
+					No pre-hackathon events at this time.
+				</p>
 			) : (
 				<ul className="flex flex-col gap-3">
 					{events
@@ -584,9 +614,26 @@ const PreHackathonList: React.FC<{
 							return (
 								<li
 									key={event.id}
-									className={`cursor-pointer rounded-xl border-3 ${colors.border} ${colors.bg} px-3 py-3 shadow-md transition-all duration-300 hover:scale-105`}
+									className={`cursor-pointer rounded-xl border-3 ${colors.border} ${colors.bg} px-3 py-3 shadow-md transition-all duration-300 hover:scale-105 relative`}
 									onClick={() => onEventClick(event)}
 								>
+									{(() => {
+										const now = new Date();
+										const isHappening =
+											now >= event.startTime && now <= event.endTime;
+										return (
+											isHappening && (
+												<div
+													className="absolute w-2 h-2 rounded-full bg-red-500 animate-pulse"
+													style={{
+														top: "8px",
+														right: "8px",
+														zIndex: 2,
+													}}
+												/>
+											)
+										);
+									})()}
 									<div className="font-bold text-white mb-1">{event.name}</div>
 									<div className="text-xs text-white/90 font-medium mb-1">
 										{event.startTime.toLocaleDateString("en-US", {
@@ -608,7 +655,9 @@ const PreHackathonList: React.FC<{
 											hour12: true,
 										})}
 									</div>
-									<div className="text-xs text-white/80 mt-1">{event.location}</div>
+									<div className="text-xs text-white/80 mt-1">
+										{event.location}
+									</div>
 								</li>
 							);
 						})}
@@ -628,7 +677,7 @@ const Schedule: React.FC = () => {
 	// State to track if component is mounted (client-side
 
 	const tempScroll = useScroll({
-		offset: ["1700px", "2500px"],
+		offset: ["2200px", "2900px"],
 	});
 
 	// pick the real scrollYProgress only after mount
@@ -790,8 +839,10 @@ const Schedule: React.FC = () => {
 
 			// Adds event to PreHackathon if begins before hackathon weekend
 			const isPreHackathon =
-				(startDayOfWeek !== 6 && startDayOfWeek !== 0) &&
-				(endDayOfWeek !== 6 && endDayOfWeek !== 0);
+				startDayOfWeek !== 6 &&
+				startDayOfWeek !== 0 &&
+				endDayOfWeek !== 6 &&
+				endDayOfWeek !== 0;
 
 			// Checks if event ends, or starts and ends, before Saturday
 			if (isPreHackathon) {
@@ -909,7 +960,7 @@ const Schedule: React.FC = () => {
 	const hasUpcomingPreEvents = useMemo(() => {
 		if (processedEvents.PreHackathon.length === 0) return false;
 		const now = new Date();
-		return processedEvents.PreHackathon.some(event => event.endTime > now);
+		return processedEvents.PreHackathon.some((event) => event.endTime > now);
 	}, [processedEvents.PreHackathon]);
 
 	// Calculate time range to show
@@ -1156,8 +1207,11 @@ const Schedule: React.FC = () => {
 									endTime: event.endTime,
 									day: "Saturday", // Not used for modal
 									duration: event.duration,
-									startMinutes: event.startTime.getHours() * 60 + event.startTime.getMinutes(),
-									endMinutes: event.endTime.getHours() * 60 + event.endTime.getMinutes(),
+									startMinutes:
+										event.startTime.getHours() * 60 +
+										event.startTime.getMinutes(),
+									endMinutes:
+										event.endTime.getHours() * 60 + event.endTime.getMinutes(),
 									column: 0,
 								});
 								setIsModalOpen(true);
