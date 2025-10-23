@@ -39,7 +39,7 @@ import {
 	GraduationCap,
 	HelpCircle,
 } from "lucide-react";
-import { useUploadResume } from "@/lib/api/resume/hook";
+import { useUpdateUser } from "@/lib/api/user/hook";
 
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading } = useFirebase();
@@ -57,7 +57,7 @@ export default function Profile() {
 
 	// Mutation for resume upload
 	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
-		useUploadResume();
+		useUpdateUser();
 
 	const [showQRCode, setShowQRCode] = useState(false);
 	const [resumeFile, setResumeFile] = useState<File | null>(null);
@@ -205,12 +205,17 @@ export default function Profile() {
 			return toast.error("Please select a file to upload");
 		}
 
-		try {
-			const formData = new FormData();
-			formData.append("resume", resumeFile);
+		if (!userData?.id) {
+			return toast.error("User ID not found");
+		}
 
-			await uploadResume(formData);
+		try {
+			await uploadResume({
+				id: userData.id,
+				data: { resume: resumeFile } as any,
+			});
 			toast.success("Resume uploaded successfully!");
+			setResumeFile(null); // Clear the file input after successful upload
 		} catch (error) {
 			console.error("Error uploading resume:", error);
 			toast.error("Failed to upload resume. Please try again.");
@@ -431,11 +436,11 @@ export default function Profile() {
 				<Card>
 					<CardHeader>
 						<CardTitle className="flex items-center space-x-2">
-							<Users className="h-6 w-6" />
-							<span>Upload Resume</span>
+							<FileText className="h-6 w-6" />
+							<span>Resume Upload</span>
 						</CardTitle>
 						<CardDescription>
-							Upload your resume for review and feedback
+							Upload or replace your resume for review and feedback
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -444,9 +449,7 @@ export default function Profile() {
 								<input
 									type="file"
 									accept=".pdf,.doc,.docx"
-									onChange={(e) =>
-										setResumeFile(e.target.files?.[0] || null)
-									}
+									onChange={(e) => setResumeFile(e.target.files?.[0] || null)}
 									className="file-input file-input-bordered w-full"
 								/>
 							</div>
@@ -455,15 +458,22 @@ export default function Profile() {
 								className="w-full md:w-auto"
 								variant="default"
 								size="lg"
+								disabled={!resumeFile || isUploadingResume}
 							>
 								{isUploadingResume ? (
 									<Loader2 className="mr-2 h-4 w-4 animate-spin" />
 								) : (
 									<FileText className="mr-2 h-4 w-4" />
 								)}
-								Upload Resume
+								{resumeFile ? "Upload Resume" : "Select Resume"}
 							</Button>
 						</div>
+
+						{resumeFile && (
+							<p className="text-sm text-green-600">
+								Selected: {resumeFile.name}
+							</p>
+						)}
 
 						<p className="text-sm text-gray-500">
 							Supported formats: PDF, DOC, DOCX. Max size: 5MB.
@@ -520,7 +530,9 @@ export default function Profile() {
 
 						{helpDeskFlag?.isEnabled && (
 							<Button
-								onClick={() => window.open("https://qstack.hackpsu.org", "_blank")}
+								onClick={() =>
+									window.open("https://qstack.hackpsu.org", "_blank")
+								}
 								className="w-full"
 								variant="default"
 								size="lg"
