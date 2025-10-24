@@ -33,7 +33,8 @@ export interface ProjectCreateEntity
 export interface ProjectPatchEntity extends Partial<ProjectCreateEntity> {}
 
 export const PROJECT_CATEGORIES = [
-	"Beginner Track",
+	"Best UX/UI Design",
+	"Nittany AI Challenge",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];

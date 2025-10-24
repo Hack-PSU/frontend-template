@@ -93,18 +93,18 @@ const PrizesChallenges: React.FC = () => {
 						/>
 						<AwardBox
 							title="Best UX/UI Design"
-							description="Create an accessible and user-friendly interface that presents information in ways that can be perceived, operated, and understood by a wide variety of users and assistive technologies. Consider adjustable color contrast, font sizes, video captions, and robust content interpretation."
+							description="Create a project where the user interface is accessible, functional, and intuitive. Information can be perceived in multiple ways, such as adjustable color contrast, font size, or captions. Navigation is operable and user-friendly. Content is understandable and robust across devices and assistive technologies."
 							prizes={[
 								{
 									place: "Prize",
 									amount:
-										"Peraton swag + Beats Headphones per team member",
+										"Peraton swag bag and Beats Headphones for each team member",
 								},
 							]}
 						/>
 						<AwardBox
 							title="Nittany AI Challenge"
-							description="Use the power of artificial intelligence to address a problem in the fields of Health, Humanitarianism, Education, Environment, and/or Agriculture."
+							description="Use the power of AI to address real-world problems in: Health, Humanitarianism, Education, Environment, and Agriculture."
 							prizes={[
 								{
 									place: "1st Place",
@@ -119,8 +119,9 @@ const PrizesChallenges: React.FC = () => {
 									amount: "$25 Amazon Gift Card per team member (up to 5)",
 								},
 							]}
+							extra="Total prize pool: $870 in cash"
 						/>
-						 
+
 					</div>
 				) : (
 					<div className="w-full">
