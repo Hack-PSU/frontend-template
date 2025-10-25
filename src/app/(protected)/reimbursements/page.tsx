@@ -28,7 +28,7 @@ import {
 	Status,
 	SubmitterType,
 	useCreateFinance,
-	Category,
+	UsersCategory
 } from "@/lib/api/finance";
 import { useFlagState } from "@/lib/api/flag/hook";
 
@@ -64,7 +64,7 @@ const reimbursementSchema = z.object({
 			required_error: "Description is required",
 		})
 		.min(5, "Description must be at least 5 characters"),
-	category: z.nativeEnum(Category, {
+	category: z.nativeEnum(UsersCategory, {
 		required_error: "Category is required",
 	}),
 	street: z
@@ -102,7 +102,7 @@ const BasicInfoStep = ({
 }: {
 	control: any;
 	errors: any;
-	categories: Category[];
+	categories: UsersCategory[];
 }) => (
 	<Grid container spacing={4} className="mb-6">
 		<Grid item xs={12} md={6}>
@@ -332,7 +332,8 @@ const NavigationButtons = ({
 
 // ----- 3) Main ReimbursementPage Component -----
 const steps = ["Basic Information", "Address Details", "Receipt Upload"];
-const categories = Object.values(Category);
+const categories = Object.values(UsersCategory
+);
 
 export default function ReimbursementPage() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -371,7 +372,7 @@ export default function ReimbursementPage() {
 		},
 		defaultValues: {
 			amount: 0,
-			category: Category.Food,
+			category: UsersCategory.TravelTransportation,
 			description: "",
 			street: "",
 			city: "",
