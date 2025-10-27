@@ -5905,11 +5905,11 @@ posthog-js@^1.257.0:
     web-vitals "^4.2.4"
 
 posthog-node@^5.5.1:
-  version "5.10.3"
-  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.10.3.tgz#74a786119d0851cea80cf3675d5a71633210dd2f"
-  integrity sha512-pe0P/4MfTSBgM4PWRTeg2iKDSSX6nxnlxAyW+v2+acpCSU50KM2YE5UFJ1Vkq/PtwcJgrt2Ydj66IzuRn2uwFQ==
+  version "5.10.4"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.10.4.tgz#4acd82d2635beeb0aa712ca84be78395c6cee9d1"
+  integrity sha512-sy020/Q4mt18eCkVo/cGEJD+wgdxeg5DTgNUaA85awBCbuEP43BOdCTOOw/K2Tvgw2oZfag3PFyhkVuQ6nJfBg==
   dependencies:
-    "@posthog/core" "1.3.1"
+    "@posthog/core" "1.4.0"
 
 preact@^10.19.3:
   version "10.27.2"
