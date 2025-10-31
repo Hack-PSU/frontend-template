@@ -53,7 +53,7 @@
 		"ics": "^3.8.1",
 		"jwt-decode": "^4.0.0",
 		"lint-staged": "^16.0.0",
-		"lucide-react": "^0.548.0",
+		"lucide-react": "^0.552.0",
 		"luxon": "^3.4.2",
 		"next": "16.0.1",
 		"posthog-js": "^1.257.0",
