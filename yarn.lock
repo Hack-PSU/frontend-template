@@ -2252,7 +2252,7 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@^0.5.2":
+"@posthog/cli@^0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.7.tgz#a4872187c91589ad60e5991e1af1e391ef9cca10"
   integrity sha512-PIDUJmXVRm4Jl5scujGHkjxpJhxnPXlZLMDpFqDwI5YoPTq+strWSN2wbfKe6JcgkqBaKamW1aDqCx4UTBkTJA==
@@ -2268,13 +2268,20 @@
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.5.0.tgz#56900cf9fbb37e9a5687020ce3864d05e67dabe1"
   integrity sha512-oxfV20QMNwH30jKybUyqi3yGuMghULQz1zkJgQG3rjpHDxhD2vDN6E7UpmaqgphMIvGG3Q+DgfU10zfSPA7w7w==
 
-"@posthog/nextjs-config@^1.0.2":
-  version "1.3.9"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.3.9.tgz#5a56f8b4f86e0a804b4cf26df74140781cd2411d"
-  integrity sha512-hWksDDh4DAJjGrIGDyKv+6nrwFBFLftnxmmF6uActcQ1ofaVOL5ByUCblwinZ+KwCfhVh+eGM6HNRtCAJaOkWA==
+"@posthog/core@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.5.1.tgz#77219929d743b4bcb7bc443ad3685c5ab3edcc55"
+  integrity sha512-8fdEzfvdStr45iIncTD+gnqp45UBTUpRK/bwB4shP5usCKytnPIeilU8rIpNBOVjJPwfW+2N8yWhQ0l14x191Q==
   dependencies:
-    "@posthog/cli" "^0.5.2"
-    "@posthog/core" "1.5.0"
+    cross-spawn "^7.0.6"
+
+"@posthog/nextjs-config@^1.0.2":
+  version "1.3.10"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.3.10.tgz#2c504ec69ecf50855e2d1cd56a999ea2ad2dc1c1"
+  integrity sha512-Z4+1WdvK16lUg8MbZtVnox2ukcmj4lW6oS4MwYTBoDnrR3kI7Xil4FRIDEgOFxItTK8mdImcXQbWGoIyKLnrKQ==
+  dependencies:
+    "@posthog/cli" "^0.5.7"
+    "@posthog/core" "1.5.1"
     semver "^7.7.2"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -3400,9 +3407,9 @@ axios-proxy-builder@^0.1.2:
     tunnel "^0.0.6"
 
 axios@^1.11.0:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.1.tgz#45b62dc8fe04e0e92274e08b98e910ba3d7963a7"
-  integrity sha512-hU4EGxxt+j7TQijx1oYdAjw4xuIp1wRQSsbMFwSthCWeBQur1eF+qJ5iQ5sN3Tw8YRzQNKb8jszgBdMDVqwJcw==
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
+  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
