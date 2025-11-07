@@ -10,6 +10,10 @@ export enum SubmitterType {
 	ORGANIZER = "ORGANIZER",
 }
 
+export enum UsersCategory {
+	TravelTransportation = "Travel - Transportation"
+}
+
 export enum Category {
 	TelephoneRental = "Telephone Rental",
 	Postage = "Postage",

@@ -157,8 +157,8 @@ const Navbar: React.FC = () => {
 		setIsMenuOpen(false);
 	}, [pathname]);
 
-	const getNavItems = () => {
-		const baseItems = [
+	const getNavItems = (): NavItemProps[] => {
+		const baseItems: NavItemProps[] = [
 			{ href: isHome ? "#info" : "/#info", text: "About" },
 			{ href: isHome ? "#schedule" : "/#schedule", text: "Schedule" },
 			{ href: isHome ? "#prizes" : "/#prizes", text: "Prizes" },
@@ -166,7 +166,7 @@ const Navbar: React.FC = () => {
 			{ href: isHome ? "#faq" : "/#faq", text: "FAQ" },
 		];
 
-		const authItem =
+		const authItem: NavItemProps =
 			!isLoading && isAuthenticated
 				? { href: "/profile", text: "Profile" }
 				: { href: "/profile", text: "Register" };
@@ -174,7 +174,11 @@ const Navbar: React.FC = () => {
 		// Only show photos link for authenticated users (keeps homepage clean for guests)
 		const photosItem =
 			!isLoading && isAuthenticated
-				? { href: "/photos", text: "Photos" }
+				? {
+						href: "https://go.hackpsu.org/photos",
+						text: "Photos",
+						isExternal: true,
+					}
 				: null;
 
 		return photosItem
@@ -236,7 +240,11 @@ const Navbar: React.FC = () => {
 									animate={{ opacity: 1, y: 0 }}
 									transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
 								>
-									<NavItem href={item.href} text={item.text} />
+									<NavItem
+										href={item.href}
+										text={item.text}
+										isExternal={item.isExternal}
+									/>
 								</motion.div>
 							))}
 						</motion.div>
@@ -322,6 +330,7 @@ const Navbar: React.FC = () => {
 										<MobileNavItem
 											href={item.href}
 											text={item.text}
+											isExternal={item.isExternal}
 											onClick={toggleMenu}
 										/>
 									</motion.div>

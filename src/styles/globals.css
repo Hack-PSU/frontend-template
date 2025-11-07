@@ -1,3 +1,7 @@
+@import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
+@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -31,9 +35,6 @@
 	animation: float-up linear infinite;
 }
 
-@import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
-@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap");
 
 @layer base {
 	:root {
