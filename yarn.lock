@@ -2271,7 +2271,7 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.5.9":
+"@posthog/cli@~0.5.13":
   version "0.5.13"
   resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.13.tgz#65890755848f3ab99353a2444a2c1fcc6800ccab"
   integrity sha512-35vPzwa1lxE51ZU2N7no3wiDl87JYv/lUEGpFHZtc38h7z/7DhRgjBb021v8AWVo1wpfTht51OWXQpLqpBvZww==
@@ -2282,13 +2282,6 @@
     detect-libc "^2.0.4"
     rimraf "^6.0.1"
 
-"@posthog/core@1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.5.3.tgz#f33d00738146adb1738c80d98a45c65096188ed4"
-  integrity sha512-1cHCMR2uS/rAdBIFlBPJ4rPYaw1O42VkFy/LwQLtoy2hMQb2DdhCoSHfgA66R9TvcOybZsSANlbuihmGEZUKVQ==
-  dependencies:
-    cross-spawn "^7.0.6"
-
 "@posthog/core@1.5.5":
   version "1.5.5"
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.5.5.tgz#fc650389b4275cec73b2e64cc2642f709bd61c39"
@@ -2297,13 +2290,22 @@
     cross-spawn "^7.0.6"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.4.1.tgz#95d50ec72bf129416ccd858a80c9e94e6b2263ab"
-  integrity sha512-5D5igH4jxJSKHSNf5UsI9xVmqvGMa29kQKEv8oy3DO4+y/83a/Y0RsuWE8LxjIxfwf7kq1cV6l4IE3RTFBx0kQ==
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.5.0.tgz#cdb7082901705123dbf8ae0a5082b91d60c94b41"
+  integrity sha512-TqQ1taWSEJ5zkKDQJPvFG/Y1V+WcAO+JESExp8He+ox4wFSg9dDxRN0PocVpyQHdD9HKVuRfxEFxwWuQbr+wkA==
   dependencies:
-    "@posthog/cli" "~0.5.9"
-    "@posthog/core" "1.5.3"
+    "@posthog/cli" "~0.5.13"
+    "@posthog/core" "1.5.5"
+    "@posthog/webpack-plugin" "1.0.0"
     semver "^7.7.2"
+
+"@posthog/webpack-plugin@1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.0.0.tgz#720259aa0326029d88dfe76773c78fc29117aa0f"
+  integrity sha512-V2oMedohuR9C89KflAnXy3euqzMV5WxP80MT4ojBAoXVgSxQLlWuqaMztRfFgd/iPsybEisW6G397R1HSrb0Zw==
+  dependencies:
+    "@posthog/cli" "~0.5.13"
+    "@posthog/core" "1.5.5"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
