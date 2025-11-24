@@ -2272,9 +2272,9 @@
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@posthog/cli@~0.5.13":
-  version "0.5.13"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.13.tgz#65890755848f3ab99353a2444a2c1fcc6800ccab"
-  integrity sha512-35vPzwa1lxE51ZU2N7no3wiDl87JYv/lUEGpFHZtc38h7z/7DhRgjBb021v8AWVo1wpfTht51OWXQpLqpBvZww==
+  version "0.5.15"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.15.tgz#038b4f35f72d9661f0709daa4b7cfb34050a14f3"
+  integrity sha512-mqjIQKo5WgKxEqOTbFPk5lHjPYqum6eDynIXbfCY1MmOh5BkNufKL1uFuXj1YtRN5NlHyiNdqrQ+1CmeyauFmA==
   dependencies:
     axios "^1.11.0"
     axios-proxy-builder "^0.1.2"
@@ -2290,9 +2290,9 @@
     cross-spawn "^7.0.6"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.5.0.tgz#cdb7082901705123dbf8ae0a5082b91d60c94b41"
-  integrity sha512-TqQ1taWSEJ5zkKDQJPvFG/Y1V+WcAO+JESExp8He+ox4wFSg9dDxRN0PocVpyQHdD9HKVuRfxEFxwWuQbr+wkA==
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.5.1.tgz#f06c0a39a314f2eeb1a68917febebd1e153e746e"
+  integrity sha512-iD7Y4vdkV+8nQSCrHluhCTpCEB3TDVNbg+Ls2fSdfXjUWeBuWIKlN64+jJig0hOP1wo7/50gDGYuHyCL0CFYSw==
   dependencies:
     "@posthog/cli" "~0.5.13"
     "@posthog/core" "1.5.5"
