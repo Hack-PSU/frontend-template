@@ -2271,7 +2271,7 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.5.13":
+"@posthog/cli@~0.5.16":
   version "0.5.16"
   resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.16.tgz#0a55b3a0dacbd1579a9f4ac4b9ec0b8301d6ed0e"
   integrity sha512-qZnEKUGWmC7V+fdvpRQpfKouezYE6CNX39yE8hSxnpWAFPLF9Aix6EBVCiuEGhn+uaWgXef+bvYcGLo8kwKADg==
@@ -2290,21 +2290,21 @@
     cross-spawn "^7.0.6"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.6.1.tgz#2f019a70494c23f97ae3bfeda7226df79bcba48d"
-  integrity sha512-5Os0LN4R3zgSQ+v5FYenhvVfXk8iX0wCtvyQMvKNuQ+t+w4r+ifx5D1rcLpozCIXeBREryR5OVRZkIZmim3g4g==
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.6.2.tgz#c0167001e5aa898d1088ca9ab02dfd7ba76e2b3a"
+  integrity sha512-QyVz+fVzt7rbtwro4MqPt9Dvg/nrwk+dcBzDLbjd8fY0SBqkd6aKfjr+RoV/a1Cg7O4MkIz8pcRmqCKuPC72vA==
   dependencies:
-    "@posthog/cli" "~0.5.13"
+    "@posthog/cli" "~0.5.16"
     "@posthog/core" "1.6.0"
-    "@posthog/webpack-plugin" "1.1.1"
+    "@posthog/webpack-plugin" "1.1.2"
     semver "^7.7.2"
 
-"@posthog/webpack-plugin@1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.1.1.tgz#03a3f5de4c6cf8593bb1fcd24a19416843a97053"
-  integrity sha512-2AP74R8p5LMtFcxElz3ilFEuzacUBflc8k0AUFjZLSHKHjxI3Jo8SsvSrevi/d4bGplk6EwSByTCTFx4XAgIjQ==
+"@posthog/webpack-plugin@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.1.2.tgz#65090cfd767d8bd014b68f3ad8326a8e1687c343"
+  integrity sha512-1I3U1K62+GlD91ZN+MciFq4xlDAPs4sugZL2DlSERhsmmekpVjBZ9mutuJJ+Ghh5+USjawsN6Od0b2WS0zcSuw==
   dependencies:
-    "@posthog/cli" "~0.5.13"
+    "@posthog/cli" "~0.5.16"
     "@posthog/core" "1.6.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -5460,9 +5460,9 @@ lru-cache@^10.2.0:
   integrity sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==
 
 lru-cache@^11.0.0:
-  version "11.2.2"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.2.tgz#40fd37edffcfae4b2940379c0722dc6eeaa75f24"
-  integrity sha512-F9ODfyqML2coTIsQpSkRHnLSZMtkU8Q+mSfcaIyKwy58u+8k5nvAYeiNhsyMARvzNcXJ9QfWVrcPsC9e9rAxtg==
+  version "11.2.4"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.4.tgz#ecb523ebb0e6f4d837c807ad1abaea8e0619770d"
+  integrity sha512-B5Y16Jr9LB9dHVkh6ZevG+vAbOsNOYCX+sXvFWFu7B3Iz5mijW3zdbMyhsh8ANd2mSWBYdJgnqi+mL7/LrOPYg==
 
 lru-cache@^5.1.1:
   version "5.1.1"
