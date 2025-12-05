@@ -135,6 +135,11 @@ export default function RegistrationPage() {
 		veteran: "",
 		resume: null,
 		hasDietaryRestrictions: false,
+		excitement: "",
+		zip_code: "",
+		travel_cost: "",
+		travel_method: "",
+		travel_additional: "",
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -161,6 +166,13 @@ export default function RegistrationPage() {
 			title: "Logistics & Preferences",
 			isVisible: (data) => data.age >= 18,
 			isComplete: (data) => !!(data.shirtSize && data.country),
+		},
+		{
+			id: "travel",
+			title: "Travel Reimbursement",
+			isVisible: (data) => data.age >= 18 && !!data.travelReimbursement,
+			isComplete: (data) =>
+				!!(data.zip_code && data.travel_cost && data.travel_method),
 		},
 		{
 			id: "dietary",
@@ -371,6 +383,11 @@ export default function RegistrationPage() {
 			referral: formData.referral,
 			shareEmailMlh: formData.shareEmailMlh,
 			veteran: formData.veteran,
+			excitement: formData.excitement,
+			zip_code: formData.zip_code,
+			travel_cost: formData.travel_cost,
+			travel_method: formData.travel_method,
+			travel_additional: formData.travel_additional,
 			time: Date.now(),
 		};
 
@@ -751,6 +768,74 @@ export default function RegistrationPage() {
 											</Card>
 										</div>
 
+										{/* Travel Questions*/}
+										{formData.travelReimbursement && (
+											<>
+												<Card>
+													<CardHeader>
+														<CardTitle>
+															Travel Reimbursement Questions
+														</CardTitle>
+													</CardHeader>
+													<CardContent className="space-y-6">
+														<div className="space-y-2">
+															<Label htmlFor="project">
+																What is the zip code you will be traveling from?
+															</Label>
+															<Input
+																id="zip_code"
+																name="zip_code"
+																placeholder="e.g., 10001"
+																value={formData.zip_code}
+																onChange={handleChange}
+															/>
+														</div>
+														<div className="space-y-2">
+															<Label htmlFor="travel_cost">
+																What is your estimated travel cost?
+															</Label>
+															<Input
+																id="travel_cost"
+																name="travel_cost"
+																type="number"
+																min="0"
+																step="1"
+																placeholder="e.g., 200"
+																value={formData.travel_cost}
+																onChange={handleChange}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<Label htmlFor="travel_method">
+																What is your travel method?
+															</Label>
+															<Input
+																id="travel_method"
+																name="travel_method"
+																placeholder="e.g., Plane, Car, Train"
+																value={formData.travel_method}
+																onChange={handleChange}
+															/>
+														</div>
+
+														<div className="space-y-2">
+															<Label htmlFor="travel_additional">
+																Any additional travel information?
+															</Label>
+															<Input
+																id="travel_additional"
+																name="travel_additional"
+																placeholder="e.g., Layovers, special accommodations"
+																value={formData.travel_additional}
+																onChange={handleChange}
+															/>
+														</div>
+													</CardContent>
+												</Card>
+											</>
+										)}
+
 										{/* Dietary Needs */}
 										<div ref={dietaryRef}>
 											<Card>
@@ -1099,6 +1184,19 @@ export default function RegistrationPage() {
 																		name="expectations"
 																		placeholder="e.g., Learn a new skill, meet new people, build something cool..."
 																		value={formData.expectations}
+																		onChange={handleChange}
+																	/>
+																</div>
+																<div className="space-y-2">
+																	<Label htmlFor="excitement">
+																		What are you most excited about for this
+																		hackathon?
+																	</Label>
+																	<Textarea
+																		id="excitement"
+																		name="excitement"
+																		placeholder="e.g., Meeting new people, building a cool project, learning new skills..."
+																		value={formData.excitement}
 																		onChange={handleChange}
 																	/>
 																</div>
