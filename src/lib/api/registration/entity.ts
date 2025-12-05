@@ -21,7 +21,7 @@ export interface RegistrationEntity {
 	veteran: string;
 	excitement?: string;
 	zip_code?: string;
-	travel_cost?: string;
+	travel_cost?: number;
 	travel_method?: string;
 	travel_additional?: string;
 }

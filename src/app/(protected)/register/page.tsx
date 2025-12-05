@@ -137,7 +137,7 @@ export default function RegistrationPage() {
 		hasDietaryRestrictions: false,
 		excitement: "",
 		zip_code: "",
-		travel_cost: "",
+		travel_cost: 0,
 		travel_method: "",
 		travel_additional: "",
 	});
