@@ -642,7 +642,7 @@ Happy hacking!
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
 					>
-						HackPSU Fall 2025
+						HackPSU Spring 2026
 					</motion.h1>
 
 					{/* Countdown Timer */}
