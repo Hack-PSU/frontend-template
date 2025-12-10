@@ -75,9 +75,6 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useReplaceUser();
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
-	const { data: additionalQuestionsFlag } = useFlagState(
-		"RegistrationAdditionalQuestions"
-	);
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
@@ -205,7 +202,14 @@ export default function RegistrationPage() {
 			id: "additional",
 			title: "Additional Questions",
 			isVisible: (data) => data.age >= 18 && data.mlhCoc && data.mlhDcp,
-			isComplete: (data) => !!data.codingExperience,
+			isComplete: (data) =>
+				!!(
+					data.codingExperience &&
+					data.expectations &&
+					data.excitement &&
+					data.referral &&
+					data.project
+				),
 		},
 	];
 
@@ -346,6 +350,26 @@ export default function RegistrationPage() {
 				"You must agree to the MLH Code of Conduct and Data Sharing Policy."
 			);
 			return;
+		}
+		if (formData.travelReimbursement) {
+			if (
+				!formData.zip_code ||
+				!formData.travel_cost ||
+				!formData.travel_method
+			) {
+				toast.error("Please complete all travel reimbursement questions.");
+				return;
+			}
+		}
+			if (
+				!formData.project ||
+				!formData.referral ||
+				!formData.codingExperience ||
+				!formData.expectations ||
+				!formData.excitement
+				) {
+				toast.error("Please complete all additional questions.");
+				return;
 		}
 
 		const userData: Omit<UserEntity, "id" | "resume"> & {
@@ -788,6 +812,7 @@ export default function RegistrationPage() {
 																placeholder="e.g., 10001"
 																value={formData.zip_code}
 																onChange={handleChange}
+																required
 															/>
 														</div>
 														<div className="space-y-2">
@@ -803,6 +828,7 @@ export default function RegistrationPage() {
 																placeholder="e.g., 200"
 																value={formData.travel_cost}
 																onChange={handleChange}
+																required
 															/>
 														</div>
 
@@ -810,13 +836,38 @@ export default function RegistrationPage() {
 															<Label htmlFor="travel_method">
 																What is your travel method?
 															</Label>
-															<Input
-																id="travel_method"
+															<Select
 																name="travel_method"
-																placeholder="e.g., Plane, Car, Train"
 																value={formData.travel_method}
-																onChange={handleChange}
-															/>
+																onValueChange={(value) =>
+																	handleSelectChange("travel_method", value)
+																}
+																required
+															>
+																<SelectTrigger>
+																	<SelectValue placeholder="Select travel method" />
+																</SelectTrigger>
+																<SelectContent>
+																	<SelectItem value="Plane">
+																		Plane
+																	</SelectItem>
+																	<SelectItem value="Personal Vehicle">
+																		Personal Vehicle
+																	</SelectItem>
+																	<SelectItem value="Bus">
+																		Bus
+																	</SelectItem>
+																	<SelectItem value="Ride-Sharing">
+																		Ride-Sharing
+																	</SelectItem>
+																	<SelectItem value="Taxi">
+																		Taxi
+																	</SelectItem>
+																	<SelectItem value="Rental Vehicle">
+																		Rental Vehicle
+																	</SelectItem>
+																</SelectContent>
+															</Select>
 														</div>
 
 														<div className="space-y-2">
@@ -1160,48 +1211,48 @@ export default function RegistrationPage() {
 																}
 															/>
 														</div>
-														{additionalQuestionsFlag?.isEnabled && (
-															<>
-																<div className="space-y-2">
-																	<Label htmlFor="project">
-																		What is a project you&apos;re proud of?
-																	</Label>
-																	<Textarea
-																		id="project"
-																		name="project"
-																		placeholder="Describe a project and your role in it..."
-																		value={formData.project}
-																		onChange={handleChange}
-																	/>
-																</div>
-																<div className="space-y-2">
-																	<Label htmlFor="expectations">
-																		What do you want to get out of this
-																		hackathon?
-																	</Label>
-																	<Textarea
-																		id="expectations"
-																		name="expectations"
-																		placeholder="e.g., Learn a new skill, meet new people, build something cool..."
-																		value={formData.expectations}
-																		onChange={handleChange}
-																	/>
-																</div>
-																<div className="space-y-2">
-																	<Label htmlFor="excitement">
-																		What are you most excited about for this
-																		hackathon?
-																	</Label>
-																	<Textarea
-																		id="excitement"
-																		name="excitement"
-																		placeholder="e.g., Meeting new people, building a cool project, learning new skills..."
-																		value={formData.excitement}
-																		onChange={handleChange}
-																	/>
-																</div>
-															</>
-														)}
+														<div className="space-y-2">
+															<Label htmlFor="project">
+																Tell us about a time you built something you’re
+																proud of. What inspired it, and what did you
+																learn?
+															</Label>
+															<Textarea
+																id="project"
+																name="project"
+																placeholder="Describe a project and your role in it..."
+																value={formData.project}
+																onChange={handleChange}
+															/>
+														</div>
+														<div className="space-y-2">
+															<Label htmlFor="expectations">
+																What do you hope to get out of this hackathon
+																that you can’t get from a classroom or
+																traditional internship?
+															</Label>
+															<Textarea
+																id="expectations"
+																name="expectations"
+																placeholder="e.g., Learn a new skill, meet new people, build something cool..."
+																value={formData.expectations}
+																onChange={handleChange}
+															/>
+														</div>
+														<div className="space-y-2">
+															<Label htmlFor="excitement">
+																What makes you excited to participate in this
+																hackathon? What do you hope your experience will
+																look like?
+															</Label>
+															<Textarea
+																id="excitement"
+																name="excitement"
+																placeholder="e.g., Meeting new people, building a cool project, learning new skills..."
+																value={formData.excitement}
+																onChange={handleChange}
+															/>
+														</div>
 													</CardContent>
 												</Card>
 											</div>
