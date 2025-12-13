@@ -5972,9 +5972,9 @@ postcss@^8.4.47:
     source-map-js "^1.2.1"
 
 posthog-js@^1.257.0:
-  version "1.305.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.305.0.tgz#14fe7d0dc7fcad4df15c5fe3c904bfb80af5c5c0"
-  integrity sha512-lUQETmmR5o2VwmNCJeWBZZI1wKT4D9ZuwEEIeAAuQJiJZMfzYQFz33p85zPsOpskX1azU3xxnBfQhCjyWLubjA==
+  version "1.306.1"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.306.1.tgz#85e5f0654f5d407b32dc69f45eb8ad8c4ce50192"
+  integrity sha512-wO7bliv/5tlAlfoKCUzwkGXZVNexk0dHigMf9tNp0q1rzs62wThogREY7Tz7h/iWKYiuXy1RumtVlTmHuBXa1w==
   dependencies:
     "@posthog/core" "1.7.1"
     core-js "^3.38.1"
