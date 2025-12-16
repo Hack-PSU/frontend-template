@@ -2276,16 +2276,16 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.5.16":
-  version "0.5.16"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.16.tgz#0a55b3a0dacbd1579a9f4ac4b9ec0b8301d6ed0e"
-  integrity sha512-qZnEKUGWmC7V+fdvpRQpfKouezYE6CNX39yE8hSxnpWAFPLF9Aix6EBVCiuEGhn+uaWgXef+bvYcGLo8kwKADg==
+"@posthog/cli@~0.5.17":
+  version "0.5.19"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.19.tgz#d47138f709978b2c79eaa73427bc13e33a3cbe58"
+  integrity sha512-grbvwiGOhazH3uDaI5/pshVXANEC6EkINiEL/5LvCskcLlktCMWc9dK33xWla4jPV5GXsJ9kF6/rDF/dwmWtew==
   dependencies:
-    axios "^1.11.0"
+    axios "^1.13.2"
     axios-proxy-builder "^0.1.2"
     console.table "^0.10.0"
-    detect-libc "^2.0.4"
-    rimraf "^6.0.1"
+    detect-libc "^2.1.2"
+    rimraf "^6.1.2"
 
 "@posthog/core@1.7.1":
   version "1.7.1"
@@ -2295,21 +2295,21 @@
     cross-spawn "^7.0.6"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.6.4"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.6.4.tgz#d439b7a3ff1ed114d9f9032f96a90ac709771593"
-  integrity sha512-N1MmP4Hh1Jp2PRSUrhQfj6t9CvTkZR4xeu+vZcyv/ZPU7yef8ZSF8cfzChyWt/IeoCX7bR4DpXnWtngfvX/nvw==
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.7.1.tgz#015a3eb2fb39a263afa2f827184912589eb2696b"
+  integrity sha512-YBBk2nYIiXm+HzWeuj9CNgUVxLHiBXLuO59Be0kHojYqQ3CTB8hDSD2RxX1r4hWZl6IDT4lV6VKN8yFdZqRlhg==
   dependencies:
-    "@posthog/cli" "~0.5.16"
+    "@posthog/cli" "~0.5.17"
     "@posthog/core" "1.7.1"
-    "@posthog/webpack-plugin" "1.1.4"
+    "@posthog/webpack-plugin" "1.2.1"
     semver "^7.7.2"
 
-"@posthog/webpack-plugin@1.1.4":
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.1.4.tgz#2373944402e4ea8934d459cad0380ec7e13f3134"
-  integrity sha512-bT2XDydzOccrSpe2x9dh+UtSoikXXdDcYKFaj62WcN5o+j6a6bpxwRRezfVT5EtRazQoPNtl7vEsCTVyAgkrbw==
+"@posthog/webpack-plugin@1.2.1":
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.1.tgz#3d6b42f1e02635747512a6ba8c74dafa6e507a32"
+  integrity sha512-Diz/7w7l5e/xOz0YJsCAG6uoSghixVx9oTo2+x7tdhcxEgD1nEgMOtcx5JfmxQCE0a7FfQ3W8QqGzYDWvuf/iA==
   dependencies:
-    "@posthog/cli" "~0.5.16"
+    "@posthog/cli" "~0.5.17"
     "@posthog/core" "1.7.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
@@ -3440,7 +3440,7 @@ axios-proxy-builder@^0.1.2:
   dependencies:
     tunnel "^0.0.6"
 
-axios@^1.11.0:
+axios@^1.13.2:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
   integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
@@ -3955,7 +3955,7 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==
 
-detect-libc@^2.0.4, detect-libc@^2.1.2:
+detect-libc@^2.1.2:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.1.2.tgz#689c5dcdc1900ef5583a4cb9f6d7b473742074ad"
   integrity sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==
@@ -6288,7 +6288,7 @@ rfdc@^1.4.1:
   resolved "https://registry.yarnpkg.com/rfdc/-/rfdc-1.4.1.tgz#778f76c4fb731d93414e8f925fbecf64cce7f6ca"
   integrity sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==
 
-rimraf@^6.0.1:
+rimraf@^6.1.2:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-6.1.2.tgz#9a0f3cea2ab853e81291127422116ecf2a86ae89"
   integrity sha512-cFCkPslJv7BAXJsYlK1dZsbP8/ZNLkCAQ0bi1hf5EKX2QHegmDFEFA6QhuYJlk7UDdc+02JjO80YSOrWPpw06g==
