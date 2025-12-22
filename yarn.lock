@@ -5331,9 +5331,9 @@ keyv@^4.5.4:
     json-buffer "3.0.1"
 
 knip@^5.62.0:
-  version "5.76.2"
-  resolved "https://registry.yarnpkg.com/knip/-/knip-5.76.2.tgz#ca0a6a9200c7e3077e502b0a7002f93afd9e86c4"
-  integrity sha512-UCs2MNe+sUYo5rR/KcoyEqCqwWh1mrHcAkTvW7Hm7DcnaLa1xzHHRbEqmEeocI23bMXPaZtlSALrfjFIU0xNjQ==
+  version "5.76.3"
+  resolved "https://registry.yarnpkg.com/knip/-/knip-5.76.3.tgz#49282f0405bfb629277d3452a249e56935b47f38"
+  integrity sha512-YLCCzOFzkuNgyL9LdrwFBstV9gpmvPCuolRzs9W++of0mtPH1D3ehE3M4okgayksgq7tWkkMAmyjrDrXxX6aAQ==
   dependencies:
     "@nodelib/fs.walk" "^1.2.3"
     fast-glob "^3.3.3"
@@ -6520,9 +6520,9 @@ slice-ansi@^7.1.0:
     is-fullwidth-code-point "^5.0.0"
 
 smol-toml@^1.5.2:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/smol-toml/-/smol-toml-1.5.2.tgz#70d4324d47b7cccbc67d611829c9b3f6d528b02f"
-  integrity sha512-QlaZEqcAH3/RtNyet1IPIYPsEWAaYyXXv1Krsi+1L/QHppjX4Ifm8MQsBISz9vE8cHicIq3clogsheili5vhaQ==
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/smol-toml/-/smol-toml-1.6.0.tgz#7911830b47bb3e87be536f939453e10c9e1dfd36"
+  integrity sha512-4zemZi0HvTnYwLfrpk/CF9LOd9Lt87kAt50GnqhMpyF9U3poDAP2+iukq2bZsO/ufegbYehBkqINbsWxj4l4cw==
 
 snake-case@^3.0.4:
   version "3.0.4"
