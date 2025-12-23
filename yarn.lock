@@ -2276,10 +2276,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.5.17":
-  version "0.5.19"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.19.tgz#d47138f709978b2c79eaa73427bc13e33a3cbe58"
-  integrity sha512-grbvwiGOhazH3uDaI5/pshVXANEC6EkINiEL/5LvCskcLlktCMWc9dK33xWla4jPV5GXsJ9kF6/rDF/dwmWtew==
+"@posthog/cli@~0.5.20":
+  version "0.5.20"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.20.tgz#e9a20ca9d6d34eddc88ca06d494986a9431d52a9"
+  integrity sha512-Rgo7ppkZNmH/StfdxYY7aT+fHx+TKS8kc2qU3r+bDDNa1hGUaT/PQJF6W8jSDlAcaZVuDQDWA0ofnVXgjXjMTw==
   dependencies:
     axios "^1.13.2"
     axios-proxy-builder "^0.1.2"
@@ -2294,23 +2294,30 @@
   dependencies:
     cross-spawn "^7.0.6"
 
-"@posthog/nextjs-config@^1.0.2":
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.7.3.tgz#5873307c63acbdc095a84a9461dba6b02e71f9c6"
-  integrity sha512-z8n5sc6gQNPtB6fQR22t0lOlV900c4ARNBMzfiRIwe6nCPwjkjvKBzRwch2vX39vFTNoO/7CEfSOBFnem7mcRw==
+"@posthog/core@1.9.0":
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.9.0.tgz#b0f3b2018e166dd47e8d5a38fbcf32c93ff384f7"
+  integrity sha512-j7KSWxJTUtNyKynLt/p0hfip/3I46dWU2dk+pt7dKRoz2l5CYueHuHK4EO7Wlgno5yo1HO4sc4s30MXMTICHJw==
   dependencies:
-    "@posthog/cli" "~0.5.17"
-    "@posthog/core" "1.8.1"
-    "@posthog/webpack-plugin" "1.2.3"
+    cross-spawn "^7.0.6"
+
+"@posthog/nextjs-config@^1.0.2":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.7.4.tgz#2ee6ba7c1370ba515696268f61d0d41ad53bf9d6"
+  integrity sha512-qis/z2OKeD0t9YRRe2xJsswmQCv1RfF8oA3w6agLzdDOtnFQAEWz1Ls3Ks9sI8F98frHIQWyEj3iUgptNJv7gA==
+  dependencies:
+    "@posthog/cli" "~0.5.20"
+    "@posthog/core" "1.9.0"
+    "@posthog/webpack-plugin" "1.2.4"
     semver "^7.7.2"
 
-"@posthog/webpack-plugin@1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.3.tgz#1686706c5599b072a009729201d3d40048fe59fe"
-  integrity sha512-g4Lai/WplSaQczTmbtbcMNi7wwc18NfHy8hS43bY3MSD/RAuTiEYJDOUp0WKXCMqBmJQ1WUij67iEaY03f3qIQ==
+"@posthog/webpack-plugin@1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.4.tgz#2493b1fd371160afa452ae3151cbb54e36bb3dc1"
+  integrity sha512-qBY2ptjAF62df0kYWlfEGqIztJXoVVw7C7FxDYznt0Spx6KLzqM7hGmsT+swa3TXlyT3qSNVk5Ff9BFRBU7GcQ==
   dependencies:
-    "@posthog/cli" "~0.5.17"
-    "@posthog/core" "1.8.1"
+    "@posthog/cli" "~0.5.20"
+    "@posthog/core" "1.9.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
