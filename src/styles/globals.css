@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,500,600,700");
-@import url("https://fonts.googleapis.com/css2?family=Rye&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Monomaniac+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baumans&family=Orbitron:wght@400..900&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -34,7 +35,6 @@
 .animate-float-up {
 	animation: float-up linear infinite;
 }
-
 
 @layer base {
 	:root {
@@ -70,7 +70,6 @@
 		--chart-5: 27 87% 67%;
 	}
 
-
 	/* Account for fixed size of the Navbar upon jumping to links. */
 
 	html {
@@ -83,7 +82,6 @@
 		font-feature-settings:
 			"rlig" 1,
 			"calt" 1;
-		background-color: #FFEBB8;
 		min-height: 100vh;
 		margin: 0;
 		overscroll-behavior: none;
@@ -91,7 +89,56 @@
 		width: 100%;
 		position: relative;
 	}
-  .dark {
+
+	/* Section-specific backgrounds */
+	.hero-bg {
+		background-image: url("/sp26/computer_backgrounds/first_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.info-bg {
+		background-image: url("/sp26/computer_backgrounds/second_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.prizes-bg {
+		background-image: url("/sp26/computer_backgrounds/prizes_third_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.schedule-bg {
+		background-image: url("/sp26/computer_backgrounds/schedule_fourth_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.faq-bg {
+		background-image: url("/sp26/computer_backgrounds/faq_fifth_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.gallery-bg {
+		background-image: url("/sp26/computer_backgrounds/gallery_sixth_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.sponsors-bg {
+		background-image: url("/sp26/computer_backgrounds/sponsors_seventh_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+
+	.footer-bg {
+		background-image: url("/sp26/computer_backgrounds/madewlove_eigth_page_computer.png");
+		background-size: 100% auto;
+		background-position: center;
+	}
+	.dark {
 		--background: 0 0% 3.9%;
 		--foreground: 0 0% 98%;
 		--card: 0 0% 3.9%;
@@ -119,16 +166,11 @@
 	}
 }
 
-
-
-
-
-
 @layer base {
-  * {
-    @apply border-border;
+	* {
+		@apply border-border;
 	}
-  body {
-    @apply text-foreground;
+	body {
+		@apply text-foreground;
 	}
 }

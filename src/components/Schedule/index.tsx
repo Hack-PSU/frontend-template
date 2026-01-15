@@ -108,13 +108,13 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 							<div>
 								<h3
 									className="text-xl font-bold text-white mb-2"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									{event.name}
 								</h3>
 								<span
 									className="inline-block px-3 py-1 rounded-full text-sm font-medium text-white bg-black/20"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									{colors.label}
 								</span>
@@ -275,7 +275,7 @@ const EventItem: React.FC<EventItemProps> = ({
 				left: leftOffset,
 				width: `calc(${columnWidth} - 8px)`, // More margin between columns
 				height: `${height}px`,
-				fontFamily: "Monomaniac One, monospace",
+				fontFamily: "Baumans, monospace",
 				marginLeft: "4px",
 				marginRight: "4px",
 			}}
@@ -432,7 +432,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 						>
 							<div
 								className={`font-medium text-white text-center ${isMobile ? "text-[10px]" : "text-xs"}`}
-								style={{ fontFamily: "Monomaniac One, monospace" }}
+								style={{ fontFamily: "Orbitron, monospace" }}
 							>
 								{hour === 0
 									? "12 AM"
@@ -594,7 +594,7 @@ const PreHackathonList: React.FC<{
 				${isMobile ? "w-full mb-4 rounded-3xl" : "w-64 mr-6 min-w-[220px] max-h-[600px] overflow-y-auto"}
 			`}
 			style={{
-				fontFamily: "Monomaniac One, monospace",
+				fontFamily: "Orbitron, monospace",
 			}}
 		>
 			<div className="text-center bg-[#215172] rounded-xl p-3 -m-4 mb-2">
@@ -682,7 +682,6 @@ const Schedule: React.FC = () => {
 
 	// pick the real scrollYProgress only after mount
 	const scrollYProgress = tempScroll.scrollYProgress;
-	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "70vw"]);
 
 	// Mobile detection
 	const [isMobile, setIsMobile] = useState(false);
@@ -993,7 +992,7 @@ const Schedule: React.FC = () => {
 			>
 				<motion.p
 					className="text-xl text-[#048A81]"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					animate={{ opacity: [0.5, 1, 0.5] }}
 					transition={{ duration: 2, repeat: Infinity }}
 				>
@@ -1011,7 +1010,7 @@ const Schedule: React.FC = () => {
 			>
 				<p
 					className="text-xl text-[#A20021]"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 				>
 					Error loading schedule.
 				</p>
@@ -1023,32 +1022,9 @@ const Schedule: React.FC = () => {
 		<section
 			ref={scheduleRef}
 			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
-			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
+			style={{ minHeight: "60vw" }}
 			id="schedule"
 		>
-			{/* Animated Surfboard - Scroll-linked */}
-			<motion.div
-				className="absolute z-50
-				md:top-[-300px]
-				top-[0px]
-				"
-				style={{
-					left: surfboardX,
-					width: "clamp(120px, 15vw, 250px)",
-					height: "clamp(80px, 15vw, 250px)",
-				}}
-				initial={{ opacity: 1, rotate: -15 }}
-				animate={{ opacity: 1, y: [-20, 20, -20] }}
-				transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-			>
-				<Image
-					src="/f25/surfboard.png"
-					alt="Surfboard"
-					className="object-contain"
-					fill
-				/>
-			</motion.div>
-
 			{/* Header */}
 			<motion.div
 				className="text-center mb-8 z-10 relative"
@@ -1057,8 +1033,8 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3 "
+					style={{ fontFamily: "Orbitron, monospace" }}
 				>
 					Schedule
 				</h1>
@@ -1081,7 +1057,7 @@ const Schedule: React.FC = () => {
 											? `${colors.bg} ${colors.border} text-white`
 											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
 									}`}
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 									initial={{ opacity: 0, scale: 0.8 }}
 									animate={{ opacity: 1, scale: 1 }}
 									transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -1135,7 +1111,7 @@ const Schedule: React.FC = () => {
 													: "text-gray-600 bg-white/70"
 											}`}
 											style={{
-												fontFamily: "Monomaniac One, monospace",
+												fontFamily: "Orbitron, monospace",
 												fontSize: "clamp(12px, 2vw, 16px)",
 											}}
 										>
@@ -1152,7 +1128,7 @@ const Schedule: React.FC = () => {
 				<div className="text-center mb-4">
 					<span
 						className="text-sm text-[#A20021]/70 font-medium"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						{selectedCategories.size === Object.keys(EventType).length
 							? "Showing all categories"
@@ -1170,7 +1146,7 @@ const Schedule: React.FC = () => {
 									? "bg-[#215172] border-[#215172] text-white"
 									: "bg-white/80 border-[#215172] text-[#215172] hover:bg-white"
 							}`}
-							style={{ fontFamily: "Monomaniac One, monospace" }}
+							style={{ fontFamily: "Orbitron, monospace" }}
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 						>
@@ -1239,7 +1215,7 @@ const Schedule: React.FC = () => {
 											? "bg-[#215172] text-white"
 											: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
 									}`}
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 									whileHover={{ scale: 1.02 }}
 									whileTap={{ scale: 0.98 }}
 									initial={{ opacity: 0, y: -20 }}
@@ -1306,7 +1282,7 @@ const Schedule: React.FC = () => {
 			<div className="w-full max-w-5xl flex justify-center mt-6">
 				<button
 					className="flex items-center gap-2 px-5 py-3 bg-[#215172] text-white font-semibold rounded-xl shadow-md hover:bg-[#1a3f5c] transition-colors "
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					onClick={handleDownloadIcs}
 				>
 					<svg

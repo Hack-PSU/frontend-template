@@ -200,7 +200,7 @@ const Sponsors: React.FC = () => {
 			>
 				<motion.div
 					className="text-xl text-[#048A81] font-medium"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					animate={{ opacity: [0.5, 1, 0.5] }}
 					transition={{ duration: 2, repeat: Infinity }}
 				>
@@ -218,7 +218,10 @@ const Sponsors: React.FC = () => {
 		<section
 			id="sponsors"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
-			style={{ backgroundColor: "#215172" }}
+			style={{
+				backgroundImage: "url('/f25/sponsors_bg.png')",
+				backgroundSize: "cover",
+			}}
 		>
 			{/* Hacky Diver Image */}
 			<motion.div
@@ -365,8 +368,8 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3 backdrop-blur-sm"
+						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						Sponsors
 					</h1>
@@ -401,7 +404,7 @@ const Sponsors: React.FC = () => {
 					<motion.button
 						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
 						style={{
-							fontFamily: "Monomaniac One, monospace",
+							fontFamily: "Orbitron, monospace",
 							background: "",
 							boxShadow:
 								"0 10px 25px rgba(0, 102, 204, 0.3), 0 0 20px rgba(255, 235, 184, 0.2)",

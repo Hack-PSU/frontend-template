@@ -11,6 +11,7 @@ type Section = {
 	content: string;
 	textColor: string;
 	color: string;
+	glowColor: string;
 };
 
 const SECTIONS: Section[] = [
@@ -21,6 +22,7 @@ const SECTIONS: Section[] = [
 			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators. Join us for an incredible weekend of building, learning, and connecting with fellow hackers from universities across the region!",
 		textColor: "#048A81",
 		color: "#FFE4B5",
+		glowColor: "#FF4444",
 	},
 	{
 		id: "eligibility",
@@ -29,6 +31,7 @@ const SECTIONS: Section[] = [
 			"All participants must be at least 18 years old and a student of some university (or a recent PSU graduate within less than one year).\n\nTeams may be comprised of up to five members. A team may only submit one project, and no participant may be a member of multiple teams.\n\nAll participants must bring a valid form of identification.",
 		textColor: "#8B4513",
 		color: "#E6F3FF",
+		glowColor: "#FFFF00",
 	},
 	{
 		id: "guidelines",
@@ -37,6 +40,7 @@ const SECTIONS: Section[] = [
 			"Projects should be original works created on site. Coming with an idea in mind is perfectly fine, working on an existing project is not.\n\nAll projects must be submitted through Devpost by 12PM on Sunday and can be edited until 1:45PM Sunday. All project code must be attached to the project's Devpost submission.\n\nAnything you create is your work - HackPSU and its partners have no claim over intellectual property produced at the event.",
 		textColor: "#2E8B57",
 		color: "#F0FFF0",
+		glowColor: "#00FF44",
 	},
 ];
 
@@ -50,11 +54,6 @@ const STATS = [
 const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
 	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
-
-	// Easter egg; spinning the floaties
-	const [clicked1, setClicked1] = useState(false);
-	const [clicked2, setClicked2] = useState(false);
-	const [clicked3, setClicked3] = useState(false);
 
 	function rotateLeft(steps: number) {
 		setOrder((prev) => {
@@ -71,241 +70,8 @@ const InfoSections: React.FC = () => {
 		<section
 			id="info"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw] "
-			style={{ minHeight: "60vw", backgroundColor: "#B1E8FF" }}
+			style={{ minHeight: "60vw" }}
 		>
-			{/* Animated Float Elements */}
-			<motion.div
-				key={1}
-				className="absolute
-				left-[clamp(20px, 4vw, 80px)]
-				top-[clamp(100px, 15vw, 200px)]
-				md:left-[10px]
-				md:top-[-100px]"
-				style={{
-					width: "clamp(80px, 30vw, 400px)",
-					height: "clamp(80px, 30vw, 400px)",
-				}}
-				animate={
-					clicked1
-						? {
-								rotate: [0, 360, 0],
-								y: [-130, -30, -130],
-								scale: [1, 0.9, 1],
-								transition: {
-									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-						: {
-								rotate: [0, 15, 0],
-								y: [-130, -30, -130],
-								scale: [1, 0.9, 1],
-								transition: {
-									rotate: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-				}
-				transition={{
-					duration: 6,
-					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 0,
-				}}
-				onClick={() => {
-					setClicked1(true);
-					setTimeout(() => setClicked1(false), 1000);
-				}}
-			>
-				<Image
-					src="/f25/f1.png"
-					alt="Duck Float"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			<motion.div
-				key={2}
-				className="absolute max-sm:hidden"
-				style={{
-					width: "clamp(80px, 30vw, 400px)",
-					height: "clamp(80px, 30vw, 400px)",
-					right: "clamp(20px, 4vw, 80px)",
-					top: "clamp(0px, 1vw, 100px)",
-				}}
-				animate={
-					clicked2
-						? {
-								rotate: [0, 360, 0],
-								y: [0, -20, 0],
-								scale: [1, 0.8, 1],
-								transition: {
-									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-						: {
-								rotate: [0, 15, 0],
-								y: [0, -20, 0],
-								scale: [1, 0.8, 1],
-								transition: {
-									rotate: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-				}
-				transition={{
-					duration: 5,
-					repeat: Infinity,
-					ease: "easeInOut",
-					delay: 1,
-				}}
-				onClick={() => {
-					setClicked2(true);
-					setTimeout(() => setClicked2(false), 1000);
-				}}
-			>
-				<Image
-					src="/f25/f2.png"
-					alt="Donut Float"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			<motion.div
-				key={3}
-				className="absolute
-				right-[clamp(20px, 4vw, 80px)]
-				top-[clamp(100px, 15vw, 200px)]
-				md:right-[20vw]
-				md:top-[0vw]"
-				style={{
-					width: "clamp(80px, 30vw, 300px)",
-					height: "clamp(80px, 30vw, 300px)",
-				}}
-				animate={
-					clicked3
-						? {
-								rotate: [0, 360, 0],
-								y: [0, -20, 0],
-								scale: [1, 0.8, 1],
-								transition: {
-									rotate: { duration: 1, ease: "easeInOut" }, // one-off spin
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-						: {
-								rotate: [0, 15, 0],
-								y: [0, -20, 0],
-								scale: [1, 0.8, 1],
-								transition: {
-									rotate: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									y: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-									scale: {
-										duration: 5,
-										repeat: Infinity,
-										ease: "easeInOut",
-										delay: 1,
-									},
-								},
-							}
-				}
-				transition={{
-					duration: 6.67,
-					repeat: Infinity,
-					ease: "linear",
-					delay: 3,
-				}}
-				onClick={() => {
-					setClicked3(true);
-					setTimeout(() => setClicked3(false), 1000);
-				}}
-			>
-				<Image
-					src="/f25/f3.png"
-					alt="Flamingo Float"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
 			{/* Header */}
 			<div className="absolute top-[2vw] left-1/2 transform -translate-x-1/2 z-10">
 				<motion.div
@@ -315,8 +81,8 @@ const InfoSections: React.FC = () => {
 					className="text-center"
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-4xl md:text-5xl font-bold text-[#000080] mb-3 "
+						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						Info
 					</h1>
@@ -325,7 +91,7 @@ const InfoSections: React.FC = () => {
 			</div>
 
 			{/* Main Content Container */}
-			<div className="w-full max-w-7xl mx-auto mt-[-100px] md:mt-0">
+			<div className="w-full max-w-7xl mx-auto md:mt-40">
 				{/* Hexagon Section + Info Panel */}
 				<div className="flex flex-col md:flex-row items-center justify-between gap-[4vw]">
 					{/* Hexagon Container */}
@@ -374,7 +140,7 @@ const InfoSections: React.FC = () => {
 							className="font-semibold mb-[1vw]"
 							style={{
 								fontSize: "clamp(18px, 3vw, 32px)",
-								fontFamily: "Monomaniac One, monospace",
+								fontFamily: "Orbitron, monospace",
 								color: "#00DAB7",
 							}}
 						>
@@ -382,7 +148,7 @@ const InfoSections: React.FC = () => {
 						</h3>
 						<p
 							className="text-gray-700 whitespace-pre-line"
-							style={{ fontSize: "clamp(14px, 2vw, 18px)" }}
+							style={{ fontSize: "clamp(14px, 2vw, 18px)", fontFamily: "Baumans, monospace" }}
 						>
 							{order[0].content}
 						</p>
@@ -401,7 +167,7 @@ const InfoSections: React.FC = () => {
 										style={{
 											fontSize: "clamp(24px, 5vw, 48px)",
 											color: colors[i % colors.length],
-											fontFamily: "Monomaniac One, monospace",
+											fontFamily: "Orbitron, monospace",
 										}}
 									>
 										{s.value}
@@ -484,23 +250,29 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				duration: 0.8,
 			}}
 		>
-			<svg viewBox="0 0 120 100" className="absolute inset-0 w-full h-full">
+			<svg
+				viewBox="0 0 120 100"
+				className="absolute inset-0 w-full h-full"
+				style={{
+					filter: `drop-shadow(0 0 8px ${section.glowColor}) drop-shadow(0 0 16px ${section.glowColor})`,
+				}}
+			>
 				<path
 					d="M38,2 L82,2 A12,12 0 0,1 94,10 L112,44 A12,12 0 0,1 112,56 L94,90 A12,12 0 0,1 82,98 L38,98 A12,12 0 0,1 26,90 L8,56 A12,12 0 0,1 8,44 L26,10 A12,12 0 0,1 38,2"
-					fill={section.color}
-					fillOpacity={0.1}
-					stroke="#86CFFC"
+					fill="#000000"
+					fillOpacity={1}
+					stroke={section.glowColor}
 					strokeWidth={7}
 				/>
 			</svg>
 			<motion.span
 				className="relative z-10 font-bold text-center px-2 absolute inset-0 flex items-center justify-center"
 				style={{
-					color: "#000080",
+					color: "#ffffffff",
 					fontSize: isSelected
-						? "clamp(17px, 2.5vw, 17px)"
+						? "clamp(14px, 2.5vw, 14px)"
 						: "clamp(13px, 2vw, 13px)",
-					fontFamily: "Monomaniac One, monospace",
+					fontFamily: "Orbitron, monospace",
 				}}
 				animate={{ rotate: -(position.rotation + containerRotation) }}
 				transition={{

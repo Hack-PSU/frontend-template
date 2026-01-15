@@ -23,7 +23,7 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 }) => {
 	return (
 		<div className="p-6 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-[#0066CC] shadow-md hover:shadow-xl transition-all hover:-translate-y-1">
-			<div style={{ fontFamily: "Monomaniac One, monospace" }}>
+			<div style={{ fontFamily: "Orbitron, monospace" }}>
 				<h2 className="text-xl md:text-2xl font-bold text-[#000080] mb-4 text-center">
 					{title}
 				</h2>
@@ -35,7 +35,10 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 				{prizes.length > 0 && (
 					<div className="mt-4 space-y-2">
 						{prizes.map((prize, index) => (
-							<div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+							<div
+								key={index}
+								className="p-3 bg-blue-50 rounded-lg border border-blue-100"
+							>
 								<div className="text-sm md:text-base font-semibold text-[#000080] mb-1">
 									{prize.place}
 								</div>
@@ -64,7 +67,6 @@ const PrizesChallenges: React.FC = () => {
 			id="prizes"
 			className="flex flex-col items-center w-full px-4 md:px-8"
 			style={{
-				backgroundColor: "#B1E8FF",
 				minHeight: "50vh",
 				paddingTop: "5rem",
 				paddingBottom: "5rem",
@@ -73,7 +75,7 @@ const PrizesChallenges: React.FC = () => {
 			<div className="w-full max-w-7xl flex flex-col items-center">
 				<h1
 					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 				>
 					Prizes & Challenges
 				</h1>
@@ -121,7 +123,6 @@ const PrizesChallenges: React.FC = () => {
 							]}
 							extra="Total prize pool: $870 in cash"
 						/>
-
 					</div>
 				) : (
 					<div className="w-full">
@@ -130,7 +131,7 @@ const PrizesChallenges: React.FC = () => {
 							<div className="p-4 rounded-lg text-center bg-white/90 backdrop-blur-sm border-2 border-[#0066CC] shadow-md">
 								<h3
 									className="text-lg font-bold text-[#000080] mb-1"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									Coming Soon!
 								</h3>

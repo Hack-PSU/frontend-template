@@ -110,7 +110,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
 						fontSize: "clamp(16px, 2.5vw, 20px)",
-						fontFamily: "Monomaniac One, monospace",
+						fontFamily: "Baumans, monospace",
 					}}
 				>
 					{faq.question}
@@ -139,7 +139,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 								animate={{ y: 0, opacity: 1 }}
 								transition={{ duration: 0.2, delay: 0.1 }}
 								className="text-white/90 leading-relaxed mb-4"
-								style={{ fontSize: "clamp(14px, 2vw, 16px)" }}
+								style={{
+									fontSize: "clamp(14px, 2vw, 16px)",
+								}}
 							>
 								{faq.answer}
 							</motion.p>
@@ -149,7 +151,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 									target="_blank"
 									rel="noopener noreferrer"
 									className="inline-block text-[#86CFFC] hover:text-white underline decoration-[#86CFFC] hover:decoration-white transition-colors duration-200"
-									style={{ fontSize: "clamp(14px, 2vw, 16px)" }}
+									style={{
+										fontSize: "clamp(14px, 2vw, 16px)",
+										fontFamily: "Orbitron, monospace",
+									}}
 									initial={{ y: -10, opacity: 0 }}
 									animate={{ y: 0, opacity: 1 }}
 									transition={{ duration: 0.2, delay: 0.2 }}
@@ -187,11 +192,7 @@ const FAQ: React.FC = () => {
 	};
 
 	return (
-		<section
-			className="relative w-full"
-			style={{ backgroundColor: "#85CEFF" }}
-			id="faq"
-		>
+		<section className="relative w-full" id="faq">
 			{/* Centered Header */}
 			<div className="w-full px-[4vw] pt-[8vw] pb-[4vw] text-center relative">
 				<motion.div
@@ -200,8 +201,8 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#000080] mb-6"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-5xl md:text-6xl font-bold text-[#000080] mb-6 "
+						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						FAQ
 					</h1>

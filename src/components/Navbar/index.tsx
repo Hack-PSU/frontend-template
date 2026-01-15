@@ -24,7 +24,7 @@ const NavItem: React.FC<NavItemProps> = ({
 	const content = (
 		<motion.span
 			className="relative px-6 py-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] border-2 border-[#FF91A4] hover:border-[#FF6B9D] text-[#A20021] font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-			style={{ fontFamily: "Monomaniac One, monospace" }}
+			style={{ fontFamily: "Orbitron, monospace" }}
 			whileHover={{ scale: 1.08 }}
 			whileTap={{ scale: 0.92 }}
 		>
@@ -66,7 +66,7 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 	const content = (
 		<motion.div
 			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] border-3 border-[#FF91A4] text-[#A20021] font-bold rounded-2xl shadow-lg"
-			style={{ fontFamily: "Monomaniac One, monospace" }}
+			style={{ fontFamily: "Orbitron, monospace" }}
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}
 		>
@@ -192,7 +192,7 @@ const Navbar: React.FC = () => {
 		<>
 			{/* Main Navbar */}
 			<motion.nav
-				className="relative w-full bg-[#FFEBB8] z-40"
+				className="relative w-full bg-purple-900/80 backdrop-blur-md z-40"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -349,7 +349,7 @@ const Navbar: React.FC = () => {
 								{/* Close instruction */}
 								<motion.p
 									className="text-center text-[#A20021]/70 text-sm pt-4"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}
 									transition={{
