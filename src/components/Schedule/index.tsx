@@ -1022,7 +1022,13 @@ const Schedule: React.FC = () => {
 		<section
 			ref={scheduleRef}
 			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
-			style={{ minHeight: "60vw" }}
+			style={{
+				minHeight: "60vw",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+			}}
 			id="schedule"
 		>
 			{/* Header */}
@@ -1033,8 +1039,14 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3 "
-					style={{ fontFamily: "Orbitron, monospace" }}
+					className="text-4xl md:text-5xl font-bold text-[#2f234bff] mt-5 mx-auto"
+					style={{
+						fontFamily: "Orbitron, monospace",
+						backgroundColor: "#ffffff",
+						borderRadius: "12px",
+						padding: "0.5rem 1rem",
+						width: "fit-content",
+					}}
 				>
 					Schedule
 				</h1>
@@ -1071,7 +1083,7 @@ const Schedule: React.FC = () => {
 					</div>
 				) : (
 					/* Desktop: Jellyfish Buttons */
-					<div className="flex flex-wrap justify-center gap-6 mb-6">
+					<div className="flex flex-wrap justify-center gap-6">
 						{Object.entries(eventTypeColors).map(([type, colors], index) => {
 							const eventType = type as EventType;
 							const isSelected = selectedCategories.has(eventType);
@@ -1127,7 +1139,7 @@ const Schedule: React.FC = () => {
 				{/* Show selected count */}
 				<div className="text-center mb-4">
 					<span
-						className="text-sm text-[#A20021]/70 font-medium"
+						className="text-sm text-[#ffa1fd] font-medium"
 						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						{selectedCategories.size === Object.keys(EventType).length
@@ -1279,7 +1291,7 @@ const Schedule: React.FC = () => {
 			</div>
 
 			{/* Download .ics Button */}
-			<div className="w-full max-w-5xl flex justify-center mt-6">
+			<div className="w-full max-w-5xl flex justify-center mt-8 mb-8">
 				<button
 					className="flex items-center gap-2 px-5 py-3 bg-[#215172] text-white font-semibold rounded-xl shadow-md hover:bg-[#1a3f5c] transition-colors "
 					style={{ fontFamily: "Orbitron, monospace" }}

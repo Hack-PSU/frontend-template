@@ -235,7 +235,13 @@ Happy hacking!
 		<section
 			id="hero"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[4vw] overflow-hidden"
-			style={{ minHeight: "45vw" }}
+			style={{
+				minHeight: "45vw",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+			}}
 		>
 			{/* Container for scaled content (title and countdown only) */}
 			<div
@@ -248,10 +254,12 @@ Happy hacking!
 				<motion.div
 					className="relative px-[4vw] py-[3vw] mb-[1vw]"
 					style={{
-						backgroundColor: "#FFFFFF",
-						border: "4px solid #0066CC",
+						backgroundColor: "#2f234bff",
+						border: "8px solid #ff88e9ff",
 						borderRadius: "15px",
 						position: "relative",
+						boxShadow:
+							"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 136, 233, 0.2), inset 0 15px 15px rgba(255, 136, 233, 0.2)",
 					}}
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}
@@ -263,7 +271,7 @@ Happy hacking!
 						style={{
 							fontSize: "clamp(32px, 8vw, 80px)",
 							fontFamily: "Orbitron, monospace",
-							color: "#000080",
+							color: "#ffffff",
 						}}
 						initial={{ opacity: 0, y: -50 }}
 						animate={{ opacity: 1, y: 0 }}
@@ -288,7 +296,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -299,7 +307,7 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
+											color: "#ffffff",
 											fontFamily: "Orbitron, monospace",
 										}}
 									>
@@ -312,7 +320,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffff",
 									}}
 								>
 									:
@@ -324,7 +332,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -335,7 +343,7 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
+											color: "#ffffffff",
 											fontFamily: "Orbitron, monospace",
 										}}
 									>
@@ -348,7 +356,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffffff",
 									}}
 								>
 									:
@@ -360,7 +368,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -371,7 +379,7 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
+											color: "#ffffff",
 											fontFamily: "Orbitron, monospace",
 										}}
 									>
@@ -384,7 +392,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffff",
 									}}
 								>
 									:
@@ -396,7 +404,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										animate={secondsControls}
 										initial={{ scaleY: 1 }}
@@ -407,7 +415,7 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
+											color: "#ffffff",
 											fontFamily: "Orbitron, monospace",
 										}}
 									>
@@ -422,7 +430,7 @@ Happy hacking!
 									className="text-center font-bold mb-[1.5vw]"
 									style={{
 										fontSize: "clamp(14px, 2.5vw, 32px)",
-										color: "#000080",
+										color: "#ffffff",
 										fontFamily: "Orbitron, monospace",
 									}}
 								>
@@ -435,7 +443,7 @@ Happy hacking!
 								className="text-center font-semibold"
 								style={{
 									fontSize: "clamp(16px, 3vw, 24px)",
-									color: "#000080",
+									color: "#ffffff",
 									fontFamily: "Orbitron, monospace",
 								}}
 								initial={{ opacity: 0, y: -30 }}
@@ -452,7 +460,7 @@ Happy hacking!
 							className="text-center font-bold mb-[2vw] relative z-10"
 							style={{
 								fontSize: "clamp(14px, 2.5vw, 32px)",
-								color: "#000080",
+								color: "#ffffff",
 								fontFamily: "Orbitron, monospace",
 							}}
 						>

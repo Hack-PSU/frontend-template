@@ -192,7 +192,16 @@ const FAQ: React.FC = () => {
 	};
 
 	return (
-		<section className="relative w-full" id="faq">
+		<section
+			className="relative w-full"
+			id="faq"
+			style={{
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+			}}
+		>
 			{/* Centered Header */}
 			<div className="w-full px-[4vw] pt-[8vw] pb-[4vw] text-center relative">
 				<motion.div
@@ -201,59 +210,18 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#000080] mb-6 "
-						style={{ fontFamily: "Orbitron, monospace" }}
+						className="text-5xl md:text-6xl font-bold text-[#2f234bff] mb-6 mx-auto"
+						style={{
+							fontFamily: "Orbitron, monospace",
+							backgroundColor: "#ffffff",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+							width: "fit-content",
+						}}
 					>
 						FAQ
 					</h1>
-					<div className="w-20 h-1 bg-[#000080] rounded-full mx-auto"></div>
-				</motion.div>
-
-				{/* Fish Animation */}
-				<motion.div
-					className="absolute cursor-pointer"
-					style={{
-						right: "20%",
-						top: "-30%",
-						width: "clamp(40px, 30vw, 300px)",
-						height: "clamp(30px, 30vw, 300px)",
-						zIndex: 10,
-					}}
-					initial={{ x: 0, y: 0, opacity: 1 }}
-					animate={
-						fishClicked
-							? {
-									x: "-50vw",
-									y: [0, -20, 0, -15, 0, -10, 0],
-									opacity: [1, 1, 1, 1, 0],
-								}
-							: {
-									y: [0, -8, 0, -5, 0],
-								}
-					}
-					transition={
-						fishClicked
-							? {
-									duration: 3,
-									ease: "easeInOut",
-									times: [0, 0.2, 0.4, 0.6, 1],
-								}
-							: {
-									duration: 4,
-									repeat: Infinity,
-									ease: "easeInOut",
-								}
-					}
-					onClick={handleFishClick}
-					whileHover={{ scale: 1.1 }}
-					whileTap={{ scale: 0.95 }}
-				>
-					<Image
-						src="/f25/fish.png"
-						alt="Swimming Fish"
-						fill
-						className="object-contain"
-					/>
+					<div className="w-20 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 

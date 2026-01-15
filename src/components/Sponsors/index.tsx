@@ -221,6 +221,9 @@ const Sponsors: React.FC = () => {
 			style={{
 				backgroundImage: "url('/f25/sponsors_bg.png')",
 				backgroundSize: "cover",
+				borderTop: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 15px 30px #ff88e9ff, inset 0 15px 15px rgba(255, 20, 147, 0.2)",
 			}}
 		>
 			{/* Hacky Diver Image */}
@@ -232,19 +235,7 @@ const Sponsors: React.FC = () => {
 				initial={{ opacity: 0, x: -50 }}
 				animate={{ opacity: 1, x: 0 }}
 				transition={{ duration: 0.8, delay: 0.5 }}
-			>
-				<Image
-					src="/f25/hacky_diver.png"
-					alt="Hacky Diver"
-					width={200}
-					height={300}
-					className="object-contain"
-					style={{
-						width: "clamp(80px, 12vw, 200px)",
-						height: "auto",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			{/* Glowing Decorative Images - f25/1.png */}
 			<motion.div
@@ -269,20 +260,7 @@ const Sponsors: React.FC = () => {
 					repeat: Infinity,
 					ease: "easeInOut",
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(60px, 8vw, 120px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			<motion.div
 				className="absolute z-10"
@@ -307,20 +285,7 @@ const Sponsors: React.FC = () => {
 					ease: "easeInOut",
 					delay: 0.5,
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(50px, 7vw, 100px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			<motion.div
 				className="absolute z-10"
@@ -345,35 +310,22 @@ const Sponsors: React.FC = () => {
 					ease: "easeInOut",
 					delay: 1,
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(40px, 6vw, 80px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			{/* Header */}
-			<div className="text-center mb-8 z-10 relative">
+			<div className="text-center mb-12 z-10 relative">
 				<motion.div
 					initial={{ opacity: 0, y: -30 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3 backdrop-blur-sm"
-						style={{ fontFamily: "Orbitron, monospace" }}
+						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3 mr-[35px]"
+						style={{ fontFamily: "Orbitron, monospace", backgroundColor: "#ffffff", borderRadius: "12px", padding: "0.5rem 1rem" }}
 					>
 						Sponsors
 					</h1>
-					<div className="w-16 h-1 bg-[#FFEBB8] rounded-full mx-auto"></div>
+					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 

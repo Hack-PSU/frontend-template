@@ -23,8 +23,14 @@ const NavItem: React.FC<NavItemProps> = ({
 }) => {
 	const content = (
 		<motion.span
-			className="relative px-6 py-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] border-2 border-[#FF91A4] hover:border-[#FF6B9D] text-[#A20021] font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-			style={{ fontFamily: "Orbitron, monospace" }}
+			className="relative px-6 py-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold transition-all duration-300"
+			style={{
+				fontFamily: "Orbitron, monospace",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.2), inset 0 8px 8px rgba(255, 136, 233, 0.2)",
+			}}
 			whileHover={{ scale: 1.08 }}
 			whileTap={{ scale: 0.92 }}
 		>
@@ -65,8 +71,14 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 }) => {
 	const content = (
 		<motion.div
-			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] border-3 border-[#FF91A4] text-[#A20021] font-bold rounded-2xl shadow-lg"
-			style={{ fontFamily: "Orbitron, monospace" }}
+			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold rounded-2xl"
+			style={{
+				fontFamily: "Orbitron, monospace",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.2), inset 0 8px 8px rgba(255, 136, 233, 0.2)",
+			}}
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}
 		>
@@ -192,7 +204,7 @@ const Navbar: React.FC = () => {
 		<>
 			{/* Main Navbar */}
 			<motion.nav
-				className="relative w-full bg-purple-900/80 backdrop-blur-md z-40"
+				className="relative w-full bg-[#2f234bff] backdrop-blur-md z-40"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -313,7 +325,7 @@ const Navbar: React.FC = () => {
 
 						{/* Menu Content */}
 						<motion.div
-							className="absolute top-24 left-0 right-0 bottom-0 bg-[#FFEBB8] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
+							className="absolute top-24 left-0 right-0 bottom-0 bg-[#2f234bff] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
 							initial={{ y: -20, opacity: 0 }}
 							animate={{ y: 0, opacity: 1 }}
 							exit={{ y: -20, opacity: 0 }}

@@ -70,16 +70,20 @@ const PrizesChallenges: React.FC = () => {
 				minHeight: "50vh",
 				paddingTop: "5rem",
 				paddingBottom: "5rem",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
 			}}
 		>
 			<div className="w-full max-w-7xl flex flex-col items-center">
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
-					style={{ fontFamily: "Orbitron, monospace" }}
+					className="text-4xl md:text-5xl font-bold text-[#3D5EAB] mb-3"
+					style={{ fontFamily: "Orbitron, monospace", backgroundColor: "#ffffff", borderRadius: "12px", padding: "0.5rem 1rem" }}
 				>
 					Prizes & Challenges
 				</h1>
-				<div className="w-20 h-1.5 bg-[#000080] rounded-full mx-auto mb-10"></div>
+				<div className="w-20 h-1.5 rounded-full mx-auto mb-10"></div>
 
 				{/* {prizesAndChallengesFlag?.isEnabled ? ( */}
 				{prizesAndChallengesFlag?.isEnabled ? (

@@ -21,16 +21,30 @@ const PhotoGallery: React.FC<CarouselProps> = ({
 	const isPhotosPage = variant === "photos";
 
 	return (
-		<div className={`w-full overflow-hidden py-8 md:py-16`}>
+		<section
+			className={`w-full overflow-hidden py-8 md:py-16`}
+			style={{
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+			}}
+		>
 			{/* Header */}
 			<div className="text-center mb-8">
 				<h1
-					className={`text-4xl md:text-5xl font-bold mb-3 text-white`}
-					style={{ fontFamily: "Orbitron, monospace" }}
+					className={`text-4xl md:text-5xl font-bold mb-3 text-[#2f234bff] mx-auto`}
+					style={{
+						fontFamily: "Orbitron, monospace",
+						backgroundColor: "#ffffff",
+						borderRadius: "12px",
+						padding: "0.5rem 1rem",
+						width: "fit-content",
+					}}
 				>
 					Gallery
 				</h1>
-				<div className={`w-16 h-1 rounded-full mx-auto bg-white`}></div>
+				<div className={`w-16 h-1 rounded-full mx-auto`}></div>
 			</div>
 			<Swiper
 				modules={[Pagination, Autoplay]}
@@ -111,7 +125,7 @@ const PhotoGallery: React.FC<CarouselProps> = ({
 					height: 14px !important;
 				}
 			`}</style>
-		</div>
+		</section>
 	);
 };
 
