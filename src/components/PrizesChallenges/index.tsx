@@ -73,7 +73,7 @@ const PrizesChallenges: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
 			}}
 		>
 			<div className="w-full max-w-7xl flex flex-col items-center">

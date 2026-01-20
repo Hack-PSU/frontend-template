@@ -472,7 +472,7 @@ Happy hacking!
 
 			{/* Register & Discord Buttons - kept at original size */}
 			<motion.div
-				className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-[0vw] md:w-full mt-[-8vw]"
+				className="flex flex-col md:flex-row items-center justify-center md:gap-[0vw] md:w-full mt-[-8vw]"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
@@ -483,13 +483,13 @@ Happy hacking!
 					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
 						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(160px, 20vw, 280px)",
+						height: "clamp(80px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 				>
 					<Image
-						src="/sp26/register.png"
+						src="/sp26/register3.png"
 						alt="Register Now"
 						fill
 						className="object-contain"
@@ -498,10 +498,13 @@ Happy hacking!
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
 						style={{
-							fontSize: "clamp(21px, 3.75vw, 42px)",
+							fontSize: "clamp(14px, 3.75vw, 42px)",
 							color: "#FFFFFF",
 							fontFamily: "Orbitron, monospace",
-							transform: "translate(-10px, 4px)",
+							transform:
+								window.innerWidth >= 768
+									? "translate(-10px, 4px)"
+									: "translate(0, 0)",
 						}}
 					>
 						Register now
@@ -511,16 +514,16 @@ Happy hacking!
 				{/* Discord Button */}
 				<motion.button
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center mt-[-60px] md:mt-0"
+					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
 						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(160px, 20vw, 280px)",
+						height: "clamp(80px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 				>
 					<Image
-						src="/sp26/register.png"
+						src="/sp26/register3.png"
 						alt="Join Discord"
 						fill
 						className="object-contain"
@@ -529,10 +532,13 @@ Happy hacking!
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
 						style={{
-							fontSize: "clamp(21px, 3.75vw, 42px)",
+							fontSize: "clamp(14px, 4vw, 42px)",
 							color: "#FFFFFF",
 							fontFamily: "Orbitron, monospace",
-							transform: "translate(-10px, 4px)",
+							transform:
+								window.innerWidth >= 768
+									? "translate(-10px, 4px)"
+									: "translate(0, 0)",
 						}}
 					>
 						<div className="flex items-center gap-2">

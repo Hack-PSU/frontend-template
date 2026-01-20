@@ -168,7 +168,6 @@ const InfoSections: React.FC = () => {
 							className="text-white whitespace-pre-line"
 							style={{
 								fontSize: "clamp(14px, 2vw, 18px)",
-								fontFamily: "Baumans, monospace",
 							}}
 						>
 							{order[0].content}

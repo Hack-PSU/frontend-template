@@ -97,10 +97,22 @@
 		background-position: center;
 	}
 
+	@media (max-width: 767px) {
+		.hero-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_first.png");
+		}
+	}
+
 	.info-bg {
 		background-image: url("/sp26/computer_backgrounds/second_page_computer.png");
 		background-size: 100% auto;
 		background-position: center;
+	}
+
+	@media (max-width: 767px) {
+		.info-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_second_about.png");
+		}
 	}
 
 	.prizes-bg {
@@ -109,10 +121,22 @@
 		background-position: center;
 	}
 
+	@media (max-width: 767px) {
+		.prizes-bg {
+			background-image: url("/sp26/phone_backgrounds/third_page_phone .png");
+		}
+	}
+
 	.schedule-bg {
 		background-image: url("/sp26/computer_backgrounds/schedule_fourth_page_computer.png");
 		background-size: 100% auto;
 		background-position: center;
+	}
+
+	@media (max-width: 767px) {
+		.schedule-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_schedule.png");
+		}
 	}
 
 	.faq-bg {
@@ -121,16 +145,34 @@
 		background-position: center;
 	}
 
+	@media (max-width: 767px) {
+		.faq-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_faq.png");
+		}
+	}
+
 	.gallery-bg {
 		background-image: url("/sp26/computer_backgrounds/gallery_sixth_page_computer.png");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
+	@media (max-width: 767px) {
+		.gallery-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_gallery.png");
+		}
+	}
+
 	.sponsors-bg {
 		background-image: url("/sp26/computer_backgrounds/sponsors_seventh_page_computer.png");
 		background-size: 100% auto;
 		background-position: center;
+	}
+
+	@media (max-width: 767px) {
+		.sponsors-bg {
+			background-image: url("/sp26/phone_backgrounds/phone_sponsors3.png");
+		}
 	}
 
 	.footer-bg {

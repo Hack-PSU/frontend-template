@@ -275,7 +275,6 @@ const EventItem: React.FC<EventItemProps> = ({
 				left: leftOffset,
 				width: `calc(${columnWidth} - 8px)`, // More margin between columns
 				height: `${height}px`,
-				fontFamily: "Baumans, monospace",
 				marginLeft: "4px",
 				marginRight: "4px",
 			}}
@@ -1027,7 +1026,7 @@ const Schedule: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
 			}}
 			id="schedule"
 		>
@@ -1039,7 +1038,7 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#2f234bff] mt-5 mx-auto"
+					className="text-4xl md:text-5xl font-bold text-[#2f234bff] mt-8 mx-auto"
 					style={{
 						fontFamily: "Orbitron, monospace",
 						backgroundColor: "#ffffff",

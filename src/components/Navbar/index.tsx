@@ -204,7 +204,7 @@ const Navbar: React.FC = () => {
 		<>
 			{/* Main Navbar */}
 			<motion.nav
-				className="relative w-full bg-[#2f234bff] backdrop-blur-md z-40"
+				className="relative w-full bg-[#180249] backdrop-blur-md z-40"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -325,7 +325,7 @@ const Navbar: React.FC = () => {
 
 						{/* Menu Content */}
 						<motion.div
-							className="absolute top-24 left-0 right-0 bottom-0 bg-[#2f234bff] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
+							className="absolute top-24 left-0 right-0 bottom-0 bg-[#180249] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
 							initial={{ y: -20, opacity: 0 }}
 							animate={{ y: 0, opacity: 1 }}
 							exit={{ y: -20, opacity: 0 }}
