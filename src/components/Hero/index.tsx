@@ -501,10 +501,6 @@ Happy hacking!
 							fontSize: "clamp(14px, 3.75vw, 42px)",
 							color: "#FFFFFF",
 							fontFamily: "Orbitron, monospace",
-							transform:
-								window.innerWidth >= 768
-									? "translate(-10px, 4px)"
-									: "translate(0, 0)",
 						}}
 					>
 						Register now
@@ -535,10 +531,6 @@ Happy hacking!
 							fontSize: "clamp(14px, 4vw, 42px)",
 							color: "#FFFFFF",
 							fontFamily: "Orbitron, monospace",
-							transform:
-								window.innerWidth >= 768
-									? "translate(-10px, 4px)"
-									: "translate(0, 0)",
 						}}
 					>
 						<div className="flex items-center gap-2">
