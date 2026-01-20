@@ -29,7 +29,7 @@ const NavItem: React.FC<NavItemProps> = ({
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.2), inset 0 8px 8px rgba(255, 136, 233, 0.2)",
+					"0 -4px 8px #ff88e9ff, 0 4px 8px #ff88e9ff, inset 0 -4px 4px rgba(255, 136, 233, 0.1), inset 0 4px 4px rgba(255, 136, 233, 0.1)",
 			}}
 			whileHover={{ scale: 1.08 }}
 			whileTap={{ scale: 0.92 }}
@@ -71,13 +71,13 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 }) => {
 	const content = (
 		<motion.div
-			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold rounded-2xl"
+			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold rounded-2xl mt-6"
 			style={{
 				fontFamily: "Orbitron, monospace",
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.2), inset 0 8px 8px rgba(255, 136, 233, 0.2)",
+					"0 -4px 8px #ff88e9ff, 0 4px 8px #ff88e9ff, inset 0 -4px 4px rgba(255, 136, 233, 0.1), inset 0 4px 4px rgba(255, 136, 233, 0.1)",
 			}}
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}

@@ -109,8 +109,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 				<h3
 					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
-						fontSize: "clamp(16px, 2.5vw, 20px)",
-						fontFamily: "Baumans, monospace",
+						fontSize: "clamp(16px, 2.5vw, 20px)"
 					}}
 				>
 					{faq.question}

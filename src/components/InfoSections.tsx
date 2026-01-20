@@ -75,7 +75,7 @@ const InfoSections: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 20, 147, 0.2), inset 0 15px 15px rgba(255, 20, 147, 0.2)",
+					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
 			}}
 		>
 			{/* Header */}
@@ -88,7 +88,12 @@ const InfoSections: React.FC = () => {
 				>
 					<h1
 						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3 "
-						style={{ fontFamily: "Orbitron, monospace", backgroundColor: "#ffffff", borderRadius: "12px", padding: "0.5rem 1rem" }}
+						style={{
+							fontFamily: "Orbitron, monospace",
+							backgroundColor: "#ffffff",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+						}}
 					>
 						Info
 					</h1>
@@ -270,7 +275,7 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				viewBox="0 0 120 100"
 				className="absolute inset-0 w-full h-full"
 				style={{
-					filter: `drop-shadow(0 0 8px ${section.glowColor}) drop-shadow(0 0 16px ${section.glowColor})`,
+					filter: `drop-shadow(0 0 4px ${section.glowColor}) drop-shadow(0 0 8px ${section.glowColor})`,
 				}}
 			>
 				<path
