@@ -352,7 +352,8 @@ export default function Profile() {
 				</Card>
 
 				{/* QR Code Section */}
-				<Card>
+				{(userData?.registration as any)?.application_status === "confirmed" && (
+					<Card>
 					<CardHeader>
 						<CardTitle className="flex items-center space-x-2">
 							<QrCode className="h-6 w-6" />
@@ -395,6 +396,7 @@ export default function Profile() {
 						)}
 					</CardContent>
 				</Card>
+				)}
 
 				{/* Wallet Integration */}
 				<Card>
