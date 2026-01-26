@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
 import { Fireworks } from "@fireworks-js/react";
@@ -23,13 +23,14 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { CheckCircle, Mail, Home } from "lucide-react";
+import { CheckCircle, Mail, Home, Lock } from "lucide-react";
 import {
 	YearStanding,
 	OrganizerTeam,
 	type OrganizerApplicationCreateEntity,
 } from "@/lib/api/organizer-application/entity";
 import { useSubmitOrganizerApplication } from "@/lib/api/organizer-application/hook";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 interface FormData {
 	name: string;
@@ -48,6 +49,11 @@ export default function OrganizerApplicationPage() {
 	const router = useRouter();
 	const submitApplicationMutation = useSubmitOrganizerApplication();
 	const [isSubmitted, setIsSubmitted] = useState(false);
+
+	// Feature flag check
+	const { data: organizerApplicationsFlag, isLoading: flagLoading } =
+		useFlagState("OrganizerApplications");
+	
 
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
@@ -153,6 +159,150 @@ export default function OrganizerApplicationPage() {
 
 	const yearStandingOptions = Object.values(YearStanding);
 	const teamOptions = Object.values(OrganizerTeam);
+
+	// Show loading state while flag is being fetched
+	if (flagLoading) {
+		return (
+			<div className="min-h-screen flex items-center justify-center bg-transparent p-4">
+				<Card className="w-full max-w-md">
+					<CardContent className="p-8 text-center">
+						<div className="flex justify-center mb-4">
+							<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+						</div>
+						<CardTitle className="text-lg text-muted-foreground">
+							Loading...
+						</CardTitle>
+					</CardContent>
+				</Card>
+			</div>
+		);
+	}
+
+	const isApplicationEnabled = organizerApplicationsFlag?.isEnabled ?? false;
+	console.log("Organizer Applications Flag:", organizerApplicationsFlag);
+
+	// Show closed message if flag is disabled
+	if (!isApplicationEnabled) {
+		return (
+			<>
+				<Toaster richColors />
+				<div className="text-foreground min-h-screen bg-transparent">
+					<div className="flex-1 p-4 sm:p-6 lg:p-8">
+						<div className="max-w-3xl mx-auto">
+							<header className="text-center mb-8 mt-8">
+								<h1 className="text-4xl font-bold tracking-tight text-primary mb-4">
+									HackPSU Organizer Team Application
+								</h1>
+
+								{/* Status Banner */}
+								<div className="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/30 rounded-lg p-6 mb-8">
+									<div className="flex items-start gap-3 mb-3">
+										<Lock className="h-6 w-6 text-amber-600 dark:text-amber-500 mt-1 flex-shrink-0" />
+										<div className="text-left flex-1">
+											<h2 className="text-xl font-semibold text-amber-900 dark:text-amber-100 mb-2">
+												Applications Currently Closed
+											</h2>
+											<p className="text-amber-800 dark:text-amber-200">
+												We&apos;re not currently accepting new organizer applications.
+												Organizer applications will reopen after the hackathon concludes.
+												Thank you for your interest in joining the HackPSU team!
+											</p>
+										</div>
+									</div>
+								</div>
+
+								{/* About Section */}
+								<Card className="text-left mb-8 bg-card">
+									<CardHeader>
+										<CardTitle className="text-xl">About HackPSU</CardTitle>
+									</CardHeader>
+									<CardContent className="space-y-4">
+										<p>
+											HackPSU is the largest 24-hour student-run hackathon and
+											technology event at Penn State. We&apos;re all about
+											celebrating innovation, creativity, and the thrill of
+											learning. Imagine being part of a team that brings
+											mind-blowing ideas to life and creates an unforgettable
+											experience for everyone involved. That&apos;s what HackPSU
+											is all about!
+										</p>
+
+										<div>
+											<h3 className="font-semibold text-lg mb-2">
+												What Does the Organizing Team Do?
+											</h3>
+											<p>
+												As an organizer, you&apos;ll work alongside a passionate
+												team to plan and execute one of the most exciting tech
+												events at Penn State. From securing sponsors and
+												coordinating logistics to designing promotional materials
+												and creating engaging activities, there&apos;s a role for
+												everyone!
+											</p>
+										</div>
+
+										<div>
+											<h3 className="font-semibold text-lg mb-2">
+												Experience Level
+											</h3>
+											<p>
+												You do NOT need a tech background to join the HackPSU
+												organizing team. We&apos;re all about embracing diverse
+												perspectives and talents. Whether you&apos;re a coding
+												expert or have never written a line of code, as long as
+												you are curious and have a can-do attitude, we would like
+												to hear from you.
+											</p>
+											<p className="mt-2">
+												We have teams like Entertainment, Logistics,
+												Communications, Design, and Marketing that are open to
+												everyone from all majors and backgrounds!
+											</p>
+										</div>
+
+										<div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/30 rounded-lg p-4">
+											<h3 className="font-semibold mb-2">Team Descriptions</h3>
+											<p className="text-sm mb-2">
+												Find a detailed list of team descriptions{" "}
+												<a
+													href="https://docs.google.com/document/d/1UtW5J2arWv8K-8g7jfLHHaRqHavm8nR0qpJRiRYSzwQ/edit?tab=t.0"
+													target="_blank"
+													rel="noopener noreferrer"
+													className="text-primary underline"
+												>
+													here
+												</a>
+												.
+											</p>
+										</div>
+
+										<div className="pt-4 text-center border-t">
+											<p className="text-sm text-muted-foreground mb-4">
+												Have questions or want to be notified when applications open?
+											</p>
+											<p className="text-sm mb-4">
+												Reach out at{" "}
+												<a
+													href="mailto:team@hackpsu.org"
+													className="text-primary underline"
+												>
+													team@hackpsu.org
+												</a>
+											</p>
+											<Button onClick={() => router.push("/")}>
+												<Home className="mr-2 h-4 w-4" />
+												Back to Home
+											</Button>
+										</div>
+									</CardContent>
+								</Card>
+							</header>
+						</div>
+					</div>
+				</div>
+			</>
+		);
+	}
 
 	// Success View
 	if (isSubmitted) {
@@ -326,7 +476,7 @@ export default function OrganizerApplicationPage() {
 									<div className="bg-blue-500/10 border border-blue-500/20 rounded-md p-4">
 										<p className="text-sm">
 											<strong>Note:</strong> Applications are considered on a
-											rolling basis and may take up to 3 weeks into the fall
+											rolling basis and may take up to 3 weeks into the next
 											semester to process. Team roles will close once the
 											positions are filled.
 										</p>
