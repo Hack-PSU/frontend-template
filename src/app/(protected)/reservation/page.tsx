@@ -2,7 +2,7 @@ import ReservationSystem from "@/components/ReservationSystem";
 import React from "react";
 
 const ReservationPage = () => {
-  return <ReservationSystem />;
+	return <ReservationSystem />;
 };
 
 export default ReservationPage;

@@ -1,7 +1,16 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import { ChevronLeft, ChevronRight, Loader2, Calendar, Clock, Users, MapPin, X } from "lucide-react";
+import {
+	ChevronLeft,
+	ChevronRight,
+	Loader2,
+	Calendar,
+	Clock,
+	Users,
+	MapPin,
+	X,
+} from "lucide-react";
 import {
 	useReservations,
 	useLocations,
@@ -110,7 +119,9 @@ const ReservationSystem: React.FC = () => {
 	} | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [cancelModalOpen, setCancelModalOpen] = useState(false);
-	const [reservationToCancel, setReservationToCancel] = useState<string | null>(null);
+	const [reservationToCancel, setReservationToCancel] = useState<string | null>(
+		null
+	);
 
 	// Get valid date range for the hackathon (normalize to ms)
 	const dateRange = useMemo(() => {
@@ -292,7 +303,7 @@ const ReservationSystem: React.FC = () => {
 		// Count participant reservations per slot
 		reservations.forEach((reservation) => {
 			// Only count participant reservations toward capacity
-			if (reservation.reservationType !== 'participant') return;
+			if (reservation.reservationType !== "participant") return;
 
 			const startLabel = timestampToTime(reservation.startTime);
 			const key = `${reservation.locationId}-${startLabel}`;
@@ -310,8 +321,12 @@ const ReservationSystem: React.FC = () => {
 			}
 
 			// Mark as unavailable if at capacity (capacity > 0 means limited, 0 means unlimited)
-			const room = rooms.find(r => r.id === reservation.locationId);
-			if (room && room.capacity > 0 && availabilityMap[key].currentOccupancy >= room.capacity) {
+			const room = rooms.find((r) => r.id === reservation.locationId);
+			if (
+				room &&
+				room.capacity > 0 &&
+				availabilityMap[key].currentOccupancy >= room.capacity
+			) {
 				availabilityMap[key].available = false;
 			}
 		});
@@ -344,8 +359,11 @@ const ReservationSystem: React.FC = () => {
 
 		// If slot is not available (at capacity), show detailed message
 		if (!slotInfo.available) {
-			const capacityText = slotInfo.maxCapacity === 0 ? 'unlimited' : slotInfo.maxCapacity;
-			toast.error(`This time slot is at full capacity (${slotInfo.currentOccupancy}/${capacityText})`);
+			const capacityText =
+				slotInfo.maxCapacity === 0 ? "unlimited" : slotInfo.maxCapacity;
+			toast.error(
+				`This time slot is at full capacity (${slotInfo.currentOccupancy}/${capacityText})`
+			);
 			return;
 		}
 
@@ -362,7 +380,10 @@ const ReservationSystem: React.FC = () => {
 				}
 			} else {
 				// Add this time
-				setSelectedSlots({ roomId, times: [...selectedSlots.times, time].sort() });
+				setSelectedSlots({
+					roomId,
+					times: [...selectedSlots.times, time].sort(),
+				});
 			}
 		} else {
 			// New room selection
@@ -397,7 +418,9 @@ const ReservationSystem: React.FC = () => {
 
 				// Validate within bounds (ms)
 				if (startTimeMs < hackathonStartMs || endTimeMs > hackathonEndMs) {
-					throw new Error("Reservation time must be within the hackathon period");
+					throw new Error(
+						"Reservation time must be within the hackathon period"
+					);
 				}
 
 				return createReservation({
@@ -674,7 +697,9 @@ const ReservationSystem: React.FC = () => {
 													{room.name}
 												</span>
 												<span className="text-[10px] text-gray-500 mt-0.5">
-													{room.capacity === 0 ? 'Unlimited' : `Cap: ${room.capacity}`}
+													{room.capacity === 0
+														? "Unlimited"
+														: `Cap: ${room.capacity}`}
 												</span>
 											</div>
 
@@ -693,24 +718,32 @@ const ReservationSystem: React.FC = () => {
 												);
 
 												// Calculate fill percentage for visual indicator
-												const fillPercentage = slotInfo.maxCapacity > 0
-													? (slotInfo.currentOccupancy / slotInfo.maxCapacity) * 100
-													: 0;
+												const fillPercentage =
+													slotInfo.maxCapacity > 0
+														? (slotInfo.currentOccupancy /
+																slotInfo.maxCapacity) *
+															100
+														: 0;
 
 												// Determine background color based on occupancy
-												let bgColor = "bg-green-400 hover:bg-green-500 hover:ring-2 hover:ring-green-600 hover:ring-inset";
+												let bgColor =
+													"bg-green-400 hover:bg-green-500 hover:ring-2 hover:ring-green-600 hover:ring-inset";
 												if (isUserReservation) {
 													bgColor = "bg-purple-400 hover:bg-purple-500";
 												} else if (isSelected) {
-													bgColor = "bg-blue-500 hover:bg-blue-600 ring-2 ring-blue-700 ring-inset";
+													bgColor =
+														"bg-blue-500 hover:bg-blue-600 ring-2 ring-blue-700 ring-inset";
 												} else if (!slotInfo.available) {
-													bgColor = "bg-gray-300 cursor-not-allowed hover:bg-gray-300";
+													bgColor =
+														"bg-gray-300 cursor-not-allowed hover:bg-gray-300";
 												} else if (slotInfo.maxCapacity > 0) {
 													// Show color gradient based on occupancy
 													if (fillPercentage >= 75) {
-														bgColor = "bg-yellow-300 hover:bg-yellow-400 hover:ring-2 hover:ring-yellow-500 hover:ring-inset";
+														bgColor =
+															"bg-yellow-300 hover:bg-yellow-400 hover:ring-2 hover:ring-yellow-500 hover:ring-inset";
 													} else if (fillPercentage >= 50) {
-														bgColor = "bg-green-300 hover:bg-green-400 hover:ring-2 hover:ring-green-500 hover:ring-inset";
+														bgColor =
+															"bg-green-300 hover:bg-green-400 hover:ring-2 hover:ring-green-500 hover:ring-inset";
 													}
 												}
 
@@ -719,16 +752,20 @@ const ReservationSystem: React.FC = () => {
 												if (isUserReservation) {
 													tooltipText = `Your reservation at ${room.name} - Click to cancel`;
 												} else if (slotInfo.available) {
-													const capacityText = slotInfo.maxCapacity === 0
-														? 'Unlimited capacity'
-														: `${slotInfo.currentOccupancy}/${slotInfo.maxCapacity} spots filled`;
+													const capacityText =
+														slotInfo.maxCapacity === 0
+															? "Unlimited capacity"
+															: `${slotInfo.currentOccupancy}/${slotInfo.maxCapacity} spots filled`;
 													if (isSelected) {
 														tooltipText = `Deselect ${time} (${capacityText})`;
 													} else {
 														tooltipText = `Select ${time} at ${room.name} (${capacityText})`;
 													}
 												} else {
-													const capacityText = slotInfo.maxCapacity === 0 ? 'unlimited' : slotInfo.maxCapacity;
+													const capacityText =
+														slotInfo.maxCapacity === 0
+															? "unlimited"
+															: slotInfo.maxCapacity;
 													tooltipText = `Full capacity (${slotInfo.currentOccupancy}/${capacityText})`;
 												}
 
@@ -742,13 +779,17 @@ const ReservationSystem: React.FC = () => {
 														title={tooltipText}
 													>
 														{/* Show occupancy indicator for non-empty slots */}
-														{!isUserReservation && !isSelected && slotInfo.currentOccupancy > 0 && slotInfo.maxCapacity > 0 && (
-															<div className="absolute inset-0 flex items-center justify-center">
-																<span className="text-[10px] font-bold text-gray-700 opacity-70">
-																	{slotInfo.currentOccupancy}/{slotInfo.maxCapacity}
-																</span>
-															</div>
-														)}
+														{!isUserReservation &&
+															!isSelected &&
+															slotInfo.currentOccupancy > 0 &&
+															slotInfo.maxCapacity > 0 && (
+																<div className="absolute inset-0 flex items-center justify-center">
+																	<span className="text-[10px] font-bold text-gray-700 opacity-70">
+																		{slotInfo.currentOccupancy}/
+																		{slotInfo.maxCapacity}
+																	</span>
+																</div>
+															)}
 													</div>
 												);
 											})}
@@ -765,7 +806,8 @@ const ReservationSystem: React.FC = () => {
 									className="px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-semibold shadow-lg hover:shadow-xl flex items-center gap-2 text-lg"
 								>
 									<Calendar className="h-5 w-5" />
-									Review & Confirm ({selectedSlots.times.length} slot{selectedSlots.times.length > 1 ? 's' : ''})
+									Review & Confirm ({selectedSlots.times.length} slot
+									{selectedSlots.times.length > 1 ? "s" : ""})
 								</button>
 							</div>
 						)}
@@ -775,7 +817,8 @@ const ReservationSystem: React.FC = () => {
 							<DialogContent className="sm:max-w-lg">
 								<DialogHeader>
 									<DialogTitle className="text-2xl font-bold text-gray-800">
-										Confirm Reservation{selectedSlots && selectedSlots.times.length > 1 ? 's' : ''}
+										Confirm Reservation
+										{selectedSlots && selectedSlots.times.length > 1 ? "s" : ""}
 									</DialogTitle>
 									<DialogDescription className="text-gray-600">
 										Review your reservation details before confirming.
@@ -784,9 +827,11 @@ const ReservationSystem: React.FC = () => {
 
 								<div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
 									<p className="text-xs text-blue-900">
-										<span className="font-semibold">Note:</span> Reserving a room does not guarantee exclusive use.
-										Larger rooms are shared hacking spaces. This system ensures your team has a designated spot
-										and helps manage room capacity to keep everyone comfortable and productive.
+										<span className="font-semibold">Note:</span> Reserving a
+										room does not guarantee exclusive use. Larger rooms are
+										shared hacking spaces. This system ensures your team has a
+										designated spot and helps manage room capacity to keep
+										everyone comfortable and productive.
 									</p>
 								</div>
 
@@ -795,9 +840,14 @@ const ReservationSystem: React.FC = () => {
 										<div className="flex items-start gap-3">
 											<MapPin className="h-5 w-5 text-blue-600 mt-0.5" />
 											<div>
-												<p className="text-sm font-medium text-gray-500">Room</p>
+												<p className="text-sm font-medium text-gray-500">
+													Room
+												</p>
 												<p className="text-lg font-semibold text-gray-800">
-													{rooms.find((r) => r.id === selectedSlots.roomId)?.name}
+													{
+														rooms.find((r) => r.id === selectedSlots.roomId)
+															?.name
+													}
 												</p>
 											</div>
 										</div>
@@ -805,7 +855,9 @@ const ReservationSystem: React.FC = () => {
 										<div className="flex items-start gap-3">
 											<Calendar className="h-5 w-5 text-blue-600 mt-0.5" />
 											<div>
-												<p className="text-sm font-medium text-gray-500">Date</p>
+												<p className="text-sm font-medium text-gray-500">
+													Date
+												</p>
 												<p className="text-lg font-semibold text-gray-800">
 													{selectedDate.toLocaleDateString("en-US", {
 														weekday: "long",
@@ -820,7 +872,8 @@ const ReservationSystem: React.FC = () => {
 											<Clock className="h-5 w-5 text-blue-600 mt-0.5" />
 											<div className="flex-1">
 												<p className="text-sm font-medium text-gray-500 mb-2">
-													Time Slots ({selectedSlots.times.length} hour{selectedSlots.times.length > 1 ? 's' : ''})
+													Time Slots ({selectedSlots.times.length} hour
+													{selectedSlots.times.length > 1 ? "s" : ""})
 												</p>
 												<div className="flex flex-wrap gap-2">
 													{selectedSlots.times.map((time) => (
@@ -838,7 +891,9 @@ const ReservationSystem: React.FC = () => {
 										<div className="flex items-start gap-3">
 											<Users className="h-5 w-5 text-blue-600 mt-0.5" />
 											<div>
-												<p className="text-sm font-medium text-gray-500">Team</p>
+												<p className="text-sm font-medium text-gray-500">
+													Team
+												</p>
 												<p className="text-lg font-semibold text-gray-800">
 													{userTeam?.name || "No Team"}
 												</p>
@@ -891,7 +946,10 @@ const ReservationSystem: React.FC = () => {
 											<div>
 												<p className="text-sm text-gray-500">Room</p>
 												<p className="font-semibold text-gray-800">
-													{rooms.find((r) => r.id === selectedSlots.roomId)?.name}
+													{
+														rooms.find((r) => r.id === selectedSlots.roomId)
+															?.name
+													}
 												</p>
 											</div>
 										</div>
@@ -901,7 +959,8 @@ const ReservationSystem: React.FC = () => {
 											<div>
 												<p className="text-sm text-gray-500">Time</p>
 												<p className="font-semibold text-gray-800">
-													{selectedDate.toLocaleDateString()} at {selectedSlots.times[0]}
+													{selectedDate.toLocaleDateString()} at{" "}
+													{selectedSlots.times[0]}
 												</p>
 											</div>
 										</div>

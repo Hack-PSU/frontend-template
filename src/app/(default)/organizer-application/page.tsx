@@ -53,7 +53,6 @@ export default function OrganizerApplicationPage() {
 	// Feature flag check
 	const { data: organizerApplicationsFlag, isLoading: flagLoading } =
 		useFlagState("OrganizerApplications");
-	
 
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
@@ -203,9 +202,10 @@ export default function OrganizerApplicationPage() {
 												Applications Currently Closed
 											</h2>
 											<p className="text-amber-800 dark:text-amber-200">
-												We&apos;re not currently accepting new organizer applications.
-												Organizer applications will reopen after the hackathon concludes.
-												Thank you for your interest in joining the HackPSU team!
+												We&apos;re not currently accepting new organizer
+												applications. Organizer applications will reopen after
+												the hackathon concludes. Thank you for your interest in
+												joining the HackPSU team!
 											</p>
 										</div>
 									</div>
@@ -235,9 +235,9 @@ export default function OrganizerApplicationPage() {
 												As an organizer, you&apos;ll work alongside a passionate
 												team to plan and execute one of the most exciting tech
 												events at Penn State. From securing sponsors and
-												coordinating logistics to designing promotional materials
-												and creating engaging activities, there&apos;s a role for
-												everyone!
+												coordinating logistics to designing promotional
+												materials and creating engaging activities, there&apos;s
+												a role for everyone!
 											</p>
 										</div>
 
@@ -250,8 +250,8 @@ export default function OrganizerApplicationPage() {
 												organizing team. We&apos;re all about embracing diverse
 												perspectives and talents. Whether you&apos;re a coding
 												expert or have never written a line of code, as long as
-												you are curious and have a can-do attitude, we would like
-												to hear from you.
+												you are curious and have a can-do attitude, we would
+												like to hear from you.
 											</p>
 											<p className="mt-2">
 												We have teams like Entertainment, Logistics,
@@ -278,7 +278,8 @@ export default function OrganizerApplicationPage() {
 
 										<div className="pt-4 text-center border-t">
 											<p className="text-sm text-muted-foreground mb-4">
-												Have questions or want to be notified when applications open?
+												Have questions or want to be notified when applications
+												open?
 											</p>
 											<p className="text-sm mb-4">
 												Reach out at{" "}

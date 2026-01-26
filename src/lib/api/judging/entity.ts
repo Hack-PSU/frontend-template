@@ -25,8 +25,10 @@ export interface ProjectEntity {
 	devpostLink?: string;
 }
 
-export interface ProjectCreateEntity
-	extends Omit<ProjectEntity, "id" | "hackathonId"> {
+export interface ProjectCreateEntity extends Omit<
+	ProjectEntity,
+	"id" | "hackathonId"
+> {
 	hackathonId?: string;
 }
 

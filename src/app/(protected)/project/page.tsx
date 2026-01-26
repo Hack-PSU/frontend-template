@@ -42,7 +42,7 @@ export default function Project() {
 	const { data: teams, error: teamsError } = useAllTeams();
 
 	const [projectName, setProjectName] = useState("");
-	const [githubLink, setGithubLink] = useState ("");
+	const [githubLink, setGithubLink] = useState("");
 	const [devpostLink, setDevpostLink] = useState("");
 	const [selectedCategories, setSelectedCategories] = useState<
 		ProjectCategory[]
@@ -150,9 +150,7 @@ export default function Project() {
 		}
 
 		if (!isValidGithubUrl(githubLink)) {
-			toast.error(
-				"Please enter a valid Github URL (must be from github.com)"
-			);
+			toast.error("Please enter a valid Github URL (must be from github.com)");
 			return;
 		}
 

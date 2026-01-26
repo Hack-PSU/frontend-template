@@ -361,15 +361,15 @@ export default function RegistrationPage() {
 				return;
 			}
 		}
-			if (
-				!formData.project ||
-				!formData.referral ||
-				!formData.codingExperience ||
-				!formData.expectations ||
-				!formData.excitement
-				) {
-				toast.error("Please complete all additional questions.");
-				return;
+		if (
+			!formData.project ||
+			!formData.referral ||
+			!formData.codingExperience ||
+			!formData.expectations ||
+			!formData.excitement
+		) {
+			toast.error("Please complete all additional questions.");
+			return;
 		}
 
 		const userData: Omit<UserEntity, "id" | "resume"> & {
@@ -848,21 +848,15 @@ export default function RegistrationPage() {
 																	<SelectValue placeholder="Select travel method" />
 																</SelectTrigger>
 																<SelectContent>
-																	<SelectItem value="Plane">
-																		Plane
-																	</SelectItem>
+																	<SelectItem value="Plane">Plane</SelectItem>
 																	<SelectItem value="Personal Vehicle">
 																		Personal Vehicle
 																	</SelectItem>
-																	<SelectItem value="Bus">
-																		Bus
-																	</SelectItem>
+																	<SelectItem value="Bus">Bus</SelectItem>
 																	<SelectItem value="Ride-Sharing">
 																		Ride-Sharing
 																	</SelectItem>
-																	<SelectItem value="Taxi">
-																		Taxi
-																	</SelectItem>
+																	<SelectItem value="Taxi">Taxi</SelectItem>
 																	<SelectItem value="Rental Vehicle">
 																		Rental Vehicle
 																	</SelectItem>

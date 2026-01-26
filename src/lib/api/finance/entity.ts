@@ -11,7 +11,7 @@ export enum SubmitterType {
 }
 
 export enum UsersCategory {
-	TravelTransportation = "Travel - Transportation"
+	TravelTransportation = "Travel - Transportation",
 }
 
 export enum Category {
