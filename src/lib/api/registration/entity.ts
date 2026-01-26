@@ -26,8 +26,9 @@ export interface RegistrationEntity {
 	travel_additional?: string;
 }
 
-export interface RegistrationCreateEntity
-	extends Omit<RegistrationEntity, "id" | "userId" | "hackathonId" | "time"> {}
+export interface RegistrationCreateEntity extends Omit<
+	RegistrationEntity,
+	"id" | "userId" | "hackathonId" | "time"
+> {}
 
-export interface RegistrationUpdateEntity
-	extends Partial<RegistrationCreateEntity> {}
+export interface RegistrationUpdateEntity extends Partial<RegistrationCreateEntity> {}

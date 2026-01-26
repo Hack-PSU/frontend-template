@@ -35,7 +35,10 @@ const AwardBox: React.FC<AwardBoxProps> = ({
 				{prizes.length > 0 && (
 					<div className="mt-4 space-y-2">
 						{prizes.map((prize, index) => (
-							<div key={index} className="p-3 bg-blue-50 rounded-lg border border-blue-100">
+							<div
+								key={index}
+								className="p-3 bg-blue-50 rounded-lg border border-blue-100"
+							>
 								<div className="text-sm md:text-base font-semibold text-[#000080] mb-1">
 									{prize.place}
 								</div>
@@ -121,7 +124,6 @@ const PrizesChallenges: React.FC = () => {
 							]}
 							extra="Total prize pool: $870 in cash"
 						/>
-
 					</div>
 				) : (
 					<div className="w-full">

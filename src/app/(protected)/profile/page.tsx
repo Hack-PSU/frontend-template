@@ -209,8 +209,8 @@ export default function Profile() {
 	};
 
 	const handleReserve = () => {
-		router.push("/reservation")
-	}
+		router.push("/reservation");
+	};
 
 	const handleProject = () => {
 		router.push("/project");
@@ -333,7 +333,9 @@ export default function Profile() {
 						</CardTitle>
 						<CardDescription className="text-slate-300 flex items-center justify-center gap-2">
 							{isOrganizer && <Shield className="h-4 w-4" />}
-							{isOrganizer ? `HackPSU ${getRoleName(userRole)}` : "HackPSU Participant"}
+							{isOrganizer
+								? `HackPSU ${getRoleName(userRole)}`
+								: "HackPSU Participant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -344,7 +346,8 @@ export default function Profile() {
 						{isOrganizer && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className="text-sm text-slate-200 text-center">
-									You are viewing this profile as an organizer. Participant actions are disabled.
+									You are viewing this profile as an organizer. Participant
+									actions are disabled.
 								</p>
 							</div>
 						)}
@@ -537,7 +540,6 @@ export default function Profile() {
 						)}
 					</CardContent>
 				</Card>
-
 
 				{/* Actions */}
 				<Card>

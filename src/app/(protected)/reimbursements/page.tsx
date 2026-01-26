@@ -28,7 +28,7 @@ import {
 	Status,
 	SubmitterType,
 	useCreateFinance,
-	UsersCategory
+	UsersCategory,
 } from "@/lib/api/finance";
 import { useFlagState } from "@/lib/api/flag/hook";
 
@@ -332,8 +332,7 @@ const NavigationButtons = ({
 
 // ----- 3) Main ReimbursementPage Component -----
 const steps = ["Basic Information", "Address Details", "Receipt Upload"];
-const categories = Object.values(UsersCategory
-);
+const categories = Object.values(UsersCategory);
 
 export default function ReimbursementPage() {
 	const [activeStep, setActiveStep] = useState(0);
