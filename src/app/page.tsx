@@ -9,9 +9,6 @@ import FAQ from "@/components/FAQ";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
-import Submissions from "@/components/common/Submissions";
-import { Fireworks } from "@fireworks-js/react";
-import FerrisWheel from "@/components/FerrisWheel";
 import InfoSections from "@/components/InfoSections";
 import PhotoGallery from "@/components/PhotoGallery";
 
@@ -61,6 +58,18 @@ export default function Home() {
 							"/event/event_10.jpg",
 							"/event/event_11.jpg",
 							"/event/event_12.jpg",
+							"/event/event_13.webp",
+							"/event/event_14.webp",
+							"/event/event_15.webp",
+							"/event/event_16.webp",
+							"/event/event_17.webp",
+							"/event/event_18.webp",
+							"/event/event_19.webp",
+							"/event/event_20.webp",
+							"/event/event_21.webp",
+							"/event/event_22.webp",
+							"/event/event_23.webp",
+							"/event/event_24.webp",
 						]}
 					/>
 				</section>

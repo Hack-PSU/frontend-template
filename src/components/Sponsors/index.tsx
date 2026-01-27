@@ -378,7 +378,6 @@ const Sponsors: React.FC = () => {
 							Interested in Sponsoring Us? Click Here!
 						</motion.span>
 
-						{/* Animated wave effect */}
 						<motion.div
 							className="absolute inset-0 rounded-2xl opacity-20 hover:opacity-30 transition-opacity duration-300"
 							style={{
