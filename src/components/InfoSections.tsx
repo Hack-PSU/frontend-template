@@ -97,12 +97,11 @@ const InfoSections: React.FC = () => {
 					>
 						Info
 					</h1>
-					<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 
 			{/* Main Content Container */}
-			<div className="w-full max-w-7xl mx-auto md:mt-40">
+			<div className="w-full max-w-7xl mx-auto md:mt-10">
 				{/* Hexagon Section + Info Panel */}
 				<div className="flex flex-col md:flex-row items-center justify-between gap-[4vw] mt-12">
 					{/* Hexagon Container */}

@@ -116,14 +116,14 @@
 	}
 
 	.prizes-bg {
-		background-image: url("/sp26/computer_backgrounds/prizes_third_page_computer.png");
+		background-image: url("/sp26/computer_backgrounds/prizeschallenges_third_page_computer.png");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
 	@media (max-width: 767px) {
 		.prizes-bg {
-			background-image: url("/sp26/phone_backgrounds/third_page_phone .png");
+			background-image: url("/sp26/phone_backgrounds/third_page_phone3.png");
 		}
 	}
 
@@ -136,6 +136,7 @@
 	@media (max-width: 767px) {
 		.schedule-bg {
 			background-image: url("/sp26/phone_backgrounds/phone_schedule.png");
+			background-repeat: no-repeat;
 		}
 	}
 
