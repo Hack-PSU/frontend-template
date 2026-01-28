@@ -670,7 +670,7 @@ const PreHackathonList: React.FC<{
 const Schedule: React.FC = () => {
 	// Feature flag checks
 	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
-	const { data: sampleScheduleFlag } = useFlagState("sample-schedule");
+	const { data: sampleScheduleFlag } = useFlagState("SampleSchedule");
 
 	// Fetch all hackathons to find the previous one when sample schedule flag is enabled
 	const { data: allHackathons, isLoading: isLoadingHackathons } = useAllHackathons();

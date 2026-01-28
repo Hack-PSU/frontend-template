@@ -320,7 +320,7 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3 mr-[35px]"
+						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3"
 						style={{ fontFamily: "Orbitron, monospace", backgroundColor: "#ffffff", borderRadius: "12px", padding: "0.5rem 1rem" }}
 					>
 						Sponsors
