@@ -46,18 +46,6 @@ export default function Home() {
 				<section className="gallery-bg w-full">
 					<PhotoGallery
 						images={[
-							"/event/event_1.jpg",
-							"/event/event_2.jpg",
-							"/event/event_3.jpg",
-							"/event/event_4.jpg",
-							"/event/event_5.jpg",
-							"/event/event_6.jpg",
-							"/event/event_7.jpg",
-							"/event/event_8.jpg",
-							"/event/event_9.jpg",
-							"/event/event_10.jpg",
-							"/event/event_11.jpg",
-							"/event/event_12.jpg",
 							"/event/event_13.webp",
 							"/event/event_14.webp",
 							"/event/event_15.webp",
@@ -70,6 +58,18 @@ export default function Home() {
 							"/event/event_22.webp",
 							"/event/event_23.webp",
 							"/event/event_24.webp",
+							"/event/event_1.jpg",
+							"/event/event_2.jpg",
+							"/event/event_3.jpg",
+							"/event/event_4.jpg",
+							"/event/event_5.jpg",
+							"/event/event_6.jpg",
+							"/event/event_7.jpg",
+							"/event/event_8.jpg",
+							"/event/event_9.jpg",
+							"/event/event_10.jpg",
+							"/event/event_11.jpg",
+							"/event/event_12.jpg",
 						]}
 					/>
 				</section>
