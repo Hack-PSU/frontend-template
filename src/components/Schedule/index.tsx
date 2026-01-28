@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useAllEvents } from "@/lib/api/event/hook";
 import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
 import { useFlagState } from "@/lib/api/flag/hook";
+import { useAllHackathons } from "@/lib/api/hackathon/hook";
 
 // Event type color mapping with jellyfish assets
 const eventTypeColors = {
@@ -667,8 +668,37 @@ const PreHackathonList: React.FC<{
 };
 
 const Schedule: React.FC = () => {
-	const { data: events, isLoading, error } = useAllEvents();
+	// Feature flag checks
 	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
+	const { data: sampleScheduleFlag } = useFlagState("sample-schedule");
+
+	// Fetch all hackathons to find the previous one when sample schedule flag is enabled
+	const { data: allHackathons, isLoading: isLoadingHackathons } = useAllHackathons();
+
+	// Find the previous hackathon (most recent inactive hackathon)
+	const previousHackathonId = useMemo(() => {
+		if (!sampleScheduleFlag?.isEnabled || !allHackathons) return undefined;
+		
+		// Filter out active hackathons and sort by endTime descending
+		const inactiveHackathons = allHackathons
+			.filter((h) => !h.active)
+			.sort((a, b) => b.endTime - a.endTime);
+		
+		// Return the most recent inactive hackathon ID
+		return inactiveHackathons.length > 0 ? inactiveHackathons[0].id : undefined;
+	}, [sampleScheduleFlag?.isEnabled, allHackathons]);
+
+	// Fetch previous hackathon events when the flag is enabled, otherwise current
+	const { data: fetchedEvents, isLoading: isLoadingEvents, error } = useAllEvents(
+		sampleScheduleFlag?.isEnabled ? previousHackathonId : undefined
+	);
+
+
+	// Use fetched events directly; default to empty array while loading
+	const events = fetchedEvents ?? [];
+
+	// Combine loading states: loading if either hackathons or events are loading
+	const isLoading = isLoadingHackathons || isLoadingEvents;
 
 	// Ref for tracking scroll position of schedule section
 	const scheduleRef = useRef<HTMLDivElement>(null);
