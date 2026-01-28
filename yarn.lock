@@ -2381,10 +2381,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.5.20":
-  version "0.5.25"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.25.tgz#ab48de5ab7dfdd859efcd0eec12542006f7ecc8b"
-  integrity sha512-uSHpznMmXKz571LRKDfkt0ZUWp9e0D6p3Cgutzrz+YfoNrpjrN2i1EB8XtPiyOqp7Y93KQ4y16PkxW9+RSOBAQ==
+"@posthog/cli@~0.5.26":
+  version "0.5.26"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.26.tgz#b66c9e2482fa7e61791dd88f489517cb652083be"
+  integrity sha512-X3k2jtSaR7CGghcBlduU2qZdqu8iSYmMx/Uy2XxJCXCsnyiD/jcuNSwUrH2y3IbNPmxb0kTWKEtcR+HCvP/zcg==
   dependencies:
     axios "^1.13.2"
     axios-proxy-builder "^0.1.2"
@@ -2399,14 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
-"@posthog/nextjs-config@^1.0.2":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.4.tgz#e95ccf2c1173583d8a9b288484129488a62815ca"
-  integrity sha512-OlaJrSA/ePpUZ7KruXsYLCtqOAEDITHtYRQsVfbewUv+xsEIStMG3x2wicyvA8eUi/pjos3wyyGiRDSOdMTEoA==
+"@posthog/core@1.14.1":
+  version "1.14.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.14.1.tgz#0796611d9f3438d499198d299a61268d19d491ff"
+  integrity sha512-DtmJ1y1IDauX8yAZtIotRAYDRkgCCMLk5S9vFFRX7vufhWblQuRUOgn9WYSJrocJlZKm1aEjDzGQ0uyL7HcdLw==
   dependencies:
-    "@posthog/cli" "~0.5.20"
-    "@posthog/core" "1.14.0"
-    "@posthog/webpack-plugin" "1.2.10"
+    cross-spawn "^7.0.6"
+
+"@posthog/nextjs-config@^1.0.2":
+  version "1.8.5"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.5.tgz#5c2be9755da0a4f37d8a19142aa24b4f0f4abffd"
+  integrity sha512-e6jx8sT3ZAHPCeRMul0APTGPZ/DJLDhmDadEFPAh9/83HicC5Ri8ouz73s0fo4S9e7sf18EAQGMWjE70Q93NGQ==
+  dependencies:
+    "@posthog/cli" "~0.5.26"
+    "@posthog/core" "1.14.1"
+    "@posthog/webpack-plugin" "1.2.11"
     semver "^7.7.2"
 
 "@posthog/types@1.335.3":
@@ -2414,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.335.3.tgz#e90099a646a450ef4753edf0d02d939ba1579260"
   integrity sha512-mReFmfI+ep5sH3cnFhjvWfOcl3j6olKpN5lHFbOomLGxYTHMXcyMUBE3/o8WfrAgR1qxKQUsWMNcv6BhLr/GKA==
 
-"@posthog/webpack-plugin@1.2.10":
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.10.tgz#3116e15a440d10e6693d259fa92b0e2c82fa3650"
-  integrity sha512-RXcG+vyxBJn0avkK043t64I81xb7nfRI/7rHMF0KpJd/6z3QKrkjojTqkDjPgqZGffO9zjP9dOk8eNv8puCa0w==
+"@posthog/webpack-plugin@1.2.11":
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.11.tgz#57fad85da32edd901a40cd1bfa75f8f3a01d3e98"
+  integrity sha512-7phvE+3AbfTeymdiY6qk0u2Id7zVRDYU89vHQqvAO28UY8ssVMmIjGLSLN9tDVmbvk7eKjYHAMS8SwnsU9kfTg==
   dependencies:
-    "@posthog/cli" "~0.5.20"
-    "@posthog/core" "1.14.0"
+    "@posthog/cli" "~0.5.26"
+    "@posthog/core" "1.14.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -3563,9 +3570,9 @@ axios-proxy-builder@^0.1.2:
     tunnel "^0.0.6"
 
 axios@^1.13.2:
-  version "1.13.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
-  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
+  version "1.13.4"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.4.tgz#15d109a4817fb82f73aea910d41a2c85606076bc"
+  integrity sha512-1wVkUaAO6WyaYtCkcYCOx12ZgpGf9Zif+qXa4n+oYzK558YryKqiL6UWwd5DqiH3VRW0GYhTZQ/vlgJrCoNQlg==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
@@ -5605,9 +5612,9 @@ lru-cache@^10.2.0:
   integrity sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==
 
 lru-cache@^11.0.0:
-  version "11.2.4"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.4.tgz#ecb523ebb0e6f4d837c807ad1abaea8e0619770d"
-  integrity sha512-B5Y16Jr9LB9dHVkh6ZevG+vAbOsNOYCX+sXvFWFu7B3Iz5mijW3zdbMyhsh8ANd2mSWBYdJgnqi+mL7/LrOPYg==
+  version "11.2.5"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.5.tgz#6811ae01652ae5d749948cdd80bcc22218c6744f"
+  integrity sha512-vFrFJkWtJvJnD5hg+hJvVE8Lh/TcMzKnTgCWmtBipwI5yLX/iX+5UB2tfuyODF5E7k9xEzMdYgGqaSb1c0c5Yw==
 
 lru-cache@^5.1.1:
   version "5.1.1"
