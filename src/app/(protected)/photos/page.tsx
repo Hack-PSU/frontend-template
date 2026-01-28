@@ -13,36 +13,44 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function PhotosPage() {
 	const { data: photos, isLoading, refetch } = usePhotos();
 	const { user } = useFirebase();
-	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
-	const [viewingTab, setViewingTab] = useState<"my-photos" | "community">("my-photos");
+	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+		null
+	);
+	const [viewingTab, setViewingTab] = useState<"my-photos" | "community">(
+		"my-photos"
+	);
 
 	// Separate my photos into public and private
-	const myPublicPhotos = photos?.filter((photo) => {
-		const userId = photo.name.split("_")[0];
-		const fileType = photo.name.split("_")[1];
-		return userId === user?.uid && fileType === "public";
-	}) || [];
+	const myPublicPhotos =
+		photos?.filter((photo) => {
+			const userId = photo.name.split("_")[0];
+			const fileType = photo.name.split("_")[1];
+			return userId === user?.uid && fileType === "public";
+		}) || [];
 
-	const myPrivatePhotos = photos?.filter((photo) => {
-		const userId = photo.name.split("_")[0];
-		const fileType = photo.name.split("_")[1];
-		return userId === user?.uid && fileType === "private";
-	}) || [];
+	const myPrivatePhotos =
+		photos?.filter((photo) => {
+			const userId = photo.name.split("_")[0];
+			const fileType = photo.name.split("_")[1];
+			return userId === user?.uid && fileType === "private";
+		}) || [];
 
 	const myPhotos = [...myPublicPhotos, ...myPrivatePhotos];
 
-	const communityPhotos = photos?.filter((photo) => {
-		const userId = photo.name.split("_")[0];
-		const fileType = photo.name.split("_")[1];
-		return userId !== user?.uid && fileType === "public";
-	}) || [];
+	const communityPhotos =
+		photos?.filter((photo) => {
+			const userId = photo.name.split("_")[0];
+			const fileType = photo.name.split("_")[1];
+			return userId !== user?.uid && fileType === "public";
+		}) || [];
 
 	const getPhotoArray = () => {
 		return viewingTab === "my-photos" ? myPhotos : communityPhotos;
 	};
 
 	const currentPhotos = getPhotoArray();
-	const selectedPhoto = selectedImageIndex !== null ? currentPhotos[selectedImageIndex] : null;
+	const selectedPhoto =
+		selectedImageIndex !== null ? currentPhotos[selectedImageIndex] : null;
 
 	const openLightbox = (index: number) => {
 		setSelectedImageIndex(index);
@@ -59,7 +67,10 @@ export default function PhotosPage() {
 	};
 
 	const goToNext = () => {
-		if (selectedImageIndex !== null && selectedImageIndex < currentPhotos.length - 1) {
+		if (
+			selectedImageIndex !== null &&
+			selectedImageIndex < currentPhotos.length - 1
+		) {
 			setSelectedImageIndex(selectedImageIndex + 1);
 		}
 	};
@@ -70,7 +81,11 @@ export default function PhotosPage() {
 		if (e.key === "Escape") closeLightbox();
 	};
 
-	const isPhotoPrivate = (photo: { name: string; url: string; createdAt: string }) => {
+	const isPhotoPrivate = (photo: {
+		name: string;
+		url: string;
+		createdAt: string;
+	}) => {
 		const fileType = photo.name.split("_")[1];
 		return fileType === "private";
 	};
@@ -78,7 +93,10 @@ export default function PhotosPage() {
 	return (
 		<>
 			<Toaster richColors />
-			<div className="min-h-screen py-8 md:py-12">
+			<div
+				className="min-h-screen py-8 md:py-12"
+				style={{ backgroundColor: "#4d1170" }}
+			>
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					{/* Header */}
 					<div className="mb-10">
@@ -89,7 +107,8 @@ export default function PhotosPage() {
 							Photo Gallery
 						</h1>
 						<p className="text-lg text-muted-foreground max-w-3xl">
-							Capture and share your HackPSU moments. Upload photos as public to share with the community, or keep them private just for you.
+							Capture and share your HackPSU moments. Upload photos as public to
+							share with the community, or keep them private just for you.
 						</p>
 					</div>
 
@@ -99,7 +118,13 @@ export default function PhotosPage() {
 					</div>
 
 					{/* Gallery Tabs */}
-					<Tabs value={viewingTab} onValueChange={(v: string) => setViewingTab(v as "my-photos" | "community")} className="w-full">
+					<Tabs
+						value={viewingTab}
+						onValueChange={(v: string) =>
+							setViewingTab(v as "my-photos" | "community")
+						}
+						className="w-full"
+					>
 						<TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
 							<TabsTrigger value="my-photos" className="text-base">
 								My Photos
@@ -125,14 +150,17 @@ export default function PhotosPage() {
 								<div className="flex items-center justify-center py-20">
 									<div className="text-center">
 										<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-										<p className="text-muted-foreground">Loading your photos...</p>
+										<p className="text-muted-foreground">
+											Loading your photos...
+										</p>
 									</div>
 								</div>
 							) : myPhotos.length > 0 ? (
 								<div>
 									<div className="mb-4 flex items-center justify-between">
 										<p className="text-sm text-muted-foreground">
-											{myPublicPhotos.length} public • {myPrivatePhotos.length} private
+											{myPublicPhotos.length} public • {myPrivatePhotos.length}{" "}
+											private
 										</p>
 									</div>
 									<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -168,7 +196,8 @@ export default function PhotosPage() {
 												No Photos Yet
 											</h3>
 											<p className="text-muted-foreground">
-												Upload your first photo above to start your gallery. You can choose to make it public or keep it private.
+												Upload your first photo above to start your gallery. You
+												can choose to make it public or keep it private.
 											</p>
 										</div>
 									</CardContent>
@@ -182,14 +211,18 @@ export default function PhotosPage() {
 								<div className="flex items-center justify-center py-20">
 									<div className="text-center">
 										<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
-										<p className="text-muted-foreground">Loading community photos...</p>
+										<p className="text-muted-foreground">
+											Loading community photos...
+										</p>
 									</div>
 								</div>
 							) : communityPhotos.length > 0 ? (
 								<div>
 									<div className="mb-4">
 										<p className="text-sm text-muted-foreground">
-											{communityPhotos.length} {communityPhotos.length === 1 ? "photo" : "photos"} from the HackPSU community
+											{communityPhotos.length}{" "}
+											{communityPhotos.length === 1 ? "photo" : "photos"} from
+											the HackPSU community
 										</p>
 									</div>
 									<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -220,7 +253,9 @@ export default function PhotosPage() {
 												No Community Photos Yet
 											</h3>
 											<p className="text-muted-foreground">
-												Be the first to share a public photo with the HackPSU community! Upload a photo above and select &quot;Public&quot; to get started.
+												Be the first to share a public photo with the HackPSU
+												community! Upload a photo above and select
+												&quot;Public&quot; to get started.
 											</p>
 										</div>
 									</CardContent>
@@ -259,15 +294,16 @@ export default function PhotosPage() {
 						)}
 
 						{/* Next Button */}
-						{selectedImageIndex !== null && selectedImageIndex < currentPhotos.length - 1 && (
-							<button
-								onClick={goToNext}
-								className="absolute right-4 z-50 p-3 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors backdrop-blur-sm"
-								aria-label="Next photo"
-							>
-								<ChevronRight className="h-8 w-8" />
-							</button>
-						)}
+						{selectedImageIndex !== null &&
+							selectedImageIndex < currentPhotos.length - 1 && (
+								<button
+									onClick={goToNext}
+									className="absolute right-4 z-50 p-3 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors backdrop-blur-sm"
+									aria-label="Next photo"
+								>
+									<ChevronRight className="h-8 w-8" />
+								</button>
+							)}
 
 						{/* Image Container */}
 						{selectedPhoto && (
@@ -280,7 +316,8 @@ export default function PhotosPage() {
 								{/* Image Counter & Privacy Badge */}
 								<div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2">
 									<div className="px-4 py-2 rounded-full bg-black/70 text-white text-sm backdrop-blur-sm">
-										{selectedImageIndex !== null && `${selectedImageIndex + 1} / ${currentPhotos.length}`}
+										{selectedImageIndex !== null &&
+											`${selectedImageIndex + 1} / ${currentPhotos.length}`}
 									</div>
 									{isPhotoPrivate(selectedPhoto) && (
 										<div className="px-3 py-2 rounded-full bg-purple-500/90 text-white text-sm backdrop-blur-sm flex items-center gap-1.5">

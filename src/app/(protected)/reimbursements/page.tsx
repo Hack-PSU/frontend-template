@@ -28,7 +28,7 @@ import {
 	Status,
 	SubmitterType,
 	useCreateFinance,
-	UsersCategory
+	UsersCategory,
 } from "@/lib/api/finance";
 import { useFlagState } from "@/lib/api/flag/hook";
 
@@ -332,8 +332,7 @@ const NavigationButtons = ({
 
 // ----- 3) Main ReimbursementPage Component -----
 const steps = ["Basic Information", "Address Details", "Receipt Upload"];
-const categories = Object.values(UsersCategory
-);
+const categories = Object.values(UsersCategory);
 
 export default function ReimbursementPage() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -446,7 +445,10 @@ export default function ReimbursementPage() {
 	// Show loading state while flag is being fetched
 	if (flagLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-transparent">
+			<div
+				className="min-h-screen flex items-center justify-center"
+				style={{ backgroundColor: "#4d1170" }}
+			>
 				<Container maxWidth="md">
 					<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
 						<CardContent className="p-8 text-center">
@@ -465,7 +467,10 @@ export default function ReimbursementPage() {
 		participantReimbursementFlag?.isEnabled ?? false;
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-transparent">
+		<div
+			className="min-h-screen flex items-center justify-center"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<Container maxWidth="md">
 				<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
 					<CardContent className="p-8">

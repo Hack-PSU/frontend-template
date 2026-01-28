@@ -205,6 +205,11 @@ const Navbar: React.FC = () => {
 			{/* Main Navbar */}
 			<motion.nav
 				className="relative w-full bg-[#180249] backdrop-blur-md z-40"
+				style={{
+					borderBottom: "2px solid #ff88e9ff",
+					boxShadow:
+						"0 8px 15px #ff88e9ff, inset 0 8px 8px rgba(255, 136, 233, 0.1)",
+				}}
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -227,7 +232,7 @@ const Navbar: React.FC = () => {
 									whileTap={{ scale: 0.95 }}
 								>
 									<Image
-										src="/logo.svg"
+										src="/logo.png"
 										alt="HackPSU Logo"
 										width={100}
 										height={100}

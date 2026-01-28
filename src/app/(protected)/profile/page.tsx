@@ -209,8 +209,8 @@ export default function Profile() {
 	};
 
 	const handleReserve = () => {
-		router.push("/reservation")
-	}
+		router.push("/reservation");
+	};
 
 	const handleProject = () => {
 		router.push("/project");
@@ -313,7 +313,10 @@ export default function Profile() {
 	}
 
 	return (
-		<div className="min-h-screen bg-transparent py-8 px-4">
+		<div
+			className="min-h-screen py-8 px-4"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
 				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
@@ -333,7 +336,9 @@ export default function Profile() {
 						</CardTitle>
 						<CardDescription className="text-slate-300 flex items-center justify-center gap-2">
 							{isOrganizer && <Shield className="h-4 w-4" />}
-							{isOrganizer ? `HackPSU ${getRoleName(userRole)}` : "HackPSU Participant"}
+							{isOrganizer
+								? `HackPSU ${getRoleName(userRole)}`
+								: "HackPSU Participant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -344,7 +349,8 @@ export default function Profile() {
 						{isOrganizer && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className="text-sm text-slate-200 text-center">
-									You are viewing this profile as an organizer. Participant actions are disabled.
+									You are viewing this profile as an organizer. Participant
+									actions are disabled.
 								</p>
 							</div>
 						)}
@@ -352,50 +358,51 @@ export default function Profile() {
 				</Card>
 
 				{/* QR Code Section */}
-				{(userData?.registration as any)?.application_status === "confirmed" && (
+				{(userData?.registration as any)?.application_status ===
+					"confirmed" && (
 					<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<QrCode className="h-6 w-6" />
-							<span>Check-in QR Code</span>
-						</CardTitle>
-						<CardDescription>
-							Use this QR code to sign in for hackathons and workshops
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<Button
-							onClick={toggleQRCode}
-							variant="outline"
-							className="w-full bg-transparent"
-							size="lg"
-						>
-							{showQRCode ? (
-								<>
-									<EyeOff className="mr-2 h-4 w-4" />
-									Hide QR Code
-								</>
-							) : (
-								<>
-									<Eye className="mr-2 h-4 w-4" />
-									Show QR Code
-								</>
-							)}
-						</Button>
+						<CardHeader>
+							<CardTitle className="flex items-center space-x-2">
+								<QrCode className="h-6 w-6" />
+								<span>Check-in QR Code</span>
+							</CardTitle>
+							<CardDescription>
+								Use this QR code to sign in for hackathons and workshops
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<Button
+								onClick={toggleQRCode}
+								variant="outline"
+								className="w-full bg-transparent"
+								size="lg"
+							>
+								{showQRCode ? (
+									<>
+										<EyeOff className="mr-2 h-4 w-4" />
+										Hide QR Code
+									</>
+								) : (
+									<>
+										<Eye className="mr-2 h-4 w-4" />
+										Show QR Code
+									</>
+								)}
+							</Button>
 
-						{showQRCode && (
-							<div className="flex justify-center">
-								<div className="bg-white p-4 rounded-lg shadow-lg">
-									<QRCode
-										value={`HACKPSU_${user.uid}`}
-										size={Math.min(300, window.innerWidth - 120)}
-										level="H"
-									/>
+							{showQRCode && (
+								<div className="flex justify-center">
+									<div className="bg-white p-4 rounded-lg shadow-lg">
+										<QRCode
+											value={`HACKPSU_${user.uid}`}
+											size={Math.min(300, window.innerWidth - 120)}
+											level="H"
+										/>
+									</div>
 								</div>
-							</div>
-						)}
-					</CardContent>
-				</Card>
+							)}
+						</CardContent>
+					</Card>
 				)}
 
 				{/* Wallet Integration */}
@@ -539,7 +546,6 @@ export default function Profile() {
 						)}
 					</CardContent>
 				</Card>
-
 
 				{/* Actions */}
 				<Card>
