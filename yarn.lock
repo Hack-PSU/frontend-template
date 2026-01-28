@@ -2399,14 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.15.0":
+  version "1.15.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.15.0.tgz#fecaf9d48d3c6f00bc587a4274b6d07a4fc94385"
+  integrity sha512-n2/Yy0+qc8xhmlcOFiYqTcGHBZuuaQjVolfFXk7yTCynzdMe8Fx1zYvPPUrbdQK5tWwXyilkzybpqhK6I7aV4Q==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.5"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.5.tgz#5c2be9755da0a4f37d8a19142aa24b4f0f4abffd"
-  integrity sha512-e6jx8sT3ZAHPCeRMul0APTGPZ/DJLDhmDadEFPAh9/83HicC5Ri8ouz73s0fo4S9e7sf18EAQGMWjE70Q93NGQ==
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.6.tgz#9d3803eec574399bde25ef4c04664885cbd8ccb4"
+  integrity sha512-/+Sn6Xlsk0MuujLgu/3z3zPySuh2CnDmZXy8Nzu8JXMGjBATME81FdRQ5KNm7evyp3dZIVzMZAwcSLdHvO8v1w==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.14.1"
-    "@posthog/webpack-plugin" "1.2.11"
+    "@posthog/core" "1.15.0"
+    "@posthog/webpack-plugin" "1.2.12"
     semver "^7.7.2"
 
 "@posthog/types@1.335.5":
@@ -2414,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.335.5.tgz#2d55824b4bacc3c80f72ac93d853d487815b45f3"
   integrity sha512-QYj5c8wSaXGvV4ugEN65GHD0sIXRveGiZxV4tqpyoP7YIAvAwwA0do0yNfTrEjDXucCQn25pMbCqO25hJrMi5w==
 
-"@posthog/webpack-plugin@1.2.11":
-  version "1.2.11"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.11.tgz#57fad85da32edd901a40cd1bfa75f8f3a01d3e98"
-  integrity sha512-7phvE+3AbfTeymdiY6qk0u2Id7zVRDYU89vHQqvAO28UY8ssVMmIjGLSLN9tDVmbvk7eKjYHAMS8SwnsU9kfTg==
+"@posthog/webpack-plugin@1.2.12":
+  version "1.2.12"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.12.tgz#5cdf42a34ea2a99fb42bb0ebaa01322b917b6b6a"
+  integrity sha512-iz3+Uyb6jfucrVFRpC7VWXnCMYNOJPZH8PwU/BMYqole56kOLZVV1p5/B/YCYCdTPq4+LL9Of2iwpzKOk/72Rw==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.14.1"
+    "@posthog/core" "1.15.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
