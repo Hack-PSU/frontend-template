@@ -21,28 +21,28 @@ const eventTypeColors = {
 		border: "border-[#f5b90c]",
 		text: "text-[#DC2626]",
 		label: "Activity",
-		jellyfishAsset: "/f25/9.png",
+		jellyfishAsset: "/sp26/activities2.png",
 	},
 	[EventType.food]: {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
 		label: "General",
-		jellyfishAsset: "/f25/10.png",
+		jellyfishAsset: "/sp26/general2.png",
 	},
 	[EventType.workshop]: {
 		bg: "bg-[#88d960]",
 		border: "border-[#88d960]",
 		text: "text-[#D97706]",
 		label: "Workshop",
-		jellyfishAsset: "/f25/11.png",
+		jellyfishAsset: "/sp26/workshops2.png",
 	},
 	[EventType.checkIn]: {
 		bg: "bg-[#e295fd]",
 		border: "border-[#e295fd]",
 		text: "text-[#4338CA]",
 		label: "Check-in",
-		jellyfishAsset: "/f25/12.png",
+		jellyfishAsset: "/sp26/checkin2.png",
 	},
 };
 
@@ -673,26 +673,30 @@ const Schedule: React.FC = () => {
 	const { data: sampleScheduleFlag } = useFlagState("SampleSchedule");
 
 	// Fetch all hackathons to find the previous one when sample schedule flag is enabled
-	const { data: allHackathons, isLoading: isLoadingHackathons } = useAllHackathons();
+	const { data: allHackathons, isLoading: isLoadingHackathons } =
+		useAllHackathons();
 
 	// Find the previous hackathon (most recent inactive hackathon)
 	const previousHackathonId = useMemo(() => {
 		if (!sampleScheduleFlag?.isEnabled || !allHackathons) return undefined;
-		
+
 		// Filter out active hackathons and sort by endTime descending
 		const inactiveHackathons = allHackathons
 			.filter((h) => !h.active)
 			.sort((a, b) => b.endTime - a.endTime);
-		
+
 		// Return the most recent inactive hackathon ID
 		return inactiveHackathons.length > 0 ? inactiveHackathons[0].id : undefined;
 	}, [sampleScheduleFlag?.isEnabled, allHackathons]);
 
 	// Fetch previous hackathon events when the flag is enabled, otherwise current
-	const { data: fetchedEvents, isLoading: isLoadingEvents, error } = useAllEvents(
+	const {
+		data: fetchedEvents,
+		isLoading: isLoadingEvents,
+		error,
+	} = useAllEvents(
 		sampleScheduleFlag?.isEnabled ? previousHackathonId : undefined
 	);
-
 
 	// Use fetched events directly; default to empty array while loading
 	const events = fetchedEvents ?? [];
@@ -1056,7 +1060,7 @@ const Schedule: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 			id="schedule"
 		>

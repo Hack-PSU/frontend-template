@@ -46,7 +46,7 @@ const faqs: FAQItem[] = [
 	{
 		question: "How should I submit a project?",
 		answer:
-			"All projects will be submitted through the HackPSU Devpost. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
+			"All projects will be submitted through the HackPSU Devpost AND through the HackPSU main website. To submit on the main website, go to the profile page and select Submit Project. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",
@@ -109,7 +109,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 				<h3
 					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
-						fontSize: "clamp(16px, 2.5vw, 20px)"
+						fontSize: "clamp(16px, 2.5vw, 20px)",
 					}}
 				>
 					{faq.question}
@@ -198,7 +198,7 @@ const FAQ: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
 			{/* Centered Header */}
@@ -243,7 +243,7 @@ const FAQ: React.FC = () => {
 						}}
 					>
 						<Image
-							src="/f25/4.png"
+							src="/sp26/robot.png"
 							alt="FAQ Illustration"
 							fill
 							className="object-contain"

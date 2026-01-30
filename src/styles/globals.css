@@ -111,7 +111,7 @@
 
 	@media (max-width: 767px) {
 		.info-bg {
-			background-image: url("/sp26/phone_backgrounds/phone_second_about.png");
+			background-image: url("/sp26/phone_backgrounds/phone_second_about2.png");
 		}
 	}
 
@@ -135,7 +135,7 @@
 
 	@media (max-width: 767px) {
 		.schedule-bg {
-			background-image: url("/sp26/phone_backgrounds/phone_schedule.png");
+			background-image: url("/sp26/phone_backgrounds/phone_schedule2.png");
 			background-repeat: no-repeat;
 		}
 	}

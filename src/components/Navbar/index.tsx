@@ -29,7 +29,7 @@ const NavItem: React.FC<NavItemProps> = ({
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -4px 8px #ff88e9ff, 0 4px 8px #ff88e9ff, inset 0 -4px 4px rgba(255, 136, 233, 0.1), inset 0 4px 4px rgba(255, 136, 233, 0.1)",
+					"0 -3px 6px #ff88e9cc, 0 3px 6px #ff88e9cc, inset 0 -3px 3px rgba(255, 136, 233, 0.05), inset 0 3px 3px rgba(255, 136, 233, 0.05)",
 			}}
 			whileHover={{ scale: 1.08 }}
 			whileTap={{ scale: 0.92 }}
@@ -77,7 +77,7 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -4px 8px #ff88e9ff, 0 4px 8px #ff88e9ff, inset 0 -4px 4px rgba(255, 136, 233, 0.1), inset 0 4px 4px rgba(255, 136, 233, 0.1)",
+					"0 -3px 6px #ff88e9cc, 0 3px 6px #ff88e9cc, inset 0 -3px 3px rgba(255, 136, 233, 0.05), inset 0 3px 3px rgba(255, 136, 233, 0.05)",
 			}}
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}

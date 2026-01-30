@@ -273,7 +273,7 @@ const PrizesChallenges: React.FC = () => {
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
 			<div className="text-center mb-20 mt-[-3rem]">
@@ -338,7 +338,7 @@ const PrizesChallenges: React.FC = () => {
 						})}
 					</div>
 				) : (
-					<div className="w-full">
+					<div className="w-full mb-60">
 						{/* Small Coming Soon Message */}
 						<div className="w-full max-w-md mx-auto mb-40">
 							<div className="p-4 rounded-lg text-center bg-white/90 backdrop-blur-sm border-2 border-[#0066CC] shadow-md">

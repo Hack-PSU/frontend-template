@@ -222,11 +222,11 @@ const Sponsors: React.FC = () => {
 				backgroundImage: "url('/f25/sponsors_bg.png')",
 				backgroundSize: "cover",
 				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
-			{/* Hacky Diver Image */}
 			<motion.div
 				className="absolute top-1/2 transform -translate-y-1/2 z-10"
 				style={{
@@ -321,7 +321,12 @@ const Sponsors: React.FC = () => {
 				>
 					<h1
 						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3"
-						style={{ fontFamily: "Orbitron, monospace", backgroundColor: "#ffffff", borderRadius: "12px", padding: "0.5rem 1rem" }}
+						style={{
+							fontFamily: "Orbitron, monospace",
+							backgroundColor: "#ffffff",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+						}}
 					>
 						Sponsors
 					</h1>

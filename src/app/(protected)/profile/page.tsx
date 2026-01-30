@@ -319,7 +319,13 @@ export default function Profile() {
 		>
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
-				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+				<Card
+					className="border-4 border-[#ff88e9ff] bg-gradient-to-r from-slate-900 to-slate-800 text-white"
+					style={{
+						boxShadow:
+							"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)",
+					}}
+				>
 					<CardHeader className="text-center">
 						<div className="flex justify-center mb-4">
 							<Avatar className="h-24 w-24">
