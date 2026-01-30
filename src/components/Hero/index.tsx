@@ -243,6 +243,40 @@ Happy hacking!
 					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
+			{/* Billboard Image - Left Side */}
+			<motion.div
+				className="absolute left-[1vw] top-[30%] hidden lg:block drop-shadow-2xl"
+				animate={{ y: [0, -30, 0] }}
+				transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+				style={{ zIndex: 5 }}
+			>
+				<Image
+					src="/sp26/billboard2.png"
+					alt="Billboard"
+					width={300}
+					height={300}
+					className="drop-shadow-2xl xl:w-[300px] xl:h-[150px] w-[200px] h-[100px]"
+					priority
+				/>
+			</motion.div>
+
+			{/* Drone Image - Right Side, Full Height Oscillation */}
+			<motion.div
+				className="absolute right-[2vw] top-[-40%] bottom-0 hidden lg:block drop-shadow-2xl"
+				animate={{ y: [0, "calc(100vh + 50px)", 0] }}
+				transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+				style={{ zIndex: 4, height: "100%" }}
+			>
+				<Image
+					src="/sp26/drone.png"
+					alt="Drone"
+					width={150}
+					height={150}
+					className="drop-shadow-2xl"
+					priority
+				/>
+			</motion.div>
+
 			{/* Container for scaled content (title and countdown only) */}
 			<div
 				style={{
@@ -259,7 +293,7 @@ Happy hacking!
 						borderRadius: "15px",
 						position: "relative",
 						boxShadow:
-							"0 -15px 30px #ff88e9ff, 0 15px 30px #ff88e9ff, inset 0 -15px 15px rgba(255, 136, 233, 0.2), inset 0 15px 15px rgba(255, 136, 233, 0.2)",
+							"0 -5px 15px #ff88e9ff, 0 5px 15px #ff88e9ff, inset 0 -15px 15px rgba(255, 136, 233, 0.2), inset 0 15px 15px rgba(255, 136, 233, 0.2)",
 					}}
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}

@@ -92,7 +92,7 @@
 
 	/* Section-specific backgrounds */
 	.hero-bg {
-		background-image: url("/sp26/computer_backgrounds/first_page_computer.png");
+		background-image: url("/sp26/computer_backgrounds/first_page_computer2.png");
 		background-size: 100% auto;
 		background-position: center;
 	}
@@ -170,7 +170,7 @@
 		background-position: center;
 	}
 
-	@media (max-width: 767px) {
+	@media (max-width: 1024px) {
 		.sponsors-bg {
 			background-image: url("/sp26/phone_backgrounds/phone_sponsors3.png");
 		}

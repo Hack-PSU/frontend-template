@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { m, motion } from "framer-motion";
 import Image from "next/image";
 import { useFlagState } from "@/lib/api/flag/hook";
@@ -53,7 +53,32 @@ const STATS = [
 
 const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
+	const [graffittiKey, setGraffittiKey] = useState(0);
+	const graffittiRef = useRef<HTMLDivElement>(null);
 	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						setGraffittiKey((prev) => prev + 1);
+					}
+				});
+			},
+			{ threshold: 0.1 }
+		);
+
+		if (graffittiRef.current) {
+			observer.observe(graffittiRef.current);
+		}
+
+		return () => {
+			if (graffittiRef.current) {
+				observer.unobserve(graffittiRef.current);
+			}
+		};
+	}, []);
 
 	function rotateLeft(steps: number) {
 		setOrder((prev) => {
@@ -99,6 +124,40 @@ const InfoSections: React.FC = () => {
 					</h1>
 				</motion.div>
 			</div>
+
+			{/* Graffiti Image - Bottom Right (Desktop Only) */}
+			<div
+				ref={graffittiRef}
+				key={graffittiKey}
+				className="absolute bottom-[2vw] right-[40vw] hidden md:block z-5"
+			>
+				<Image
+					src="/sp26/graffiti_animated.png"
+					alt="Graffiti"
+					width={250}
+					height={250}
+					priority
+				/>
+			</div>
+
+			{/* Cyber Hacky Image - Bottom Left (Desktop Only) with Oscillation */}
+			<motion.div
+				className="absolute bottom-[2vw] left-[2vw] hidden md:block z-5"
+				animate={{ y: [0, -30, 0] }}
+				transition={{
+					duration: 4,
+					ease: "easeInOut",
+					repeat: Infinity,
+				}}
+			>
+				<Image
+					src="/sp26/cyber_hacky.png"
+					alt="Cyber Hacky"
+					width={250}
+					height={250}
+					priority
+				/>
+			</motion.div>
 
 			{/* Main Content Container */}
 			<div className="w-full max-w-7xl mx-auto md:mt-10">
