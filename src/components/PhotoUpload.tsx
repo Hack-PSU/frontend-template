@@ -25,7 +25,10 @@ export default function PhotoUpload({
 	const [isPublic, setIsPublic] = useState<boolean>(true);
 	const [isDragging, setIsDragging] = useState(false);
 	const [isUploading, setIsUploading] = useState(false);
-	const [uploadProgress, setUploadProgress] = useState<{current: number, total: number}>({current: 0, total: 0});
+	const [uploadProgress, setUploadProgress] = useState<{
+		current: number;
+		total: number;
+	}>({ current: 0, total: 0 });
 
 	const upload = useUploadPhoto();
 
@@ -40,11 +43,7 @@ export default function PhotoUpload({
 			"image/heic",
 			"image/heif",
 		];
-		const validVideoTypes = [
-			"video/mp4",
-			"video/quicktime",
-			"video/x-msvideo",
-		];
+		const validVideoTypes = ["video/mp4", "video/quicktime", "video/x-msvideo"];
 
 		if (
 			!validImageTypes.includes(f.type) &&
@@ -79,7 +78,7 @@ export default function PhotoUpload({
 		}
 
 		if (newFiles.length > 0) {
-			setFiles(prev => [...prev, ...newFiles]);
+			setFiles((prev) => [...prev, ...newFiles]);
 		}
 	};
 
@@ -98,7 +97,7 @@ export default function PhotoUpload({
 	};
 
 	const removeFile = (index: number) => {
-		setFiles(prev => {
+		setFiles((prev) => {
 			const newFiles = [...prev];
 			// Revoke object URL to prevent memory leak
 			URL.revokeObjectURL(newFiles[index].preview);
@@ -114,7 +113,7 @@ export default function PhotoUpload({
 		}
 
 		setIsUploading(true);
-		setUploadProgress({current: 0, total: files.length});
+		setUploadProgress({ current: 0, total: files.length });
 
 		let successCount = 0;
 		let failCount = 0;
@@ -124,31 +123,39 @@ export default function PhotoUpload({
 			try {
 				await upload.mutateAsync({ file: files[i].file, fileType });
 				successCount++;
-				setUploadProgress({current: i + 1, total: files.length});
+				setUploadProgress({ current: i + 1, total: files.length });
 			} catch (err: any) {
 				failCount++;
-				toast.error(`Failed to upload ${files[i].file.name}: ${err?.message || "Unknown error"}`);
+				toast.error(
+					`Failed to upload ${files[i].file.name}: ${err?.message || "Unknown error"}`
+				);
 			}
 		}
 
 		// Clean up
-		files.forEach(f => URL.revokeObjectURL(f.preview));
+		files.forEach((f) => URL.revokeObjectURL(f.preview));
 		setFiles([]);
 		setIsPublic(true);
 		setIsUploading(false);
-		setUploadProgress({current: 0, total: 0});
+		setUploadProgress({ current: 0, total: 0 });
 		onUploaded?.();
 
 		// Show summary toast
 		if (successCount > 0) {
-			toast.success(`${successCount} ${successCount === 1 ? "photo" : "photos"} uploaded successfully!`, {
-				description: "Your photos are being reviewed by our moderation team and will appear in your gallery once approved.",
-				duration: 6000,
-			});
+			toast.success(
+				`${successCount} ${successCount === 1 ? "photo" : "photos"} uploaded successfully!`,
+				{
+					description:
+						"Your photos are being reviewed by our moderation team and will appear in your gallery once approved.",
+					duration: 6000,
+				}
+			);
 		}
 
 		if (failCount > 0) {
-			toast.error(`${failCount} ${failCount === 1 ? "photo" : "photos"} failed to upload.`);
+			toast.error(
+				`${failCount} ${failCount === 1 ? "photo" : "photos"} failed to upload.`
+			);
 		}
 	};
 
@@ -206,7 +213,8 @@ export default function PhotoUpload({
 								</div>
 								<div className="text-center pt-2">
 									<p className="text-sm font-medium text-foreground mb-3">
-										{files.length} {files.length === 1 ? "file" : "files"} selected
+										{files.length} {files.length === 1 ? "file" : "files"}{" "}
+										selected
 									</p>
 									<Button
 										type="button"
@@ -229,7 +237,8 @@ export default function PhotoUpload({
 									Upload Photos or Videos
 								</h3>
 								<p className="text-sm text-muted-foreground mb-4 max-w-sm mx-auto">
-									Drag and drop your files here, or click the button below to browse
+									Drag and drop your files here, or click the button below to
+									browse
 								</p>
 								<Button
 									type="button"
@@ -250,11 +259,24 @@ export default function PhotoUpload({
 					<div className="space-y-3">
 						<Label className="text-base font-semibold">Privacy Settings</Label>
 						<div className="flex items-start gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-900">
-							<svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							<svg
+								className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke="currentColor"
+							>
+								<path
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									strokeWidth={2}
+									d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+								/>
 							</svg>
 							<p>
-								All photos are reviewed by our moderation team before appearing in galleries. <strong>Public photos</strong> will be visible to everyone once approved. <strong>Private photos</strong> will only be visible to you.
+								All photos are reviewed by our moderation team before appearing
+								in galleries. <strong>Public photos</strong> will be visible to
+								everyone once approved. <strong>Private photos</strong> will
+								only be visible to you.
 							</p>
 						</div>
 						<RadioGroup
@@ -264,7 +286,11 @@ export default function PhotoUpload({
 							className="grid grid-cols-1 sm:grid-cols-2 gap-3"
 						>
 							<div>
-								<RadioGroupItem value="public" id="public" className="peer sr-only" />
+								<RadioGroupItem
+									value="public"
+									id="public"
+									className="peer sr-only"
+								/>
 								<Label
 									htmlFor="public"
 									className="flex flex-col items-start gap-3 rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
@@ -283,7 +309,11 @@ export default function PhotoUpload({
 								</Label>
 							</div>
 							<div>
-								<RadioGroupItem value="private" id="private" className="peer sr-only" />
+								<RadioGroupItem
+									value="private"
+									id="private"
+									className="peer sr-only"
+								/>
 								<Label
 									htmlFor="private"
 									className="flex flex-col items-start gap-3 rounded-lg border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary/5 cursor-pointer transition-all"
@@ -312,10 +342,16 @@ export default function PhotoUpload({
 									Uploading {uploadProgress.current} of {uploadProgress.total}
 								</span>
 								<span className="font-semibold text-primary">
-									{Math.round((uploadProgress.current / uploadProgress.total) * 100)}%
+									{Math.round(
+										(uploadProgress.current / uploadProgress.total) * 100
+									)}
+									%
 								</span>
 							</div>
-							<Progress value={(uploadProgress.current / uploadProgress.total) * 100} className="h-2" />
+							<Progress
+								value={(uploadProgress.current / uploadProgress.total) * 100}
+								className="h-2"
+							/>
 						</div>
 					)}
 
@@ -335,7 +371,10 @@ export default function PhotoUpload({
 							) : (
 								<>
 									<Upload className="h-4 w-4 mr-2" />
-									Upload {files.length > 0 ? `${files.length} ${files.length === 1 ? "Photo" : "Photos"}` : ""}
+									Upload{" "}
+									{files.length > 0
+										? `${files.length} ${files.length === 1 ? "Photo" : "Photos"}`
+										: ""}
 								</>
 							)}
 						</Button>
@@ -343,7 +382,7 @@ export default function PhotoUpload({
 							<Button
 								variant="outline"
 								onClick={() => {
-									files.forEach(f => URL.revokeObjectURL(f.preview));
+									files.forEach((f) => URL.revokeObjectURL(f.preview));
 									setFiles([]);
 								}}
 								className="h-11"
