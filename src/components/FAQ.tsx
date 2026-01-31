@@ -46,7 +46,7 @@ const faqs: FAQItem[] = [
 	{
 		question: "How should I submit a project?",
 		answer:
-			"All projects will be submitted through the HackPSU Devpost. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
+			"All projects will be submitted through the HackPSU Devpost AND through the HackPSU main website. To submit on the main website, go to the profile page and select Submit Project. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",
@@ -110,7 +110,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
 						fontSize: "clamp(16px, 2.5vw, 20px)",
-						fontFamily: "Monomaniac One, monospace",
 					}}
 				>
 					{faq.question}
@@ -139,7 +138,9 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 								animate={{ y: 0, opacity: 1 }}
 								transition={{ duration: 0.2, delay: 0.1 }}
 								className="text-white/90 leading-relaxed mb-4"
-								style={{ fontSize: "clamp(14px, 2vw, 16px)" }}
+								style={{
+									fontSize: "clamp(14px, 2vw, 16px)",
+								}}
 							>
 								{faq.answer}
 							</motion.p>
@@ -149,7 +150,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 									target="_blank"
 									rel="noopener noreferrer"
 									className="inline-block text-[#86CFFC] hover:text-white underline decoration-[#86CFFC] hover:decoration-white transition-colors duration-200"
-									style={{ fontSize: "clamp(14px, 2vw, 16px)" }}
+									style={{
+										fontSize: "clamp(14px, 2vw, 16px)",
+										fontFamily: "Orbitron, monospace",
+									}}
 									initial={{ y: -10, opacity: 0 }}
 									animate={{ y: 0, opacity: 1 }}
 									transition={{ duration: 0.2, delay: 0.2 }}
@@ -189,8 +193,13 @@ const FAQ: React.FC = () => {
 	return (
 		<section
 			className="relative w-full"
-			style={{ backgroundColor: "#85CEFF" }}
 			id="faq"
+			style={{
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
+			}}
 		>
 			{/* Centered Header */}
 			<div className="w-full px-[4vw] pt-[8vw] pb-[4vw] text-center relative">
@@ -200,59 +209,18 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#000080] mb-6"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-5xl md:text-6xl font-bold text-[#2f234bff] mb-6 mx-auto"
+						style={{
+							fontFamily: "Orbitron, monospace",
+							backgroundColor: "#ffffff",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+							width: "fit-content",
+						}}
 					>
 						FAQ
 					</h1>
-					<div className="w-20 h-1 bg-[#000080] rounded-full mx-auto"></div>
-				</motion.div>
-
-				{/* Fish Animation */}
-				<motion.div
-					className="absolute cursor-pointer"
-					style={{
-						right: "20%",
-						top: "-30%",
-						width: "clamp(40px, 30vw, 300px)",
-						height: "clamp(30px, 30vw, 300px)",
-						zIndex: 10,
-					}}
-					initial={{ x: 0, y: 0, opacity: 1 }}
-					animate={
-						fishClicked
-							? {
-									x: "-50vw",
-									y: [0, -20, 0, -15, 0, -10, 0],
-									opacity: [1, 1, 1, 1, 0],
-								}
-							: {
-									y: [0, -8, 0, -5, 0],
-								}
-					}
-					transition={
-						fishClicked
-							? {
-									duration: 3,
-									ease: "easeInOut",
-									times: [0, 0.2, 0.4, 0.6, 1],
-								}
-							: {
-									duration: 4,
-									repeat: Infinity,
-									ease: "easeInOut",
-								}
-					}
-					onClick={handleFishClick}
-					whileHover={{ scale: 1.1 }}
-					whileTap={{ scale: 0.95 }}
-				>
-					<Image
-						src="/f25/fish.png"
-						alt="Swimming Fish"
-						fill
-						className="object-contain"
-					/>
+					<div className="w-20 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 
@@ -275,7 +243,7 @@ const FAQ: React.FC = () => {
 						}}
 					>
 						<Image
-							src="/f25/4.png"
+							src="/sp26/robot.png"
 							alt="FAQ Illustration"
 							fill
 							className="object-contain"

@@ -313,10 +313,19 @@ export default function Profile() {
 	}
 
 	return (
-		<div className="min-h-screen bg-transparent py-8 px-4">
+		<div
+			className="min-h-screen py-8 px-4"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
-				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+				<Card
+					className="border-4 border-[#ff88e9ff] bg-gradient-to-r from-slate-900 to-slate-800 text-white"
+					style={{
+						boxShadow:
+							"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)",
+					}}
+				>
 					<CardHeader className="text-center">
 						<div className="flex justify-center mb-4">
 							<Avatar className="h-24 w-24">
@@ -355,49 +364,52 @@ export default function Profile() {
 				</Card>
 
 				{/* QR Code Section */}
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<QrCode className="h-6 w-6" />
-							<span>Check-in QR Code</span>
-						</CardTitle>
-						<CardDescription>
-							Use this QR code to sign in for hackathons and workshops
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<Button
-							onClick={toggleQRCode}
-							variant="outline"
-							className="w-full bg-transparent"
-							size="lg"
-						>
-							{showQRCode ? (
-								<>
-									<EyeOff className="mr-2 h-4 w-4" />
-									Hide QR Code
-								</>
-							) : (
-								<>
-									<Eye className="mr-2 h-4 w-4" />
-									Show QR Code
-								</>
-							)}
-						</Button>
+				{(userData?.registration as any)?.application_status ===
+					"confirmed" && (
+					<Card>
+						<CardHeader>
+							<CardTitle className="flex items-center space-x-2">
+								<QrCode className="h-6 w-6" />
+								<span>Check-in QR Code</span>
+							</CardTitle>
+							<CardDescription>
+								Use this QR code to sign in for hackathons and workshops
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<Button
+								onClick={toggleQRCode}
+								variant="outline"
+								className="w-full bg-transparent"
+								size="lg"
+							>
+								{showQRCode ? (
+									<>
+										<EyeOff className="mr-2 h-4 w-4" />
+										Hide QR Code
+									</>
+								) : (
+									<>
+										<Eye className="mr-2 h-4 w-4" />
+										Show QR Code
+									</>
+								)}
+							</Button>
 
-						{showQRCode && (
-							<div className="flex justify-center">
-								<div className="bg-white p-4 rounded-lg shadow-lg">
-									<QRCode
-										value={`HACKPSU_${user.uid}`}
-										size={Math.min(300, window.innerWidth - 120)}
-										level="H"
-									/>
+							{showQRCode && (
+								<div className="flex justify-center">
+									<div className="bg-white p-4 rounded-lg shadow-lg">
+										<QRCode
+											value={`HACKPSU_${user.uid}`}
+											size={Math.min(300, window.innerWidth - 120)}
+											level="H"
+										/>
+									</div>
 								</div>
-							</div>
-						)}
-					</CardContent>
-				</Card>
+							)}
+						</CardContent>
+					</Card>
+				)}
 
 				{/* Wallet Integration */}
 				<Card>

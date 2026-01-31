@@ -445,7 +445,10 @@ export default function ReimbursementPage() {
 	// Show loading state while flag is being fetched
 	if (flagLoading) {
 		return (
-			<div className="min-h-screen flex items-center justify-center bg-transparent">
+			<div
+				className="min-h-screen flex items-center justify-center"
+				style={{ backgroundColor: "#4d1170" }}
+			>
 				<Container maxWidth="md">
 					<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
 						<CardContent className="p-8 text-center">
@@ -464,7 +467,10 @@ export default function ReimbursementPage() {
 		participantReimbursementFlag?.isEnabled ?? false;
 
 	return (
-		<div className="min-h-screen flex items-center justify-center bg-transparent">
+		<div
+			className="min-h-screen flex items-center justify-center"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<Container maxWidth="md">
 				<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
 					<CardContent className="p-8">

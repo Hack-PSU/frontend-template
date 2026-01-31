@@ -1,14 +1,8 @@
 "use client";
 
-import React, {
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-	useRef,
-} from "react";
-import { motion, useAnimation } from "framer-motion";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -34,104 +28,13 @@ const Hero = () => {
 	const [bannerMessage, setBannerMessage] = useState<string>("");
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
-	const [crabClicked, setCrabClicked] = useState<boolean>(false);
-	const [crabArmy, setCrabArmy] = useState<
-		Array<{
-			id: number;
-			x: number;
-			y: number;
-			delay: number;
-			endX: number;
-			endY: number;
-			direction: number;
-		}>
-	>([]);
-	const [showCrabArmy, setShowCrabArmy] = useState<boolean>(false);
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
-	const [crabRaveAudio, setCrabRaveAudio] = useState<HTMLAudioElement | null>(
-		null
-	);
-	const [hackySpeech, setHackySpeech] = useState<string>("");
 
 	const secondsControls = useAnimation();
-
-	// Handle crab click to animate it up and away
-	const handleCrabClick = useCallback(() => {
-		if (!crabClicked) {
-			setCrabClicked(true);
-		}
-	}, [crabClicked]);
-
-	// Handle HackPSU title click to spawn crab army
-	const handleTitleClick = useCallback(() => {
-		if (showCrabArmy) return; // Prevent multiple armies
-
-		// Generate 15-25 random crabs
-		const numCrabs = Math.floor(Math.random() * 11) + 45;
-		const newCrabs = Array.from({ length: numCrabs }, (_, i) => ({
-			id: i,
-			x: Math.random() * 100, // Random x position (0-100%)
-			y: Math.random() * 100, // Random y position (0-100%)
-			delay: Math.random() * 2, // Random animation delay (0-2s)
-			// Random walking path endpoints
-			endX: Math.random() * 100,
-			endY: Math.random() * 100,
-			// Random walking direction (for facing left/right)
-			direction: Math.random() > 0.5 ? 1 : -1,
-		}));
-
-		setCrabArmy(newCrabs);
-		setShowCrabArmy(true);
-
-		// Play crab rave audio
-		if (crabRaveAudio) {
-			crabRaveAudio.currentTime = 0;
-			crabRaveAudio.play().catch(console.error);
-		}
-
-		// Hide crabs and stop audio after 15 seconds
-		setTimeout(() => {
-			setShowCrabArmy(false);
-			setCrabArmy([]);
-			if (crabRaveAudio) {
-				crabRaveAudio.pause();
-				crabRaveAudio.currentTime = 0;
-			}
-		}, 15000);
-	}, [showCrabArmy, crabRaveAudio]);
 
 	// Handle starfish click to show memory game
 	const handleStarfishClick = useCallback(() => {
 		setShowMemoryGame(true);
-	}, []);
-
-	// Handle Chill Hacky click to show random quote
-	const handleChillHackyClick = useCallback(() => {
-		// Random HackPSU messages
-		const speechMessages = [
-			"I'm so excited for HackPSU!",
-			"Hope to see you at HackPSU!",
-			"Have you registered for HackPSU yet?",
-			"I can't wait for HackPSU!",
-			"What are you most excited for at HackPSU?",
-			"Have you checked out the schedule for HackPSU?",
-			"Don't forget to register for HackPSU!",
-			"Have you joined the HackPSU Discord?",
-			"Have you seen the HackPSU sponsors?",
-			"Have you applied to be an organizer for HackPSU?",
-			"Ready to dive into 24 hours of coding?",
-			"The beach vibes are perfect for hacking!",
-			"Let's make some waves at HackPSU!",
-			"Time to surf the code waves! 🏄‍♂️",
-			"Beach + Code = Perfect hackathon!",
-		];
-
-		const message =
-			speechMessages[Math.floor(Math.random() * speechMessages.length)];
-		setHackySpeech(message);
-
-		// Clear speech after 4 seconds
-		setTimeout(() => setHackySpeech(""), 4000);
 	}, []);
 
 	// This function initializes the timer fields based on hackathon data.
@@ -223,19 +126,6 @@ const Hero = () => {
 		const interval = setInterval(updateCountdown, 1000);
 		return () => clearInterval(interval);
 	}, [updateCountdown]);
-
-	// Initialize crab rave audio
-	useEffect(() => {
-		const audio = new Audio("/f25/crab_rave.mp3");
-		audio.loop = true;
-		audio.volume = 0.7;
-		setCrabRaveAudio(audio);
-
-		return () => {
-			audio.pause();
-			audio.src = "";
-		};
-	}, []);
 
 	// Console easter egg - show on component mount
 	useEffect(() => {
@@ -345,266 +235,46 @@ Happy hacking!
 		<section
 			id="hero"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[4vw] overflow-hidden"
-			style={{ minHeight: "45vw", backgroundColor: "#FFEBB8" }}
+			style={{
+				minHeight: "45vw",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
+			}}
 		>
-			{/* Decorative elements - kept at normal size */}
-			{/* Animated Starfish Elements */}
+			{/* Billboard Image - Left Side */}
 			<motion.div
-				className="absolute z-10
-				top-[clamp(10px, 1.5vw, 20px)]
-				left-[0px]
-				md:left-[3vw]
-				md:top-[6vw]
-				"
-				style={{
-					width: "clamp(80px, 10vw, 150px)",
-					height: "clamp(80px, 10vw, 150px)",
-					pointerEvents: "none",
-				}}
-				initial={{ opacity: 0, scale: 0.8 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{ duration: 0.6, delay: 0.2 }}
+				className="absolute left-[1vw] top-[30%] hidden lg:block drop-shadow-2xl"
+				animate={{ y: [0, -30, 0] }}
+				transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+				style={{ zIndex: 5 }}
 			>
 				<Image
-					src="/f25/2.png"
-					alt="Starfish"
-					fill
-					className="object-contain"
+					src="/sp26/billboard2.png"
+					alt="Billboard"
+					width={300}
+					height={300}
+					className="drop-shadow-2xl xl:w-[300px] xl:h-[150px] w-[200px] h-[100px]"
+					priority
 				/>
 			</motion.div>
 
+			{/* Drone Image - Right Side, Full Height Oscillation */}
 			<motion.div
-				className="absolute cursor-pointer
-				top-[-3vw]
-				md:top-[1.8vw]
-				"
-				style={{
-					width: "clamp(80px, 10vw, 150px)",
-					height: "clamp(80px, 10vw, 150px)",
-					left: "clamp(40px, 5vw, 100px)",
-					//top: "clamp(12px, 1.8vw, 25px)",
-				}}
-				initial={{ opacity: 1, rotate: 0 }}
-				animate={{
-					opacity: 1,
-					rotate: [0, -15, 15, 0],
-					x: [0, 5, -5, 0],
-				}}
-				transition={{
-					duration: 2,
-					ease: "easeInOut",
-				}}
-				onClick={handleStarfishClick}
-				whileHover={{ scale: 1.1 }}
-				whileTap={{ scale: 0.9 }}
+				className="absolute right-[2vw] top-[-40%] bottom-0 hidden lg:block drop-shadow-2xl"
+				animate={{ y: [0, "calc(100vh + 50px)", 0] }}
+				transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+				style={{ zIndex: 4, height: "100%" }}
 			>
 				<Image
-					src="/f25/3.png"
-					alt="Starfish - Click for Memory Game!"
-					fill
-					className="object-contain"
+					src="/sp26/drone.png"
+					alt="Drone"
+					width={150}
+					height={150}
+					className="drop-shadow-2xl"
+					priority
 				/>
-			</motion.div>
-
-			{/* Chill Hacky Character */}
-			<motion.div
-				className="absolute cursor-pointer z-20"
-				style={{
-					left: "clamp(-15px, -15px, -15px)",
-					bottom: "clamp(60px, 80vw, 200px)",
-					width: "clamp(120px, 18vw, 300px)",
-					height: "clamp(120px, 18vw, 300px)",
-				}}
-				initial={{ opacity: 1, rotate: 0 }}
-				animate={{
-					opacity: 1,
-					y: [0, -8, 0], // Gentle floating animation
-				}}
-				transition={{
-					duration: 3,
-					repeat: Infinity,
-					ease: "easeInOut",
-				}}
-				onClick={handleChillHackyClick}
-				whileHover={{ scale: 1.1 }}
-				whileTap={{ scale: 0.9 }}
-				title="Click me for a random quote!"
-			>
-				<Image
-					src="/f25/chill_hacky.png"
-					alt="Chill Hacky - Click for a quote!"
-					fill
-					className="object-contain"
-				/>
-
-				{/* Speech Bubble */}
-				{hackySpeech && (
-					<motion.div
-						className="absolute left-1/2 transform -translate-x-1/2 z-50"
-						style={{
-							bottom: "calc(100% + 8px)",
-							marginBottom: "0px",
-						}}
-						initial={{ opacity: 0, scale: 0.8, y: 10 }}
-						animate={{ opacity: 1, scale: 1, y: 0 }}
-						exit={{ opacity: 0, scale: 0.8, y: 10 }}
-						transition={{ duration: 0.3 }}
-					>
-						<div className="relative bg-white px-4 py-3 rounded-lg shadow-lg border-2 border-[#0066CC] max-w-[200px] min-w-[140px]">
-							<p
-								className="text-xs font-bold text-[#000080] text-center break-words leading-tight"
-								style={{ fontFamily: "Monomaniac One, monospace" }}
-							>
-								{hackySpeech}
-							</p>
-							{/* Speech bubble tail */}
-							<div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-white"></div>
-							<div className="absolute top-full left-1/2 transform -translate-x-1/2 translate-y-[-2px] w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[10px] border-t-[#0066CC]"></div>
-						</div>
-					</motion.div>
-				)}
-			</motion.div>
-
-			{/* Rotating Beach Ball */}
-			<motion.div
-				className="absolute z-30"
-				style={{
-					width: "clamp(150px, 20vw, 1000px)",
-					height: "clamp(150px, 20vw, 1000px)",
-					bottom: "clamp(-40px, -100vw, 400px)",
-					left: "calc(0% - 25px)", // Center horizontally
-					pointerEvents: "none", // Make ball transparent for clicks
-				}}
-				initial={{
-					x: "calc(-10vw - 50px)",
-					rotate: 0,
-				}}
-				animate={{
-					x: "calc(100vw + 50px)",
-					rotate: 360 * 6,
-				}}
-				transition={{
-					duration: 30,
-					repeat: Infinity,
-					ease: "linear",
-					delay: 2,
-				}}
-			>
-				<Image
-					src="/f25/ball.png"
-					alt="Beach Ball"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			{/* Additional Decorative Images */}
-			{/* Starfish */}
-			<motion.div
-				className="absolute z-10 hidden"
-				style={{
-					width: "clamp(80px, 10vw, 150px)",
-					height: "clamp(80px, 10vw, 150px)",
-					left: "clamp(40px, 5vw, 100px)",
-					top: "clamp(12px, 1.8vw, 25px)",
-				}}
-				initial={{ opacity: 0, scale: 0.8 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{ duration: 0.6 }}
-			>
-				<Image
-					src="/f25/starfish.png"
-					alt="Starfish"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			{/* Orange Starfish */}
-			<motion.div
-				className="absolute z-10
-				right-[0px]
-				md:right-[5vw]
-				hidden
-				"
-				style={{
-					width: "clamp(80px, 10vw, 80px)",
-					height: "clamp(80px, 10vw, 80px)",
-					top: "clamp(12px, 1.8vw, 25px)",
-				}}
-				initial={{ opacity: 0, scale: 0.8 }}
-				animate={{ opacity: 1, scale: 1 }}
-				transition={{ duration: 0.6, delay: 0.2 }}
-			>
-				<Image
-					src="/f25/starfish-orange.png"
-					alt="Orange Starfish"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			{/* Crab */}
-			<motion.div
-				className="absolute z-20
-				max-sm:hidden
-				right-[clamp(15px, 3vw, 60px)]
-				md:right-[16vw]
-				top-[clamp(60px, 80vw, 200px)] 
-				md:top-[12vw]
-				cursor-pointer"
-				initial={{ opacity: 1, scale: 1 }}
-				animate={
-					crabClicked
-						? {
-								y: -300,
-								opacity: 1,
-								rotate: [
-									5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5,
-									5, -5, 5,
-								],
-							}
-						: { rotate: [5, -5, 5, -5, 5, -5, 5], y: [20, -20, 20] }
-				}
-				transition={
-					crabClicked
-						? { duration: 5, ease: "linear" }
-						: {
-								duration: 3.5,
-								repeat: Infinity,
-								ease: "linear",
-							}
-				}
-				style={{
-					width: "clamp(60px, 18vw, 100px)",
-					height: "clamp(60px, 18vw, 100px)",
-				}}
-				onClick={handleCrabClick}
-			>
-				<Image
-					src="/f25/5.png"
-					alt="Number 5"
-					fill
-					className="object-contain"
-				/>
-			</motion.div>
-
-			{/* Sand */}
-			<motion.div
-				className="absolute z-10
-				max-sm:hidden
-				right-[clamp(15px, 3vw, 60px)]
-				md:right-[18vw]
-				top-[clamp(60px, 80vw, 200px)] 
-				md:top-[2vw]
-				"
-				initial={{ opacity: 1, scale: 1 }}
-				style={{
-					width: "clamp(60px, 18vw, 200px)",
-					height: "clamp(60px, 18vw, 200px)",
-				}}
-			>
-				<Image src="/f25/sand.png" alt="Sand" fill className="object-contain" />
 			</motion.div>
 
 			{/* Container for scaled content (title and countdown only) */}
@@ -618,10 +288,12 @@ Happy hacking!
 				<motion.div
 					className="relative px-[4vw] py-[3vw] mb-[1vw]"
 					style={{
-						backgroundColor: "#FFFFFF",
-						border: "4px solid #0066CC",
+						backgroundColor: "#2f234bff",
+						border: "8px solid #ff88e9ff",
 						borderRadius: "15px",
 						position: "relative",
+						boxShadow:
+							"0 -5px 15px #ff88e9ff, 0 5px 15px #ff88e9ff, inset 0 -15px 15px rgba(255, 136, 233, 0.2), inset 0 15px 15px rgba(255, 136, 233, 0.2)",
 					}}
 					initial={{ opacity: 0, scale: 0.8 }}
 					animate={{ opacity: 1, scale: 1 }}
@@ -632,13 +304,12 @@ Happy hacking!
 						className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200 relative z-10"
 						style={{
 							fontSize: "clamp(32px, 8vw, 80px)",
-							fontFamily: "Monomaniac One, monospace",
-							color: "#000080",
+							fontFamily: "Orbitron, monospace",
+							color: "#ffffff",
 						}}
 						initial={{ opacity: 0, y: -50 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 1 }}
-						onClick={handleTitleClick}
 						whileHover={{ scale: 1.05 }}
 						whileTap={{ scale: 0.95 }}
 					>
@@ -651,7 +322,7 @@ Happy hacking!
 							{/* Countdown Numbers */}
 							<div
 								className="flex items-center justify-center gap-[1.5vw] mb-[1.5vw]"
-								style={{ fontFamily: "Monomaniac One, monospace" }}
+								style={{ fontFamily: "Orbitron, monospace" }}
 							>
 								{/* Days */}
 								<div className="flex flex-col items-center">
@@ -659,7 +330,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -670,8 +341,8 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
-											fontFamily: "Monomaniac One, monospace",
+											color: "#ffffff",
+											fontFamily: "Orbitron, monospace",
 										}}
 									>
 										{days === 1 ? "Day" : "Days"}
@@ -683,7 +354,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffff",
 									}}
 								>
 									:
@@ -695,7 +366,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -706,8 +377,8 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
-											fontFamily: "Monomaniac One, monospace",
+											color: "#ffffffff",
+											fontFamily: "Orbitron, monospace",
 										}}
 									>
 										{hours === 1 ? "Hour" : "Hours"}
@@ -719,7 +390,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffffff",
 									}}
 								>
 									:
@@ -731,7 +402,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										initial={{ scaleY: 0 }}
 										animate={{ scaleY: 1 }}
@@ -742,8 +413,8 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
-											fontFamily: "Monomaniac One, monospace",
+											color: "#ffffff",
+											fontFamily: "Orbitron, monospace",
 										}}
 									>
 										{minutes === 1 ? "Minute" : "Minutes"}
@@ -755,7 +426,7 @@ Happy hacking!
 									className="font-bold mb-[2vw]"
 									style={{
 										fontSize: "clamp(24px, 6vw, 80px)",
-										color: "#000080",
+										color: "#ffffff",
 									}}
 								>
 									:
@@ -767,7 +438,7 @@ Happy hacking!
 										className="font-bold"
 										style={{
 											fontSize: "clamp(24px, 6vw, 80px)",
-											color: "#000080",
+											color: "#ffffff",
 										}}
 										animate={secondsControls}
 										initial={{ scaleY: 1 }}
@@ -778,8 +449,8 @@ Happy hacking!
 										className="font-semibold"
 										style={{
 											fontSize: "clamp(10px, 1.5vw, 18px)",
-											color: "#000080",
-											fontFamily: "Monomaniac One, monospace",
+											color: "#ffffff",
+											fontFamily: "Orbitron, monospace",
 										}}
 									>
 										{seconds === 1 ? "Second" : "Seconds"}
@@ -793,8 +464,8 @@ Happy hacking!
 									className="text-center font-bold mb-[1.5vw]"
 									style={{
 										fontSize: "clamp(14px, 2.5vw, 32px)",
-										color: "#000080",
-										fontFamily: "Monomaniac One, monospace",
+										color: "#ffffff",
+										fontFamily: "Orbitron, monospace",
 									}}
 								>
 									{bannerMessage}
@@ -806,8 +477,8 @@ Happy hacking!
 								className="text-center font-semibold"
 								style={{
 									fontSize: "clamp(16px, 3vw, 24px)",
-									color: "#000080",
-									fontFamily: "Monomaniac One, monospace",
+									color: "#ffffff",
+									fontFamily: "Orbitron, monospace",
 								}}
 								initial={{ opacity: 0, y: -30 }}
 								animate={{ opacity: 1, y: 0 }}
@@ -823,8 +494,8 @@ Happy hacking!
 							className="text-center font-bold mb-[2vw] relative z-10"
 							style={{
 								fontSize: "clamp(14px, 2.5vw, 32px)",
-								color: "#000080",
-								fontFamily: "Monomaniac One, monospace",
+								color: "#ffffff",
+								fontFamily: "Orbitron, monospace",
 							}}
 						>
 							{bannerMessage}
@@ -835,7 +506,7 @@ Happy hacking!
 
 			{/* Register & Discord Buttons - kept at original size */}
 			<motion.div
-				className="flex flex-col md:flex-row items-center justify-center gap-0 md:gap-[0vw] md:w-full mt-[-8vw]"
+				className="flex flex-col md:flex-row items-center justify-center md:gap-[0vw] md:w-full mt-[-8vw]"
 				initial={{ opacity: 0, y: 50 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
@@ -846,13 +517,13 @@ Happy hacking!
 					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
 						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(160px, 20vw, 280px)",
+						height: "clamp(80px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 				>
 					<Image
-						src="/f25/register.png"
+						src="/sp26/register3.png"
 						alt="Register Now"
 						fill
 						className="object-contain"
@@ -861,10 +532,9 @@ Happy hacking!
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
 						style={{
-							fontSize: "clamp(21px, 3.75vw, 42px)",
+							fontSize: "clamp(14px, 3.75vw, 42px)",
 							color: "#FFFFFF",
-							fontFamily: "Monomaniac One, monospace",
-							transform: "translate(-10px, 4px)",
+							fontFamily: "Orbitron, monospace",
 						}}
 					>
 						Register now
@@ -874,16 +544,16 @@ Happy hacking!
 				{/* Discord Button */}
 				<motion.button
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center mt-[-60px] md:mt-0"
+					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 					style={{
 						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(160px, 20vw, 280px)",
+						height: "clamp(80px, 20vw, 280px)",
 					}}
 					whileHover={{ scale: 1.05 }}
 					whileTap={{ scale: 0.95 }}
 				>
 					<Image
-						src="/f25/register.png"
+						src="/sp26/register3.png"
 						alt="Join Discord"
 						fill
 						className="object-contain"
@@ -892,10 +562,9 @@ Happy hacking!
 					<div
 						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
 						style={{
-							fontSize: "clamp(21px, 3.75vw, 42px)",
+							fontSize: "clamp(14px, 4vw, 42px)",
 							color: "#FFFFFF",
-							fontFamily: "Monomaniac One, monospace",
-							transform: "translate(-10px, 4px)",
+							fontFamily: "Orbitron, monospace",
 						}}
 					>
 						<div className="flex items-center gap-2">
@@ -923,59 +592,6 @@ Happy hacking!
 					</div>
 				</motion.button>
 			</motion.div>
-
-			{/* Crab Army Easter Egg */}
-			{showCrabArmy &&
-				crabArmy.map((crab) => (
-					<motion.div
-						key={crab.id}
-						className="absolute z-50 pointer-events-none"
-						style={{
-							width: "clamp(40px, 8vw, 80px)",
-							height: "clamp(40px, 8vw, 80px)",
-							left: `${crab.x}%`,
-							top: `${crab.y}%`,
-							transform: `scaleX(${crab.direction})`, // Flip crab based on direction
-						}}
-						initial={{
-							opacity: 0,
-							scale: 0,
-						}}
-						animate={{
-							opacity: [0, 1, 1, 1, 0],
-							scale: [0, 1, 1, 1, 0],
-							// Walking animation - same as existing crab
-							rotate: [5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5, -5, 5],
-							y: [0, 20, -20, 20, -20, 20, -20, 20, -20, 20, -20, 20, 0],
-							// Movement across screen
-							left: [`${crab.x}%`, `${crab.endX}%`],
-							top: [`${crab.y}%`, `${crab.endY}%`],
-						}}
-						transition={{
-							duration: 15,
-							delay: crab.delay,
-							ease: "linear",
-							times: [0, 0.05, 0.1, 0.9, 1],
-							rotate: {
-								duration: 1.5,
-								repeat: 10,
-								ease: "linear",
-							},
-							y: {
-								duration: 1.5,
-								repeat: 10,
-								ease: "linear",
-							},
-						}}
-					>
-						<Image
-							src="/f25/5.png"
-							alt="Crab Army"
-							fill
-							className="object-contain"
-						/>
-					</motion.div>
-				))}
 
 			{/* Memory Game Modal */}
 			<MemoryGame

@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useAllEvents } from "@/lib/api/event/hook";
 import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
 import { useFlagState } from "@/lib/api/flag/hook";
+import { useAllHackathons } from "@/lib/api/hackathon/hook";
 
 // Event type color mapping with jellyfish assets
 const eventTypeColors = {
@@ -20,28 +21,28 @@ const eventTypeColors = {
 		border: "border-[#f5b90c]",
 		text: "text-[#DC2626]",
 		label: "Activity",
-		jellyfishAsset: "/f25/9.png",
+		jellyfishAsset: "/sp26/activities2.png",
 	},
 	[EventType.food]: {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
 		label: "General",
-		jellyfishAsset: "/f25/10.png",
+		jellyfishAsset: "/sp26/general2.png",
 	},
 	[EventType.workshop]: {
 		bg: "bg-[#88d960]",
 		border: "border-[#88d960]",
 		text: "text-[#D97706]",
 		label: "Workshop",
-		jellyfishAsset: "/f25/11.png",
+		jellyfishAsset: "/sp26/workshops2.png",
 	},
 	[EventType.checkIn]: {
 		bg: "bg-[#e295fd]",
 		border: "border-[#e295fd]",
 		text: "text-[#4338CA]",
 		label: "Check-in",
-		jellyfishAsset: "/f25/12.png",
+		jellyfishAsset: "/sp26/checkin2.png",
 	},
 };
 
@@ -108,13 +109,13 @@ const EventDetailsModal: React.FC<EventDetailsModalProps> = ({
 							<div>
 								<h3
 									className="text-xl font-bold text-white mb-2"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									{event.name}
 								</h3>
 								<span
 									className="inline-block px-3 py-1 rounded-full text-sm font-medium text-white bg-black/20"
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									{colors.label}
 								</span>
@@ -275,7 +276,6 @@ const EventItem: React.FC<EventItemProps> = ({
 				left: leftOffset,
 				width: `calc(${columnWidth} - 8px)`, // More margin between columns
 				height: `${height}px`,
-				fontFamily: "Monomaniac One, monospace",
 				marginLeft: "4px",
 				marginRight: "4px",
 			}}
@@ -432,7 +432,7 @@ const DayColumn: React.FC<DayColumnProps> = ({
 						>
 							<div
 								className={`font-medium text-white text-center ${isMobile ? "text-[10px]" : "text-xs"}`}
-								style={{ fontFamily: "Monomaniac One, monospace" }}
+								style={{ fontFamily: "Orbitron, monospace" }}
 							>
 								{hour === 0
 									? "12 AM"
@@ -594,7 +594,7 @@ const PreHackathonList: React.FC<{
 				${isMobile ? "w-full mb-4 rounded-3xl" : "w-64 mr-6 min-w-[220px] max-h-[600px] overflow-y-auto"}
 			`}
 			style={{
-				fontFamily: "Monomaniac One, monospace",
+				fontFamily: "Orbitron, monospace",
 			}}
 		>
 			<div className="text-center bg-[#215172] rounded-xl p-3 -m-4 mb-2">
@@ -668,8 +668,41 @@ const PreHackathonList: React.FC<{
 };
 
 const Schedule: React.FC = () => {
-	const { data: events, isLoading, error } = useAllEvents();
+	// Feature flag checks
 	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
+	const { data: sampleScheduleFlag } = useFlagState("SampleSchedule");
+
+	// Fetch all hackathons to find the previous one when sample schedule flag is enabled
+	const { data: allHackathons, isLoading: isLoadingHackathons } =
+		useAllHackathons();
+
+	// Find the previous hackathon (most recent inactive hackathon)
+	const previousHackathonId = useMemo(() => {
+		if (!sampleScheduleFlag?.isEnabled || !allHackathons) return undefined;
+
+		// Filter out active hackathons and sort by endTime descending
+		const inactiveHackathons = allHackathons
+			.filter((h) => !h.active)
+			.sort((a, b) => b.endTime - a.endTime);
+
+		// Return the most recent inactive hackathon ID
+		return inactiveHackathons.length > 0 ? inactiveHackathons[0].id : undefined;
+	}, [sampleScheduleFlag?.isEnabled, allHackathons]);
+
+	// Fetch previous hackathon events when the flag is enabled, otherwise current
+	const {
+		data: fetchedEvents,
+		isLoading: isLoadingEvents,
+		error,
+	} = useAllEvents(
+		sampleScheduleFlag?.isEnabled ? previousHackathonId : undefined
+	);
+
+	// Use fetched events directly; default to empty array while loading
+	const events = fetchedEvents ?? [];
+
+	// Combine loading states: loading if either hackathons or events are loading
+	const isLoading = isLoadingHackathons || isLoadingEvents;
 
 	// Ref for tracking scroll position of schedule section
 	const scheduleRef = useRef<HTMLDivElement>(null);
@@ -682,7 +715,6 @@ const Schedule: React.FC = () => {
 
 	// pick the real scrollYProgress only after mount
 	const scrollYProgress = tempScroll.scrollYProgress;
-	const surfboardX = useTransform(scrollYProgress, [0, 1], ["0vw", "70vw"]);
 
 	// Mobile detection
 	const [isMobile, setIsMobile] = useState(false);
@@ -993,7 +1025,7 @@ const Schedule: React.FC = () => {
 			>
 				<motion.p
 					className="text-xl text-[#048A81]"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					animate={{ opacity: [0.5, 1, 0.5] }}
 					transition={{ duration: 2, repeat: Infinity }}
 				>
@@ -1011,7 +1043,7 @@ const Schedule: React.FC = () => {
 			>
 				<p
 					className="text-xl text-[#A20021]"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 				>
 					Error loading schedule.
 				</p>
@@ -1023,32 +1055,15 @@ const Schedule: React.FC = () => {
 		<section
 			ref={scheduleRef}
 			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
-			style={{ minHeight: "60vw", backgroundColor: "#85CEFF" }}
+			style={{
+				minHeight: "60vw",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
+			}}
 			id="schedule"
 		>
-			{/* Animated Surfboard - Scroll-linked */}
-			<motion.div
-				className="absolute z-50
-				md:top-[-300px]
-				top-[0px]
-				"
-				style={{
-					left: surfboardX,
-					width: "clamp(120px, 15vw, 250px)",
-					height: "clamp(80px, 15vw, 250px)",
-				}}
-				initial={{ opacity: 1, rotate: -15 }}
-				animate={{ opacity: 1, y: [-20, 20, -20] }}
-				transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-			>
-				<Image
-					src="/f25/surfboard.png"
-					alt="Surfboard"
-					className="object-contain"
-					fill
-				/>
-			</motion.div>
-
 			{/* Header */}
 			<motion.div
 				className="text-center mb-8 z-10 relative"
@@ -1057,8 +1072,14 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#000080] mb-3"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					className="text-4xl md:text-5xl font-bold text-[#2f234bff] mt-8 mx-auto"
+					style={{
+						fontFamily: "Orbitron, monospace",
+						backgroundColor: "#ffffff",
+						borderRadius: "12px",
+						padding: "0.5rem 1rem",
+						width: "fit-content",
+					}}
 				>
 					Schedule
 				</h1>
@@ -1081,7 +1102,7 @@ const Schedule: React.FC = () => {
 											? `${colors.bg} ${colors.border} text-white`
 											: "bg-white/80 border-gray-300 text-gray-700 hover:bg-gray-100"
 									}`}
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 									initial={{ opacity: 0, scale: 0.8 }}
 									animate={{ opacity: 1, scale: 1 }}
 									transition={{ duration: 0.4, delay: index * 0.1 }}
@@ -1095,7 +1116,7 @@ const Schedule: React.FC = () => {
 					</div>
 				) : (
 					/* Desktop: Jellyfish Buttons */
-					<div className="flex flex-wrap justify-center gap-6 mb-6">
+					<div className="flex flex-wrap justify-center gap-6">
 						{Object.entries(eventTypeColors).map(([type, colors], index) => {
 							const eventType = type as EventType;
 							const isSelected = selectedCategories.has(eventType);
@@ -1135,7 +1156,7 @@ const Schedule: React.FC = () => {
 													: "text-gray-600 bg-white/70"
 											}`}
 											style={{
-												fontFamily: "Monomaniac One, monospace",
+												fontFamily: "Orbitron, monospace",
 												fontSize: "clamp(12px, 2vw, 16px)",
 											}}
 										>
@@ -1151,8 +1172,8 @@ const Schedule: React.FC = () => {
 				{/* Show selected count */}
 				<div className="text-center mb-4">
 					<span
-						className="text-sm text-[#A20021]/70 font-medium"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-sm text-[#ffa1fd] font-medium"
+						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						{selectedCategories.size === Object.keys(EventType).length
 							? "Showing all categories"
@@ -1170,7 +1191,7 @@ const Schedule: React.FC = () => {
 									? "bg-[#215172] border-[#215172] text-white"
 									: "bg-white/80 border-[#215172] text-[#215172] hover:bg-white"
 							}`}
-							style={{ fontFamily: "Monomaniac One, monospace" }}
+							style={{ fontFamily: "Orbitron, monospace" }}
 							whileHover={{ scale: 1.05 }}
 							whileTap={{ scale: 0.95 }}
 						>
@@ -1239,7 +1260,7 @@ const Schedule: React.FC = () => {
 											? "bg-[#215172] text-white"
 											: "bg-[#1a3f5c] text-white/70 hover:text-white hover:bg-[#215172]/80"
 									}`}
-									style={{ fontFamily: "Monomaniac One, monospace" }}
+									style={{ fontFamily: "Orbitron, monospace" }}
 									whileHover={{ scale: 1.02 }}
 									whileTap={{ scale: 0.98 }}
 									initial={{ opacity: 0, y: -20 }}
@@ -1303,10 +1324,10 @@ const Schedule: React.FC = () => {
 			</div>
 
 			{/* Download .ics Button */}
-			<div className="w-full max-w-5xl flex justify-center mt-6">
+			<div className="w-full max-w-5xl flex justify-center mt-8 mb-8">
 				<button
 					className="flex items-center gap-2 px-5 py-3 bg-[#215172] text-white font-semibold rounded-xl shadow-md hover:bg-[#1a3f5c] transition-colors "
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					onClick={handleDownloadIcs}
 				>
 					<svg

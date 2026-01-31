@@ -56,6 +56,11 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 		| "shareAddressSponsors"
 		| "driving"
 		| "shareAddressMlh"
+		| "application_status"
+		| "accepted_at"
+		| "rsvp_deadline"
+		| "rsvp_at"
+		| "accepted_by"
 	> & {
 		resume: File | null;
 		hasDietaryRestrictions: boolean;
@@ -137,6 +142,7 @@ export default function RegistrationPage() {
 		travel_cost: 0,
 		travel_method: "",
 		travel_additional: "",
+
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -455,7 +461,10 @@ export default function RegistrationPage() {
 	return (
 		<>
 			<Toaster richColors />
-			<div className="text-foreground min-h-screen bg-transparent">
+			<div
+				className="text-foreground min-h-screen"
+				style={{ backgroundColor: "#4d1170" }}
+			>
 				<div className="flex">
 					{/* Sidebar - Hidden on mobile, floating and vertically centered */}
 					<div className="hidden xl:block fixed left-4 top-1/2 -translate-y-1/2 w-80 bg-background/95 backdrop-blur-sm border rounded-lg shadow-lg p-6 z-40 max-h-[80vh] overflow-y-auto">
@@ -512,14 +521,14 @@ export default function RegistrationPage() {
 					<div className="flex-1 lg:ml-8 p-4 sm:p-6 lg:p-8">
 						<div className="max-w-3xl mx-auto">
 							<header className="text-center mb-8">
-								<h1 className="text-4xl font-bold tracking-tight text-primary">
+								<h1 className="text-4xl font-bold tracking-tight text-primary text-white">
 									Register for our {hackathon?.name} hackathon
 								</h1>
-								<p className="text-muted-foreground mt-2">
+								<p className="text-muted-foreground mt-2 text-[#c4c4c4]">
 									Feel free to reach out to us at{" "}
 									<a
 										href="mailto:technology@hackpsu.org"
-										className="text-primary underline"
+										className="text-primary underline text-[#d468d4]"
 									>
 										<span className="">technology@hackpsu.org</span>
 									</a>{" "}

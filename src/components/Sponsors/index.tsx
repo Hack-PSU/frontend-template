@@ -200,7 +200,7 @@ const Sponsors: React.FC = () => {
 			>
 				<motion.div
 					className="text-xl text-[#048A81] font-medium"
-					style={{ fontFamily: "Monomaniac One, monospace" }}
+					style={{ fontFamily: "Orbitron, monospace" }}
 					animate={{ opacity: [0.5, 1, 0.5] }}
 					transition={{ duration: 2, repeat: Infinity }}
 				>
@@ -218,9 +218,15 @@ const Sponsors: React.FC = () => {
 		<section
 			id="sponsors"
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
-			style={{ backgroundColor: "#215172" }}
+			style={{
+				backgroundImage: "url('/f25/sponsors_bg.png')",
+				backgroundSize: "cover",
+				borderTop: "2px solid #ff88e9ff",
+				borderBottom: "2px solid #ff88e9ff",
+				boxShadow:
+					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
+			}}
 		>
-			{/* Hacky Diver Image */}
 			<motion.div
 				className="absolute top-1/2 transform -translate-y-1/2 z-10"
 				style={{
@@ -229,19 +235,7 @@ const Sponsors: React.FC = () => {
 				initial={{ opacity: 0, x: -50 }}
 				animate={{ opacity: 1, x: 0 }}
 				transition={{ duration: 0.8, delay: 0.5 }}
-			>
-				<Image
-					src="/f25/hacky_diver.png"
-					alt="Hacky Diver"
-					width={200}
-					height={300}
-					className="object-contain"
-					style={{
-						width: "clamp(80px, 12vw, 200px)",
-						height: "auto",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			{/* Glowing Decorative Images - f25/1.png */}
 			<motion.div
@@ -266,20 +260,7 @@ const Sponsors: React.FC = () => {
 					repeat: Infinity,
 					ease: "easeInOut",
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(60px, 8vw, 120px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			<motion.div
 				className="absolute z-10"
@@ -304,20 +285,7 @@ const Sponsors: React.FC = () => {
 					ease: "easeInOut",
 					delay: 0.5,
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(50px, 7vw, 100px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			<motion.div
 				className="absolute z-10"
@@ -342,35 +310,27 @@ const Sponsors: React.FC = () => {
 					ease: "easeInOut",
 					delay: 1,
 				}}
-			>
-				<Image
-					src="/f25/1.png"
-					alt="Glowing decoration"
-					width={120}
-					height={120}
-					className="object-contain"
-					style={{
-						width: "clamp(40px, 6vw, 80px)",
-						height: "auto",
-						filter: "drop-shadow(0 0 4px rgba(255,255,255,0.4))",
-					}}
-				/>
-			</motion.div>
+			></motion.div>
 
 			{/* Header */}
-			<div className="text-center mb-8 z-10 relative">
+			<div className="text-center mb-12 z-10 relative">
 				<motion.div
 					initial={{ opacity: 0, y: -30 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#FFEBB8] mb-3"
-						style={{ fontFamily: "Monomaniac One, monospace" }}
+						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3"
+						style={{
+							fontFamily: "Orbitron, monospace",
+							backgroundColor: "#ffffff",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+						}}
 					>
 						Sponsors
 					</h1>
-					<div className="w-16 h-1 bg-[#FFEBB8] rounded-full mx-auto"></div>
+					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
 
@@ -401,7 +361,7 @@ const Sponsors: React.FC = () => {
 					<motion.button
 						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
 						style={{
-							fontFamily: "Monomaniac One, monospace",
+							fontFamily: "Orbitron, monospace",
 							background: "",
 							boxShadow:
 								"0 10px 25px rgba(0, 102, 204, 0.3), 0 0 20px rgba(255, 235, 184, 0.2)",
@@ -423,7 +383,6 @@ const Sponsors: React.FC = () => {
 							Interested in Sponsoring Us? Click Here!
 						</motion.span>
 
-						{/* Animated wave effect */}
 						<motion.div
 							className="absolute inset-0 rounded-2xl opacity-20 hover:opacity-30 transition-opacity duration-300"
 							style={{

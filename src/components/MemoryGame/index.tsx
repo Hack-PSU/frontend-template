@@ -187,7 +187,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 						<div className="flex justify-between items-center mb-6">
 							<h2
 								className="text-3xl font-bold text-[#215172]"
-								style={{ fontFamily: "Monomaniac One, monospace" }}
+								style={{ fontFamily: "Orbitron, monospace" }}
 							>
 								Memory Match
 							</h2>
