@@ -63,6 +63,16 @@ enum Role {
 	FINANCE = 5,
 }
 
+// Mapping from application status to its respective color
+const applicationStatusColorMap = new Map<string, string>([
+	['pending', 'text-purple-400'],
+	['accepted', 'text-green-300'],
+	['rejected', 'text-red-600'],
+	['waitlisted', 'text-orange-300'],
+	['confirmed', 'text-green-600'],
+	['declined', 'text-stone-500']
+]);
+
 // Utility to get user role from token
 function getUserRole(token: string | undefined): number {
 	if (!token) return Role.NONE;
@@ -357,6 +367,13 @@ export default function Profile() {
 								<p className="text-sm text-slate-200 text-center">
 									You are viewing this profile as an organizer. Participant
 									actions are disabled.
+								</p>
+							</div>
+						)}
+						{(!isOrganizer && userData?.registration) && (
+							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
+								<p className={`text-2xl text-slate-200 text-center`}>
+									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.application_status)}`}>{userData.registration.application_status.toUpperCase()}</span>
 								</p>
 							</div>
 						)}
