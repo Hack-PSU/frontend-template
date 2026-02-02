@@ -44,7 +44,7 @@ export const metadata: Metadata = {
 			"Join HackPSU Spring 2026 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
 		images: [
 			{
-				url: "/logo.svg",
+				url: "/logo.png",
 				alt: "HackPSU Spring 2026 Logo",
 			},
 		],

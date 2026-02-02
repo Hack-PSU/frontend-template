@@ -9,11 +9,7 @@ import FAQ from "@/components/FAQ";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
-import Submissions from "@/components/common/Submissions";
-import { Fireworks } from "@fireworks-js/react";
-import FerrisWheel from "@/components/FerrisWheel";
 import InfoSections from "@/components/InfoSections";
-import Wave from "@/components/Wave";
 import PhotoGallery from "@/components/PhotoGallery";
 
 export default function Home() {
@@ -29,71 +25,60 @@ export default function Home() {
 		return () => window.removeEventListener("resize", checkMobile);
 	}, []);
 
-	const wavePoints = isMobile ? 3 : 6;
-
 	return (
 		<>
 			<main className="flex flex-col items-center w-full">
-				<Hero />
-				{/* Wave transition after Hero */}
-				<Wave
-					height={200}
-					fill="#B1E8FF"
-					borderColor="#ffffff"
-					borderOffset={-30}
-					waveHeight={50}
-					waveDelta={50}
-					speed={0.15}
-					wavePoints={wavePoints}
-					className="w-full"
-					style={{ backgroundColor: "#FFEBB8", marginTop: "-50px" }}
-				/>
-				<InfoSections />
-				<PrizesChallenges />
-				<Wave
-					height={200}
-					fill="#84cefe"
-					borderColor="#ffffff"
-					borderOffset={-20}
-					waveHeight={50}
-					waveDelta={50}
-					speed={0.15}
-					wavePoints={wavePoints}
-					className="w-full"
-					style={{ backgroundColor: "#B1E8FF" }}
-				/>
-				<Schedule />
-				<FAQ />
-				<Wave
-					height={120}
-					fill="#215172"
-					borderColor="#9eadbd"
-					borderOffset={-10}
-					waveHeight={50}
-					waveDelta={50}
-					speed={0.15}
-					wavePoints={wavePoints}
-					className="w-full"
-					style={{ backgroundColor: "#84cefe" }}
-				/>{" "}
-				<PhotoGallery
-					images={[
-						"/event/event_1.jpg",
-						"/event/event_2.jpg",
-						"/event/event_3.jpg",
-						"/event/event_4.jpg",
-						"/event/event_5.jpg",
-						"/event/event_6.jpg",
-						"/event/event_7.jpg",
-						"/event/event_8.jpg",
-						"/event/event_9.jpg",
-						"/event/event_10.jpg",
-						"/event/event_11.jpg",
-						"/event/event_12.jpg",
-					]}
-				/>
-				<Sponsors />
-				<Footer />
+				<section className="hero-bg w-full">
+					<Hero />
+				</section>
+				<section className="info-bg w-full">
+					<InfoSections />
+				</section>
+				<section className="prizes-bg w-full">
+					<PrizesChallenges />
+				</section>
+				<section className="schedule-bg w-full">
+					<Schedule />
+				</section>
+				<section className="faq-bg w-full">
+					<FAQ />
+				</section>
+				<section className="gallery-bg w-full">
+					<PhotoGallery
+						images={[
+							"/event/event_13.webp",
+							"/event/event_14.webp",
+							"/event/event_15.webp",
+							"/event/event_16.webp",
+							"/event/event_17.webp",
+							"/event/event_18.webp",
+							"/event/event_19.webp",
+							"/event/event_20.webp",
+							"/event/event_21.webp",
+							"/event/event_22.webp",
+							"/event/event_23.webp",
+							"/event/event_24.webp",
+							"/event/event_1.jpg",
+							"/event/event_2.jpg",
+							"/event/event_3.jpg",
+							"/event/event_4.jpg",
+							"/event/event_5.jpg",
+							"/event/event_6.jpg",
+							"/event/event_7.jpg",
+							"/event/event_8.jpg",
+							"/event/event_9.jpg",
+							"/event/event_10.jpg",
+							"/event/event_11.jpg",
+							"/event/event_12.jpg",
+						]}
+					/>
+				</section>
+				<section className="sponsors-bg w-full">
+					<Sponsors />
+				</section>
+				<section className="footer-bg w-full">
+					<Footer />
+				</section>
 			</main>
 		</>
 	);

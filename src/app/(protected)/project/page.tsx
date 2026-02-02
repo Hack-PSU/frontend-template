@@ -248,7 +248,10 @@ export default function Project() {
 
 	if (!userTeam) {
 		return (
-			<div className="min-h-screen bg-transparent py-8 px-4">
+			<div
+				className="min-h-screen py-8 px-4"
+				style={{ backgroundColor: "#4d1170" }}
+			>
 				<div className="mx-auto max-w-4xl space-y-6">
 					<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
 						<CardHeader className="text-center">

@@ -24,11 +24,14 @@ export interface RegistrationEntity {
 	travel_cost?: number;
 	travel_method?: string;
 	travel_additional?: string;
+	application_status: "pending" | "accepted" | "rejected" | "waitlisted" | "confirmed" | "declined";
+	accepted_at?: number;
+	rsvp_deadline?: number;
+	rsvp_at?: number;
+	accepted_by?: string;
 }
 
-export interface RegistrationCreateEntity extends Omit<
-	RegistrationEntity,
-	"id" | "userId" | "hackathonId" | "time"
-> {}
+export interface RegistrationCreateEntity
+	extends Omit<RegistrationEntity, "id" | "userId" | "hackathonId" | "time" | "application_status" | "accepted_at" | "rsvp_deadline" | "rsvp_at" | "accepted_by"> {}
 
 export interface RegistrationUpdateEntity extends Partial<RegistrationCreateEntity> {}

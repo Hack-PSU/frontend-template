@@ -12,7 +12,10 @@ const AccountDeletionPolicy = () => {
 	];
 
 	return (
-		<div className="min-h-screen py-8 px-4 sm:px-6 lg:px-8 bg-transparent">
+		<div
+			className="min-h-screen py-8 px-4 sm:px-6 lg:px-8"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<div className="max-w-3xl mx-auto">
 				{/* Header */}
 				<div className="text-center mb-8">

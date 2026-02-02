@@ -96,7 +96,10 @@ export default function ExtraCredit() {
 	}
 
 	return (
-		<div className="min-h-screen bg-transparent py-8 px-4">
+		<div
+			className="min-h-screen py-8 px-4"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<div className="mx-auto max-w-4xl space-y-6">
 				<Button
 					variant="ghost"
