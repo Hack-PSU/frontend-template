@@ -7,12 +7,15 @@ import {
 	updateRegistration,
 	replaceRegistration,
 	deleteRegistration,
+	patchApplicationStatus,
 } from "./provider";
 import {
 	RegistrationEntity,
 	RegistrationCreateEntity,
 	RegistrationUpdateEntity,
+	ApplicationStatusRsvp,
 } from "./entity";
+import { userQueryKeys } from "@/lib/api/user/hook";
 
 export const registrationQueryKeys = {
 	all: ["registrations"] as const,
@@ -79,6 +82,23 @@ export function useDeleteRegistration() {
 		mutationFn: (id: string) => deleteRegistration(id),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
+		},
+	});
+}
+
+export function usePatchApplicationStatus() {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (opts: {
+			userId: string;
+			status: ApplicationStatusRsvp;
+		}) => patchApplicationStatus(opts.userId, opts.status),
+		onSuccess: (updated) => {
+			queryClient.invalidateQueries({ queryKey: registrationQueryKeys.all });
+			queryClient.invalidateQueries({
+				queryKey: registrationQueryKeys.detail(updated.id.toString()),
+			});
+			queryClient.invalidateQueries({ queryKey: userQueryKeys.me });
 		},
 	});
 }

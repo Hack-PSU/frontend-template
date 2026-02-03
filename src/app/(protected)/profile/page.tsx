@@ -49,9 +49,12 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { usePatchApplicationStatus } from "@/lib/api/registration/hook";
+import type { RegistrationEntity } from "@/lib/api/registration/entity";
 
 // Role definitions matching AuthGuard
 enum Role {
@@ -109,9 +112,18 @@ export default function Profile() {
 	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
 		useUpdateUser();
 
+	const {
+		mutateAsync: patchApplicationStatus,
+		isPending: isPatchingApplicationStatus,
+	} = usePatchApplicationStatus();
+
 	const [showQRCode, setShowQRCode] = useState(false);
 	const [showResumeModal, setShowResumeModal] = useState(false);
 	const [resumeFile, setResumeFile] = useState<File | null>(null);
+	const [rsvpConfirmOpen, setRsvpConfirmOpen] = useState(false);
+	const [rsvpPendingStatus, setRsvpPendingStatus] = useState<
+		"confirmed" | "declined" | null
+	>(null);
 
 	// Feature flag checks
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
@@ -296,6 +308,47 @@ export default function Profile() {
 		}
 	};
 
+	const registration = userData?.registration as
+		| RegistrationEntity
+		| undefined;
+	const applicationStatus = registration?.application_status;
+	const showRsvp = applicationStatus === "accepted";
+
+	const openRsvpConfirm = (status: "confirmed" | "declined") => {
+		setRsvpPendingStatus(status);
+		setRsvpConfirmOpen(true);
+	};
+
+	const handleRsvpConfirm = async () => {
+		if (!userData?.id || !rsvpPendingStatus) return;
+		try {
+			await patchApplicationStatus({
+				userId: userData.id,
+				status: rsvpPendingStatus,
+			});
+			toast.success(
+				rsvpPendingStatus === "confirmed"
+					? "You're attending HackPSU! We can't wait to see you."
+					: "Your response has been recorded."
+			);
+			setRsvpConfirmOpen(false);
+			setRsvpPendingStatus(null);
+		} catch (error) {
+			console.error("RSVP error:", error);
+			const message =
+				error instanceof Error ? error.message : "Something went wrong.";
+			toast.error(
+				message.includes("400")
+					? "Invalid request. Please try again."
+					: message.includes("404")
+						? "Registration not found."
+						: "Failed to submit RSVP. Please try again."
+			);
+			setRsvpConfirmOpen(false);
+			setRsvpPendingStatus(null);
+		}
+	};
+
 	if (isLoading) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
@@ -363,9 +416,42 @@ export default function Profile() {
 					</CardContent>
 				</Card>
 
+				{/* RSVP Section - only when accepted and not organizer */}
+				{showRsvp && !isOrganizer && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Will you be attending HackPSU?</CardTitle>
+							<CardDescription>
+								Please confirm your attendance so we can plan accordingly.
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<div className="flex flex-wrap gap-3">
+								<Button
+									variant="success"
+									onClick={() => openRsvpConfirm("confirmed")}
+									disabled={isPatchingApplicationStatus}
+								>
+									{isPatchingApplicationStatus ? (
+										<Loader2 className="h-4 w-4 animate-spin" />
+									) : (
+										"Yes"
+									)}
+								</Button>
+								<Button
+									variant="destructive"
+									onClick={() => openRsvpConfirm("declined")}
+									disabled={isPatchingApplicationStatus}
+								>
+									No
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				)}
+
 				{/* QR Code Section */}
-				{(userData?.registration as any)?.application_status ===
-					"confirmed" && (
+				{applicationStatus === "confirmed" && (
 					<Card>
 						<CardHeader>
 							<CardTitle className="flex items-center space-x-2">
@@ -716,6 +802,49 @@ export default function Profile() {
 								</Button>
 							</div>
 						</div>
+					</DialogContent>
+				</Dialog>
+
+				{/* RSVP confirmation modal */}
+				<Dialog
+					open={rsvpConfirmOpen}
+					onOpenChange={(open) => {
+						setRsvpConfirmOpen(open);
+						if (!open) setRsvpPendingStatus(null);
+					}}
+				>
+					<DialogContent className="sm:max-w-md">
+						<DialogHeader>
+							<DialogTitle>Are you sure?</DialogTitle>
+							<DialogDescription>
+								{rsvpPendingStatus === "confirmed"
+									? "You are confirming that you will attend HackPSU."
+									: "You are declining your spot. This cannot be undone."}
+							</DialogDescription>
+						</DialogHeader>
+						<DialogFooter className="gap-2 sm:gap-0">
+							<Button
+								variant="outline"
+								onClick={() => {
+									setRsvpConfirmOpen(false);
+									setRsvpPendingStatus(null);
+								}}
+								disabled={isPatchingApplicationStatus}
+							>
+								Cancel
+							</Button>
+							<Button
+								variant={rsvpPendingStatus === "declined" ? "destructive" : "success"}
+								onClick={handleRsvpConfirm}
+								disabled={isPatchingApplicationStatus}
+							>
+								{isPatchingApplicationStatus ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									"Confirm"
+								)}
+							</Button>
+						</DialogFooter>
 					</DialogContent>
 				</Dialog>
 			</div>
