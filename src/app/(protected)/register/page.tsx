@@ -550,22 +550,22 @@ export default function RegistrationPage() {
 										•{" "}
 										<span className="font-bold">
 											Application decisions will be made approximately one month
-											before the event
+											before the event. You will be notified by email.
 										</span>
-									</li>
-									<li>
-										•{" "}
-										<span className="font-bold">
-											Acceptance is required to attend
-										</span>{" "}
-										— you cannot participate without being accepted
 									</li>
 									<li>
 										•{" "}
 										<span className="font-bold">
 											After acceptance, you must RSVP on your Profile page
 										</span>{" "}
-										to confirm your attendance
+										to confirm your attendance.
+									</li>
+									<li>
+										•{" "}
+										<span className="font-bold">
+											Acceptance and RSVP are required to attend
+										</span>{" "}
+										— you cannot participate without being accepted and responding 'Yes' to the RSVP.
 									</li>
 								</ul>
 							</div>
