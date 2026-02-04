@@ -6127,11 +6127,11 @@ posthog-js@^1.257.0:
     web-vitals "^5.1.0"
 
 posthog-node@^5.5.1:
-  version "5.24.9"
-  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.24.9.tgz#757caa2852b6e2b6c0c3659b05ede5f29dd806b6"
-  integrity sha512-afu4kYL+QTEPinnvTF/VimdsGbrpJztqbxIWhQ96C+m24yW/KenEodWH9em989t+MLwGWcnBGhw1vytgeZdySg==
+  version "5.24.10"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.24.10.tgz#5e5ff765c8d84b5a7d9ac430dd702225d9c0162c"
+  integrity sha512-C4ueZUrifTJMDFngybSWQ+GthcqCqPiCcGg5qnjoh+f6ie3+tdhFROqqshjttpQ6Q4DPM40USPTmU/UBYqgsbA==
   dependencies:
-    "@posthog/core" "1.19.0"
+    "@posthog/core" "1.20.0"
 
 preact@^10.28.2:
   version "10.28.3"
