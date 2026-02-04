@@ -8,6 +8,8 @@ import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import settings from "@/lib/config/settings.json";
 import MemoryGame from "@/components/MemoryGame";
+import { REGISTRATION_OPEN } from "@/lib/config/registration";
+
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
@@ -511,35 +513,41 @@ Happy hacking!
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
 			>
-				{/* Register Button */}
-				<motion.button
-					onClick={() => router.push("/profile")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
-					style={{
-						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(80px, 20vw, 280px)",
-					}}
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
+				{/* Register Button (only when registration is open) */}
+			{REGISTRATION_OPEN && (
+			<motion.button
+				onClick={() => router.push(isAuthenticated ? "/profile" : "/register")}
+				disabled={isLoading}
+				className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
+				style={{
+				width: "clamp(400px, 50vw, 700px)",
+				height: "clamp(80px, 20vw, 280px)",
+				opacity: isLoading ? 0.6 : 1,
+				cursor: isLoading ? "not-allowed" : "pointer",
+				}}
+				whileHover={{ scale: 1.05 }}
+				whileTap={{ scale: 0.95 }}
+			>
+				<Image
+				src="/sp26/register3.png"
+				alt="Register Now"
+				fill
+				className="object-contain"
+				priority
+				/>
+				<div
+				className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
+				style={{
+					fontSize: "clamp(14px, 3.75vw, 42px)",
+					color: "#FFFFFF",
+					fontFamily: "Orbitron, monospace",
+				}}
 				>
-					<Image
-						src="/sp26/register3.png"
-						alt="Register Now"
-						fill
-						className="object-contain"
-						priority
-					/>
-					<div
-						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
-						style={{
-							fontSize: "clamp(14px, 3.75vw, 42px)",
-							color: "#FFFFFF",
-							fontFamily: "Orbitron, monospace",
-						}}
-					>
-						Register now
-					</div>
-				</motion.button>
+				Register now
+				</div>
+			</motion.button>
+			)}
+
 
 				{/* Discord Button */}
 				<motion.button

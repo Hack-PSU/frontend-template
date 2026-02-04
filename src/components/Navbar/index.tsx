@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { Menu, X } from "lucide-react";
+import { REGISTRATION_OPEN } from "@/lib/config/registration";
 
 interface NavItemProps {
 	href: string;
@@ -178,12 +179,16 @@ const Navbar: React.FC = () => {
 			{ href: isHome ? "#faq" : "/#faq", text: "FAQ" },
 		];
 
-		const authItem: NavItemProps =
-			!isLoading && isAuthenticated
-				? { href: "/profile", text: "Profile" }
-				: { href: "/profile", text: "Register" };
+		const profileItem: NavItemProps | null =
+  			!isLoading && isAuthenticated ? { href: "/profile", text: "Profile" } : null;
 
-		// Only show photos link for authenticated users (keeps homepage clean for guests)
+		const registerItem: NavItemProps | null =
+			!isLoading && !isAuthenticated && REGISTRATION_OPEN
+				? { href: "/register", text: "Register" }
+				: null;
+
+		const rightmostItem = profileItem ?? registerItem;
+
 		const photosItem =
 			!isLoading && isAuthenticated
 				? {
@@ -194,8 +199,8 @@ const Navbar: React.FC = () => {
 				: null;
 
 		return photosItem
-			? [...baseItems, photosItem, authItem]
-			: [...baseItems, authItem];
+			? [...baseItems, photosItem, ...(rightmostItem ? [rightmostItem] : [])]
+			: [...baseItems, ...(rightmostItem ? [rightmostItem] : [])];
 	};
 
 	const navItems = getNavItems();

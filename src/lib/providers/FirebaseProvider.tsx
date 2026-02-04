@@ -65,9 +65,17 @@ export const FirebaseProvider: FC<Props> = ({ children }) => {
 
 			console.log("Session verification response:", response.status);
 
+			if (response.status === 401) {
+				// Not logged in (no session cookie) — this is EXPECTED.
+				setUser(null);
+				setToken(undefined);
+				setError(undefined);
+				return;
+				}
+
 			if (!response.ok) {
 				throw new Error(`Session verification failed: ${response.status}`);
-			}
+				}
 
 			const data = await response.json();
 			console.log("Session data received:", !!data.customToken);
