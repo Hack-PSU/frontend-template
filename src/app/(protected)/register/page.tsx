@@ -142,7 +142,6 @@ export default function RegistrationPage() {
 		travel_cost: 0,
 		travel_method: "",
 		travel_additional: "",
-
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -535,6 +534,41 @@ export default function RegistrationPage() {
 									if you have any questions or concerns.
 								</p>
 							</header>
+
+							{/* Important Notice Box */}
+							<div className="mb-8 p-6 bg-red-900/30 border-2 border-red-600 rounded-lg">
+								<h2 className="text-lg font-bold text-red-400 mb-3">
+									Important: Limited Capacity Application
+								</h2>
+								<p className="text-red-200 text-sm mb-3">
+									HackPSU has a limited number of spots available.
+									This year, we are operating on an application-based admissions
+									system.
+								</p>
+								<ul className="space-y-2 text-red-200 text-sm">
+									<li>
+										•{" "}
+										<span className="font-bold">
+											Application decisions will be made approximately one month
+											before the event
+										</span>
+									</li>
+									<li>
+										•{" "}
+										<span className="font-bold">
+											Acceptance is required to attend
+										</span>{" "}
+										— you cannot participate without being accepted
+									</li>
+									<li>
+										•{" "}
+										<span className="font-bold">
+											After acceptance, you must RSVP on your Profile page
+										</span>{" "}
+										to confirm your attendance
+									</li>
+								</ul>
+							</div>
 
 							<form onSubmit={handleSubmit} className="space-y-8">
 								{/* Personal Information */}
