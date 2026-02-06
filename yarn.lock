@@ -2399,14 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.20.1":
+  version "1.20.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.20.1.tgz#bb5e291bf59aad4bdecb9ed5d1802d297d809c1d"
+  integrity sha512-uoTmWkYCtLYFpiK37/JCq+BuCA/OZn1qQZn5cPv1EEKt3ni3Zgg48xWCnSEyGFl5KKSXlfCruiRTwnbAtCgrBA==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.11"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.11.tgz#85d3a7bde27483529cd477f162077e0b95704cde"
-  integrity sha512-kwh8fMJj4bj6Ca2LKBc1FhWdlHyvntEMHj5k9ILDpah+Mr1tD180suma4oG3syc8V00RjANcNony/OPdI0dsJg==
+  version "1.8.12"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.12.tgz#d82982cd14e4f46c9b9f4896b92c1524d7ef6cd2"
+  integrity sha512-sZ6H4TQeNO+3Zy8Vi0pHsumHcaO52p0/d/pHHxKq7cC0JTjCVY3dm9L/1pN29OW4cVCHPQbB2RFCRlUta4XnlQ==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.0"
-    "@posthog/webpack-plugin" "1.2.17"
+    "@posthog/core" "1.20.1"
+    "@posthog/webpack-plugin" "1.2.18"
     semver "^7.7.2"
 
 "@posthog/types@1.342.0":
@@ -2414,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.342.0.tgz#68b00a945f9fd664901f6b1d18584d1bbbf53cf6"
   integrity sha512-GfKJ6Q+4+IE4+9LrONkSBS92gsNJBuL+HfaSKhXd/bxD/tx+7CySmPshmBbjsIqA+eWbOdqreQK77x4RzTGjzQ==
 
-"@posthog/webpack-plugin@1.2.17":
-  version "1.2.17"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.17.tgz#8b03d6b69d014c8d6022d73091d91e62419ebec6"
-  integrity sha512-T4YBZ3LRugBZ/JdtdlN6FeCm1fKQD9ifiMuRadZycC1ygFp9636cH7GqaEr8JRvWJub2je1K2jFhjt/Q5AQtRg==
+"@posthog/webpack-plugin@1.2.18":
+  version "1.2.18"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.18.tgz#380a1eb632ee38b3a224ba5b4e37e49ef6928067"
+  integrity sha512-2cx3Gvurv3OO12HEqieX7d4AQ18GRx5g+ksAJ+fHLQnO3ksHhf2UeBvRC3Cr6xIcDeT6h+zcgYgBMNTxBo8ikg==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.0"
+    "@posthog/core" "1.20.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -6521,7 +6528,12 @@ semver@^7.6.0, semver@^7.6.3:
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
   integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
 
-semver@^7.7.2, semver@^7.7.3:
+semver@^7.7.2:
+  version "7.7.4"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.4.tgz#28464e36060e991fa7a11d0279d2d3f3b57a7e8a"
+  integrity sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==
+
+semver@^7.7.3:
   version "7.7.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.3.tgz#4b5f4143d007633a8dc671cd0a6ef9147b8bb946"
   integrity sha512-SdsKMrI9TdgjdweUSR9MweHA4EJ8YxHn8DFaDisvhVlUOe4BF1tLD7GAj0lIqWVl+dPb/rExr0Btby5loQm20Q==
