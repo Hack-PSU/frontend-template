@@ -20,18 +20,34 @@ export interface RegistrationEntity {
 	time: number;
 	veteran: string;
 	excitement: string;
-	zip_code?: string;
-	travel_cost?: number;
-	travel_method?: string;
-	travel_additional?: string;
-	applicationStatus: "pending" | "accepted" | "rejected" | "waitlisted" | "confirmed" | "declined";
-	accepted_at?: number;
-	rsvp_deadline?: number;
-	rsvp_at?: number;
-	accepted_by?: string;
+	zipCode?: string;
+	travelCost?: number;
+	travelMethod?: string;
+	travelAdditional?: string;
+	applicationStatus:
+		| "pending"
+		| "accepted"
+		| "rejected"
+		| "waitlisted"
+		| "confirmed"
+		| "declined";
+	acceptedAt?: number;
+	rsvpDeadline?: number;
+	rsvpAt?: number;
+	acceptedBy?: string;
 }
 
-export interface RegistrationCreateEntity
-	extends Omit<RegistrationEntity, "id" | "userId" | "hackathonId" | "time" | "application_status" | "accepted_at" | "rsvp_deadline" | "rsvp_at" | "accepted_by"> {}
+export interface RegistrationCreateEntity extends Omit<
+	RegistrationEntity,
+	| "id"
+	| "userId"
+	| "hackathonId"
+	| "time"
+	| "applicationStatus"
+	| "acceptedAt"
+	| "rsvpDeadline"
+	| "rsvpAt"
+	| "acceptedBy"
+> {}
 
 export interface RegistrationUpdateEntity extends Partial<RegistrationCreateEntity> {}
