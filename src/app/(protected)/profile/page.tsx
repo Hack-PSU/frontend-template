@@ -123,9 +123,10 @@ export default function Profile() {
 
 	// Check if user has a confirmed application
 	const applicationStatus =
-		(userData?.registration as any)?.application_status;
+		(userData?.registration as any)?.applicationStatus;
 	const isConfirmed = applicationStatus === "confirmed";
-
+	console.log("User Data: " + JSON.stringify(userData));
+	console.log("Registration: " + JSON.stringify(userData?.registration?.applicationStatus));
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
@@ -655,9 +656,9 @@ export default function Profile() {
 				) : (
 					<Card>
 						<CardHeader>
-							<CardTitle>Application Pending</CardTitle>
+							<CardTitle>Actions Unavailable</CardTitle>
 							<CardDescription>
-								Your application is currently under review. Once confirmed, you’ll
+								Access to our features is currently unavailable. Once confirmed, you’ll
 								gain full access to QR check-in, wallet passes, team features, and
 								project tools.
 							</CardDescription>
