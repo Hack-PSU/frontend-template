@@ -291,7 +291,7 @@ export default function RegistrationPage() {
 				major: userInfo.major || "",
 				phone: userInfo.phone || "",
 				country: userInfo.country || "",
-				race: "",
+				race: userInfo.race || "",
 				hasDietaryRestrictions: !!(
 					userInfo.dietaryRestriction || userInfo.allergies
 				),
