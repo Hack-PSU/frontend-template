@@ -56,11 +56,11 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 		| "shareAddressSponsors"
 		| "driving"
 		| "shareAddressMlh"
-		| "application_status"
-		| "accepted_at"
-		| "rsvp_deadline"
-		| "rsvp_at"
-		| "accepted_by"
+		| "applicationStatus"
+		| "acceptedAt"
+		| "rsvpDeadline"
+		| "rsvpAt"
+		| "acceptedBy"
 	> & {
 		resume: File | null;
 		hasDietaryRestrictions: boolean;
@@ -138,10 +138,10 @@ export default function RegistrationPage() {
 		resume: null,
 		hasDietaryRestrictions: false,
 		excitement: "",
-		zip_code: "",
-		travel_cost: 0,
-		travel_method: "",
-		travel_additional: "",
+		zipCode: "",
+		travelCost: 0,
+		travelMethod: "",
+		travelAdditional: "",
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -174,7 +174,7 @@ export default function RegistrationPage() {
 			title: "Travel Reimbursement",
 			isVisible: (data) => data.age >= 18 && !!data.travelReimbursement,
 			isComplete: (data) =>
-				!!(data.zip_code && data.travel_cost && data.travel_method),
+				!!(data.zipCode && data.travelCost && data.travelMethod),
 		},
 		{
 			id: "dietary",
@@ -357,11 +357,7 @@ export default function RegistrationPage() {
 			return;
 		}
 		if (formData.travelReimbursement) {
-			if (
-				!formData.zip_code ||
-				!formData.travel_cost ||
-				!formData.travel_method
-			) {
+			if (!formData.zipCode || !formData.travelCost || !formData.travelMethod) {
 				toast.error("Please complete all travel reimbursement questions.");
 				return;
 			}
@@ -413,10 +409,10 @@ export default function RegistrationPage() {
 			shareEmailMlh: formData.shareEmailMlh,
 			veteran: formData.veteran,
 			excitement: formData.excitement,
-			zip_code: formData.zip_code,
-			travel_cost: formData.travel_cost,
-			travel_method: formData.travel_method,
-			travel_additional: formData.travel_additional,
+			zipCode: formData.zipCode,
+			travelCost: formData.travelCost,
+			travelMethod: formData.travelMethod,
+			travelAdditional: formData.travelAdditional,
 			time: Date.now(),
 		};
 
@@ -541,9 +537,8 @@ export default function RegistrationPage() {
 									Important: Limited Capacity Application
 								</h2>
 								<p className="text-red-200 text-sm mb-3">
-									HackPSU has a limited number of spots available.
-									This year, we are operating on an application-based admissions
-									system.
+									HackPSU has a limited number of spots available. This year, we
+									are operating on an application-based admissions system.
 								</p>
 								<ul className="space-y-2 text-red-200 text-sm">
 									<li>
@@ -850,40 +845,40 @@ export default function RegistrationPage() {
 																What is the zip code you will be traveling from?
 															</Label>
 															<Input
-																id="zip_code"
-																name="zip_code"
+																id="zipCode"
+																name="zipCode"
 																placeholder="e.g., 10001"
-																value={formData.zip_code}
+																value={formData.zipCode}
 																onChange={handleChange}
 																required
 															/>
 														</div>
 														<div className="space-y-2">
-															<Label htmlFor="travel_cost">
+															<Label htmlFor="travelCost">
 																What is your estimated travel cost?
 															</Label>
 															<Input
-																id="travel_cost"
-																name="travel_cost"
+																id="travelCost"
+																name="travelCost"
 																type="number"
 																min="0"
 																step="1"
 																placeholder="e.g., 200"
-																value={formData.travel_cost}
+																value={formData.travelCost}
 																onChange={handleChange}
 																required
 															/>
 														</div>
 
 														<div className="space-y-2">
-															<Label htmlFor="travel_method">
+															<Label htmlFor="travelMethod">
 																What is your travel method?
 															</Label>
 															<Select
-																name="travel_method"
-																value={formData.travel_method}
+																name="travelMethod"
+																value={formData.travelMethod}
 																onValueChange={(value) =>
-																	handleSelectChange("travel_method", value)
+																	handleSelectChange("travelMethod", value)
 																}
 																required
 															>
@@ -908,14 +903,14 @@ export default function RegistrationPage() {
 														</div>
 
 														<div className="space-y-2">
-															<Label htmlFor="travel_additional">
+															<Label htmlFor="travelAdditional">
 																Any additional travel information?
 															</Label>
 															<Input
-																id="travel_additional"
-																name="travel_additional"
+																id="travelAdditional"
+																name="travelAdditional"
 																placeholder="e.g., Layovers, special accommodations"
-																value={formData.travel_additional}
+																value={formData.travelAdditional}
 																onChange={handleChange}
 															/>
 														</div>
