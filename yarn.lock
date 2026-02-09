@@ -2399,14 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.20.2":
+  version "1.20.2"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.20.2.tgz#1dc2757d1775ca008d596c5629231e75813fb4b9"
+  integrity sha512-aQhrUzOHYr0z/bkwDsJ5hXahdh6oyeWdx2/CHwR6vFG3eK07J69lbuGOj+HGOOxJP1eAdNnsk8J0fj1vqRA9+A==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.12"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.12.tgz#d82982cd14e4f46c9b9f4896b92c1524d7ef6cd2"
-  integrity sha512-sZ6H4TQeNO+3Zy8Vi0pHsumHcaO52p0/d/pHHxKq7cC0JTjCVY3dm9L/1pN29OW4cVCHPQbB2RFCRlUta4XnlQ==
+  version "1.8.13"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.13.tgz#40668bfa09adb7c71c3adbacdb0a680c0eec5002"
+  integrity sha512-u+UVZlom+a4LV0nio23q4xGHcGTbdOjM712d5vr3im12JmytFfMBbDT0QbF8X2HmuhtrlQq9lWN1fXHVUuRn1A==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.1"
-    "@posthog/webpack-plugin" "1.2.18"
+    "@posthog/core" "1.20.2"
+    "@posthog/webpack-plugin" "1.2.19"
     semver "^7.7.2"
 
 "@posthog/types@1.342.1":
@@ -2414,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.342.1.tgz#a4d5f7b44539641e910f36818fd4b6aa41022a2f"
   integrity sha512-bcyBdO88FWTkd5AVTa4Nu8T7RfY0WJrG7WMCXum/rcvNjYhS3DmOfKf8o/Bt56vA3J3yeU0vbgrmltYVoTAfaA==
 
-"@posthog/webpack-plugin@1.2.18":
-  version "1.2.18"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.18.tgz#380a1eb632ee38b3a224ba5b4e37e49ef6928067"
-  integrity sha512-2cx3Gvurv3OO12HEqieX7d4AQ18GRx5g+ksAJ+fHLQnO3ksHhf2UeBvRC3Cr6xIcDeT6h+zcgYgBMNTxBo8ikg==
+"@posthog/webpack-plugin@1.2.19":
+  version "1.2.19"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.19.tgz#8111246ec16b24bebd03a09447ef181b8d2ce1bf"
+  integrity sha512-0oy+mkuferiL5hO5tOwgoGlFb5zZO5UqUhDd9a1C16+P9MShQuItwgaMdgGJ+7G15Hq+gzLAmErz6Ffp6qJCgQ==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.1"
+    "@posthog/core" "1.20.2"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -3563,12 +3570,12 @@ axios-proxy-builder@^0.1.2:
     tunnel "^0.0.6"
 
 axios@^1.13.2:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.4.tgz#15d109a4817fb82f73aea910d41a2c85606076bc"
-  integrity sha512-1wVkUaAO6WyaYtCkcYCOx12ZgpGf9Zif+qXa4n+oYzK558YryKqiL6UWwd5DqiH3VRW0GYhTZQ/vlgJrCoNQlg==
+  version "1.13.5"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.5.tgz#5e464688fa127e11a660a2c49441c009f6567a43"
+  integrity sha512-cz4ur7Vb0xS4/KUN0tPWe44eqxrIu31me+fbang3ijiNscE129POzipJJA6zniq2C/Z6sJCjMimjS8Lc/GAs8Q==
   dependencies:
-    follow-redirects "^1.15.6"
-    form-data "^4.0.4"
+    follow-redirects "^1.15.11"
+    form-data "^4.0.5"
     proxy-from-env "^1.1.0"
 
 axobject-query@^4.1.0:
@@ -4804,7 +4811,7 @@ flatted@^3.2.9:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-3.3.3.tgz#67c8fad95454a7c7abebf74bb78ee74a44023358"
   integrity sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==
 
-follow-redirects@^1.15.6:
+follow-redirects@^1.15.11:
   version "1.15.11"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.11.tgz#777d73d72a92f8ec4d2e410eb47352a56b8e8340"
   integrity sha512-deG2P0JfjrTxl50XGCDyfI97ZGVCxIpfKYmfyrQ54n5FO/0gfIES8C/Psl6kWVDolizcaaxZJnTS0QSMxvnsBQ==
@@ -4824,7 +4831,7 @@ foreground-child@^3.1.0:
     cross-spawn "^7.0.6"
     signal-exit "^4.0.1"
 
-form-data@^4.0.0, form-data@^4.0.4:
+form-data@^4.0.0, form-data@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/form-data/-/form-data-4.0.5.tgz#b49e48858045ff4cbf6b03e1805cebcad3679053"
   integrity sha512-8RipRLol37bNs2bhoV67fiTEvdTrbMUYcFTiy3+wuuOnUog2QBHCZWXDRijWQfAkhBj2Uf5UnVaiWwA5vdd82w==
