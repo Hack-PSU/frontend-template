@@ -66,7 +66,7 @@ enum Role {
 // Mapping from application status to its respective color
 const applicationStatusColorMap = new Map<string, string>([
 	['pending', 'text-purple-400'],
-	['accepted', 'text-green-300'],
+	['accepted', 'text-blue-400'],
 	['rejected', 'text-red-600'],
 	['waitlisted', 'text-orange-300'],
 	['confirmed', 'text-green-600'],
@@ -373,7 +373,7 @@ export default function Profile() {
 						{(!isOrganizer && userData?.registration) && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className={`text-2xl text-slate-200 text-center`}>
-									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.application_status)}`}>{userData.registration.application_status.toUpperCase()}</span>
+									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}>{userData.registration.applicationStatus.toUpperCase()}</span>
 								</p>
 							</div>
 						)}
