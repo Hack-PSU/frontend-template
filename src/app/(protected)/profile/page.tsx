@@ -326,10 +326,9 @@ export default function Profile() {
 	};
 
 	const registration = userData?.registration as RegistrationEntity | undefined;
-	const applicationStatus = registration?.applicationStatus;
 	const isOnTime =
 		registration?.rsvpDeadline && registration?.rsvpDeadline >= Date.now();
-	const showRsvp = applicationStatus === "accepted" && isOnTime;
+	const showRsvp = registration?.applicationStatus === "accepted" && isOnTime;
 
 	const openRsvpConfirm = (status: "confirmed" | "declined") => {
 		setRsvpPendingStatus(status);
