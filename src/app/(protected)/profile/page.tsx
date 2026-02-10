@@ -311,7 +311,7 @@ export default function Profile() {
 	const registration = userData?.registration as
 		| RegistrationEntity
 		| undefined;
-	const applicationStatus = registration?.application_status;
+	const applicationStatus = registration?.applicationStatus;
 	const showRsvp = applicationStatus === "accepted";
 
 	const openRsvpConfirm = (status: "confirmed" | "declined") => {
