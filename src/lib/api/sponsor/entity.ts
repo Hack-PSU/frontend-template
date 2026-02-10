@@ -7,4 +7,5 @@ export interface SponsorEntity {
 	lightLogo?: string;
 	order: number;
 	hackathonId?: string;
+	sponsorType: "sponsor" | "partner";
 }

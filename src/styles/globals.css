@@ -165,9 +165,9 @@
 	}
 
 	.sponsors-bg {
-		background-image: url("/sp26/computer_backgrounds/sponsors_seventh_page_computer2.png");
+		background-image: url("/sp26/computer_backgrounds/sponsors_seventh_page_computer3.png");
 		background-size: 100% auto;
-		background-position: center;
+		background-position: top center;
 	}
 
 	@media (max-width: 1024px) {

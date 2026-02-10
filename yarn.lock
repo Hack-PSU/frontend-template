@@ -2399,21 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
-"@posthog/core@1.20.2":
-  version "1.20.2"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.20.2.tgz#1dc2757d1775ca008d596c5629231e75813fb4b9"
-  integrity sha512-aQhrUzOHYr0z/bkwDsJ5hXahdh6oyeWdx2/CHwR6vFG3eK07J69lbuGOj+HGOOxJP1eAdNnsk8J0fj1vqRA9+A==
+"@posthog/core@1.21.0":
+  version "1.21.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.21.0.tgz#f907aa9a6f4d0419585cb11eb5a7c4c27f039abb"
+  integrity sha512-0a2JUIX1vhduP2El/6/J8s5AeYAurIoufQGFgMiGnJE5ajd63o9LFocu2vFYYBnIOmy75y4ADNeW8zSl1keEQQ==
   dependencies:
     cross-spawn "^7.0.6"
 
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.13"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.13.tgz#40668bfa09adb7c71c3adbacdb0a680c0eec5002"
-  integrity sha512-u+UVZlom+a4LV0nio23q4xGHcGTbdOjM712d5vr3im12JmytFfMBbDT0QbF8X2HmuhtrlQq9lWN1fXHVUuRn1A==
+  version "1.8.14"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.14.tgz#c34e07e64c3880e9f23bf124a67d07ffad29c8cc"
+  integrity sha512-RDaKLYXmJuZAFc7NLHvMowXCESe3xaV3KF0LH+9zUvfJ9I4nl9uNX2WMFnfbZf5doK8mWPYVdIRpiXLwgP6e3Q==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.2"
-    "@posthog/webpack-plugin" "1.2.19"
+    "@posthog/core" "1.21.0"
+    "@posthog/webpack-plugin" "1.2.20"
     semver "^7.7.2"
 
 "@posthog/types@1.342.1":
@@ -2421,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.342.1.tgz#a4d5f7b44539641e910f36818fd4b6aa41022a2f"
   integrity sha512-bcyBdO88FWTkd5AVTa4Nu8T7RfY0WJrG7WMCXum/rcvNjYhS3DmOfKf8o/Bt56vA3J3yeU0vbgrmltYVoTAfaA==
 
-"@posthog/webpack-plugin@1.2.19":
-  version "1.2.19"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.19.tgz#8111246ec16b24bebd03a09447ef181b8d2ce1bf"
-  integrity sha512-0oy+mkuferiL5hO5tOwgoGlFb5zZO5UqUhDd9a1C16+P9MShQuItwgaMdgGJ+7G15Hq+gzLAmErz6Ffp6qJCgQ==
+"@posthog/webpack-plugin@1.2.20":
+  version "1.2.20"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.20.tgz#a6355a38a136248b82478d2a9175f7566fca412a"
+  integrity sha512-rqyCFBzCwMne2YdjbSJEijb0f/wU5QKIX53ObgxdazfQlVroflb+qwevIKkkU1lUg5e4S6zYvVNNwrpe0Zoomw==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.20.2"
+    "@posthog/core" "1.21.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"

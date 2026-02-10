@@ -169,13 +169,16 @@ const SponsorTier: React.FC<SponsorTierProps> = ({
 const Sponsors: React.FC = () => {
 	const { data: sponsors, isLoading, error } = useAllSponsors();
 
-	// Group sponsors by tier level
+	// Group sponsors by tier level, filtering out partners
 	const sponsorsByTier = useMemo(() => {
 		if (!sponsors) return {};
 
 		const grouped: Record<string, SponsorEntity[]> = {};
 
 		sponsors.forEach((sponsor) => {
+			// Skip partners - they'll be displayed separately
+			if (sponsor.sponsorType === "partner") return;
+
 			const level = sponsor.level.toLowerCase();
 			if (!grouped[level]) {
 				grouped[level] = [];
@@ -189,6 +192,14 @@ const Sponsors: React.FC = () => {
 		});
 
 		return grouped;
+	}, [sponsors]);
+
+	// Get partners separately
+	const partners = useMemo(() => {
+		if (!sponsors) return [];
+		return sponsors
+			.filter((sponsor) => sponsor.sponsorType === "partner")
+			.sort((a, b) => a.order - b.order);
 	}, [sponsors]);
 
 	if (isLoading) {
@@ -217,10 +228,8 @@ const Sponsors: React.FC = () => {
 	return (
 		<section
 			id="sponsors"
-			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
+			className="sponsors-bg relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
 			style={{
-				backgroundImage: "url('/f25/sponsors_bg.png')",
-				backgroundSize: "cover",
 				borderTop: "2px solid #ff88e9ff",
 				borderBottom: "2px solid #ff88e9ff",
 				boxShadow:
@@ -237,7 +246,6 @@ const Sponsors: React.FC = () => {
 				transition={{ duration: 0.8, delay: 0.5 }}
 			></motion.div>
 
-			{/* Glowing Decorative Images - f25/1.png */}
 			<motion.div
 				className="absolute z-10"
 				style={{
@@ -313,7 +321,7 @@ const Sponsors: React.FC = () => {
 			></motion.div>
 
 			{/* Header */}
-			<div className="text-center mb-12 z-10 relative">
+			<div className="text-center mb-12 mt-12 z-10 relative">
 				<motion.div
 					initial={{ opacity: 0, y: -30 }}
 					animate={{ opacity: 1, y: 0 }}
@@ -335,7 +343,7 @@ const Sponsors: React.FC = () => {
 			</div>
 
 			{/* Main Content */}
-			<div className="w-full max-w-7xl mx-auto">
+			<div className="w-full max-w-7xl mx-auto mt-12">
 				{/* Sponsor Pyramid */}
 				<div className="space-y-8">
 					{Object.entries(TIER_CONFIG).map(([tierKey, config], index) => {
@@ -350,6 +358,79 @@ const Sponsors: React.FC = () => {
 						);
 					})}
 				</div>
+
+				{/* Event Partners Section */}
+				{partners.length > 0 && (
+					<motion.div
+						className="mt-20 pt-12 border-t-2 border-[#ff88e9ff] w-full flex flex-col items-center"
+						initial={{ opacity: 0, y: 30 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 0.8, delay: 0.5 }}
+					>
+						<motion.h2
+							className="text-2xl md:text-3xl font-bold text-[#2f234bff] text-center mb-8"
+							style={{
+								fontFamily: "Orbitron, monospace",
+								backgroundColor: "#ffffff",
+								borderRadius: "12px",
+								padding: "0.5rem 1rem",
+							}}
+							initial={{ opacity: 0, y: -20 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 0.6, delay: 0.6 }}
+						>
+							Event Partners
+						</motion.h2>
+						<div className="flex flex-wrap justify-center gap-8 mt-10">
+							{partners.map((partner, index) => {
+								const tierConfig = TIER_CONFIG.partner;
+								const handleClick = () => {
+									if (partner.link) {
+										window.open(partner.link, "_blank", "noopener,noreferrer");
+									}
+								};
+								return (
+									<motion.div
+										key={partner.id}
+										className={`
+											relative p-6 rounded-2xl border-2 ${tierConfig.borderColor} ${tierConfig.containerBg} 
+											${tierConfig.shadowColor} cursor-pointer transition-all duration-300
+											hover:shadow-xl hover:scale-105 active:scale-95
+										`}
+										onClick={handleClick}
+										initial={{ opacity: 0, y: 20, scale: 0.9 }}
+										animate={{ opacity: 1, y: 0, scale: 1 }}
+										transition={{
+											duration: 0.6,
+											delay: index * 0.1,
+											type: "spring",
+											stiffness: 100,
+										}}
+										whileHover={{
+											scale: 1.05,
+											transition: { duration: 0.3 },
+										}}
+										whileTap={{ scale: 0.95 }}
+									>
+										<div className="flex items-center justify-center h-full">
+											<div
+												className={`relative ${tierConfig.logoSize} flex items-center justify-center`}
+											>
+												<Image
+													src={partner.darkLogo || partner.lightLogo || ""}
+													alt={partner.name}
+													fill
+													className="object-contain drop-shadow-lg"
+													sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+												/>
+											</div>
+										</div>
+									</motion.div>
+								);
+							})}
+						</div>
+					</motion.div>
+				)}
 
 				{/* Call to Action */}
 				<motion.div
