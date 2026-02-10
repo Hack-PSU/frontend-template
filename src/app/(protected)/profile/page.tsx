@@ -413,7 +413,7 @@ export default function Profile() {
 							{isOrganizer && <Shield className="h-4 w-4" />}
 							{isOrganizer
 								? `HackPSU ${getRoleName(userRole)}`
-								: "HackPSU Participant"}
+								: isConfirmed ? "HackPSU Participant" : "HackPSU Applicant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
