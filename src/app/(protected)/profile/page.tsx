@@ -13,6 +13,7 @@ import { useFlagState } from "@/lib/api/flag/hook";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
 import {
 	Card,
 	CardContent,
@@ -308,11 +309,11 @@ export default function Profile() {
 		}
 	};
 
-	const registration = userData?.registration as
-		| RegistrationEntity
-		| undefined;
+	const registration = userData?.registration as RegistrationEntity | undefined;
 	const applicationStatus = registration?.applicationStatus;
-	const showRsvp = applicationStatus === "accepted";
+	const isOnTime =
+		registration?.rsvpDeadline && registration?.rsvpDeadline >= Date.now();
+	const showRsvp = applicationStatus === "accepted" && isOnTime;
 
 	const openRsvpConfirm = (status: "confirmed" | "declined") => {
 		setRsvpPendingStatus(status);
@@ -426,12 +427,14 @@ export default function Profile() {
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
-							<div className="flex flex-wrap gap-3">
+							<div className="flex flex-col gap-3 w-full">
 								<Button
 									variant="success"
 									onClick={() => openRsvpConfirm("confirmed")}
 									disabled={isPatchingApplicationStatus}
+									className="w-full"
 								>
+									<Check className="h-4 w-4" />
 									{isPatchingApplicationStatus ? (
 										<Loader2 className="h-4 w-4 animate-spin" />
 									) : (
@@ -442,7 +445,9 @@ export default function Profile() {
 									variant="destructive"
 									onClick={() => openRsvpConfirm("declined")}
 									disabled={isPatchingApplicationStatus}
+									className="w-full"
 								>
+									<X className="h-4 w-4" />
 									No
 								</Button>
 							</div>
@@ -817,9 +822,20 @@ export default function Profile() {
 						<DialogHeader>
 							<DialogTitle>Are you sure?</DialogTitle>
 							<DialogDescription>
-								{rsvpPendingStatus === "confirmed"
-									? "You are confirming that you will attend HackPSU."
-									: "You are declining your spot. This cannot be undone."}
+								{rsvpPendingStatus === "confirmed" ? (
+									<>
+										<div>
+											You are confirming that you will attend HackPSU. This
+											cannot be undone.
+										</div>
+										<div className="mt-2">
+											<strong>IMPORTANT:</strong> If you confirm and do not
+											attend, you may be banned from the next hackathon.
+										</div>
+									</>
+								) : (
+									"You are declining your spot. This cannot be undone."
+								)}
 							</DialogDescription>
 						</DialogHeader>
 						<DialogFooter className="gap-2 sm:gap-0">
@@ -834,7 +850,9 @@ export default function Profile() {
 								Cancel
 							</Button>
 							<Button
-								variant={rsvpPendingStatus === "declined" ? "destructive" : "success"}
+								variant={
+									rsvpPendingStatus === "declined" ? "destructive" : "success"
+								}
 								onClick={handleRsvpConfirm}
 								disabled={isPatchingApplicationStatus}
 							>

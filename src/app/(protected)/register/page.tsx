@@ -56,11 +56,11 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 		| "shareAddressSponsors"
 		| "driving"
 		| "shareAddressMlh"
-		| "application_status"
-		| "accepted_at"
-		| "rsvp_deadline"
-		| "rsvp_at"
-		| "accepted_by"
+		| "applicationStatus"
+		| "acceptedAt"
+		| "rsvpDeadline"
+		| "rsvpAt"
+		| "acceptedBy"
 	> & {
 		resume: File | null;
 		hasDietaryRestrictions: boolean;
@@ -142,7 +142,6 @@ export default function RegistrationPage() {
 		travel_cost: 0,
 		travel_method: "",
 		travel_additional: "",
-
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
