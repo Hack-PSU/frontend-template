@@ -51,3 +51,5 @@ export interface RegistrationCreateEntity extends Omit<
 > {}
 
 export interface RegistrationUpdateEntity extends Partial<RegistrationCreateEntity> {}
+
+export type ApplicationStatusRsvp = "confirmed" | "declined";
