@@ -20,10 +20,10 @@ export interface RegistrationEntity {
 	time: number;
 	veteran: string;
 	excitement: string;
-	zip_code?: string;
-	travel_cost?: number;
-	travel_method?: string;
-	travel_additional?: string;
+	zipCode?: string;
+	travelCost?: number;
+	travelMethod?: string;
+	travelAdditional?: string;
 	applicationStatus:
 		| "pending"
 		| "accepted"

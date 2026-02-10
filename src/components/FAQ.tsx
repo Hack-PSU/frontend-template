@@ -170,9 +170,40 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 	);
 };
 
+function playRobotSound() {
+	try {
+		const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+		const playBeep = (frequency: number, startTime: number, duration: number) => {
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+			osc.type = "square";
+			osc.frequency.setValueAtTime(frequency, startTime);
+			osc.frequency.setValueAtTime(frequency * 0.5, startTime + duration * 0.6);
+			gain.gain.setValueAtTime(0.12, startTime);
+			gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
+			osc.start(startTime);
+			osc.stop(startTime + duration);
+		};
+		playBeep(440, 0, 0.08);
+		playBeep(330, 0.12, 0.1);
+		playBeep(550, 0.26, 0.12);
+	} catch {
+		// ignore if audio not supported or blocked
+	}
+}
+
 const FAQ: React.FC = () => {
 	const [openItems, setOpenItems] = useState<Set<number>>(new Set());
 	const [fishClicked, setFishClicked] = useState(false);
+	const [robotDance, setRobotDance] = useState(false);
+
+	const handleRobotClick = () => {
+		playRobotSound();
+		setRobotDance(true);
+		setTimeout(() => setRobotDance(false), 800);
+	};
 
 	const toggleItem = (index: number) => {
 		setOpenItems((prev) => {
@@ -228,25 +259,43 @@ const FAQ: React.FC = () => {
 				{/* Left side - Image on desktop, hidden on mobile */}
 				<div className="hidden lg:flex lg:w-1/2 items-center justify-center px-[4vw] pb-[8vw]">
 					<motion.div
-						className="relative"
+						className="relative cursor-pointer select-none"
 						style={{
 							width: "clamp(200px, 50vw, 800px)",
 							height: "clamp(200px, 50vw, 800px)",
 						}}
 						initial={{ opacity: 1, scale: 1, rotate: 0 }}
-						animate={{ scale: [0.9, 1, 0.9], opacity: [0.8, 1, 0.8] }}
-						transition={{
-							duration: 6,
-							repeat: Infinity,
-							ease: "easeInOut",
-							delay: 0.2,
-						}}
+						animate={
+							robotDance
+								? {
+										scale: [1, 1.15, 0.95, 1],
+										rotate: [0, -12, 12, -8, 8, 0],
+										transition: {
+											duration: 0.8,
+											ease: "easeOut",
+										},
+									}
+								: {
+										scale: [0.9, 1, 0.9],
+										opacity: [0.8, 1, 0.8],
+										rotate: 0,
+										transition: {
+											duration: 6,
+											repeat: Infinity,
+											ease: "easeInOut",
+											delay: 0.2,
+										},
+									}
+						}
+						onClick={handleRobotClick}
+						title="Click me!"
 					>
 						<Image
 							src="/sp26/robot.png"
 							alt="FAQ Illustration"
 							fill
-							className="object-contain"
+							className="object-contain pointer-events-none"
+							draggable={false}
 						/>
 					</motion.div>
 				</div>

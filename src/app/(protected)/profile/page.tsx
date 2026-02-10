@@ -67,6 +67,16 @@ enum Role {
 	FINANCE = 5,
 }
 
+// Mapping from application status to its respective color
+const applicationStatusColorMap = new Map<string, string>([
+	['pending', 'text-purple-400'],
+	['accepted', 'text-blue-400'],
+	['rejected', 'text-red-600'],
+	['waitlisted', 'text-orange-300'],
+	['confirmed', 'text-green-600'],
+	['declined', 'text-stone-500']
+]);
+
 // Utility to get user role from token
 function getUserRole(token: string | undefined): number {
 	if (!token) return Role.NONE;
@@ -134,6 +144,12 @@ export default function Profile() {
 	const userRole = getUserRole(token);
 	const isOrganizer = userRole > Role.NONE;
 
+	// Check if user has a confirmed application
+	const applicationStatus =
+		(userData?.registration as any)?.applicationStatus;
+	const isConfirmed = applicationStatus === "confirmed";
+	console.log("User Data: " + JSON.stringify(userData));
+	console.log("Registration: " + JSON.stringify(userData?.registration?.applicationStatus));
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
@@ -414,6 +430,13 @@ export default function Profile() {
 								</p>
 							</div>
 						)}
+						{(!isOrganizer && userData?.registration) && (
+							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
+								<p className={`text-2xl text-slate-200 text-center`}>
+									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}>{userData.registration.applicationStatus.toUpperCase()}</span>
+								</p>
+							</div>
+						)}
 					</CardContent>
 				</Card>
 
@@ -456,286 +479,312 @@ export default function Profile() {
 				)}
 
 				{/* QR Code Section */}
-				{applicationStatus === "confirmed" && (
+				{isOrganizer || isConfirmed ? (
+					<>
+						{isConfirmed && (
+							<Card>
+								<CardHeader>
+									<CardTitle className="flex items-center space-x-2">
+										<QrCode className="h-6 w-6" />
+										<span>Check-in QR Code</span>
+									</CardTitle>
+									<CardDescription>
+										Use this QR code to sign in for hackathons and workshops
+									</CardDescription>
+								</CardHeader>
+								<CardContent className="space-y-4">
+									<Button
+										onClick={toggleQRCode}
+										variant="outline"
+										className="w-full bg-transparent"
+										size="lg"
+									>
+										{showQRCode ? (
+											<>
+												<EyeOff className="mr-2 h-4 w-4" />
+												Hide QR Code
+											</>
+										) : (
+											<>
+												<Eye className="mr-2 h-4 w-4" />
+												Show QR Code
+											</>
+										)}
+									</Button>
+
+									{showQRCode && (
+										<div className="flex justify-center">
+											<div className="bg-white p-4 rounded-lg shadow-lg">
+												<QRCode
+													value={`HACKPSU_${user.uid}`}
+													size={Math.min(300, window.innerWidth - 120)}
+													level="H"
+												/>
+											</div>
+										</div>
+									)}
+								</CardContent>
+							</Card>
+						)}
+
+						{/* Wallet Integration */}
+						<Card>
+							<CardHeader>
+								<CardTitle className="flex items-center space-x-2">
+									<Wallet className="h-6 w-6" />
+									<span>Add to Wallet</span>
+								</CardTitle>
+								<CardDescription>
+									Save your HackPSU pass to your digital wallet for easy access
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+									<div className="flex justify-center">
+										{isCreatingGoogleWallet ? (
+											<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
+												<Loader2 className="h-6 w-6 animate-spin" />
+											</div>
+										) : (
+											<Image
+												src="/google_wallet.svg"
+												alt="Add to Google Wallet"
+												width={200}
+												height={60}
+												className={`transition-opacity duration-200 ${
+													isOrganizer
+														? "opacity-30 cursor-not-allowed"
+														: "cursor-pointer hover:opacity-80"
+												}`}
+												onClick={isOrganizer ? undefined : handleAddToGoogleWallet}
+												priority
+											/>
+										)}
+									</div>
+
+									<div className="flex justify-center">
+										{isCreatingAppleWallet ? (
+											<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
+												<Loader2 className="h-6 w-6 animate-spin" />
+											</div>
+										) : (
+											<Image
+												src="/apple_wallet.svg"
+												alt="Add to Apple Wallet"
+												width={200}
+												height={60}
+												className={`transition-opacity duration-200 ${
+													isOrganizer
+														? "opacity-30 cursor-not-allowed"
+														: "cursor-pointer hover:opacity-80"
+												}`}
+												onClick={isOrganizer ? undefined : handleAddToAppleWallet}
+												priority
+											/>
+										)}
+									</div>
+								</div>
+							</CardContent>
+						</Card>
+
+						{/* Team Section */}
+						<Card>
+							<CardHeader>
+								<CardTitle className="flex items-center space-x-2">
+									<Users className="h-6 w-6" />
+									<span>Your Team</span>
+								</CardTitle>
+								<CardDescription>
+									{userTeam
+										? "Team information and management"
+										: "Create or join a team for HackPSU"}
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								{userTeam ? (
+									<>
+										<div className="flex items-center justify-between">
+											<div>
+												<h3 className="font-semibold text-lg">{userTeam.name}</h3>
+											</div>
+											{!userTeam.isActive && (
+												<div className="flex items-center space-x-2 text-yellow-600">
+													<Lock className="h-4 w-4" />
+													<span className="text-sm font-medium">Locked</span>
+												</div>
+											)}
+										</div>
+										<div className="space-y-2">
+											<p className="text-sm font-medium">
+												Members ({getTeamMembers().length}/5):
+											</p>
+											<div className="space-y-1">
+												{getTeamMembers().map((memberId) => (
+													<TeamMemberDisplay key={memberId} memberId={memberId!} />
+												))}
+											</div>
+										</div>
+										<Button
+											onClick={handleTeam}
+											className="w-full"
+											variant="default"
+											size="lg"
+											disabled={isOrganizer}
+										>
+											<Users className="mr-2 h-4 w-4" />
+											Manage Team
+										</Button>
+										{roomReservationFlag?.isEnabled && (
+											<Button
+												onClick={handleReserve}
+												className="w-full"
+												variant="default"
+												size="lg"
+												disabled={isOrganizer}
+											>
+												<Room className="mr-2 h-4 w-4" />
+												Reserve Room
+											</Button>
+										)}
+									</>
+								) : (
+									<>
+										<p className="text-gray-600">
+											{isOrganizer
+												? "Team management is for participants only."
+												: "You're not part of any team yet."}
+										</p>
+										<Button
+											onClick={handleTeam}
+											className="w-full"
+											variant="default"
+											size="lg"
+											disabled={isOrganizer}
+										>
+											<Users className="mr-2 h-4 w-4" />
+											Create or Join Team
+										</Button>
+									</>
+								)}
+							</CardContent>
+						</Card>
+
+						{/* Actions */}
+						<Card>
+							<CardHeader>
+								<CardTitle>Quick Actions</CardTitle>
+								<CardDescription>
+									{isOrganizer
+										? "View-only organizer access"
+										: "Manage your HackPSU experience"}
+								</CardDescription>
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<Button
+									onClick={handleProject}
+									className="w-full"
+									variant="default"
+									size="lg"
+									disabled={isOrganizer}
+								>
+									<FileText className="mr-2 h-4 w-4" />
+									Submit Project
+								</Button>
+
+								<Button
+									onClick={handleExpo}
+									className="w-full"
+									variant="default"
+									size="lg"
+								>
+									<FolderOpen className="mr-2 h-4 w-4" />
+									View Project Expo
+								</Button>
+
+								<Button
+									onClick={handleReimbursement}
+									className="w-full"
+									variant="default"
+									size="lg"
+									disabled={isOrganizer}
+								>
+									<FileText className="mr-2 h-4 w-4" />
+									Submit Reimbursement Form
+								</Button>
+
+								<Button
+									onClick={handleExtraCredit}
+									className="w-full"
+									variant="default"
+									size="lg"
+									disabled={isOrganizer}
+								>
+									<GraduationCap className="mr-2 h-4 w-4" />
+									Manage Extra Credit
+								</Button>
+
+								<Button
+									onClick={() => setShowResumeModal(true)}
+									className="w-full"
+									variant="default"
+									size="lg"
+									disabled={isOrganizer}
+								>
+									<Upload className="mr-2 h-4 w-4" />
+									Upload Resume
+								</Button>
+
+								{helpDeskFlag?.isEnabled && (
+									<Button
+										onClick={() =>
+											window.open("https://qstack.hackpsu.org", "_blank")
+										}
+										className="w-full"
+										variant="default"
+										size="lg"
+									>
+										<HelpCircle className="mr-2 h-4 w-4" />
+										Get Help / Submit a Ticket
+									</Button>
+								)}
+
+								<Separator />
+
+								<Button
+									onClick={handleSignOut}
+									variant="destructive"
+									className="w-full"
+									size="lg"
+								>
+									<LogOut className="mr-2 h-4 w-4" />
+									Sign Out
+								</Button>
+							</CardContent>
+						</Card>
+					</>
+				) : (
 					<Card>
 						<CardHeader>
-							<CardTitle className="flex items-center space-x-2">
-								<QrCode className="h-6 w-6" />
-								<span>Check-in QR Code</span>
-							</CardTitle>
+							<CardTitle>Actions Unavailable</CardTitle>
 							<CardDescription>
-								Use this QR code to sign in for hackathons and workshops
+								Access to our features is currently unavailable. Once confirmed, you’ll
+								gain full access to QR check-in, wallet passes, team features, and
+								project tools.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
 							<Button
-								onClick={toggleQRCode}
-								variant="outline"
-								className="w-full bg-transparent"
+								onClick={handleSignOut}
+								variant="destructive"
+								className="w-full"
 								size="lg"
 							>
-								{showQRCode ? (
-									<>
-										<EyeOff className="mr-2 h-4 w-4" />
-										Hide QR Code
-									</>
-								) : (
-									<>
-										<Eye className="mr-2 h-4 w-4" />
-										Show QR Code
-									</>
-								)}
+								<LogOut className="mr-2 h-4 w-4" />
+								Sign Out
 							</Button>
-
-							{showQRCode && (
-								<div className="flex justify-center">
-									<div className="bg-white p-4 rounded-lg shadow-lg">
-										<QRCode
-											value={`HACKPSU_${user.uid}`}
-											size={Math.min(300, window.innerWidth - 120)}
-											level="H"
-										/>
-									</div>
-								</div>
-							)}
 						</CardContent>
 					</Card>
 				)}
-
-				{/* Wallet Integration */}
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<Wallet className="h-6 w-6" />
-							<span>Add to Wallet</span>
-						</CardTitle>
-						<CardDescription>
-							Save your HackPSU pass to your digital wallet for easy access
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div className="flex justify-center">
-								{isCreatingGoogleWallet ? (
-									<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
-										<Loader2 className="h-6 w-6 animate-spin" />
-									</div>
-								) : (
-									<Image
-										src="/google_wallet.svg"
-										alt="Add to Google Wallet"
-										width={200}
-										height={60}
-										className={`transition-opacity duration-200 ${
-											isOrganizer
-												? "opacity-30 cursor-not-allowed"
-												: "cursor-pointer hover:opacity-80"
-										}`}
-										onClick={isOrganizer ? undefined : handleAddToGoogleWallet}
-										priority
-									/>
-								)}
-							</div>
-
-							<div className="flex justify-center">
-								{isCreatingAppleWallet ? (
-									<div className="flex items-center justify-center w-[200px] h-[60px] bg-gray-100 rounded">
-										<Loader2 className="h-6 w-6 animate-spin" />
-									</div>
-								) : (
-									<Image
-										src="/apple_wallet.svg"
-										alt="Add to Apple Wallet"
-										width={200}
-										height={60}
-										className={`transition-opacity duration-200 ${
-											isOrganizer
-												? "opacity-30 cursor-not-allowed"
-												: "cursor-pointer hover:opacity-80"
-										}`}
-										onClick={isOrganizer ? undefined : handleAddToAppleWallet}
-										priority
-									/>
-								)}
-							</div>
-						</div>
-					</CardContent>
-				</Card>
-
-				{/* Team Section */}
-				<Card>
-					<CardHeader>
-						<CardTitle className="flex items-center space-x-2">
-							<Users className="h-6 w-6" />
-							<span>Your Team</span>
-						</CardTitle>
-						<CardDescription>
-							{userTeam
-								? "Team information and management"
-								: "Create or join a team for HackPSU"}
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						{userTeam ? (
-							<>
-								<div className="flex items-center justify-between">
-									<div>
-										<h3 className="font-semibold text-lg">{userTeam.name}</h3>
-									</div>
-									{!userTeam.isActive && (
-										<div className="flex items-center space-x-2 text-yellow-600">
-											<Lock className="h-4 w-4" />
-											<span className="text-sm font-medium">Locked</span>
-										</div>
-									)}
-								</div>
-								<div className="space-y-2">
-									<p className="text-sm font-medium">
-										Members ({getTeamMembers().length}/5):
-									</p>
-									<div className="space-y-1">
-										{getTeamMembers().map((memberId) => (
-											<TeamMemberDisplay key={memberId} memberId={memberId!} />
-										))}
-									</div>
-								</div>
-								<Button
-									onClick={handleTeam}
-									className="w-full"
-									variant="default"
-									size="lg"
-									disabled={isOrganizer}
-								>
-									<Users className="mr-2 h-4 w-4" />
-									Manage Team
-								</Button>
-								{roomReservationFlag?.isEnabled && (
-									<Button
-										onClick={handleReserve}
-										className="w-full"
-										variant="default"
-										size="lg"
-										disabled={isOrganizer}
-									>
-										<Room className="mr-2 h-4 w-4" />
-										Reserve Room
-									</Button>
-								)}
-							</>
-						) : (
-							<>
-								<p className="text-gray-600">
-									{isOrganizer
-										? "Team management is for participants only."
-										: "You're not part of any team yet."}
-								</p>
-								<Button
-									onClick={handleTeam}
-									className="w-full"
-									variant="default"
-									size="lg"
-									disabled={isOrganizer}
-								>
-									<Users className="mr-2 h-4 w-4" />
-									Create or Join Team
-								</Button>
-							</>
-						)}
-					</CardContent>
-				</Card>
-
-				{/* Actions */}
-				<Card>
-					<CardHeader>
-						<CardTitle>Quick Actions</CardTitle>
-						<CardDescription>
-							{isOrganizer
-								? "View-only organizer access"
-								: "Manage your HackPSU experience"}
-						</CardDescription>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<Button
-							onClick={handleProject}
-							className="w-full"
-							variant="default"
-							size="lg"
-							disabled={isOrganizer}
-						>
-							<FileText className="mr-2 h-4 w-4" />
-							Submit Project
-						</Button>
-
-						<Button
-							onClick={handleExpo}
-							className="w-full"
-							variant="default"
-							size="lg"
-						>
-							<FolderOpen className="mr-2 h-4 w-4" />
-							View Project Expo
-						</Button>
-
-						<Button
-							onClick={handleReimbursement}
-							className="w-full"
-							variant="default"
-							size="lg"
-							disabled={isOrganizer}
-						>
-							<FileText className="mr-2 h-4 w-4" />
-							Submit Reimbursement Form
-						</Button>
-
-						<Button
-							onClick={handleExtraCredit}
-							className="w-full"
-							variant="default"
-							size="lg"
-							disabled={isOrganizer}
-						>
-							<GraduationCap className="mr-2 h-4 w-4" />
-							Manage Extra Credit
-						</Button>
-
-						<Button
-							onClick={() => setShowResumeModal(true)}
-							className="w-full"
-							variant="default"
-							size="lg"
-							disabled={isOrganizer}
-						>
-							<Upload className="mr-2 h-4 w-4" />
-							Upload Resume
-						</Button>
-
-						{helpDeskFlag?.isEnabled && (
-							<Button
-								onClick={() =>
-									window.open("https://qstack.hackpsu.org", "_blank")
-								}
-								className="w-full"
-								variant="default"
-								size="lg"
-							>
-								<HelpCircle className="mr-2 h-4 w-4" />
-								Get Help / Submit a Ticket
-							</Button>
-						)}
-
-						<Separator />
-
-						<Button
-							onClick={handleSignOut}
-							variant="destructive"
-							className="w-full"
-							size="lg"
-						>
-							<LogOut className="mr-2 h-4 w-4" />
-							Sign Out
-						</Button>
-					</CardContent>
-				</Card>
 
 				{/* Resume Upload Modal */}
 				<Dialog open={showResumeModal} onOpenChange={setShowResumeModal}>
