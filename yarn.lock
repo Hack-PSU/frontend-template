@@ -2382,9 +2382,9 @@
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@posthog/cli@~0.5.26":
-  version "0.5.26"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.26.tgz#b66c9e2482fa7e61791dd88f489517cb652083be"
-  integrity sha512-X3k2jtSaR7CGghcBlduU2qZdqu8iSYmMx/Uy2XxJCXCsnyiD/jcuNSwUrH2y3IbNPmxb0kTWKEtcR+HCvP/zcg==
+  version "0.5.27"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.27.tgz#7f72dbb6cd434068bbda71a0dd55481056662736"
+  integrity sha512-r/jzoVUsOYfcX8h97WiMHyIGN99ZFSVyQTlB2qc/mryiMnbWUKB8TDNwSlqimkU4fHjQnaLuu/QdFum6uzhb8g==
   dependencies:
     axios "^1.13.2"
     axios-proxy-builder "^0.1.2"
@@ -2399,14 +2399,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.22.0":
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.22.0.tgz#058ec7f126dd2cc1a189c614f65a0f8bdadc23df"
+  integrity sha512-WkmOnq95aAOu6yk6r5LWr5cfXsQdpVbWDCwOxQwxSne8YV6GuZET1ziO5toSQXgrgbdcjrSz2/GopAfiL6iiAA==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.14"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.14.tgz#c34e07e64c3880e9f23bf124a67d07ffad29c8cc"
-  integrity sha512-RDaKLYXmJuZAFc7NLHvMowXCESe3xaV3KF0LH+9zUvfJ9I4nl9uNX2WMFnfbZf5doK8mWPYVdIRpiXLwgP6e3Q==
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.15.tgz#af23b3e872acd1706125178fa9b6f34d7f8f6416"
+  integrity sha512-gv0+uVEnsIQrOkvKm2+TH5j6/uMLky5XUKazQflNJyAavuESzUXq5m2g2yUBtJxvUwRKL63ji6+xSH/CcPT4MQ==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.21.0"
-    "@posthog/webpack-plugin" "1.2.20"
+    "@posthog/core" "1.22.0"
+    "@posthog/webpack-plugin" "1.2.21"
     semver "^7.7.2"
 
 "@posthog/types@1.345.2":
@@ -2414,13 +2421,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.345.2.tgz#e2cfdd861d1fa8033be0167b5b1dd22a013edfea"
   integrity sha512-VZ1I+bp1YbYG4pSN84YAYCfvUyG5PmKIHx0ucZ6HO23sRgMZw381LLzfBAtmsA4tQ9+uMLigCTIZ4sDMl4ADFw==
 
-"@posthog/webpack-plugin@1.2.20":
-  version "1.2.20"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.20.tgz#a6355a38a136248b82478d2a9175f7566fca412a"
-  integrity sha512-rqyCFBzCwMne2YdjbSJEijb0f/wU5QKIX53ObgxdazfQlVroflb+qwevIKkkU1lUg5e4S6zYvVNNwrpe0Zoomw==
+"@posthog/webpack-plugin@1.2.21":
+  version "1.2.21"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.21.tgz#61309aa8dc86299f42126481e2a10a749effc719"
+  integrity sha512-Rx5XebuMsQo2C6l2cgP+Ktz3ZrV9pX2TmfUnBOGjusVV6ibdYyBlr1WYFNyuw8ba0zmUpfNb8M22DQVBHjDd/w==
   dependencies:
     "@posthog/cli" "~0.5.26"
-    "@posthog/core" "1.21.0"
+    "@posthog/core" "1.22.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -4970,9 +4977,9 @@ glob@^10.3.10:
     path-scurry "^1.11.1"
 
 glob@^13.0.0:
-  version "13.0.1"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-13.0.1.tgz#c59a2500c9a5f1ab9cdd370217ced63c2aa81e60"
-  integrity sha512-B7U/vJpE3DkJ5WXTgTpTRN63uV42DseiXXKMwG14LQBXmsdeIoHAPbU/MEo6II0k5ED74uc2ZGTC6MwHFQhF6w==
+  version "13.0.2"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-13.0.2.tgz#74b28859255e319c84d1aed1a0a5b5248bfea227"
+  integrity sha512-035InabNu/c1lW0tzPhAgapKctblppqsKKG9ZaNzbr+gXwWMjXoiyGSyB9sArzrjG7jY+zntRq5ZSUYemrnWVQ==
   dependencies:
     minimatch "^10.1.2"
     minipass "^7.1.2"
@@ -5605,9 +5612,9 @@ lru-cache@^10.2.0:
   integrity sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==
 
 lru-cache@^11.0.0:
-  version "11.2.5"
-  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.5.tgz#6811ae01652ae5d749948cdd80bcc22218c6744f"
-  integrity sha512-vFrFJkWtJvJnD5hg+hJvVE8Lh/TcMzKnTgCWmtBipwI5yLX/iX+5UB2tfuyODF5E7k9xEzMdYgGqaSb1c0c5Yw==
+  version "11.2.6"
+  resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-11.2.6.tgz#356bf8a29e88a7a2945507b31f6429a65a192c58"
+  integrity sha512-ESL2CrkS/2wTPfuend7Zhkzo2u0daGJ/A2VucJOgQ/C48S/zB8MMeMHSGKYpXhIjbPxfuezITkaBH1wqv00DDQ==
 
 lru-cache@^5.1.1:
   version "5.1.1"
