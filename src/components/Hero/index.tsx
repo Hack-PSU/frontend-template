@@ -8,10 +8,12 @@ import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import settings from "@/lib/config/settings.json";
 import MemoryGame from "@/components/MemoryGame";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } = useFlagState("Registrations");
 
 	// Use React Query to fetch the active hackathon data.
 	const {
@@ -482,6 +484,7 @@ Happy hacking!
 				transition={{ duration: 1, delay: 0.6 }}
 			>
 				{/* Register Button */}
+				{registrationsFlagData?.isEnabled && (
 				<motion.button
 					onClick={() => router.push("/profile")}
 					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
@@ -510,7 +513,7 @@ Happy hacking!
 						Register now
 					</div>
 				</motion.button>
-
+				)}
 				{/* Discord Button */}
 				<motion.button
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}
