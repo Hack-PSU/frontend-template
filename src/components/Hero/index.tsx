@@ -40,7 +40,7 @@ const Hero = () => {
 				if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
 				return false;
 			}
-			glitchTimeoutRef.current = setTimeout(() => setGlitchActive(false), 3000);
+			glitchTimeoutRef.current = setTimeout(() => setGlitchActive(false), 500);
 			return true;
 		});
 	}, []);
