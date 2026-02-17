@@ -2375,9 +2375,9 @@
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
 "@posthog/cli@~0.5.29":
-  version "0.5.29"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.29.tgz#32b9165087ce2b184e84cb77d7fcefc2a86bfe15"
-  integrity sha512-HIOyyexpFjpOqxc9Rki+kGTbyTXcmuyWKxHEIZYj1riXUu7PRi2ZH8VkVIvp8DirqTDAouAjlxLu3rF+U1JwLg==
+  version "0.5.30"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.5.30.tgz#d20273c8d2cc0e039f9790fca49d0888e1899367"
+  integrity sha512-smKwhAVWk2iHr+I0S3b6OaJsdJL/8yZSmyeMag/4L7QnFZ5FmgkmQgw0bhbuJAOEBTVAnnFCXd59MkoAhqihow==
   dependencies:
     axios "^1.13.2"
     axios-proxy-builder "^0.1.2"
@@ -2392,14 +2392,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.23.0":
+  version "1.23.0"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.23.0.tgz#e5c89e2f1fcd433391b5a2cf01cd797617ebd5df"
+  integrity sha512-WXYL4+trl27iV8/Y+ESADOYDB7jBhbEj6q3AEQdn+9ygYG06Q3rZSdWk4ZVn8FdrD3mlq8fEqkUgRCekzp2W4g==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.16"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.16.tgz#3698db12f29b3575655185000ed9e27e82c113ca"
-  integrity sha512-a7gDXf55QTkksLR/bcsrrKuGl105kKBHyH6WvZMbR1zjPKI+pf2pXyhaho3Ue5xT7fKw+zFqiwy78ogIFfLQyg==
+  version "1.8.17"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.17.tgz#3b6269e6ca85ca366cafff22e1de8a10ebe2ef1a"
+  integrity sha512-xyE2CG6gLOmh1kA18MsWwkio9JPnY79xwLhu/Eh0AYQ50awzxuf/IQY+DZVTF7fKYjQDHmpxRsW+a8Y0+LGVPA==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.22.0"
-    "@posthog/webpack-plugin" "1.2.22"
+    "@posthog/core" "1.23.0"
+    "@posthog/webpack-plugin" "1.2.23"
     semver "^7.7.2"
 
 "@posthog/types@1.347.2":
@@ -2407,13 +2414,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.347.2.tgz#3ba17fee1560151269878be0be7d65fcda43b60e"
   integrity sha512-aT+r/7jXOzPmUHO6sutoWzczPcYIZyhmWt1f1OvY4zKC7Pwp/ZsJWKFTxjV02p0PZz96AE83eLTe7w7b6tjhIw==
 
-"@posthog/webpack-plugin@1.2.22":
-  version "1.2.22"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.22.tgz#7b9fb0ed0703d5316d146873aca2f4ca9b948d82"
-  integrity sha512-QlrrVdiUK7nrdzEkn2iIBJCiocZ2Uh5gzKh0n3yxBQHGipUm4crCoNgFI4JSJVspJ0XYq8/VBupm80M+Hw8P4A==
+"@posthog/webpack-plugin@1.2.23":
+  version "1.2.23"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.23.tgz#a5b763425d1b2b7ebbdfb072021e7059c649e256"
+  integrity sha512-sv7657nzMMvQhsENPLEi3bcC6qys6R0oU6/UAsnNhawtiQwzfZGQVTZx9djZ71xImPcQmqk/gFIKWIttafXXtg==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.22.0"
+    "@posthog/core" "1.23.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -4976,12 +4983,12 @@ glob@^10.3.10:
     package-json-from-dist "^1.0.0"
     path-scurry "^1.11.1"
 
-glob@^13.0.0:
-  version "13.0.3"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-13.0.3.tgz#e5c39b3e0eb8a2e2bc35e3b28e78fd0839ff9e68"
-  integrity sha512-/g3B0mC+4x724v1TgtBlBtt2hPi/EWptsIAmXUx9Z2rvBYleQcsrmaOzd5LyL50jf/Soi83ZDJmw2+XqvH/EeA==
+glob@^13.0.3:
+  version "13.0.5"
+  resolved "https://registry.yarnpkg.com/glob/-/glob-13.0.5.tgz#a48f760c6312b1a19d2950fcb577384221c4ec00"
+  integrity sha512-BzXxZg24Ibra1pbQ/zE7Kys4Ua1ks7Bn6pKLkVPZ9FZe4JQS6/Q7ef3LG1H+k7lUf5l4T3PLSyYyYJVYUvfgTw==
   dependencies:
-    minimatch "^10.2.0"
+    minimatch "^10.2.1"
     minipass "^7.1.2"
     path-scurry "^2.0.0"
 
@@ -5697,10 +5704,10 @@ mini-svg-data-uri@^1.2.3:
   resolved "https://registry.yarnpkg.com/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz#8ab0aabcdf8c29ad5693ca595af19dd2ead09939"
   integrity sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg==
 
-minimatch@^10.2.0:
-  version "10.2.0"
-  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-10.2.0.tgz#e710473e66e3e1aaf376d0aa82438375cac86e9e"
-  integrity sha512-ugkC31VaVg9cF0DFVoADH12k6061zNZkZON+aX8AWsR9GhPcErkcMBceb6znR8wLERM2AkkOxy2nWRLpT9Jq5w==
+minimatch@^10.2.1:
+  version "10.2.1"
+  resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-10.2.1.tgz#9d82835834cdc85d5084dd055e9a4685fa56e5f0"
+  integrity sha512-MClCe8IL5nRRmawL6ib/eT4oLyeKMGCghibcDWK+J0hh0Q8kqSdia6BvbRMVk6mPa6WqUa5uR2oxt6C5jd533A==
   dependencies:
     brace-expansion "^5.0.2"
 
@@ -6451,11 +6458,11 @@ rfdc@^1.4.1:
   integrity sha512-q1b3N5QkRUWUl7iyylaaj3kOpIT0N2i9MqIEQXP73GVsN9cw3fdx8X63cEmWhJGi2PPCF23Ijp7ktmd39rawIA==
 
 rimraf@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-6.1.2.tgz#9a0f3cea2ab853e81291127422116ecf2a86ae89"
-  integrity sha512-cFCkPslJv7BAXJsYlK1dZsbP8/ZNLkCAQ0bi1hf5EKX2QHegmDFEFA6QhuYJlk7UDdc+02JjO80YSOrWPpw06g==
+  version "6.1.3"
+  resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-6.1.3.tgz#afbee236b3bd2be331d4e7ce4493bac1718981af"
+  integrity sha512-LKg+Cr2ZF61fkcaK1UdkH2yEBBKnYjTyWzTJT6KNPcSPaiT7HSdhtMXQuN5wkTX0Xu72KQ1l8S42rlmexS2hSA==
   dependencies:
-    glob "^13.0.0"
+    glob "^13.0.3"
     package-json-from-dist "^1.0.1"
 
 rspack-resolver@^1.1.0:
