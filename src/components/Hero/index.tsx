@@ -31,6 +31,23 @@ const Hero = () => {
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
+	const [glitchActive, setGlitchActive] = useState<boolean>(false);
+	const glitchTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+	const handleTitleClick = useCallback(() => {
+		setGlitchActive((prev) => {
+			if (prev) {
+				if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
+				return false;
+			}
+			glitchTimeoutRef.current = setTimeout(() => setGlitchActive(false), 500);
+			return true;
+		});
+	}, []);
+
+	React.useEffect(() => () => {
+		if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
+	}, []);
 
 	const secondsControls = useAnimation();
 
@@ -271,22 +288,85 @@ Happy hacking!
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{ duration: 1, delay: 0.3 }}
 				>
-					{/* Title */}
-					<motion.h1
-						className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200 relative z-10"
-						style={{
-							fontSize: "clamp(32px, 8vw, 80px)",
-							fontFamily: "Orbitron, monospace",
-							color: "#ffffff",
-						}}
-						initial={{ opacity: 0, y: -50 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 1 }}
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
+					{/* Title - click for glitch easter egg */}
+					<style>{`
+						@keyframes hero-glitch {
+							0%, 100% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							12% {
+								text-shadow: -10px 0 rgba(0, 255, 255, 0.9), 10px 0 rgba(255, 0, 128, 0.9), -5px 0 rgba(0, 255, 255, 0.5);
+								opacity: 0.95;
+								filter: contrast(1.3);
+								transform: scale(1) skewX(0deg);
+							}
+							25% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							37% {
+								text-shadow: 12px 0 rgba(255, 0, 128, 0.95), -12px 0 rgba(0, 255, 255, 0.95), 6px 0 rgba(255, 0, 128, 0.6);
+								opacity: 0.9;
+								filter: contrast(1.4) brightness(1.1);
+								transform: scale(1.02) skewX(-1.5deg);
+							}
+							50% {
+								text-shadow: none;
+								opacity: 0.7;
+								filter: hue-rotate(90deg) contrast(1.2);
+								transform: scale(1) skewX(0deg);
+							}
+							62% {
+								text-shadow: -8px 0 #00ffff, 8px 0 #ff0080, -4px 0 rgba(0, 255, 255, 0.7);
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							75% {
+								text-shadow: 14px 0 #ff0080, -14px 0 #00ffff;
+								opacity: 0.95;
+								filter: contrast(1.35);
+								transform: scale(1.01) skewX(1deg);
+							}
+							87% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+						}
+						.hero-title-glitch {
+							animation: hero-glitch 0.35s steps(1) infinite;
+						}
+					`}</style>
+					<div
+						role="button"
+						tabIndex={0}
+						onClick={handleTitleClick}
+						className="relative z-10 mb-[2vw]"
+						style={{ cursor: "pointer" }}
 					>
-						HackPSU Spring 2026
-					</motion.h1>
+						<motion.h1
+							className={`text-center font-bold hover:scale-105 transition-transform duration-200 ${glitchActive ? "hero-title-glitch" : ""}`}
+							style={{
+								fontSize: "clamp(32px, 8vw, 80px)",
+								fontFamily: "Orbitron, monospace",
+								color: "#ffffff",
+							}}
+							initial={{ opacity: 0, y: -50 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 1 }}
+							whileHover={!glitchActive ? { scale: 1.05 } : undefined}
+							whileTap={!glitchActive ? { scale: 0.95 } : undefined}
+						>
+							HackPSU Spring 2026
+						</motion.h1>
+					</div>
 
 					{/* Countdown Timer */}
 					{state !== 2 ? (
