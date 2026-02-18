@@ -1919,11 +1919,6 @@
     wrap-ansi "^8.1.0"
     wrap-ansi-cjs "npm:wrap-ansi@^7.0.0"
 
-"@isaacs/cliui@^9.0.0":
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/@isaacs/cliui/-/cliui-9.0.0.tgz#4d0a3f127058043bf2e7ee169eaf30ed901302f3"
-  integrity sha512-AokJm4tuBHillT+FpMtxQ60n8ObyXBatq7jD2/JA9dxbDDokKQm8KMht5ibGzLVU9IJDIKK4TPKgMHEYMn3lMg==
-
 "@jridgewell/gen-mapping@^0.3.12", "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.12"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.12.tgz#2234ce26c62889f03db3d7fea43c1932ab3e927b"
@@ -2392,14 +2387,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
+"@posthog/core@1.23.1":
+  version "1.23.1"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.23.1.tgz#37bdcf124941649590fb0b083f1dccd17e40fe5c"
+  integrity sha512-GViD5mOv/mcbZcyzz3z9CS0R79JzxVaqEz4sP5Dsea178M/j3ZWe6gaHDZB9yuyGfcmIMQ/8K14yv+7QrK4sQQ==
+  dependencies:
+    cross-spawn "^7.0.6"
+
 "@posthog/nextjs-config@^1.0.2":
-  version "1.8.17"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.17.tgz#3b6269e6ca85ca366cafff22e1de8a10ebe2ef1a"
-  integrity sha512-xyE2CG6gLOmh1kA18MsWwkio9JPnY79xwLhu/Eh0AYQ50awzxuf/IQY+DZVTF7fKYjQDHmpxRsW+a8Y0+LGVPA==
+  version "1.8.18"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.18.tgz#52a30b22c4b33c6c72eccc6c58430f575c244d96"
+  integrity sha512-pu5LWjXJHf8O2VXacMGWiuc92vrvaQoAiZ0514PiTEZvGZ/AvdIfaYVWW2mOAsMjtdnbrixaicIzkUcXaw9ijw==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.23.0"
-    "@posthog/webpack-plugin" "1.2.23"
+    "@posthog/core" "1.23.1"
+    "@posthog/webpack-plugin" "1.2.24"
     semver "^7.7.2"
 
 "@posthog/types@1.350.0":
@@ -2407,13 +2409,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.350.0.tgz#562f88f1a63cf026d3631b899651af193cf091fc"
   integrity sha512-Z8s3xc70RByHDT9u/xB1lLYHFNmEgY7nveqY8hXRPK39+vKrhosrQQOjnURLKAdyi9fRgoLc0D2yL/qRBKTxvQ==
 
-"@posthog/webpack-plugin@1.2.23":
-  version "1.2.23"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.23.tgz#a5b763425d1b2b7ebbdfb072021e7059c649e256"
-  integrity sha512-sv7657nzMMvQhsENPLEi3bcC6qys6R0oU6/UAsnNhawtiQwzfZGQVTZx9djZ71xImPcQmqk/gFIKWIttafXXtg==
+"@posthog/webpack-plugin@1.2.24":
+  version "1.2.24"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.24.tgz#a5dafd0771690aa968a7b6d6bc3d88d91240f3de"
+  integrity sha512-TJrjSFRGA/x74fIghEJGgMz5Jcza9s7N3EWQgmwZ0g8OgU4TwKE/NE00zqPEy86O1kdqR5PfcMz+tT6ppUjxVw==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.23.0"
+    "@posthog/core" "1.23.1"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -3608,11 +3610,9 @@ balanced-match@^1.0.0:
   integrity sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==
 
 balanced-match@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-4.0.2.tgz#241591ea634702bef9c482696f2469406e16d233"
-  integrity sha512-x0K50QvKQ97fdEz2kPehIerj+YTeptKF9hyYkKf6egnwmMWAkADiO0QCzSp0R5xN8FTZgYaBfSaue46Ej62nMg==
-  dependencies:
-    jackspeak "^4.2.3"
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-4.0.3.tgz#6337a2f23e0604a30481423432f99eac603599f9"
+  integrity sha512-1pHv8LX9CpKut1Zp4EXey7Z8OfH11ONNH6Dhi2WDUt31VVZFXZzKwXcysBgqSumFCmR+0dqjMK5v5JiFHzi0+g==
 
 baseline-browser-mapping@^2.8.3:
   version "2.9.10"
@@ -5379,13 +5379,6 @@ jackspeak@^3.1.2:
     "@isaacs/cliui" "^8.0.2"
   optionalDependencies:
     "@pkgjs/parseargs" "^0.11.0"
-
-jackspeak@^4.2.3:
-  version "4.2.3"
-  resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-4.2.3.tgz#27ef80f33b93412037c3bea4f8eddf80e1931483"
-  integrity sha512-ykkVRwrYvFm1nb2AJfKKYPr0emF6IiXDYUaFx4Zn9ZuIH7MrzEZ3sD5RlqGXNRpHtvUHJyOnCEFxOlNDtGo7wg==
-  dependencies:
-    "@isaacs/cliui" "^9.0.0"
 
 jiti@^1.21.7:
   version "1.21.7"
