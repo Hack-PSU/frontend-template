@@ -69,12 +69,12 @@ enum Role {
 
 // Mapping from application status to its respective color
 const applicationStatusColorMap = new Map<string, string>([
-	['pending', 'text-purple-400'],
-	['accepted', 'text-blue-400'],
-	['rejected', 'text-red-600'],
-	['waitlisted', 'text-orange-300'],
-	['confirmed', 'text-green-600'],
-	['declined', 'text-stone-500']
+	["pending", "text-purple-400"],
+	["accepted", "text-blue-400"],
+	["rejected", "text-red-600"],
+	["waitlisted", "text-orange-300"],
+	["confirmed", "text-green-600"],
+	["declined", "text-stone-500"],
 ]);
 
 // Utility to get user role from token
@@ -146,11 +146,12 @@ export default function Profile() {
 	const isOrganizer = userRole > Role.NONE;
 
 	// Check if user has a confirmed application
-	const applicationStatus =
-		(userData?.registration as any)?.applicationStatus;
+	const applicationStatus = (userData?.registration as any)?.applicationStatus;
 	const isConfirmed = applicationStatus === "confirmed";
 	console.log("User Data: " + JSON.stringify(userData));
-	console.log("Registration: " + JSON.stringify(userData?.registration?.applicationStatus));
+	console.log(
+		"Registration: " + JSON.stringify(userData?.registration?.applicationStatus)
+	);
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
@@ -335,12 +336,18 @@ export default function Profile() {
 
 	const registration = userData?.registration as RegistrationEntity | undefined;
 	const rsvpDeadline = registration?.rsvpDeadline;
-	const isOnTime =
-		typeof rsvpDeadline === "number" && rsvpDeadline >= now;
+	const isOnTime = typeof rsvpDeadline === "number" && rsvpDeadline >= now;
 	const showRsvp = registration?.applicationStatus === "accepted" && isOnTime;
-	const remainingRsvpDays =
+	const formattedRsvpDeadline =
 		typeof rsvpDeadline === "number"
-			? Math.max(0, Math.ceil((rsvpDeadline - now) / (1000 * 60 * 60 * 24)))
+			? new Date(rsvpDeadline).toLocaleString(undefined, {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+					hour: "2-digit",
+					minute: "2-digit",
+					timeZoneName: "short",
+				})
 			: null;
 
 	const openRsvpConfirm = (status: "confirmed" | "declined") => {
@@ -426,7 +433,9 @@ export default function Profile() {
 							{isOrganizer && <Shield className="h-4 w-4" />}
 							{isOrganizer
 								? `HackPSU ${getRoleName(userRole)}`
-								: isConfirmed ? "HackPSU Participant" : "HackPSU Applicant"}
+								: isConfirmed
+									? "HackPSU Participant"
+									: "HackPSU Applicant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -442,10 +451,15 @@ export default function Profile() {
 								</p>
 							</div>
 						)}
-						{(!isOrganizer && userData?.registration) && (
+						{!isOrganizer && userData?.registration && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className={`text-2xl text-slate-200 text-center`}>
-									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}>{userData.registration.applicationStatus.toUpperCase()}</span>
+									Application Status:{" "}
+									<span
+										className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}
+									>
+										{userData.registration.applicationStatus.toUpperCase()}
+									</span>
 								</p>
 							</div>
 						)}
@@ -462,10 +476,10 @@ export default function Profile() {
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
-							{remainingRsvpDays !== null && (
+							{formattedRsvpDeadline !== null && (
 								<div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3">
 									<p className="text-sm font-semibold text-amber-900">
-										You have {remainingRsvpDays} day{remainingRsvpDays === 1 ? "" : "s"} left to respond.
+										You must RSVP by - {formattedRsvpDeadline}
 									</p>
 								</div>
 							)}
@@ -575,7 +589,9 @@ export default function Profile() {
 														? "opacity-30 cursor-not-allowed"
 														: "cursor-pointer hover:opacity-80"
 												}`}
-												onClick={isOrganizer ? undefined : handleAddToGoogleWallet}
+												onClick={
+													isOrganizer ? undefined : handleAddToGoogleWallet
+												}
 												priority
 											/>
 										)}
@@ -597,7 +613,9 @@ export default function Profile() {
 														? "opacity-30 cursor-not-allowed"
 														: "cursor-pointer hover:opacity-80"
 												}`}
-												onClick={isOrganizer ? undefined : handleAddToAppleWallet}
+												onClick={
+													isOrganizer ? undefined : handleAddToAppleWallet
+												}
 												priority
 											/>
 										)}
@@ -624,7 +642,9 @@ export default function Profile() {
 									<>
 										<div className="flex items-center justify-between">
 											<div>
-												<h3 className="font-semibold text-lg">{userTeam.name}</h3>
+												<h3 className="font-semibold text-lg">
+													{userTeam.name}
+												</h3>
 											</div>
 											{!userTeam.isActive && (
 												<div className="flex items-center space-x-2 text-yellow-600">
@@ -639,7 +659,10 @@ export default function Profile() {
 											</p>
 											<div className="space-y-1">
 												{getTeamMembers().map((memberId) => (
-													<TeamMemberDisplay key={memberId} memberId={memberId!} />
+													<TeamMemberDisplay
+														key={memberId}
+														memberId={memberId!}
+													/>
 												))}
 											</div>
 										</div>
@@ -786,9 +809,9 @@ export default function Profile() {
 						<CardHeader>
 							<CardTitle>Actions Unavailable</CardTitle>
 							<CardDescription>
-								Access to our features is currently unavailable. Once confirmed, you’ll
-								gain full access to QR check-in, wallet passes, team features, and
-								project tools.
+								Access to our features is currently unavailable. Once confirmed,
+								you’ll gain full access to QR check-in, wallet passes, team
+								features, and project tools.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
