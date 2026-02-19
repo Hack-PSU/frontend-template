@@ -110,6 +110,7 @@ export default function Profile() {
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
 	const { data: teams } = useAllTeams();
+	const [now, setNow] = useState(() => Date.now());
 
 	// Mutations for wallet integration
 	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
@@ -161,6 +162,13 @@ export default function Profile() {
 			router.push("/register");
 		}
 	}, [userData, router, isUserLoading, isOrganizer]);
+
+	useEffect(() => {
+		const timer = window.setInterval(() => {
+			setNow(Date.now());
+		}, 60_000);
+		return () => window.clearInterval(timer);
+	}, []);
 
 	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
@@ -326,9 +334,14 @@ export default function Profile() {
 	};
 
 	const registration = userData?.registration as RegistrationEntity | undefined;
+	const rsvpDeadline = registration?.rsvpDeadline;
 	const isOnTime =
-		registration?.rsvpDeadline && registration?.rsvpDeadline >= Date.now();
+		typeof rsvpDeadline === "number" && rsvpDeadline >= now;
 	const showRsvp = registration?.applicationStatus === "accepted" && isOnTime;
+	const remainingRsvpDays =
+		typeof rsvpDeadline === "number"
+			? Math.max(0, Math.ceil((rsvpDeadline - now) / (1000 * 60 * 60 * 24)))
+			: null;
 
 	const openRsvpConfirm = (status: "confirmed" | "declined") => {
 		setRsvpPendingStatus(status);
@@ -449,6 +462,13 @@ export default function Profile() {
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
+							{remainingRsvpDays !== null && (
+								<div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3">
+									<p className="text-sm font-semibold text-amber-900">
+										You have {remainingRsvpDays} day{remainingRsvpDays === 1 ? "" : "s"} left to respond.
+									</p>
+								</div>
+							)}
 							<div className="flex flex-col gap-3 w-full">
 								<Button
 									variant="success"
