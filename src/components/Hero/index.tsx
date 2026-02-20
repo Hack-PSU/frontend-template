@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
@@ -13,7 +13,8 @@ import { useFlagState } from "@/lib/api/flag/hook";
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
-	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } = useFlagState("Registrations");
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
 
 	// Use React Query to fetch the active hackathon data.
 	const {
@@ -32,9 +33,18 @@ const Hero = () => {
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
 	const [glitchActive, setGlitchActive] = useState<boolean>(false);
-	const glitchTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+	const [flyKey, setFlyKey] = useState(0);
+	const [isDroneFlying, setIsDroneFlying] = useState(false);
+	const glitchTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	);
 
 	const handleTitleClick = useCallback(() => {
+		// Trigger drone fly across screen (one at a time)
+		if (!isDroneFlying) {
+			setFlyKey((k) => k + 1);
+			setIsDroneFlying(true);
+		}
 		setGlitchActive((prev) => {
 			if (prev) {
 				if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
@@ -43,11 +53,14 @@ const Hero = () => {
 			glitchTimeoutRef.current = setTimeout(() => setGlitchActive(false), 500);
 			return true;
 		});
-	}, []);
+	}, [isDroneFlying]);
 
-	React.useEffect(() => () => {
-		if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
-	}, []);
+	React.useEffect(
+		() => () => {
+			if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
+		},
+		[]
+	);
 
 	const secondsControls = useAnimation();
 
@@ -262,10 +275,43 @@ Happy hacking!
 					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
-			
-
-			
-
+			{/* Flying drone across screen when hero title is clicked */}
+			<AnimatePresence>
+				{flyKey > 0 && (
+					<motion.div
+						key={flyKey}
+						className="fixed inset-0 z-[9999] pointer-events-none flex items-center"
+						initial={false}
+					>
+						<motion.div
+							className="absolute flex items-center justify-center"
+							style={{
+								left: 0,
+								top: "50%",
+								transform: "translateY(-50%)",
+								width: "clamp(80px, 15vw, 180px)",
+								height: "auto",
+							}}
+							initial={{ x: "-120%" }}
+							animate={{ x: "120vw" }}
+							transition={{
+								duration: 2.5,
+								ease: "linear",
+							}}
+							onAnimationComplete={() => setIsDroneFlying(false)}
+						>
+							<Image
+								src="/sp26/drone.png"
+								alt=""
+								width={180}
+								height={120}
+								className="object-contain w-full h-auto"
+								unoptimized
+							/>
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 			{/* Container for scaled content (title and countdown only) */}
 			<div
 				style={{
@@ -565,34 +611,34 @@ Happy hacking!
 			>
 				{/* Register Button */}
 				{registrationsFlagData?.isEnabled && (
-				<motion.button
-					onClick={() => router.push("/profile")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
-					style={{
-						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(80px, 20vw, 280px)",
-					}}
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
-				>
-					<Image
-						src="/sp26/register3.png"
-						alt="Register Now"
-						fill
-						className="object-contain"
-						priority
-					/>
-					<div
-						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
+					<motion.button
+						onClick={() => router.push("/profile")}
+						className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 						style={{
-							fontSize: "clamp(14px, 3.75vw, 42px)",
-							color: "#FFFFFF",
-							fontFamily: "Orbitron, monospace",
+							width: "clamp(400px, 50vw, 700px)",
+							height: "clamp(80px, 20vw, 280px)",
 						}}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
 					>
-						Register now
-					</div>
-				</motion.button>
+						<Image
+							src="/sp26/register3.png"
+							alt="Register Now"
+							fill
+							className="object-contain"
+							priority
+						/>
+						<div
+							className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
+							style={{
+								fontSize: "clamp(14px, 3.75vw, 42px)",
+								color: "#FFFFFF",
+								fontFamily: "Orbitron, monospace",
+							}}
+						>
+							Register now
+						</div>
+					</motion.button>
 				)}
 				{/* Discord Button */}
 				<motion.button
