@@ -5,6 +5,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -13,6 +14,11 @@ const Footer = () => {
 	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 	const [fishPosition, setFishPosition] = useState({ x: 0, y: 0 });
 	const [fishRotation, setFishRotation] = useState(0);
+
+	const [hoverInstagram, setHoverInstagram] = useState(false);
+	const [hoverLinkedIn, setHoverLinkedIn] = useState(false);
+	const [hoverGitHub, setHoverGitHub] = useState(false);
+	const [hoverEmail, setHoverEmail] = useState(false);
 
 	useEffect(() => {
 		const handleMouseMove = (e: MouseEvent) => {
@@ -122,11 +128,17 @@ const Footer = () => {
 							target="_blank"
 							rel="noopener noreferrer"
 							className="hover:scale-110 transition-transform duration-300"
+							style={{ transition: "transform 0.3s, filter 0.3s" }}
+							onMouseEnter={() => setHoverInstagram(true)}
+							onMouseLeave={() => setHoverInstagram(false)}
 						>
 							<InstagramIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#dbeafe",
+									color: "#ff88e9ff",
+									filter: hoverInstagram
+										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
+										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
 								}}
 							/>
 						</a>
@@ -135,11 +147,17 @@ const Footer = () => {
 							target="_blank"
 							rel="noopener noreferrer"
 							className="hover:scale-110 transition-transform duration-300"
+							style={{ transition: "transform 0.3s, filter 0.3s" }}
+							onMouseEnter={() => setHoverLinkedIn(true)}
+							onMouseLeave={() => setHoverLinkedIn(false)}
 						>
 							<LinkedInIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#dbeafe",
+									color: "#ff88e9ff",
+									filter: hoverLinkedIn
+										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
+										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
 								}}
 							/>
 						</a>
@@ -148,24 +166,37 @@ const Footer = () => {
 							target="_blank"
 							rel="noopener noreferrer"
 							className="hover:scale-110 transition-transform duration-300"
+							style={{ transition: "transform 0.3s, filter 0.3s" }}
+							onMouseEnter={() => setHoverGitHub(true)}
+							onMouseLeave={() => setHoverGitHub(false)}
 						>
 							<GitHubIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#dbeafe",
+									color: "#ff88e9ff",
+									filter: hoverGitHub
+										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
+										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
 								}}
 							/>
 						</a>
 						<a
 							href="mailto:team@hackpsu.org"
 							target="_blank"
+							
 							rel="noopener noreferrer"
 							className="hover:scale-110 transition-transform duration-300"
+							style={{ transition: "transform 0.3s, filter 0.3s" }}
+							onMouseEnter={() => setHoverEmail(true)}
+							onMouseLeave={() => setHoverEmail(false)}
 						>
 							<EmailIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#dbeafe",
+									color: "#ff88e9ff",
+									filter: hoverEmail
+										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
+										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
 								}}
 							/>
 						</a>
@@ -175,18 +206,42 @@ const Footer = () => {
 				{/* Privacy Policy */}
 				<a
 					href="/privacy"
-					className="font-bold hover:underline transition-all duration-300 text-blue-100"
-					style={{ fontSize: `clamp(14px, 2vw, 18px)` }}
+					className="font-medium hover:underline transition-all duration-300"
+					style={{
+						fontSize: `clamp(14px, 2vw, 18px)`,
+						fontFamily:
+							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+						color: "#ff88e9ff",
+						letterSpacing: "0.05em",
+						textShadow: "0 0 3px rgba(255,136,233,0.6)",
+					}}
 				>
-					Privacy Policy
+					{'>'} privacy_policy
 				</a>
 
 				{/* Made with love text */}
 				<p
-					className="font-bold text-blue-100"
-					style={{ fontSize: `clamp(14px, 2vw, 18px)` }}
+					className="font-medium"
+					style={{
+						fontSize: `clamp(14px, 2vw, 18px)`,
+						fontFamily:
+							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+						color: "#ff88e9ff",
+						letterSpacing: "0.05em",
+						textShadow: "0 0 3px rgba(255,136,233,0.6)",
+					}}
 				>
-					Made with ❤️ in Happy Valley.
+					<>
+						Made with{" "}
+						<FavoriteBorderIcon
+							style={{
+								fontSize: "1em",
+								verticalAlign: "middle",
+								margin: "0 0.25px",
+								color: "#88ffff",
+							}}
+						/>{" "}in Happy Valley.
+					</>
 				</p>
 			</div>
 		</footer>
