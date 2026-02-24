@@ -13,6 +13,7 @@ import { useFlagState } from "@/lib/api/flag/hook";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
+import { Check, X } from "lucide-react";
 import {
 	Card,
 	CardContent,
@@ -49,9 +50,12 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
+import { usePatchApplicationStatus } from "@/lib/api/registration/hook";
+import type { RegistrationEntity } from "@/lib/api/registration/entity";
 
 // Role definitions matching AuthGuard
 enum Role {
@@ -65,12 +69,12 @@ enum Role {
 
 // Mapping from application status to its respective color
 const applicationStatusColorMap = new Map<string, string>([
-	['pending', 'text-purple-400'],
-	['accepted', 'text-blue-400'],
-	['rejected', 'text-red-600'],
-	['waitlisted', 'text-orange-300'],
-	['confirmed', 'text-green-600'],
-	['declined', 'text-stone-500']
+	["pending", "text-purple-400"],
+	["accepted", "text-blue-400"],
+	["rejected", "text-red-600"],
+	["waitlisted", "text-orange-300"],
+	["confirmed", "text-green-600"],
+	["declined", "text-stone-500"],
 ]);
 
 // Utility to get user role from token
@@ -106,6 +110,7 @@ export default function Profile() {
 	const router = useRouter();
 	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
 	const { data: teams } = useAllTeams();
+	const [now, setNow] = useState(() => Date.now());
 
 	// Mutations for wallet integration
 	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
@@ -119,9 +124,18 @@ export default function Profile() {
 	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
 		useUpdateUser();
 
+	const {
+		mutateAsync: patchApplicationStatus,
+		isPending: isPatchingApplicationStatus,
+	} = usePatchApplicationStatus();
+
 	const [showQRCode, setShowQRCode] = useState(false);
 	const [showResumeModal, setShowResumeModal] = useState(false);
 	const [resumeFile, setResumeFile] = useState<File | null>(null);
+	const [rsvpConfirmOpen, setRsvpConfirmOpen] = useState(false);
+	const [rsvpPendingStatus, setRsvpPendingStatus] = useState<
+		"confirmed" | "declined" | null
+	>(null);
 
 	// Feature flag checks
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
@@ -132,11 +146,12 @@ export default function Profile() {
 	const isOrganizer = userRole > Role.NONE;
 
 	// Check if user has a confirmed application
-	const applicationStatus =
-		(userData?.registration as any)?.applicationStatus;
+	const applicationStatus = (userData?.registration as any)?.applicationStatus;
 	const isConfirmed = applicationStatus === "confirmed";
 	console.log("User Data: " + JSON.stringify(userData));
-	console.log("Registration: " + JSON.stringify(userData?.registration?.applicationStatus));
+	console.log(
+		"Registration: " + JSON.stringify(userData?.registration?.applicationStatus)
+	);
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
@@ -148,6 +163,13 @@ export default function Profile() {
 			router.push("/register");
 		}
 	}, [userData, router, isUserLoading, isOrganizer]);
+
+	useEffect(() => {
+		const timer = window.setInterval(() => {
+			setNow(Date.now());
+		}, 60_000);
+		return () => window.clearInterval(timer);
+	}, []);
 
 	// Handle add-to-Google Wallet click
 	const handleAddToGoogleWallet = async () => {
@@ -312,6 +334,57 @@ export default function Profile() {
 		}
 	};
 
+	const registration = userData?.registration as RegistrationEntity | undefined;
+	const rsvpDeadline = registration?.rsvpDeadline;
+	const isOnTime = typeof rsvpDeadline === "number" && rsvpDeadline >= now;
+	const showRsvp = registration?.applicationStatus === "accepted" && isOnTime;
+	const formattedRsvpDeadline =
+		typeof rsvpDeadline === "number"
+			? new Date(rsvpDeadline).toLocaleString(undefined, {
+					year: "numeric",
+					month: "long",
+					day: "numeric",
+					hour: "2-digit",
+					minute: "2-digit",
+					timeZoneName: "short",
+				})
+			: null;
+
+	const openRsvpConfirm = (status: "confirmed" | "declined") => {
+		setRsvpPendingStatus(status);
+		setRsvpConfirmOpen(true);
+	};
+
+	const handleRsvpConfirm = async () => {
+		if (!userData?.id || !rsvpPendingStatus) return;
+		try {
+			await patchApplicationStatus({
+				userId: userData.id,
+				status: rsvpPendingStatus,
+			});
+			toast.success(
+				rsvpPendingStatus === "confirmed"
+					? "You're attending HackPSU! We can't wait to see you."
+					: "Your response has been recorded."
+			);
+			setRsvpConfirmOpen(false);
+			setRsvpPendingStatus(null);
+		} catch (error) {
+			console.error("RSVP error:", error);
+			const message =
+				error instanceof Error ? error.message : "Something went wrong.";
+			toast.error(
+				message.includes("400")
+					? "Invalid request. Please try again."
+					: message.includes("404")
+						? "Registration not found."
+						: "Failed to submit RSVP. Please try again."
+			);
+			setRsvpConfirmOpen(false);
+			setRsvpPendingStatus(null);
+		}
+	};
+
 	if (isLoading) {
 		return (
 			<div className="flex min-h-screen items-center justify-center">
@@ -360,7 +433,9 @@ export default function Profile() {
 							{isOrganizer && <Shield className="h-4 w-4" />}
 							{isOrganizer
 								? `HackPSU ${getRoleName(userRole)}`
-								: "HackPSU Participant"}
+								: isConfirmed
+									? "HackPSU Participant"
+									: "HackPSU Applicant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">
@@ -376,15 +451,65 @@ export default function Profile() {
 								</p>
 							</div>
 						)}
-						{(!isOrganizer && userData?.registration) && (
+						{!isOrganizer && userData?.registration && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className={`text-2xl text-slate-200 text-center`}>
-									Application Status: <span className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}>{userData.registration.applicationStatus.toUpperCase()}</span>
+									Application Status:{" "}
+									<span
+										className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}
+									>
+										{userData.registration.applicationStatus.toUpperCase()}
+									</span>
 								</p>
 							</div>
 						)}
 					</CardContent>
 				</Card>
+
+				{/* RSVP Section - only when accepted and not organizer */}
+				{showRsvp && !isOrganizer && (
+					<Card>
+						<CardHeader>
+							<CardTitle>Will you be attending HackPSU?</CardTitle>
+							<CardDescription>
+								Please confirm your attendance so we can plan accordingly.
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							{formattedRsvpDeadline !== null && (
+								<div className="rounded-md border border-amber-300 bg-amber-50 px-4 py-3">
+									<p className="text-sm font-semibold text-amber-900">
+										You must RSVP by - {formattedRsvpDeadline}
+									</p>
+								</div>
+							)}
+							<div className="flex flex-col gap-3 w-full">
+								<Button
+									variant="success"
+									onClick={() => openRsvpConfirm("confirmed")}
+									disabled={isPatchingApplicationStatus}
+									className="w-full"
+								>
+									<Check className="h-4 w-4" />
+									{isPatchingApplicationStatus ? (
+										<Loader2 className="h-4 w-4 animate-spin" />
+									) : (
+										"Yes"
+									)}
+								</Button>
+								<Button
+									variant="destructive"
+									onClick={() => openRsvpConfirm("declined")}
+									disabled={isPatchingApplicationStatus}
+									className="w-full"
+								>
+									<X className="h-4 w-4" />
+									No
+								</Button>
+							</div>
+						</CardContent>
+					</Card>
+				)}
 
 				{/* QR Code Section */}
 				{isOrganizer || isConfirmed ? (
@@ -464,7 +589,9 @@ export default function Profile() {
 														? "opacity-30 cursor-not-allowed"
 														: "cursor-pointer hover:opacity-80"
 												}`}
-												onClick={isOrganizer ? undefined : handleAddToGoogleWallet}
+												onClick={
+													isOrganizer ? undefined : handleAddToGoogleWallet
+												}
 												priority
 											/>
 										)}
@@ -486,7 +613,9 @@ export default function Profile() {
 														? "opacity-30 cursor-not-allowed"
 														: "cursor-pointer hover:opacity-80"
 												}`}
-												onClick={isOrganizer ? undefined : handleAddToAppleWallet}
+												onClick={
+													isOrganizer ? undefined : handleAddToAppleWallet
+												}
 												priority
 											/>
 										)}
@@ -513,7 +642,9 @@ export default function Profile() {
 									<>
 										<div className="flex items-center justify-between">
 											<div>
-												<h3 className="font-semibold text-lg">{userTeam.name}</h3>
+												<h3 className="font-semibold text-lg">
+													{userTeam.name}
+												</h3>
 											</div>
 											{!userTeam.isActive && (
 												<div className="flex items-center space-x-2 text-yellow-600">
@@ -528,7 +659,10 @@ export default function Profile() {
 											</p>
 											<div className="space-y-1">
 												{getTeamMembers().map((memberId) => (
-													<TeamMemberDisplay key={memberId} memberId={memberId!} />
+													<TeamMemberDisplay
+														key={memberId}
+														memberId={memberId!}
+													/>
 												))}
 											</div>
 										</div>
@@ -675,9 +809,9 @@ export default function Profile() {
 						<CardHeader>
 							<CardTitle>Actions Unavailable</CardTitle>
 							<CardDescription>
-								Access to our features is currently unavailable. Once confirmed, you’ll
-								gain full access to QR check-in, wallet passes, team features, and
-								project tools.
+								Access to our features is currently unavailable. Once confirmed,
+								you’ll gain full access to QR check-in, wallet passes, team
+								features, and project tools.
 							</CardDescription>
 						</CardHeader>
 						<CardContent className="space-y-4">
@@ -764,6 +898,62 @@ export default function Profile() {
 								</Button>
 							</div>
 						</div>
+					</DialogContent>
+				</Dialog>
+
+				{/* RSVP confirmation modal */}
+				<Dialog
+					open={rsvpConfirmOpen}
+					onOpenChange={(open) => {
+						setRsvpConfirmOpen(open);
+						if (!open) setRsvpPendingStatus(null);
+					}}
+				>
+					<DialogContent className="sm:max-w-md">
+						<DialogHeader>
+							<DialogTitle>Are you sure?</DialogTitle>
+							<DialogDescription>
+								{rsvpPendingStatus === "confirmed" ? (
+									<>
+										<div>
+											You are confirming that you will attend HackPSU. This
+											cannot be undone.
+										</div>
+										<div className="mt-2">
+											<strong>IMPORTANT:</strong> If you confirm and do not
+											attend, you may be banned from the next hackathon.
+										</div>
+									</>
+								) : (
+									"You are declining your spot. This cannot be undone."
+								)}
+							</DialogDescription>
+						</DialogHeader>
+						<DialogFooter className="gap-2 sm:gap-0">
+							<Button
+								variant="outline"
+								onClick={() => {
+									setRsvpConfirmOpen(false);
+									setRsvpPendingStatus(null);
+								}}
+								disabled={isPatchingApplicationStatus}
+							>
+								Cancel
+							</Button>
+							<Button
+								variant={
+									rsvpPendingStatus === "declined" ? "destructive" : "success"
+								}
+								onClick={handleRsvpConfirm}
+								disabled={isPatchingApplicationStatus}
+							>
+								{isPatchingApplicationStatus ? (
+									<Loader2 className="h-4 w-4 animate-spin" />
+								) : (
+									"Confirm"
+								)}
+							</Button>
+						</DialogFooter>
 					</DialogContent>
 				</Dialog>
 			</div>

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { Menu, X } from "lucide-react";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 interface NavItemProps {
 	href: string;
@@ -136,6 +137,8 @@ const MLHBanner: React.FC = () => (
 const Navbar: React.FC = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { isAuthenticated, isLoading } = useFirebase();
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
 	const pathname = usePathname();
 	const router = useRouter();
 	const isHome = pathname === "/";
@@ -178,10 +181,14 @@ const Navbar: React.FC = () => {
 			{ href: isHome ? "#faq" : "/#faq", text: "FAQ" },
 		];
 
-		const authItem: NavItemProps =
+		const authItem: NavItemProps | null =
 			!isLoading && isAuthenticated
 				? { href: "/profile", text: "Profile" }
-				: { href: "/profile", text: "Register" };
+				: !isLoading &&
+					  isLoadingRegistrationsFlag === false &&
+					  registrationsFlagData?.isEnabled
+					? { href: "/profile", text: "Register" }
+					: null;
 
 		// Only show photos link for authenticated users (keeps homepage clean for guests)
 		const photosItem =
@@ -193,9 +200,11 @@ const Navbar: React.FC = () => {
 					}
 				: null;
 
-		return photosItem
-			? [...baseItems, photosItem, authItem]
-			: [...baseItems, authItem];
+		return [
+			...baseItems,
+			...(photosItem ? [photosItem] : []),
+			...(authItem ? [authItem] : []),
+		];
 	};
 
 	const navItems = getNavItems();

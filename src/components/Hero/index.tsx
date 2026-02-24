@@ -2,16 +2,19 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { motion, useAnimation } from "framer-motion";
+import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import settings from "@/lib/config/settings.json";
 import MemoryGame from "@/components/MemoryGame";
+import { useFlagState } from "@/lib/api/flag/hook";
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
 
 	// Use React Query to fetch the active hackathon data.
 	const {
@@ -29,6 +32,35 @@ const Hero = () => {
 	const [targetDate, setTargetDate] = useState<Date>(new Date());
 	const [state, setState] = useState<number>(-1); // -1 = uninitialized, 0 = before hackathon, 1 = during hackathon, 2 = after hackathon
 	const [showMemoryGame, setShowMemoryGame] = useState<boolean>(false);
+	const [glitchActive, setGlitchActive] = useState<boolean>(false);
+	const [flyKey, setFlyKey] = useState(0);
+	const [isDroneFlying, setIsDroneFlying] = useState(false);
+	const glitchTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(
+		null
+	);
+
+	const handleTitleClick = useCallback(() => {
+		// Trigger drone fly across screen (one at a time)
+		if (!isDroneFlying) {
+			setFlyKey((k) => k + 1);
+			setIsDroneFlying(true);
+		}
+		setGlitchActive((prev) => {
+			if (prev) {
+				if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
+				return false;
+			}
+			glitchTimeoutRef.current = setTimeout(() => setGlitchActive(false), 500);
+			return true;
+		});
+	}, [isDroneFlying]);
+
+	React.useEffect(
+		() => () => {
+			if (glitchTimeoutRef.current) clearTimeout(glitchTimeoutRef.current);
+		},
+		[]
+	);
 
 	const secondsControls = useAnimation();
 
@@ -243,10 +275,43 @@ Happy hacking!
 					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
-			
-
-			
-
+			{/* Flying drone across screen when hero title is clicked */}
+			<AnimatePresence>
+				{flyKey > 0 && (
+					<motion.div
+						key={flyKey}
+						className="fixed inset-0 z-[9999] pointer-events-none flex items-center"
+						initial={false}
+					>
+						<motion.div
+							className="absolute flex items-center justify-center"
+							style={{
+								left: 0,
+								top: "50%",
+								transform: "translateY(-50%)",
+								width: "clamp(80px, 15vw, 180px)",
+								height: "auto",
+							}}
+							initial={{ x: "-120%" }}
+							animate={{ x: "120vw" }}
+							transition={{
+								duration: 2.5,
+								ease: "linear",
+							}}
+							onAnimationComplete={() => setIsDroneFlying(false)}
+						>
+							<Image
+								src="/sp26/drone.png"
+								alt=""
+								width={180}
+								height={120}
+								className="object-contain w-full h-auto"
+								unoptimized
+							/>
+						</motion.div>
+					</motion.div>
+				)}
+			</AnimatePresence>
 			{/* Container for scaled content (title and countdown only) */}
 			<div
 				style={{
@@ -269,22 +334,85 @@ Happy hacking!
 					animate={{ opacity: 1, scale: 1 }}
 					transition={{ duration: 1, delay: 0.3 }}
 				>
-					{/* Title */}
-					<motion.h1
-						className="text-center mb-[2vw] font-bold cursor-pointer hover:scale-105 transition-transform duration-200 relative z-10"
-						style={{
-							fontSize: "clamp(32px, 8vw, 80px)",
-							fontFamily: "Orbitron, monospace",
-							color: "#ffffff",
-						}}
-						initial={{ opacity: 0, y: -50 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{ duration: 1 }}
-						whileHover={{ scale: 1.05 }}
-						whileTap={{ scale: 0.95 }}
+					{/* Title - click for glitch easter egg */}
+					<style>{`
+						@keyframes hero-glitch {
+							0%, 100% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							12% {
+								text-shadow: -10px 0 rgba(0, 255, 255, 0.9), 10px 0 rgba(255, 0, 128, 0.9), -5px 0 rgba(0, 255, 255, 0.5);
+								opacity: 0.95;
+								filter: contrast(1.3);
+								transform: scale(1) skewX(0deg);
+							}
+							25% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							37% {
+								text-shadow: 12px 0 rgba(255, 0, 128, 0.95), -12px 0 rgba(0, 255, 255, 0.95), 6px 0 rgba(255, 0, 128, 0.6);
+								opacity: 0.9;
+								filter: contrast(1.4) brightness(1.1);
+								transform: scale(1.02) skewX(-1.5deg);
+							}
+							50% {
+								text-shadow: none;
+								opacity: 0.7;
+								filter: hue-rotate(90deg) contrast(1.2);
+								transform: scale(1) skewX(0deg);
+							}
+							62% {
+								text-shadow: -8px 0 #00ffff, 8px 0 #ff0080, -4px 0 rgba(0, 255, 255, 0.7);
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+							75% {
+								text-shadow: 14px 0 #ff0080, -14px 0 #00ffff;
+								opacity: 0.95;
+								filter: contrast(1.35);
+								transform: scale(1.01) skewX(1deg);
+							}
+							87% {
+								text-shadow: none;
+								opacity: 1;
+								filter: none;
+								transform: scale(1) skewX(0deg);
+							}
+						}
+						.hero-title-glitch {
+							animation: hero-glitch 0.35s steps(1) infinite;
+						}
+					`}</style>
+					<div
+						role="button"
+						tabIndex={0}
+						onClick={handleTitleClick}
+						className="relative z-10 mb-[2vw]"
+						style={{ cursor: "pointer" }}
 					>
-						HackPSU Spring 2026
-					</motion.h1>
+						<motion.h1
+							className={`text-center font-bold hover:scale-105 transition-transform duration-200 ${glitchActive ? "hero-title-glitch" : ""}`}
+							style={{
+								fontSize: "clamp(32px, 8vw, 80px)",
+								fontFamily: "Orbitron, monospace",
+								color: "#ffffff",
+							}}
+							initial={{ opacity: 0, y: -50 }}
+							animate={{ opacity: 1, y: 0 }}
+							transition={{ duration: 1 }}
+							whileHover={!glitchActive ? { scale: 1.05 } : undefined}
+							whileTap={!glitchActive ? { scale: 0.95 } : undefined}
+						>
+							HackPSU Spring 2026
+						</motion.h1>
+					</div>
 
 					{/* Countdown Timer */}
 					{state !== 2 ? (
@@ -482,35 +610,36 @@ Happy hacking!
 				transition={{ duration: 1, delay: 0.6 }}
 			>
 				{/* Register Button */}
-				<motion.button
-					onClick={() => router.push("/profile")}
-					className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
-					style={{
-						width: "clamp(400px, 50vw, 700px)",
-						height: "clamp(80px, 20vw, 280px)",
-					}}
-					whileHover={{ scale: 1.05 }}
-					whileTap={{ scale: 0.95 }}
-				>
-					<Image
-						src="/sp26/register3.png"
-						alt="Register Now"
-						fill
-						className="object-contain"
-						priority
-					/>
-					<div
-						className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
+				{registrationsFlagData?.isEnabled && (
+					<motion.button
+						onClick={() => router.push("/profile")}
+						className="relative overflow-hidden rounded-full hover:scale-105 transition-transform duration-300 flex items-center justify-center"
 						style={{
-							fontSize: "clamp(14px, 3.75vw, 42px)",
-							color: "#FFFFFF",
-							fontFamily: "Orbitron, monospace",
+							width: "clamp(400px, 50vw, 700px)",
+							height: "clamp(80px, 20vw, 280px)",
 						}}
+						whileHover={{ scale: 1.05 }}
+						whileTap={{ scale: 0.95 }}
 					>
-						Register now
-					</div>
-				</motion.button>
-
+						<Image
+							src="/sp26/register3.png"
+							alt="Register Now"
+							fill
+							className="object-contain"
+							priority
+						/>
+						<div
+							className="absolute inset-0 flex items-center justify-center text-center font-black z-10"
+							style={{
+								fontSize: "clamp(14px, 3.75vw, 42px)",
+								color: "#FFFFFF",
+								fontFamily: "Orbitron, monospace",
+							}}
+						>
+							Register now
+						</div>
+					</motion.button>
+				)}
 				{/* Discord Button */}
 				<motion.button
 					onClick={() => window.open("http://discord.hackpsu.org", "_blank")}

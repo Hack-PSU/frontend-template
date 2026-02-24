@@ -80,11 +80,14 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useReplaceUser();
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } = useFlagState("Registrations");
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
 		if (isUserInfoLoading) return;
-
+		if (!registrationsFlagData?.isEnabled) {
+			router.push("/");
+		}
 		if (userInfo && userInfo.registration) router.push("/profile");
 	}, [userInfo, router]);
 

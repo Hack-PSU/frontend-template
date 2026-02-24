@@ -4,6 +4,7 @@ import {
 	RegistrationEntity,
 	RegistrationCreateEntity,
 	RegistrationUpdateEntity,
+	ApplicationStatusRsvp,
 } from "./entity";
 
 /**
@@ -64,4 +65,18 @@ export async function deleteRegistration(id: string): Promise<void> {
 	return apiFetch<void>(`/registrations/${id}`, {
 		method: "DELETE",
 	});
+}
+
+export async function patchApplicationStatus(
+	userId: string,
+	status: ApplicationStatusRsvp
+): Promise<RegistrationEntity> {
+	return apiFetch<RegistrationEntity>(
+		`/registrations/${userId}/application-status`,
+		{
+			method: "PATCH",
+			body: JSON.stringify({ status }),
+			headers: { "Content-Type": "application/json" },
+		}
+	);
 }
