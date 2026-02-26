@@ -29,6 +29,13 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { Autocomplete } from "@/components/ui/autocomplete";
 import { Progress } from "@/components/ui/progress";
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+	DialogDescription,
+} from "@/components/ui/dialog";
 import { CheckCircle, Circle } from "lucide-react";
 import countries from "@/components/common/Autocomplete/assets/countries.json";
 import universities from "@/components/common/Autocomplete/assets/schools.json";
@@ -80,7 +87,10 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useReplaceUser();
 	const createRegistrationMutation = useCreateRegistration();
 	const { data: hackathon } = useActiveHackathonForStatic();
-	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } = useFlagState("Registrations");
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
+	const { data: psuRegisterFlagData, isLoading: isLoadingPSURegisterFlag } =
+		useFlagState("PSURegister");
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
@@ -148,6 +158,42 @@ export default function RegistrationPage() {
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
+	const [showPsuEmailModal, setShowPsuEmailModal] = useState(false);
+	const [psuEmail, setPsuEmail] = useState("");
+	const [psuEmailError, setPsuEmailError] = useState("");
+
+	// Validate PSU email format: abc1234@psu.edu
+	const validatePsuEmail = (email: string): boolean => {
+		const psuEmailRegex = /^[a-z]{3}\d{4}@psu\.edu$/;
+		return psuEmailRegex.test(email);
+	};
+
+	const handlePsuEmailSubmit = () => {
+		if (!psuEmail.trim()) {
+			setPsuEmailError("Email is required");
+			return;
+		}
+
+		if (!validatePsuEmail(psuEmail.toLowerCase())) {
+			setPsuEmailError(
+				"Invalid Penn State email"
+			);
+			return;
+		}
+
+		// Email is valid, close modal
+		setShowPsuEmailModal(false);
+		toast.success("Penn State email verified!");
+	};
+
+	// Open modal when PSURegister flag is enabled
+	useEffect(() => {
+		if (psuRegisterFlagData?.isEnabled && !isLoadingPSURegisterFlag) {
+			setShowPsuEmailModal(true);
+			setPsuEmail("");
+			setPsuEmailError("");
+		}
+	}, [psuRegisterFlagData?.isEnabled, isLoadingPSURegisterFlag]);
 
 	// Define sections
 	const sections: Section[] = [
@@ -853,6 +899,9 @@ export default function RegistrationPage() {
 																placeholder="e.g., 10001"
 																value={formData.zipCode}
 																onChange={handleChange}
+																inputMode="numeric"
+																maxLength={5}
+																pattern="[0-9]*"
 																required
 															/>
 														</div>
@@ -1310,6 +1359,53 @@ export default function RegistrationPage() {
 					</div>
 				</div>
 			</div>
+
+			{/* PSU Email Verification Modal */}
+			<Dialog open={showPsuEmailModal} onOpenChange={() => {}}>
+				<DialogContent
+					className="sm:max-w-md"
+					onPointerDownOutside={(e) => e.preventDefault()}
+					onEscapeKeyDown={(e) => e.preventDefault()}
+				>
+					<DialogHeader>
+						<DialogTitle>Penn State Email Verification</DialogTitle>
+						<DialogDescription>
+							Please enter your valid Penn State email to continue.
+						</DialogDescription>
+					</DialogHeader>
+					<div className="space-y-4 py-4">
+						<div className="space-y-2">
+							<Label htmlFor="psu-email">Penn State Email Address</Label>
+							<Input
+								id="psu-email"
+								type="email"
+								value={psuEmail}
+								onChange={(e) => {
+									setPsuEmail(e.target.value);
+									if (psuEmailError) setPsuEmailError("");
+								}}
+								onKeyDown={(e) => {
+									if (e.key === "Enter") {
+										e.preventDefault();
+										handlePsuEmailSubmit();
+									}
+								}}
+								autoFocus
+							/>
+							{psuEmailError && (
+								<p className="text-sm font-medium text-red-500">
+									{psuEmailError}
+								</p>
+							)}
+						</div>
+					</div>
+					<div className="flex justify-end gap-2">
+						<Button onClick={handlePsuEmailSubmit} className="w-full">
+							Verify Email
+						</Button>
+					</div>
+				</DialogContent>
+			</Dialog>
 		</>
 	);
 }

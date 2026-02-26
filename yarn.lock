@@ -2253,9 +2253,9 @@
     "@opentelemetry/semantic-conventions" "^1.29.0"
 
 "@opentelemetry/semantic-conventions@^1.29.0":
-  version "1.39.0"
-  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.39.0.tgz#f653b2752171411feb40310b8a8953d7e5c543b7"
-  integrity sha512-R5R9tb2AXs2IRLNKLBJDynhkfmx7mX0vi8NkhZb3gUkPWHn6HXk5J8iQ/dql0U3ApfWym4kXXmBDRGO+oeOfjg==
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/semantic-conventions/-/semantic-conventions-1.40.0.tgz#10b2944ca559386590683392022a897eefd011d3"
+  integrity sha512-cifvXDhcqMwwTlTK04GBNeIe7yyo28Mfby85QXFe1Yk8nmi36Ab/5UQwptOx84SsoGNRg+EVSjwzfSZMy6pmlw==
 
 "@oxc-resolver/binding-android-arm-eabi@11.18.0":
   version "11.18.0"
@@ -2397,10 +2397,10 @@
     "@posthog/webpack-plugin" "1.2.24"
     semver "^7.7.2"
 
-"@posthog/types@1.353.0":
-  version "1.353.0"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.353.0.tgz#7749f4d096e2d8d9c2b76e43901572ded2a4d9fe"
-  integrity sha512-wG5zMdr80QNV+0XkJFCX5ZxcpdER1TtYe21YlLAuI4i0G1wjQDi/FDCjh4b0QGiV8KljQMHfC2xPZ/SXnPBlBQ==
+"@posthog/types@1.354.4":
+  version "1.354.4"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.354.4.tgz#c133e8d51e146a64a8ecd85280ea0cf671dbd4d0"
+  integrity sha512-9zhKGfJwGshwfpjJISY84mgmDrYZk4/0BhJdy9AGcmazGn6uxxA0KhzcFNbDSMe0iWilPuBodpthakiPl+4qkw==
 
 "@posthog/webpack-plugin@1.2.24":
   version "1.2.24"
@@ -3108,16 +3108,16 @@
     undici-types "~7.16.0"
 
 "@types/node@>=13.7.0":
-  version "25.3.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-25.3.0.tgz#749b1bd4058e51b72e22bd41e9eab6ebd0180470"
-  integrity sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A==
+  version "25.3.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-25.3.1.tgz#82f3f6e30ac3b48560a092d9224a975b5c24e38d"
+  integrity sha512-hj9YIJimBCipHVfHKRMnvmHg+wfhKc0o4mTtXh9pKBjC8TLJzz0nzGmLi5UJsYAUgSvXFHgb0V2oY10DUFtImw==
   dependencies:
     undici-types "~7.18.0"
 
 "@types/node@^24.1.0":
-  version "24.10.13"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.10.13.tgz#2fac25c0e30f3848e19912c3b8791a28370e9e07"
-  integrity sha512-oH72nZRfDv9lADUBSo104Aq7gPHpQZc4BTx38r9xf9pg5LfP6EzSyH2n7qFmmxRQXh7YlUXODcYsg6PuTDSxGg==
+  version "24.10.14"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-24.10.14.tgz#374550a07e24c9e4e604ceadfaddec4dd60faa90"
+  integrity sha512-OowOUbD1lBCOFIPOZ8xnMIhgqA4sCutMiYOmPHL1PTLt5+y1XA+g2+yC9OOyz8p+deMZqPZLxfMjYIfrKsPeFg==
   dependencies:
     undici-types "~7.16.0"
 
@@ -3521,12 +3521,12 @@ asynckit@^0.4.0:
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
 autoprefixer@^10.4.20:
-  version "10.4.24"
-  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.24.tgz#2c29595f3abd820a79976a609d0bf40eecf212fb"
-  integrity sha512-uHZg7N9ULTVbutaIsDRoUkoS8/h3bdsmVJYZ5l3wv8Cp/6UIIoRDm90hZ+BwxUj/hGBEzLxdHNSKuFpn8WOyZw==
+  version "10.4.27"
+  resolved "https://registry.yarnpkg.com/autoprefixer/-/autoprefixer-10.4.27.tgz#51ea301a5c3c5f8642f8e564759c4f573be486f2"
+  integrity sha512-NP9APE+tO+LuJGn7/9+cohklunJsXWiaWEfV3si4Gi/XHDwVNgkwr1J3RQYFIvPy76GmJ9/bW8vyoU1LcxwKHA==
   dependencies:
     browserslist "^4.28.1"
-    caniuse-lite "^1.0.30001766"
+    caniuse-lite "^1.0.30001774"
     fraction.js "^5.3.4"
     picocolors "^1.1.1"
     postcss-value-parser "^4.2.0"
@@ -3613,9 +3613,9 @@ baseline-browser-mapping@^2.8.3:
   integrity sha512-2VIKvDx8Z1a9rTB2eCkdPE5nSe28XnA+qivGnWHoB40hMMt/h1hSz0960Zqsn6ZyxWXUie0EBdElKv8may20AA==
 
 baseline-browser-mapping@^2.9.0:
-  version "2.9.19"
-  resolved "https://registry.yarnpkg.com/baseline-browser-mapping/-/baseline-browser-mapping-2.9.19.tgz#3e508c43c46d961eb4d7d2e5b8d1dd0f9ee4f488"
-  integrity sha512-ipDqC8FrAl/76p2SSWKSI+H9tFwm7vYqXQrItCuiVPt26Km0jS+NzSsBWAaBusvSbQcfJG+JitdMm+wZAgTYqg==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/baseline-browser-mapping/-/baseline-browser-mapping-2.10.0.tgz#5b09935025bf8a80e29130251e337c6a7fc8cbb9"
+  integrity sha512-lIyg0szRfYbiy67j9KN8IyeD7q7hcmqnJ1ddWmNt19ItGpNN64mnllmxUNFIOdOm6by97jlL6wfpTTJrmnjWAA==
 
 binary-extensions@^2.0.0:
   version "2.3.0"
@@ -3738,10 +3738,10 @@ caniuse-lite@^1.0.30001688, caniuse-lite@^1.0.30001726:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001727.tgz#22e9706422ad37aa50556af8c10e40e2d93a8b85"
   integrity sha512-pB68nIHmbN6L/4C6MH1DokyR3bYqFwjaSs/sWDHGj4CTcFtQUQMuJftVwWkXq7mNWOybD3KhUv3oWHoGxgP14Q==
 
-caniuse-lite@^1.0.30001759, caniuse-lite@^1.0.30001766:
-  version "1.0.30001766"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001766.tgz#b6f6b55cb25a2d888d9393104d14751c6a7d6f7a"
-  integrity sha512-4C0lfJ0/YPjJQHagaE9x2Elb69CIqEPZeG0anQt9SIvIoOH4a4uaRl73IavyO+0qZh6MDLH//DrXThEYKHkmYA==
+caniuse-lite@^1.0.30001759, caniuse-lite@^1.0.30001774:
+  version "1.0.30001774"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001774.tgz#0e576b6f374063abcd499d202b9ba1301be29b70"
+  integrity sha512-DDdwPGz99nmIEv216hKSgLD+D4ikHQHjBC/seF98N9CPqRX4M5mSxT9eTV6oyisnJcuzxtZy4n17yKKQYmYQOA==
 
 chalk@^4.0.0:
   version "4.1.2"
@@ -4189,9 +4189,9 @@ electron-to-chromium@^1.5.173:
   integrity sha512-dYOZfUk57hSMPePoIQ1fZWl1Fkj+OshhEVuPacNKWzC1efe56OsHY3l/jCfiAgIICOU3VgOIdoq7ahg7r7n6MQ==
 
 electron-to-chromium@^1.5.263:
-  version "1.5.283"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.283.tgz#51d492c37c2d845a0dccb113fe594880c8616de8"
-  integrity sha512-3vifjt1HgrGW/h76UEeny+adYApveS9dH2h3p57JYzBSXJIKUJAvtmIytDKjcSCt9xHfrNCFJ7gts6vkhuq++w==
+  version "1.5.302"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.302.tgz#032a5802b31f7119269959c69fe2015d8dad5edb"
+  integrity sha512-sM6HAN2LyK82IyPBpznDRqlTQAtuSaO+ShzFiWTvoMJLHyZ+Y39r8VMfHzwbU8MVBzQ4Wdn85+wlZl2TLGIlwg==
 
 electron-to-chromium@^1.5.73:
   version "1.5.182"
@@ -6101,9 +6101,9 @@ postcss@^8.4.47:
     source-map-js "^1.2.1"
 
 posthog-js@^1.257.0:
-  version "1.353.0"
-  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.353.0.tgz#49f3f7c58a1d6af0eaeb847ff6a013aedad81b7c"
-  integrity sha512-1ifN9CDMavZwRvm+6UYAaEbvzJPvC6q0warmNGyqUcmtDe3SZh4PfvftSJrucH5Oeh6r+ihWtLS7ESIUS0pYuw==
+  version "1.354.4"
+  resolved "https://registry.yarnpkg.com/posthog-js/-/posthog-js-1.354.4.tgz#cca1e86ca29057851350c730d0c791ece999b6d5"
+  integrity sha512-CFaRtaO/zUTTpVZ+vRGLNpoz2UHunEZ22k/mOXf3crfxvydRQk4u0L5XSOzyMrG6j6COSJSGAoY/ZDHrYROKCg==
   dependencies:
     "@opentelemetry/api" "^1.9.0"
     "@opentelemetry/api-logs" "^0.208.0"
@@ -6111,7 +6111,7 @@ posthog-js@^1.257.0:
     "@opentelemetry/resources" "^2.2.0"
     "@opentelemetry/sdk-logs" "^0.208.0"
     "@posthog/core" "1.23.1"
-    "@posthog/types" "1.353.0"
+    "@posthog/types" "1.354.4"
     core-js "^3.38.1"
     dompurify "^3.3.1"
     fflate "^0.4.8"
@@ -6120,9 +6120,9 @@ posthog-js@^1.257.0:
     web-vitals "^5.1.0"
 
 posthog-node@^5.5.1:
-  version "5.24.17"
-  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.24.17.tgz#ad04f7d38be22e2c1ad2cba48096b50029724912"
-  integrity sha512-mdb8TKt+YCRbGQdYar3AKNUPCyEiqcprScF4unYpGALF6HlBaEuO6wPuIqXXpCWkw4VclJYCKbb6lq6pH6bJeA==
+  version "5.26.0"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.26.0.tgz#998c1fdf646e158b451d66df9a58ea8c5225229e"
+  integrity sha512-DK1XF/RiunhvT57cFyPxW9OaliZzl5aREHFwY/AISL3MVOaDUb4wIccMn0G3ws3Ounen8iGH7xvzZQ0x2vEOEQ==
   dependencies:
     "@posthog/core" "1.23.1"
 
