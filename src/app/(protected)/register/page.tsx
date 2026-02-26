@@ -899,6 +899,9 @@ export default function RegistrationPage() {
 																placeholder="e.g., 10001"
 																value={formData.zipCode}
 																onChange={handleChange}
+																inputMode="numeric"
+																maxLength={5}
+																pattern="[0-9]*"
 																required
 															/>
 														</div>
