@@ -175,9 +175,7 @@ export default function RegistrationPage() {
 		}
 
 		if (!validatePsuEmail(psuEmail.toLowerCase())) {
-			setPsuEmailError(
-				"Invalid Penn State email"
-			);
+			setPsuEmailError("Invalid Penn State email");
 			return;
 		}
 
@@ -1039,7 +1037,13 @@ export default function RegistrationPage() {
 															School/University
 														</Label>
 														<Autocomplete
-															data={Object.keys(universities)}
+															data={
+																psuRegisterFlagData?.isEnabled
+																	? [
+																			"The Pennsylvania State University - Main Campus",
+																		]
+																	: Object.keys(universities)
+															}
 															value={formData.university}
 															placeholder="Select your school"
 															onSelectionChange={(value) =>
