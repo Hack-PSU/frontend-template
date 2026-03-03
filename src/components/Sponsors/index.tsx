@@ -130,18 +130,6 @@ const SponsorTier: React.FC<SponsorTierProps> = ({
 
 	if (sponsors.length === 0) return null;
 
-	// Create grid layout based on number of sponsors and tier configuration
-	const getGridCols = () => {
-		const count = Math.min(sponsors.length, tierConfig.maxLogos);
-		if (count === 1) return "grid-cols-1";
-		if (count === 2) return "grid-cols-1 md:grid-cols-2";
-		if (count <= 3) return "grid-cols-1 md:grid-cols-2 lg:grid-cols-3";
-		if (count <= 4) return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4";
-		if (count <= 6)
-			return "grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6";
-		return "grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8";
-	};
-
 	return (
 		<motion.div
 			className="w-full mb-16"
@@ -149,11 +137,9 @@ const SponsorTier: React.FC<SponsorTierProps> = ({
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.8, delay: index * 0.2 }}
 		>
-			{/* Sponsors Grid */}
-			<div
-				className={`grid ${getGridCols()} gap-8 justify-items-center max-w-7xl mx-auto`}
-			>
-				{sponsors.slice(0, tierConfig.maxLogos).map((sponsor, sponsorIndex) => (
+			{/* Sponsors Flex Container with wrapping */}
+			<div className="flex flex-wrap justify-center gap-8">
+				{sponsors.map((sponsor, sponsorIndex) => (
 					<SponsorCard
 						key={sponsor.id}
 						sponsor={sponsor}
@@ -174,7 +160,7 @@ const Sponsors: React.FC = () => {
 		if (!sponsors) return {};
 
 		const grouped: Record<string, SponsorEntity[]> = {};
-
+		console.log("Fetched sponsors:", sponsors);
 		sponsors.forEach((sponsor) => {
 			// Skip partners - they'll be displayed separately
 			if (sponsor.sponsorType === "partner") return;
