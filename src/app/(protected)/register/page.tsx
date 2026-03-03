@@ -164,7 +164,7 @@ export default function RegistrationPage() {
 
 	// Validate PSU email format: abc1234@psu.edu
 	const validatePsuEmail = (email: string): boolean => {
-		const psuEmailRegex = /^[a-z]{3}\d{4}@psu\.edu$/;
+		const psuEmailRegex = /@psu\.edu$/;
 		return psuEmailRegex.test(email);
 	};
 
