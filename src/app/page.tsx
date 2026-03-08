@@ -2,6 +2,8 @@
 import { useEffect, useState, useRef } from "react";
 import Hero from "@/components/Hero";
 import Schedule from "@/components/Schedule";
+import FAQRules from "@/components/FAQRules";
+import Rules from "@/components/common/Rules/index";
 import FAQ from "@/components/FAQ";
 import PrizesChallenges from "@/components/PrizesChallenges";
 import Sponsors from "@/components/Sponsors";
