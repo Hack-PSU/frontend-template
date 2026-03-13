@@ -24,23 +24,23 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 	const [difficulty, setDifficulty] = useState<12 | 24 | 36 | 100>(12);
 	const [isGameStarted, setIsGameStarted] = useState(false);
 
-	// Beach-themed images from f25 folder
+	// Beach-themed images from sp26 folder
 	const gameImages = [
-		"/f25/1.png", // Number 1
-		"/f25/2.png", // Starfish
-		"/f25/3.png", // Small starfish
-		"/f25/4.png", // Fish
-		"/f25/5.png", // Crab
-		"/f25/6.png", // Shell
-		"/f25/ball.png", // Beach ball
-		"/f25/beach-towel.png", // Beach towel
-		"/f25/chill_hacky.png", // Chill hacky
-		"/f25/deepfish.png", // Deep fish
-		"/f25/fish.png", // Fish
-		"/f25/hacky_diver.png", // Hacky diver
-		"/f25/starfish.png", // Green starfish
-		"/f25/starfish-orange.png", // Orange starfish
-		"/f25/surfboard.png", // Surfboard
+		"/sp26/controller.png",
+		"/sp26/cyber_hacky.png",
+		"/sp26/drone.png",
+		"/sp26/chip.png",
+		"/sp26/GraffitiText.png",
+		"/sp26/laptop.png",
+		"/sp26/quartz.png",
+		"/sp26/robot.png",
+		"/sp26/sunglasses.png",
+		"/sp26/vhs.png",
+		"/sp26/walkie_talkie.png",
+		"/sp26/weird_phone.png",
+		"/sp26/alien.png",
+		"/sp26/robotic_arm.png",
+		"/sp26/goggles.png",
 	];
 
 	const initializeGame = useCallback(() => {
