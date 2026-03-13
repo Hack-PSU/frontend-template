@@ -2387,14 +2387,21 @@
   dependencies:
     cross-spawn "^7.0.6"
 
-"@posthog/nextjs-config@1.8.20":
-  version "1.8.20"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.20.tgz#113a8b78206ddb625dea81d9d4a5b7fa8d12cd52"
-  integrity sha512-BFqPshPtXUUE+Cyiw8XAE7CNVPdhNZni7FbmMhQfvN0i4n4PqGsQb4IgsMIGnR4P8Ouaup5+XK95Z3fwdr6rQw==
+"@posthog/core@1.23.4":
+  version "1.23.4"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.23.4.tgz#f554c6af3c2c81fa437de28c182d199993a3b37e"
+  integrity sha512-gSM1gnIuw5UOBUOTz0IhCTH8jOHoFr5rzSDb5m7fn9ofLHvz3boZT1L1f+bcuk+mvzNJfrJ3ByVQGKmUQnKQ8g==
+  dependencies:
+    cross-spawn "^7.0.6"
+
+"@posthog/nextjs-config@1.8.21":
+  version "1.8.21"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.8.21.tgz#7e6571d13befef645722edddb1bd2556191b7d4b"
+  integrity sha512-1zeAYhHbqV9WWBbWhowQ2ueTSnymYSzdrxQ8NaKF33p0w6zvL01UcwpWtSwb1w1B3LD0WgkGINYHkX/VE5FDXw==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.23.3"
-    "@posthog/webpack-plugin" "1.2.26"
+    "@posthog/core" "1.23.4"
+    "@posthog/webpack-plugin" "1.2.27"
     semver "^7.7.2"
 
 "@posthog/types@1.360.1":
@@ -2402,13 +2409,13 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.360.1.tgz#dfa00e2ae7d2a93523210a205ab4e09e4e028f16"
   integrity sha512-zzvgckmzmjYB7YGnA2cIMtF9thj8O1TMp2YCXcBb+qnGcI5cKTo8j+lO7Kq1Lbwgp7ZPxBWUXfKHg03K5vVdjg==
 
-"@posthog/webpack-plugin@1.2.26":
-  version "1.2.26"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.26.tgz#6aaec446a11fd40481aa5125679f166d2365f6f7"
-  integrity sha512-R0gi6pl86zjrTcjxC/xV1DkvB3cpwem1StDzMCikqb2guhPWdD6s+KjiFMwUPj1O0TFQbn5uly9+W7yXihK1QQ==
+"@posthog/webpack-plugin@1.2.27":
+  version "1.2.27"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.2.27.tgz#8802c730ce57d9f1f60df27054a2a9bfdf29eebd"
+  integrity sha512-ChN0qBTsW98upI3HJBqP9gXvKpj7ldJfBOhtGevrreE5WhHonAE1fvlvTnQAkN2vdv5HM2QMZN12zB+LSp7BWA==
   dependencies:
     "@posthog/cli" "~0.5.29"
-    "@posthog/core" "1.23.3"
+    "@posthog/core" "1.23.4"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
