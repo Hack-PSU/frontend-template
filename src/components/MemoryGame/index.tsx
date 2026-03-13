@@ -168,14 +168,17 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 	return (
 		<AnimatePresence>
 			<motion.div
-				className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 overflow-hidden"
+				className="fixed inset-0 z-50 flex items-center justify-center bg-[#1a0f2e]/90 p-4 overflow-hidden backdrop-blur-sm"
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
 				exit={{ opacity: 0 }}
 				onClick={onClose}
 			>
 				<motion.div
-					className="relative w-full max-w-6xl max-h-full bg-gradient-to-b from-[#B1E8FF] to-[#84cefe] rounded-3xl shadow-2xl overflow-hidden flex flex-col"
+					className="relative w-full max-w-6xl max-h-full rounded-3xl overflow-hidden flex flex-col border-[3px] border-[#ff88e9] shadow-[0_0_20px_rgba(255,136,233,0.4),inset_0_0_20px_rgba(255,136,233,0.05)]"
+					style={{
+						backgroundColor: "#2f234b",
+					}}
 					initial={{ scale: 0.5, opacity: 0 }}
 					animate={{ scale: 1, opacity: 1 }}
 					exit={{ scale: 0.5, opacity: 0 }}
@@ -186,14 +189,17 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 						{/* Header */}
 						<div className="flex justify-between items-center mb-6">
 							<h2
-								className="text-3xl font-bold text-[#215172]"
-								style={{ fontFamily: "Orbitron, monospace" }}
+								className="text-3xl font-bold text-white"
+								style={{
+									fontFamily: "Orbitron, monospace",
+									textShadow: "0 0 10px rgba(255,136,233,0.6)",
+								}}
 							>
 								Memory Match
 							</h2>
 							<button
 								onClick={onClose}
-								className="text-[#215172] hover:text-[#00DAB7] text-2xl font-bold"
+								className="text-[#ff88e9] hover:text-[#00DAB7] text-2xl font-bold transition-colors"
 							>
 								✕
 							</button>
@@ -202,7 +208,10 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 						{!isGameStarted ? (
 							/* Difficulty Selection */
 							<div className="text-center">
-								<h3 className="text-xl font-bold text-[#215172] mb-4">
+								<h3
+									className="text-xl font-bold text-white/90 mb-4"
+									style={{ fontFamily: "Orbitron, monospace" }}
+								>
 									Choose your difficulty:
 								</h3>
 								<div className="grid grid-cols-2 gap-4 mb-6">
@@ -215,11 +224,12 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 										<button
 											key={pairs}
 											onClick={() => setDifficulty(pairs as 12 | 24 | 36 | 100)}
-											className={`p-4 rounded-xl font-bold transition-all duration-200 ${
+											className={`p-4 rounded-xl font-bold transition-all duration-200 border-2 ${
 												difficulty === pairs
-													? "bg-[#00DAB7] text-white shadow-lg"
-													: "bg-white text-[#215172] hover:bg-[#00DAB7] hover:text-white"
+													? "bg-[#ff88e9] text-[#2f234b] border-[#ff88e9] shadow-[0_0_12px_rgba(255,136,233,0.6)]"
+													: "bg-transparent text-[#ff88e9] border-[#ff88e9]/60 hover:bg-[#ff88e9]/20 hover:border-[#ff88e9]"
 											}`}
+											style={{ fontFamily: "Orbitron, monospace" }}
 										>
 											{label}
 										</button>
@@ -227,7 +237,8 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 								</div>
 								<button
 									onClick={initializeGame}
-									className="px-8 py-3 bg-[#ff6b35] text-white font-bold rounded-xl hover:scale-105 transition-transform duration-200"
+									className="px-8 py-3 bg-[#00DAB7] text-[#2f234b] font-bold rounded-xl hover:scale-105 transition-transform duration-200 shadow-[0_0_12px_rgba(0,218,183,0.5)]"
+									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									Start Game!
 								</button>
@@ -237,10 +248,16 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 							<div>
 								{/* Game Stats */}
 								<div className="flex justify-between items-center mb-6">
-									<div className="text-[#215172] font-bold">Moves: {moves}</div>
+									<div
+										className="text-[#ff88e9] font-bold"
+										style={{ fontFamily: "Orbitron, monospace" }}
+									>
+										Moves: {moves}
+									</div>
 									<button
 										onClick={resetGame}
-										className="px-4 py-2 bg-[#ff6b35] text-white font-bold rounded-lg hover:scale-105 transition-transform duration-200"
+										className="px-4 py-2 bg-[#00DAB7] text-[#2f234b] font-bold rounded-lg hover:scale-105 transition-transform duration-200"
+										style={{ fontFamily: "Orbitron, monospace" }}
 									>
 										New Game
 									</button>
@@ -267,28 +284,32 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 											<div className="w-full h-full relative">
 												{/* Card Back */}
 												<motion.div
-													className={`absolute inset-0 bg-[#215172] flex items-center justify-center shadow-lg ${
+													className={`absolute inset-0 flex items-center justify-center border-2 border-[#ff88e9]/80 shadow-[0_0_8px_rgba(255,136,233,0.3)] ${
 														difficulty === 100 ? "rounded-md" : "rounded-xl"
 													}`}
+													style={{
+														backgroundColor: "#2f234b",
+														boxShadow: "inset 0 0 12px rgba(255,136,233,0.15)",
+														backfaceVisibility: "hidden",
+														zIndex: card.isFlipped || card.isMatched ? 1 : 2,
+													}}
 													animate={{
 														rotateY: card.isFlipped || card.isMatched ? 180 : 0,
 													}}
 													transition={{ duration: 0.3 }}
-													style={{
-														backfaceVisibility: "hidden",
-														zIndex: card.isFlipped || card.isMatched ? 1 : 2,
-													}}
 												>
 													<div
 														className={`${
 															difficulty === 100 ? "text-xs" : "text-4xl"
-														}`}
-													></div>
+														} text-[#ff88e9]/40`}
+													>
+														?
+													</div>
 												</motion.div>
 
 												{/* Card Front */}
 												<motion.div
-													className={`absolute inset-0 bg-white shadow-lg ${
+													className={`absolute inset-0 bg-white/95 shadow-lg border border-[#ff88e9]/30 ${
 														difficulty === 100
 															? "rounded-md p-0.5"
 															: "rounded-xl p-2"
@@ -320,16 +341,34 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 								{/* Win Message */}
 								{gameWon && (
 									<motion.div
-										className="text-center p-6 bg-[#00DAB7] text-white rounded-xl"
+										className="text-center p-6 rounded-xl border-2 border-[#ff88e9] shadow-[0_0_20px_rgba(255,136,233,0.4)]"
+										style={{
+											backgroundColor: "rgba(255,136,233,0.2)",
+											color: "#fff",
+										}}
 										initial={{ scale: 0 }}
 										animate={{ scale: 1 }}
 										transition={{ type: "spring", stiffness: 300 }}
 									>
-										<h3 className="text-2xl font-bold mb-2">🎉 You Won! 🎉</h3>
-										<p className="text-lg">Completed in {moves} moves!</p>
+										<h3
+											className="text-2xl font-bold mb-2"
+											style={{
+												fontFamily: "Orbitron, monospace",
+												textShadow: "0 0 10px rgba(255,136,233,0.8)",
+											}}
+										>
+											🎉 You Won! 🎉
+										</h3>
+										<p
+											className="text-lg text-white/90"
+											style={{ fontFamily: "Orbitron, monospace" }}
+										>
+											Completed in {moves} moves!
+										</p>
 										<button
 											onClick={resetGame}
-											className="mt-4 px-6 py-2 bg-white text-[#00DAB7] font-bold rounded-lg hover:scale-105 transition-transform duration-200"
+											className="mt-4 px-6 py-2 bg-[#00DAB7] text-[#2f234b] font-bold rounded-lg hover:scale-105 transition-transform duration-200"
+											style={{ fontFamily: "Orbitron, monospace" }}
 										>
 											Play Again
 										</button>
