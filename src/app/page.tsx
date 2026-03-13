@@ -1,6 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import Hero from "@/components/Hero";
 import Schedule from "@/components/Schedule";
 import FAQRules from "@/components/FAQRules";
@@ -11,9 +10,25 @@ import Sponsors from "@/components/Sponsors";
 import Footer from "@/components/Footer";
 import InfoSections from "@/components/InfoSections";
 import PhotoGallery from "@/components/PhotoGallery";
+import MemoryGame from "@/components/MemoryGame";
+
+const KONAMI_SEQUENCE = [
+	"ArrowUp",
+	"ArrowUp",
+	"ArrowDown",
+	"ArrowDown",
+	"ArrowLeft",
+	"ArrowRight",
+	"ArrowLeft",
+	"ArrowRight",
+	"b",
+	"a",
+];
 
 export default function Home() {
 	const [isMobile, setIsMobile] = useState(false);
+	const [showMemoryGame, setShowMemoryGame] = useState(false);
+	const konamiIndexRef = useRef(0);
 
 	useEffect(() => {
 		const checkMobile = () => {
@@ -25,8 +40,35 @@ export default function Home() {
 		return () => window.removeEventListener("resize", checkMobile);
 	}, []);
 
+	// ↑↑↓↓←→←→BA to open the memory game
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			const target = e.target as HTMLElement;
+			if (target?.closest?.("input, textarea") || target?.getAttribute?.("contenteditable") === "true") {
+				return;
+			}
+			const expected = KONAMI_SEQUENCE[konamiIndexRef.current];
+			const key = e.key;
+			if (key === expected) {
+				konamiIndexRef.current += 1;
+				if (konamiIndexRef.current === KONAMI_SEQUENCE.length) {
+					setShowMemoryGame(true);
+					konamiIndexRef.current = 0;
+				}
+			} else {
+				konamiIndexRef.current = 0;
+			}
+		};
+		document.addEventListener("keydown", handleKeyDown);
+		return () => document.removeEventListener("keydown", handleKeyDown);
+	}, []);
+
 	return (
 		<>
+			<MemoryGame
+				isOpen={showMemoryGame}
+				onClose={() => setShowMemoryGame(false)}
+			/>
 			<main className="flex flex-col items-center w-full">
 				<section className="hero-bg w-full">
 					<Hero />
