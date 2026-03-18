@@ -705,6 +705,7 @@ export default function RegistrationPage() {
 														"Hispanic or Latinx",
 														"Native Hawaiian or Other Pacific Islander",
 														"Caucasian",
+														"Prefer not to say"
 													].map((race) => (
 														<div
 															key={race}
