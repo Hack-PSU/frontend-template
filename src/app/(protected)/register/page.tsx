@@ -379,9 +379,17 @@ export default function RegistrationPage() {
 
 	const handleRaceChange = (checked: boolean, race: string) => {
 		setRaces((prev) => {
-			const newRaces = checked
+			let newRaces = checked
 				? [...prev, race]
 				: prev.filter((r) => r !== race);
+			if (race === "Prefer not to say" && checked) {
+				newRaces = ["Prefer not to say"];
+				setFormData((prevData) => ({ ...prevData, race: "Prefer not to say" }));
+				return newRaces;
+			}
+			if (checked && race !== "Prefer not to say") {
+            	newRaces = newRaces.filter((r) => r !== "Prefer not to say");
+        	}
 			setFormData((prevData) => ({ ...prevData, race: newRaces.join(", ") }));
 			return newRaces;
 		});
@@ -705,6 +713,7 @@ export default function RegistrationPage() {
 														"Hispanic or Latinx",
 														"Native Hawaiian or Other Pacific Islander",
 														"Caucasian",
+														"Prefer not to say"
 													].map((race) => (
 														<div
 															key={race}
