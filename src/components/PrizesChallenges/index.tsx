@@ -21,6 +21,7 @@ interface AwardData {
 	description: string;
 	prizes?: Prize[];
 	extra?: string;
+	closedBoxImage?: string;
 }
 
 interface AwardBoxProps {
@@ -108,7 +109,11 @@ const PrizeButton: React.FC<{
 			className="relative transition-transform duration-200 hover:scale-110 focus:outline-none"
 		>
 			<Image
-				src={showOpen ? "/sp26/BoxOpened2.png" : "/sp26/BoxClosed3.png"}
+				src={
+					showOpen
+						? "/sp26/BoxOpened2.png"
+						: award.closedBoxImage || "/sp26/BoxClosed3.png"
+				}
 				alt={award.title}
 				fill
 				className="object-contain"
@@ -219,41 +224,36 @@ const PrizesChallenges: React.FC = () => {
 			prizes: [
 				{ place: "1st Place", amount: "$500 in cash" },
 				{ place: "2nd Place", amount: "$300 in cash" },
-				{ place: "3rd Place", amount: "$100 in cash" },
+				{ place: "3rd Place", amount: "$200 in cash" },
 			],
+			closedBoxImage: "/sp26/hackpsu_grand_prize.png",
 		},
 		{
 			id: 2,
-			title: "Best UX/UI Design",
+			title: "Base44 Challenge",
 			description:
-				"Create a project where the user interface is accessible, functional, and intuitive. Information can be perceived in multiple ways, such as adjustable color contrast, font size, or captions. Navigation is operable and user-friendly. Content is understandable and robust across devices and assistive technologies.",
+				"Social media connects billions of people, but it also faces issues like misinformation, mental health impacts, privacy concerns, and lack of meaningful engagement. How can technology improve social media experiences for users while addressing these challenges?",
 			prizes: [
 				{
 					place: "Prize",
-					amount: "Peraton swag bag and Beats Headphones for each team member",
+					amount:
+						"Ketone-IQ Prize Bundle: 1 of Each Variant of the Energy Shots, Towel, Water Bottle, Performance Hat, $50 Target Gift Card",
 				},
 			],
+			closedBoxImage: "/sp26/base44_challenge.png",
 		},
 		{
 			id: 3,
-			title: "Nittany AI Challenge",
+			title: "College of IST Challenge",
 			description:
-				"Use the power of AI to address real-world problems in: Health, Humanitarianism, Education, Environment, and Agriculture.",
+				"Build the future with Open Claw at this HackPSU challenge. Create innovative AI-powered tools, applications, and experiments using the OpenClaw platform. Explore bold ideas, collaborate with fellow hackers, and turn prototypes into real projects. Whether you're learning or pushing boundaries, this is your chance to shape what comes next with OpenClaw.",
 			prizes: [
 				{
-					place: "1st Place",
-					amount: "$99 Amazon Gift Card per team member (up to 5)",
-				},
-				{
-					place: "2nd Place",
-					amount: "$50 Amazon Gift Card per team member (up to 5)",
-				},
-				{
-					place: "3rd Place",
-					amount: "$25 Amazon Gift Card per team member (up to 5)",
+					place: "Prize",
+					amount: "TBD",
 				},
 			],
-			extra: "Total prize pool: $870 in cash",
+			closedBoxImage: "/sp26/ist_challenge.png",
 		},
 	];
 
