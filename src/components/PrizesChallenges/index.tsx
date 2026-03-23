@@ -21,6 +21,7 @@ interface AwardData {
 	description: string;
 	prizes?: Prize[];
 	extra?: string;
+	closedBoxImage?: string;
 }
 
 interface AwardBoxProps {
@@ -108,7 +109,11 @@ const PrizeButton: React.FC<{
 			className="relative transition-transform duration-200 hover:scale-110 focus:outline-none"
 		>
 			<Image
-				src={showOpen ? "/sp26/BoxOpened2.png" : "/sp26/BoxClosed3.png"}
+				src={
+					showOpen
+						? "/sp26/BoxOpened2.png"
+						: award.closedBoxImage || "/sp26/BoxClosed3.png"
+				}
 				alt={award.title}
 				fill
 				className="object-contain"
@@ -221,6 +226,7 @@ const PrizesChallenges: React.FC = () => {
 				{ place: "2nd Place", amount: "$300 in cash" },
 				{ place: "3rd Place", amount: "$200 in cash" },
 			],
+			closedBoxImage: "/sp26/hackpsu_grand_prize.png",
 		},
 		{
 			id: 2,
@@ -230,9 +236,11 @@ const PrizesChallenges: React.FC = () => {
 			prizes: [
 				{
 					place: "Prize",
-					amount: "Ketone-IQ Prize Bundle: 1 of Each Variant of the Energy Shots, Towel, Water Bottle, Performance Hat, $50 Target Gift Card",
+					amount:
+						"Ketone-IQ Prize Bundle: 1 of Each Variant of the Energy Shots, Towel, Water Bottle, Performance Hat, $50 Target Gift Card",
 				},
 			],
+			closedBoxImage: "/sp26/base44_challenge.png",
 		},
 		{
 			id: 3,
@@ -245,7 +253,7 @@ const PrizesChallenges: React.FC = () => {
 					amount: "TBD",
 				},
 			],
-			extra: "Total prize pool: Over $1000 in cash and prizes",
+			closedBoxImage: "/sp26/ist_challenge.png",
 		},
 	];
 
