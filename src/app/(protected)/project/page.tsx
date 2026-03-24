@@ -33,6 +33,7 @@ import {
 	CheckCircle,
 	AlertCircle,
 	Calendar,
+	ArrowLeft,
 } from "lucide-react";
 
 export default function Project() {
@@ -281,8 +282,20 @@ export default function Project() {
 	}
 
 	return (
-		<div className="min-h-screen bg-transparent py-8 px-4">
+		<div
+			className="min-h-screen py-8 px-4"
+			style={{ backgroundColor: "#4d1170" }}
+		>
 			<div className="mx-auto max-w-4xl space-y-6">
+				<Button
+					variant="ghost"
+					onClick={() => router.push("/profile")}
+					className="mb-4"
+				>
+					<ArrowLeft className="mr-2 h-4 w-4" />
+					Back to Profile
+				</Button>
+
 				{/* Project Header */}
 				<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
 					<CardHeader className="text-center">
