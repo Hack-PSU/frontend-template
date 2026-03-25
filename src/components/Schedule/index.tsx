@@ -841,9 +841,9 @@ const Schedule: React.FC = () => {
 				PreHackathon: [],
 			};
 
-		// Filter events by selected categories
+		// Filter events by selected categories and exclude fastPass events
 		const filteredEvents = events.filter((event) =>
-			selectedCategories.has(event.type)
+			selectedCategories.has(event.type) && !event.fastPass
 		);
 
 		const eventsByDay: {
