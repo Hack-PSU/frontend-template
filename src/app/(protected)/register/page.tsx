@@ -407,7 +407,7 @@ export default function RegistrationPage() {
 			psuRegisterFlagData?.isEnabled && !isLoadingPSURegisterFlag &&
 			formData.university !== PSU_Main
 		) {
-			toast.error("Only PSU Main students are eligible to register currently")
+			toast.error("Only Penn State Main Campus students are eligible to register currently")
 			return; 
 		}
 		if (formData.age < 18) {
@@ -1392,7 +1392,7 @@ export default function RegistrationPage() {
 					<DialogHeader>
 						<DialogTitle>Penn State Email Verification</DialogTitle>
 						<DialogDescription>
-							<strong>We are currently only accepting students from PSU Main</strong> <br/>
+							<strong>We are currently only accepting students from Penn State Main Campus</strong> <br/>
 							Please enter your valid Penn State email to continue.
 						</DialogDescription>
 					</DialogHeader>
