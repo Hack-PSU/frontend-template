@@ -188,7 +188,16 @@ const Navbar: React.FC = () => {
 					  isLoadingRegistrationsFlag === false &&
 					  registrationsFlagData?.isEnabled
 					? { href: "/profile", text: "Register" }
-					: null;
+					: !isLoading &&
+						  isLoadingRegistrationsFlag === false &&
+						  !registrationsFlagData?.isEnabled &&
+						  !isAuthenticated
+						? {
+								href: "https://auth.hackpsu.org",
+								text: "Login",
+								isExternal: true,
+							}
+						: null;
 
 		// Only show photos link for authenticated users (keeps homepage clean for guests)
 		const photosItem =
