@@ -167,7 +167,7 @@ const TerminalModal: React.FC<{
 								{award.prizes.map((prize, index) => (
 									<div key={index} className="flex justify-between">
 										<span>{prize.place}:</span>
-										<span className="text-[#ff00ff]">{prize.amount}</span>
+										<span className="text-[#ff30f8]">{prize.amount}</span>
 									</div>
 								))}
 							</div>
@@ -249,8 +249,19 @@ const PrizesChallenges: React.FC = () => {
 				"Build the future with Open Claw at this HackPSU challenge. Create innovative AI-powered tools, applications, and experiments using the OpenClaw platform. Explore bold ideas, collaborate with fellow hackers, and turn prototypes into real projects. Whether you're learning or pushing boundaries, this is your chance to shape what comes next with OpenClaw.",
 			prizes: [
 				{
-					place: "Prize",
-					amount: "TBD",
+					place: "1st Place",
+					amount:
+						"1 shared 3 month Claude Pro subscription for the team",
+				},
+				{
+					place: "2nd Place",
+					amount:
+						"1 shared 2 month Claude Pro subscription for the team",
+				},
+				{
+					place: "3rd Place",
+					amount:
+						"1 shared 1 month Claude Pro subscription for the team",
 				},
 			],
 			closedBoxImage: "/sp26/ist_challenge.png",

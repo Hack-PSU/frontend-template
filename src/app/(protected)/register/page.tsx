@@ -397,9 +397,18 @@ export default function RegistrationPage() {
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+		const PSU_Main = "The Pennsylvania State University - Main Campus";
+
 		if (!user) {
 			toast.error("You must be logged in to register.");
 			return;
+		}
+		if (
+			psuRegisterFlagData?.isEnabled && !isLoadingPSURegisterFlag &&
+			formData.university !== PSU_Main
+		) {
+			toast.error("Only Penn State Main Campus students are eligible to register currently")
+			return; 
 		}
 		if (formData.age < 18) {
 			toast.error("You must be 18 years or older to participate.");
@@ -1383,6 +1392,7 @@ export default function RegistrationPage() {
 					<DialogHeader>
 						<DialogTitle>Penn State Email Verification</DialogTitle>
 						<DialogDescription>
+							<strong>We are currently only accepting students from Penn State Main Campus</strong> <br/>
 							Please enter your valid Penn State email to continue.
 						</DialogDescription>
 					</DialogHeader>

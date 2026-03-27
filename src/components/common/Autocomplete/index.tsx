@@ -51,10 +51,12 @@ const Autocomplete: React.FC<Props> = ({
 		setQuery(value ?? "");
 	};
 
-	const handleSelectionChange = (selection: string) => {
-		onSelectionChange(data, selection);
-		setSelected(selection);
-		setQuery(selection ?? "");
+	const handleSelectionChange = (selection: string | null) => {
+		if (selection !== null) {
+			onSelectionChange(data, selection);
+			setSelected(selection);
+			setQuery(selection);
+		}
 	};
 
 	return (
