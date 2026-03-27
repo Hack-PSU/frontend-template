@@ -5084,9 +5084,9 @@ hyphenate-style-name@^1.0.0:
   integrity sha512-WDC/ui2VVRrz3jOVi+XtjqkDjiVjTtFaAGiW37k6b+ohyQ5wYDOGkvCZa8+H0nx3gyvv0+BST9xuOgIyGQ00gw==
 
 ics@^3.8.1:
-  version "3.9.1"
-  resolved "https://registry.yarnpkg.com/ics/-/ics-3.9.1.tgz#c67fe7ad041d72c39ece0f4d0bf4ce8f67f8c2aa"
-  integrity sha512-wanjdE/xKJJOkIujddNzxzI4R3V5vKKCgonzid30dDr1tJG4/nciCq82I5rgVAGzcHu+osQakTOA44jwG8RV7w==
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/ics/-/ics-3.11.0.tgz#d223a35f1b68ef34d3992e10b8f739c57a9de081"
+  integrity sha512-uDB3GEOYRSZL2BgxLZkHUDwcHqjC36gGuKBrFatl7BtMNQKzO2rXkCj0zTl/QyP9lfyAEp2WZU2XBZciaLJZZw==
   dependencies:
     nanoid "^3.1.23"
     runes2 "^1.1.2"
