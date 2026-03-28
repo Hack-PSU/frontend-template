@@ -138,12 +138,23 @@ export default function Profile() {
 	>(null);
 
 	// Feature flag checks
+	const {
+		data: registrationsFlagData,
+		isLoading: isLoadingRegistrationsFlag,
+	} = useFlagState("Registrations");
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
 	const { data: roomReservationFlag } = useFlagState("RoomReservation");
 
 	// Check if user is an organizer (role > 0)
 	const userRole = getUserRole(token);
 	const isOrganizer = userRole > Role.NONE;
+	const hasRegistration = Boolean(userData?.registration);
+	const registrationsAreOpen = registrationsFlagData?.isEnabled === true;
+	const showClosedRegistrationsState =
+		!isOrganizer &&
+		!hasRegistration &&
+		!isLoadingRegistrationsFlag &&
+		registrationsFlagData?.isEnabled === false;
 
 	// Check if user has a confirmed application
 	const applicationStatus = (userData?.registration as any)?.applicationStatus;
@@ -155,14 +166,21 @@ export default function Profile() {
 	const toggleQRCode = () => setShowQRCode((prev) => !prev);
 
 	useEffect(() => {
-		// if user data is still loading, do not redirect
-		if (isUserLoading) return;
+		// Wait until both the user and registrations flag have loaded.
+		if (isUserLoading || isLoadingRegistrationsFlag) return;
 
-		// Only redirect to registration if user is a participant (not an organizer) and not registered
-		if (!isOrganizer && (!userData || !userData.registration)) {
+		// Only redirect to registration when registrations are still open.
+		if (!isOrganizer && !hasRegistration && registrationsAreOpen) {
 			router.push("/register");
 		}
-	}, [userData, router, isUserLoading, isOrganizer]);
+	}, [
+		hasRegistration,
+		router,
+		isLoadingRegistrationsFlag,
+		isUserLoading,
+		isOrganizer,
+		registrationsAreOpen,
+	]);
 
 	useEffect(() => {
 		const timer = window.setInterval(() => {
@@ -433,6 +451,8 @@ export default function Profile() {
 							{isOrganizer && <Shield className="h-4 w-4" />}
 							{isOrganizer
 								? `HackPSU ${getRoleName(userRole)}`
+								: showClosedRegistrationsState
+									? "HackPSU Account"
 								: isConfirmed
 									? "HackPSU Participant"
 									: "HackPSU Applicant"}
@@ -448,6 +468,14 @@ export default function Profile() {
 								<p className="text-sm text-slate-200 text-center">
 									You are viewing this profile as an organizer. Participant
 									actions are disabled.
+								</p>
+							</div>
+						)}
+						{showClosedRegistrationsState && (
+							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
+								<p className="text-sm text-slate-200 text-center">
+									Registrations are closed for this event. New participant
+									registrations are no longer being accepted.
 								</p>
 							</div>
 						)}
@@ -804,6 +832,36 @@ export default function Profile() {
 							</CardContent>
 						</Card>
 					</>
+				) : showClosedRegistrationsState ? (
+					<Card>
+						<CardHeader>
+							<CardTitle>Registrations Closed</CardTitle>
+							<CardDescription>
+								Registrations for this hackathon have ended, so this account
+								does not have access to participant tools.
+							</CardDescription>
+						</CardHeader>
+						<CardContent className="space-y-4">
+							<Button
+								onClick={handleExpo}
+								className="w-full"
+								variant="default"
+								size="lg"
+							>
+								<FolderOpen className="mr-2 h-4 w-4" />
+								View Project Expo
+							</Button>
+							<Button
+								onClick={handleSignOut}
+								variant="destructive"
+								className="w-full"
+								size="lg"
+							>
+								<LogOut className="mr-2 h-4 w-4" />
+								Sign Out
+							</Button>
+						</CardContent>
+					</Card>
 				) : (
 					<Card>
 						<CardHeader>
