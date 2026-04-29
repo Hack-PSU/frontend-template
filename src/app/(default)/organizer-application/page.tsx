@@ -468,12 +468,8 @@ export default function OrganizerApplicationPage() {
 
 									<div className="bg-yellow-500/10 border border-yellow-500/20 rounded-md p-4">
 										<p className="text-sm">
-											<strong>Important:</strong> The application for the tech
-											team is extremely competitive with limited openings, so
-											ensure you choose a desired second choice team. Make sure
-											to carefully select your second choice. If rejected from
-											the first choice, you will be considered for your second
-											choice team.
+											<strong>Important:</strong> You must be a Penn State University Park student
+											 to apply for a HackPSU organizing team. 
 										</p>
 									</div>
 
