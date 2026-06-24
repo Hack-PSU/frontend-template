@@ -71,6 +71,7 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 	> & {
 		resume: File | null;
 		hasDietaryRestrictions: boolean;
+		linkedinUrl: string;
 	};
 
 interface Section {
@@ -155,6 +156,7 @@ export default function RegistrationPage() {
 		travelCost: 0,
 		travelMethod: "",
 		travelAdditional: "",
+		linkedinUrl: "",
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -339,6 +341,7 @@ export default function RegistrationPage() {
 				phone: userInfo.phone || "",
 				country: userInfo.country || "",
 				race: userInfo.race || "",
+				linkedinUrl: userInfo.linkedinUrl || "",
 				hasDietaryRestrictions: !!(
 					userInfo.dietaryRestriction || userInfo.allergies
 				),
@@ -379,17 +382,15 @@ export default function RegistrationPage() {
 
 	const handleRaceChange = (checked: boolean, race: string) => {
 		setRaces((prev) => {
-			let newRaces = checked
-				? [...prev, race]
-				: prev.filter((r) => r !== race);
+			let newRaces = checked ? [...prev, race] : prev.filter((r) => r !== race);
 			if (race === "Prefer not to say" && checked) {
 				newRaces = ["Prefer not to say"];
 				setFormData((prevData) => ({ ...prevData, race: "Prefer not to say" }));
 				return newRaces;
 			}
 			if (checked && race !== "Prefer not to say") {
-            	newRaces = newRaces.filter((r) => r !== "Prefer not to say");
-        	}
+				newRaces = newRaces.filter((r) => r !== "Prefer not to say");
+			}
 			setFormData((prevData) => ({ ...prevData, race: newRaces.join(", ") }));
 			return newRaces;
 		});
@@ -404,11 +405,14 @@ export default function RegistrationPage() {
 			return;
 		}
 		if (
-			psuRegisterFlagData?.isEnabled && !isLoadingPSURegisterFlag &&
+			psuRegisterFlagData?.isEnabled &&
+			!isLoadingPSURegisterFlag &&
 			formData.university !== PSU_Main
 		) {
-			toast.error("Only Penn State Main Campus students are eligible to register currently")
-			return; 
+			toast.error(
+				"Only Penn State Main Campus students are eligible to register currently"
+			);
+			return;
 		}
 		if (formData.age < 18) {
 			toast.error("You must be 18 years or older to participate.");
@@ -452,6 +456,7 @@ export default function RegistrationPage() {
 			phone: formData.phone,
 			country: formData.country,
 			race: formData.race,
+			linkedinUrl: formData.linkedinUrl,
 		};
 
 		if (formData.resume) {
@@ -691,6 +696,15 @@ export default function RegistrationPage() {
 													</div>
 													<div className="flex items-center space-x-2">
 														<RadioGroupItem
+															value="prefer-describe"
+															id="prefer-describe"
+														/>
+														<Label htmlFor="prefer-describe">
+															Prefer to self-describe
+														</Label>
+													</div>
+													<div className="flex items-center space-x-2">
+														<RadioGroupItem
 															value="no-disclose"
 															id="no-disclose-gender"
 														/>
@@ -716,13 +730,24 @@ export default function RegistrationPage() {
 												<Label>Race/Ethnicity (Select all that apply)</Label>
 												<div className="space-y-2 pt-2">
 													{[
-														"Native American or Alaska Native",
-														"Asian",
-														"Black or African American",
-														"Hispanic or Latinx",
-														"Native Hawaiian or Other Pacific Islander",
-														"Caucasian",
-														"Prefer not to say"
+														"Asian Indian",
+														"Black or African",
+														"Chinese",
+														"Filipino",
+														"Guamanian or Chamorro",
+														"Hispanic / Latino / Spanish Origin",
+														"Japanese",
+														"Korean",
+														"Middle Eastern",
+														"Native American or Alaskan Native",
+														"Native Hawaiian",
+														"Samoan",
+														"Vietnamese",
+														"White",
+														"Other Asian (Thai, Cambodian, etc)",
+														"Other Pacific Islander",
+														"Other",
+														"Prefer not to answer",
 													].map((race) => (
 														<div
 															key={race}
@@ -1149,6 +1174,16 @@ export default function RegistrationPage() {
 																<SelectItem value="code-school-or-bootcamp">
 																	Code School / Bootcamp
 																</SelectItem>
+																<SelectItem value="other-vocational">
+																	Other Vocational / Trade Program or
+																	Apprenticeship
+																</SelectItem>
+																<SelectItem value="post-doctorate">
+																	Post Doctorate
+																</SelectItem>
+																<SelectItem value="not-student">
+																	I'm not currently a student
+																</SelectItem>
 																<SelectItem value="other">Other</SelectItem>
 															</SelectContent>
 														</Select>
@@ -1359,6 +1394,24 @@ export default function RegistrationPage() {
 																onChange={handleChange}
 															/>
 														</div>
+														<div className="space-y-2">
+															<Label htmlFor="linkedinUrl">
+																LinkedIn URL (Optional)
+															</Label>
+															<Input
+																id="linkedinUrl"
+																name="linkedinUrl"
+																type="url"
+																placeholder="https://linkedin.com/in/yourprofile"
+																value={formData.linkedinUrl}
+																onChange={handleChange}
+															/>
+															<p className="text-sm text-muted-foreground">
+																Share your LinkedIn profile to connect with
+																partners post-event for potential job
+																opportunities.
+															</p>
+														</div>
 													</CardContent>
 												</Card>
 											</div>
@@ -1392,7 +1445,11 @@ export default function RegistrationPage() {
 					<DialogHeader>
 						<DialogTitle>Penn State Email Verification</DialogTitle>
 						<DialogDescription>
-							<strong>We are currently only accepting students from Penn State Main Campus</strong> <br/>
+							<strong>
+								We are currently only accepting students from Penn State Main
+								Campus
+							</strong>{" "}
+							<br />
 							Please enter your valid Penn State email to continue.
 						</DialogDescription>
 					</DialogHeader>
