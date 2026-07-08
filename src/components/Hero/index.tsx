@@ -410,7 +410,7 @@ Happy hacking!
 							whileHover={!glitchActive ? { scale: 1.05 } : undefined}
 							whileTap={!glitchActive ? { scale: 0.95 } : undefined}
 						>
-							HackPSU Spring 2026
+							HackPSU {hackathon?.name ?? ""}
 						</motion.h1>
 					</div>
 
