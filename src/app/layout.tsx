@@ -12,11 +12,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: {
-		default: "HackPSU Spring 2026 - Penn State's Premier Hackathon",
-		template: "%s | HackPSU Spring 2026",
+		default: "HackPSU Fall 2026 - Penn State's Premier Hackathon",
+		template: "%s | HackPSU Fall 2026",
 	},
 	description:
-		"Join HackPSU Spring 2026 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
+		"Join HackPSU Fall 2026 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
 	authors: [
 		{
 			name: "HackPSU Team",
@@ -38,14 +38,14 @@ export const metadata: Metadata = {
 		type: "website",
 		locale: "en_US",
 		url: "https://hackpsu.org",
-		siteName: "HackPSU Spring 2026",
-		title: "HackPSU Spring 2026 - Penn State's Premier Hackathon",
+		siteName: "HackPSU Fall 2026",
+		title: "HackPSU Fall 2026 - Penn State's Premier Hackathon",
 		description:
-			"Join HackPSU Spring 2026 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
+			"Join HackPSU Fall 2026 at Penn State University for 24 hours of innovation, coding, and collaboration. Open to all skill levels with workshops, mentorship, and amazing prizes.",
 		images: [
 			{
 				url: "/logo.png",
-				alt: "HackPSU Spring 2026 Logo",
+				alt: "HackPSU Fall 2026 Logo",
 			},
 		],
 	},
