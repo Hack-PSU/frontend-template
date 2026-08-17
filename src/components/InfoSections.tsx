@@ -108,7 +108,7 @@ const InfoSections: React.FC = () => {
 					className="text-center"
 				>
 					<h1
-						className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3 "
+						className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3 "
 						style={{
 							fontFamily: "Barlow Condensed, sans-serif",
 							borderRadius: "12px",
@@ -118,6 +118,18 @@ const InfoSections: React.FC = () => {
 						<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
 						<span style={{ color: "#64A5C3" }}>Briefing</span>{" "}
 					</h1>
+					<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Every mission has its protocols. Study the manual carefully before departure.
+					</div>
 				</motion.div>
 			</div>
 
@@ -179,7 +191,7 @@ const InfoSections: React.FC = () => {
 					{/* Info Panel */}
 					<div
 						key={order[0].id}
-						className="rounded-xl shadow-lg p-[3vw] bg-[#2f234bff] backdrop-blur-sm mt-12"
+						className="rounded-xl shadow-lg p-[3vw] backdrop-blur-sm mt-12"
 						style={{
 							width: "clamp(300px, 35vw, 450px)",
 							minHeight: "clamp(200px, 25vw, 320px)",
@@ -318,7 +330,7 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 			>
 				<path
 					d="M38,2 L82,2 A12,12 0 0,1 94,10 L112,44 A12,12 0 0,1 112,56 L94,90 A12,12 0 0,1 82,98 L38,98 A12,12 0 0,1 26,90 L8,56 A12,12 0 0,1 8,44 L26,10 A12,12 0 0,1 38,2"
-					fill="#2f234bff"
+					fill="transparent"
 					fillOpacity={1}
 					stroke={section.glowColor}
 					strokeWidth={7}

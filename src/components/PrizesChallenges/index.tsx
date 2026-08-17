@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Divider from "../common/Divider";
 import { useFlagState } from "../../lib/api/flag/hook";
@@ -19,105 +19,56 @@ interface AwardData {
 	id: number;
 	title: string;
 	description: string;
-	prizes?: Prize[];
-	extra?: string;
-	closedBoxImage?: string;
-}
-
-interface AwardBoxProps {
-	title: string;
-	description: string;
+	displayAmount: string;
+	planetIcon: string;
 	prizes?: Prize[];
 	extra?: string;
 }
 
-const AwardBox: React.FC<AwardBoxProps> = ({
-	title,
-	description,
-	prizes = [],
-	extra,
-}) => {
-	return (
-		<div className="p-6 rounded-xl bg-white/95 backdrop-blur-sm border-2 border-[#0066CC] shadow-md hover:shadow-xl transition-all hover:-translate-y-1">
-			<div style={{ fontFamily: "Orbitron, monospace" }}>
-				<h2 className="text-xl md:text-2xl font-bold text-[#000080] mb-4 text-center">
-					{title}
-				</h2>
-				{description && (
-					<p className="text-sm md:text-base text-gray-700 mb-4 leading-relaxed text-left">
-						{description}
-					</p>
-				)}
-				{prizes.length > 0 && (
-					<div className="mt-4 space-y-2">
-						{prizes.map((prize, index) => (
-							<div
-								key={index}
-								className="p-3 bg-blue-50 rounded-lg border border-blue-100"
-							>
-								<div className="text-sm md:text-base font-semibold text-[#000080] mb-1">
-									{prize.place}
-								</div>
-								<div className="text-sm md:text-base text-gray-900 font-medium">
-									{prize.amount}
-								</div>
-							</div>
-						))}
-					</div>
-				)}
-				{extra && (
-					<div className="text-sm md:text-base text-gray-700 mt-4 leading-relaxed text-left whitespace-pre-line">
-						{extra}
-					</div>
-				)}
-			</div>
-		</div>
-	);
-};
-
-const PrizeButton: React.FC<{
+const PrizeCard: React.FC<{
 	award: AwardData;
 	onClick: (award: AwardData) => void;
-	style?: React.CSSProperties;
-	width?: string;
-	height?: string;
-	isModalOpen?: boolean;
-	selectedAwardId?: number;
-}> = ({
-	award,
-	onClick,
-	style,
-	width = "6rem",
-	height = "6rem",
-	isModalOpen = false,
-	selectedAwardId,
-}) => {
-	const [isHovered, setIsHovered] = useState(false);
-	const isAwardSelected = selectedAwardId === award.id;
-	const showOpen = isHovered || (isModalOpen && isAwardSelected);
-
+}> = ({ award, onClick }) => {
 	return (
 		<button
 			onClick={() => onClick(award)}
-			onMouseEnter={() => setIsHovered(true)}
-			onMouseLeave={() => setIsHovered(false)}
-			style={{
-				...style,
-				width,
-				height,
-			}}
-			className="relative transition-transform duration-200 hover:scale-110 focus:outline-none"
+			className="w-full rounded-2xl bg-[#1a1734]/80 border border-white/5 p-6 md:p-7 flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)]"
 		>
-			<Image
-				src={
-					showOpen
-						? "/sp26/BoxOpened2.png"
-						: award.closedBoxImage || "/sp26/BoxClosed3.png"
-				}
-				alt={award.title}
-				fill
-				className="object-contain"
-			/>
+			<div className="relative h-28 w-28 md:h-36 md:w-36 mb-5">
+				<Image
+					src={award.planetIcon}
+					alt={award.title}
+					fill
+					className="object-contain"
+				/>
+			</div>
+			<h2
+				className="text-3xl md:text-4xl leading-none"
+				style={{
+					fontFamily: "'Barlow Condensed', sans-serif",
+					color: "#EEE5CD",
+				}}
+			>
+				{award.title}
+			</h2>
+			<p
+				className="text-3xl md:text-4xl mt-2"
+				style={{
+					fontFamily: "Orbitron, monospace",
+					color: "#B6663C",
+				}}
+			>
+				{award.displayAmount}
+			</p>
+			<p
+				className="mt-5 text-base md:text-lg leading-relaxed"
+				style={{
+					fontFamily: "'DM Sans', sans-serif",
+					color: "#EEE5CD",
+				}}
+			>
+				{award.description}
+			</p>
 		</button>
 	);
 };
@@ -194,31 +145,13 @@ const PrizesChallenges: React.FC = () => {
 	const { data: prizesAndChallengesFlag } = useFlagState("PrizesEnabled");
 	const [selectedAward, setSelectedAward] = useState<AwardData | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [isMobile, setIsMobile] = useState(false);
-
-	useEffect(() => {
-		// Check initial screen size
-		const checkMobile = () => {
-			setIsMobile(window.innerWidth < 768);
-		};
-
-		checkMobile();
-
-		// Add resize listener
-		window.addEventListener("resize", checkMobile);
-		return () => window.removeEventListener("resize", checkMobile);
-	}, []);
-
-	// Configurable button sizes
-	const mobileButtonWidth = "6.5rem";
-	const mobileButtonHeight = "6.5rem";
-	const desktopButtonWidth = "12rem";
-	const desktopButtonHeight = "12rem";
 
 	const awards: AwardData[] = [
 		{
 			id: 1,
 			title: "HackPSU Grand Prize",
+			displayAmount: "$500",
+			planetIcon: "/fa26/003/4.png",
 			description:
 				"The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally.",
 			prizes: [
@@ -226,11 +159,12 @@ const PrizesChallenges: React.FC = () => {
 				{ place: "2nd Place", amount: "$300 in cash" },
 				{ place: "3rd Place", amount: "$200 in cash" },
 			],
-			closedBoxImage: "/sp26/hackpsu_grand_prize.png",
 		},
 		{
 			id: 2,
 			title: "Base44 Challenge",
+			displayAmount: "$50",
+			planetIcon: "/fa26/003/2.png",
 			description:
 				"Social media connects billions of people, but it also faces issues like misinformation, mental health impacts, privacy concerns, and lack of meaningful engagement. How can technology improve social media experiences for users while addressing these challenges?",
 			prizes: [
@@ -240,11 +174,12 @@ const PrizesChallenges: React.FC = () => {
 						"Ketone-IQ Prize Bundle: 1 of Each Variant of the Energy Shots, Towel, Water Bottle, Performance Hat, $50 Target Gift Card",
 				},
 			],
-			closedBoxImage: "/sp26/base44_challenge.png",
 		},
 		{
 			id: 3,
 			title: "College of IST Challenge",
+			displayAmount: "Top 3 Teams",
+			planetIcon: "/fa26/003/13.png",
 			description:
 				"Build the future with Open Claw at this HackPSU challenge. Create innovative AI-powered tools, applications, and experiments using the OpenClaw platform. Explore bold ideas, collaborate with fellow hackers, and turn prototypes into real projects. Whether you're learning or pushing boundaries, this is your chance to shape what comes next with OpenClaw.",
 			prizes: [
@@ -261,7 +196,6 @@ const PrizesChallenges: React.FC = () => {
 					amount: "1 shared 1 month Claude Pro subscription for the team",
 				},
 			],
-			closedBoxImage: "/sp26/ist_challenge.png",
 		},
 	];
 
@@ -282,7 +216,7 @@ const PrizesChallenges: React.FC = () => {
 		>
 			<div className="text-center mb-20 mt-[-3rem]">
 				<h1
-					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 					style={{
 						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
@@ -292,67 +226,43 @@ const PrizesChallenges: React.FC = () => {
 					<span style={{ color: "#EEE5CD" }}>Discover</span>{" "}
 					<span style={{ color: "#E2C75E" }}>New Worlds</span>{" "}
 				</h1>
+				<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Each planet holds its own prizes, waiting to be claimed by the boldest explorers.
+					</div>
 				<div className="w-20 h-1.5 rounded-full mx-auto mb-10"></div>
 			</div>
-			<div className="w-full max-w-7xl flex flex-col items-center mb-[-8rem]">
+			<div className="w-full max-w-7xl flex flex-col items-center">
 				{prizesAndChallengesFlag?.isEnabled ? (
-					<div className="w-full h-96 md:h-[500px] relative flex items-center justify-center">
-						{/* Diagonal Button Container */}
-						{awards.map((award, index) => {
-							// Desktop alignment values
-							const desktopBaseLeft = index * 12;
-							const desktopBaseTop = index * 35;
-							const desktopHorizontalOffset = 39;
-
-							// Mobile alignment values - adjust these as needed
-							const mobileBaseLeft = index * 30;
-							const mobileBaseTop = index * 27;
-							const mobileHorizontalOffset = 15;
-
-							// Select values based on screen size
-							const baseLeft = isMobile ? mobileBaseLeft : desktopBaseLeft;
-							const baseTop = isMobile ? mobileBaseTop : desktopBaseTop;
-							const horizontalOffset = isMobile
-								? mobileHorizontalOffset
-								: desktopHorizontalOffset;
-							const buttonWidth = isMobile
-								? mobileButtonWidth
-								: desktopButtonWidth;
-							const buttonHeight = isMobile
-								? mobileButtonHeight
-								: desktopButtonHeight;
-
-							return (
-								<PrizeButton
-									key={award.id}
-									award={award}
-									onClick={handleAwardClick}
-									width={buttonWidth}
-									height={buttonHeight}
-									isModalOpen={isModalOpen}
-									selectedAwardId={selectedAward?.id}
-									style={{
-										position: "absolute",
-										left: `${baseLeft + horizontalOffset}%`,
-										top: `${baseTop}%`,
-										transform: "translate(-50%, -50%)",
-									}}
-								/>
-							);
-						})}
+					<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+						{awards.slice(0, 3).map((award) => (
+							<PrizeCard
+								key={award.id}
+								award={award}
+								onClick={handleAwardClick}
+							/>
+						))}
 					</div>
 				) : (
-					<div className="w-full mb-60">
+					<div className="w-full">
 						{/* Small Coming Soon Message */}
-						<div className="w-full max-w-md mx-auto mb-40">
-							<div className="p-4 rounded-lg text-center bg-white/90 backdrop-blur-sm border-2 border-[#0066CC] shadow-md">
+						<div className="w-full max-w-md mx-auto">
+							<div className="p-4 rounded-lg text-center backdrop-blur-sm border-2 border-[#E2C75E] shadow-md">
 								<h3
-									className="text-lg font-bold text-[#000080] mb-1"
+									className="text-lg font-bold text-[#EEE5CD] mb-1"
 									style={{ fontFamily: "Orbitron, monospace" }}
 								>
 									Coming Soon!
 								</h3>
-								<p className="text-sm text-gray-600">
+								<p className="text-sm text-[#EEE5CD]">
 									Prizes & challenges will be announced soon. Stay tuned!
 								</p>
 							</div>

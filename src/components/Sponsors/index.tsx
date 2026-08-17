@@ -309,7 +309,7 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 					style={{
 						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
@@ -319,6 +319,18 @@ const Sponsors: React.FC = () => {
 					<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
 					<span style={{ color: "#B6663C" }}>Partners</span>{" "}
 				</h1>
+				<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Our sponsors make the mission possible. Interested in supporting HackPSU?
+					</div>
 					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>

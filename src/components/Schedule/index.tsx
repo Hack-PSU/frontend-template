@@ -1068,7 +1068,7 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-12"
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-12"
 					style={{
 						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",

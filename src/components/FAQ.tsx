@@ -172,33 +172,18 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 };
 
 function playRobotSound() {
-	try {
-		const ctx = new (
-			window.AudioContext || (window as any).webkitAudioContext
-		)();
-		const playBeep = (
-			frequency: number,
-			startTime: number,
-			duration: number
-		) => {
-			const osc = ctx.createOscillator();
-			const gain = ctx.createGain();
-			osc.connect(gain);
-			gain.connect(ctx.destination);
-			osc.type = "square";
-			osc.frequency.setValueAtTime(frequency, startTime);
-			osc.frequency.setValueAtTime(frequency * 0.5, startTime + duration * 0.6);
-			gain.gain.setValueAtTime(0.12, startTime);
-			gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-			osc.start(startTime);
-			osc.stop(startTime + duration);
-		};
-		playBeep(440, 0, 0.08);
-		playBeep(330, 0.12, 0.1);
-		playBeep(550, 0.26, 0.12);
-	} catch {
-		// ignore if audio not supported or blocked
-	}
+    const audio = new Audio("/fa26/ufo_beam_sound.mp3");
+
+    // Configurable parameters
+    audio.volume = 0.5; // 0.0 = silent, 1.0 = full volume
+    audio.loop = false; // Make sure the audio does not loop
+
+    // Start from the beginning every time the button is clicked
+    audio.currentTime = 0;
+
+    audio.play().catch(() => {
+        // Ignore if audio is blocked by the browser
+    });
 }
 
 const FAQ: React.FC = () => {
@@ -238,7 +223,7 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 					style={{
 						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
@@ -248,6 +233,18 @@ const FAQ: React.FC = () => {
 					<span style={{ color: "#EEE5CD" }}>Space Station</span>{" "}
 					<span style={{ color: "#64A5C3" }}>FAQ</span>{" "}
 				</h1>
+				<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Mission control has answers to your most pressing questions.
+					</div>
 					<div className="w-20 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>

@@ -118,7 +118,7 @@ const Footer = () => {
 	};
 
 	return (
-		<footer className="relative w-full overflow-hidden bg-[#2A145C]">
+		<footer className="relative w-full overflow-hidden bg-[#1D243D]">
 			{/* Social Links Section */}
 			<div className="relative z-20 flex flex-col items-center gap-4 pb-[12vw] md:pb-[8vw] pt-[4vw]">
 				<div className="relative w-full flex justify-center">
@@ -135,7 +135,7 @@ const Footer = () => {
 							<InstagramIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#E2C75E",
+									color: "#EEE5CD",
 									filter: hoverInstagram
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -154,7 +154,7 @@ const Footer = () => {
 							<LinkedInIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#E2C75E",
+									color: "#EEE5CD",
 									filter: hoverLinkedIn
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -173,7 +173,7 @@ const Footer = () => {
 							<GitHubIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#E2C75E",
+									color: "#EEE5CD",
 									filter: hoverGitHub
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -192,7 +192,7 @@ const Footer = () => {
 							<EmailIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#E2C75E",
+									color: "#EEE5CD",
 									filter: hoverEmail
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -210,7 +210,7 @@ const Footer = () => {
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
 							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-						color: "#E2C75E",
+						color: "#EEE5CD",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",
 					}}
@@ -225,7 +225,7 @@ const Footer = () => {
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
 							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-						color: "#E2C75E",
+						color: "#EEE5CD",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",
 					}}

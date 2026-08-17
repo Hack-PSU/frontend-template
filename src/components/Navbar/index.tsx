@@ -106,7 +106,7 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 
 const MLHBanner: React.FC = () => (
 	<motion.a
-		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
+		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=blue"
 		target="_blank"
 		rel="noopener noreferrer"
 		className="focus:outline-none focus:ring-4 focus:ring-[rgba(100,165,195,0.35)] rounded-lg"
@@ -117,7 +117,7 @@ const MLHBanner: React.FC = () => (
 		transition={{ duration: 0.6, delay: 0.4 }}
 	>
 		<Image
-			src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
+			src="/fa26/logo+assets/mlh-badge.svg"
 			alt="Major League Hacking 2026 Hackathon Season"
 			width={120}
 			height={120}
@@ -254,7 +254,7 @@ const Navbar: React.FC = () => {
 
 						{/* Desktop Navigation */}
 						<motion.div
-							className="hidden md:flex items-center space-x-6"
+							className="hidden md:flex items-center space-x-6 ml-14"
 							initial={{ opacity: 0, y: -20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.6, delay: 0.2 }}

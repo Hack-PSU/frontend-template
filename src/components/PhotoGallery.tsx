@@ -24,7 +24,7 @@ const PhotoGallery: React.FC<CarouselProps> = ({
 			{/* Header */}
 			<div className="text-center mb-8">
 				<h1
-					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 					style={{
 						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
@@ -34,6 +34,18 @@ const PhotoGallery: React.FC<CarouselProps> = ({
 					<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
 					<span style={{ color: "#E2C75E" }}>Memories</span>{" "}
 				</h1>
+				<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Photographs taken during previous expeditions. Proof that something extraordinary happens there.
+					</div>
 			</div>
 
 			{/* First Row */}
