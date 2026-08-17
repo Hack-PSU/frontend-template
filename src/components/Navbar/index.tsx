@@ -241,7 +241,7 @@ const Navbar: React.FC = () => {
 									whileTap={{ scale: 0.95 }}
 								>
 									<Image
-										src="/fa26/logo+assets/logo.png"
+										src="/fa26/logo+assets/fa26-logo.png"
 										alt="HackPSU Logo"
 										width={100}
 										height={100}
