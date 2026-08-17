@@ -70,7 +70,7 @@ export default function Home() {
 				onClose={() => setShowMemoryGame(false)}
 			/>
 			<main className="flex flex-col items-center w-full">
-				<section className="hero-bg w-full">
+				<section className="hero-bg w-full pt-24 md:pt-28 lg:pt-32">
 					<Hero />
 				</section>
 				<section className="info-bg w-full">

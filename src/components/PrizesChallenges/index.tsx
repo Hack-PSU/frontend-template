@@ -250,18 +250,15 @@ const PrizesChallenges: React.FC = () => {
 			prizes: [
 				{
 					place: "1st Place",
-					amount:
-						"1 shared 3 month Claude Pro subscription for the team",
+					amount: "1 shared 3 month Claude Pro subscription for the team",
 				},
 				{
 					place: "2nd Place",
-					amount:
-						"1 shared 2 month Claude Pro subscription for the team",
+					amount: "1 shared 2 month Claude Pro subscription for the team",
 				},
 				{
 					place: "3rd Place",
-					amount:
-						"1 shared 1 month Claude Pro subscription for the team",
+					amount: "1 shared 1 month Claude Pro subscription for the team",
 				},
 			],
 			closedBoxImage: "/sp26/ist_challenge.png",
@@ -281,23 +278,19 @@ const PrizesChallenges: React.FC = () => {
 				minHeight: "50vh",
 				paddingTop: "5rem",
 				paddingBottom: "5rem",
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
 			<div className="text-center mb-20 mt-[-3rem]">
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#3D5EAB] mb-3"
+					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
 					style={{
-						fontFamily: "Orbitron, monospace",
-						backgroundColor: "#ffffff",
+						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
 						padding: "0.5rem 1rem",
 					}}
 				>
-					Prizes & Challenges
+					<span style={{ color: "#EEE5CD" }}>Discover</span>{" "}
+					<span style={{ color: "#E2C75E" }}>New Worlds</span>{" "}
 				</h1>
 				<div className="w-20 h-1.5 rounded-full mx-auto mb-10"></div>
 			</div>

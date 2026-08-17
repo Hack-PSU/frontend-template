@@ -21,28 +21,28 @@ const eventTypeColors = {
 		border: "border-[#f5b90c]",
 		text: "text-[#DC2626]",
 		label: "Activity",
-		jellyfishAsset: "/sp26/activities2.png",
+		jellyfishAsset: "/fa26/003/4.png",
 	},
 	[EventType.food]: {
 		bg: "bg-[#2b98a1]",
 		border: "border-[#2b98a1]",
 		text: "text-[#16A34A]",
 		label: "General",
-		jellyfishAsset: "/sp26/general2.png",
+		jellyfishAsset: "/fa26/003/2.png",
 	},
 	[EventType.workshop]: {
 		bg: "bg-[#88d960]",
 		border: "border-[#88d960]",
 		text: "text-[#D97706]",
 		label: "Workshop",
-		jellyfishAsset: "/sp26/workshops2.png",
+		jellyfishAsset: "/fa26/003/13.png",
 	},
 	[EventType.checkIn]: {
 		bg: "bg-[#e295fd]",
 		border: "border-[#e295fd]",
 		text: "text-[#4338CA]",
 		label: "Check-in",
-		jellyfishAsset: "/sp26/checkin2.png",
+		jellyfishAsset: "/fa26/003/1.png",
 	},
 };
 
@@ -842,8 +842,8 @@ const Schedule: React.FC = () => {
 			};
 
 		// Filter events by selected categories and exclude fastPass events
-		const filteredEvents = events.filter((event) =>
-			selectedCategories.has(event.type) && !event.fastPass
+		const filteredEvents = events.filter(
+			(event) => selectedCategories.has(event.type) && !event.fastPass
 		);
 
 		const eventsByDay: {
@@ -1057,10 +1057,6 @@ const Schedule: React.FC = () => {
 			className="relative flex flex-col items-center justify-center w-full px-[4vw]"
 			style={{
 				minHeight: "60vw",
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 			id="schedule"
 		>
@@ -1072,18 +1068,16 @@ const Schedule: React.FC = () => {
 				transition={{ duration: 0.8 }}
 			>
 				<h1
-					className="text-4xl md:text-5xl font-bold text-[#2f234bff] mt-8 mx-auto"
+					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-12"
 					style={{
-						fontFamily: "Orbitron, monospace",
-						backgroundColor: "#ffffff",
+						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
 						padding: "0.5rem 1rem",
-						width: "fit-content",
 					}}
 				>
-					Schedule
+					<span style={{ color: "#EEE5CD" }}>Flight</span>{" "}
+					<span style={{ color: "#B6663C" }}>Schedule</span>{" "}
 				</h1>
-				<div className="w-16 h-1 bg-[#000080] rounded-full mx-auto mb-6"></div>
 
 				{/* Legend - Conditional rendering based on screen size */}
 				{isMobile ? (

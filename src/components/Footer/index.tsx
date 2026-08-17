@@ -135,7 +135,7 @@ const Footer = () => {
 							<InstagramIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#ff88e9ff",
+									color: "#E2C75E",
 									filter: hoverInstagram
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -154,7 +154,7 @@ const Footer = () => {
 							<LinkedInIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#ff88e9ff",
+									color: "#E2C75E",
 									filter: hoverLinkedIn
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -173,7 +173,7 @@ const Footer = () => {
 							<GitHubIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#ff88e9ff",
+									color: "#E2C75E",
 									filter: hoverGitHub
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -183,7 +183,6 @@ const Footer = () => {
 						<a
 							href="mailto:team@hackpsu.org"
 							target="_blank"
-							
 							rel="noopener noreferrer"
 							className="hover:scale-110 transition-transform duration-300"
 							style={{ transition: "transform 0.3s, filter 0.3s" }}
@@ -193,7 +192,7 @@ const Footer = () => {
 							<EmailIcon
 								style={{
 									fontSize: `clamp(32px, 4vw, 48px)`,
-									color: "#ff88e9ff",
+									color: "#E2C75E",
 									filter: hoverEmail
 										? "drop-shadow(0 0 8px rgba(255,136,233,0.8))"
 										: "drop-shadow(0 0 4px rgba(255,136,233,0.6))",
@@ -211,12 +210,12 @@ const Footer = () => {
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
 							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-						color: "#ff88e9ff",
+						color: "#E2C75E",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",
 					}}
 				>
-					{'>'} privacy_policy
+					{">"} privacy_policy
 				</a>
 
 				{/* Made with love text */}
@@ -226,7 +225,7 @@ const Footer = () => {
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
 							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-						color: "#ff88e9ff",
+						color: "#E2C75E",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",
 					}}
@@ -240,7 +239,8 @@ const Footer = () => {
 								margin: "0 0.25px",
 								color: "#88ffff",
 							}}
-						/>{" "}in Happy Valley.
+						/>{" "}
+						in Happy Valley.
 					</>
 				</p>
 			</div>

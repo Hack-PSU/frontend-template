@@ -138,10 +138,8 @@ export default function Profile() {
 	>(null);
 
 	// Feature flag checks
-	const {
-		data: registrationsFlagData,
-		isLoading: isLoadingRegistrationsFlag,
-	} = useFlagState("Registrations");
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
 	const { data: roomReservationFlag } = useFlagState("RoomReservation");
 
@@ -427,10 +425,10 @@ export default function Profile() {
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
 				<Card
-					className="border-4 border-[#ff88e9ff] bg-gradient-to-r from-slate-900 to-slate-800 text-white"
+					className="border-4 border-[#E2C75E] bg-gradient-to-r from-slate-900 to-slate-800 text-white"
 					style={{
 						boxShadow:
-							"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)",
+							"0 -6px 10px #E2C75E, 0 6px 10px #E2C75E, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)",
 					}}
 				>
 					<CardHeader className="text-center">
@@ -453,9 +451,9 @@ export default function Profile() {
 								? `HackPSU ${getRoleName(userRole)}`
 								: showClosedRegistrationsState
 									? "HackPSU Account"
-								: isConfirmed
-									? "HackPSU Participant"
-									: "HackPSU Applicant"}
+									: isConfirmed
+										? "HackPSU Participant"
+										: "HackPSU Applicant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">

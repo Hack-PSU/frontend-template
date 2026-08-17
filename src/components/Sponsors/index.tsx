@@ -215,12 +215,7 @@ const Sponsors: React.FC = () => {
 		<section
 			id="sponsors"
 			className="sponsors-bg relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
-			style={{
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
-			}}
+			style={{}}
 		>
 			<motion.div
 				className="absolute top-1/2 transform -translate-y-1/2 z-10"
@@ -314,16 +309,16 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3"
-						style={{
-							fontFamily: "Orbitron, monospace",
-							backgroundColor: "#ffffff",
-							borderRadius: "12px",
-							padding: "0.5rem 1rem",
-						}}
-					>
-						Sponsors
-					</h1>
+					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					style={{
+						fontFamily: "Barlow Condensed",
+						borderRadius: "12px",
+						padding: "0.5rem 1rem",
+					}}
+				>
+					<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
+					<span style={{ color: "#B6663C" }}>Partners</span>{" "}
+				</h1>
 					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
@@ -348,7 +343,7 @@ const Sponsors: React.FC = () => {
 				{/* Event Partners Section */}
 				{partners.length > 0 && (
 					<motion.div
-						className="mt-20 pt-12 border-t-2 border-[#ff88e9ff] w-full flex flex-col items-center"
+						className="mt-20 pt-12 border-t-2 border-[#E2C75E] w-full flex flex-col items-center"
 						initial={{ opacity: 0, y: 30 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.8, delay: 0.5 }}

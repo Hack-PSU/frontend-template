@@ -139,6 +139,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 								transition={{ duration: 0.2, delay: 0.1 }}
 								className="text-white/90 leading-relaxed mb-4"
 								style={{
+									fontFamily: "'DM Sans', sans-serif",
 									fontSize: "clamp(14px, 2vw, 16px)",
 								}}
 							>
@@ -172,8 +173,14 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 
 function playRobotSound() {
 	try {
-		const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-		const playBeep = (frequency: number, startTime: number, duration: number) => {
+		const ctx = new (
+			window.AudioContext || (window as any).webkitAudioContext
+		)();
+		const playBeep = (
+			frequency: number,
+			startTime: number,
+			duration: number
+		) => {
 			const osc = ctx.createOscillator();
 			const gain = ctx.createGain();
 			osc.connect(gain);
@@ -222,16 +229,7 @@ const FAQ: React.FC = () => {
 	};
 
 	return (
-		<section
-			className="relative w-full"
-			id="faq"
-			style={{
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
-			}}
-		>
+		<section className="relative w-full" id="faq" style={{}}>
 			{/* Centered Header */}
 			<div className="w-full px-[4vw] pt-[8vw] pb-[4vw] text-center relative">
 				<motion.div
@@ -240,17 +238,16 @@ const FAQ: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#2f234bff] mb-6 mx-auto"
-						style={{
-							fontFamily: "Orbitron, monospace",
-							backgroundColor: "#ffffff",
-							borderRadius: "12px",
-							padding: "0.5rem 1rem",
-							width: "fit-content",
-						}}
-					>
-						FAQ
-					</h1>
+					className="text-4xl md:text-7xl font-bold text-[#EEE5CD] mb-3"
+					style={{
+						fontFamily: "Barlow Condensed",
+						borderRadius: "12px",
+						padding: "0.5rem 1rem",
+					}}
+				>
+					<span style={{ color: "#EEE5CD" }}>Space Station</span>{" "}
+					<span style={{ color: "#64A5C3" }}>FAQ</span>{" "}
+				</h1>
 					<div className="w-20 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
@@ -291,7 +288,7 @@ const FAQ: React.FC = () => {
 						title="Click me!"
 					>
 						<Image
-							src="/sp26/robot.png"
+							src="/fa26/logo+assets/ufo_beam.png"
 							alt="FAQ Illustration"
 							fill
 							className="object-contain pointer-events-none"
