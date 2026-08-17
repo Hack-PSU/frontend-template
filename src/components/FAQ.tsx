@@ -285,7 +285,7 @@ const FAQ: React.FC = () => {
 						title="Click me!"
 					>
 						<Image
-							src="/fa26/logo+assets/ufo_beam.png"
+							src="/fa26/logo+assets/ufo_beams.png"
 							alt="FAQ Illustration"
 							fill
 							className="object-contain pointer-events-none"
