@@ -107,7 +107,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 				transition={{ duration: 0.2 }}
 			>
 				<h3
-					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
+					className="text-[#EEE5CD] font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
 						fontSize: "clamp(16px, 2.5vw, 20px)",
 					}}
@@ -137,7 +137,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 								initial={{ y: -10, opacity: 0 }}
 								animate={{ y: 0, opacity: 1 }}
 								transition={{ duration: 0.2, delay: 0.1 }}
-								className="text-white/90 leading-relaxed mb-4"
+								className="text-[#EEE5CD] leading-relaxed mb-4"
 								style={{
 									fontFamily: "'DM Sans', sans-serif",
 									fontSize: "clamp(14px, 2vw, 16px)",

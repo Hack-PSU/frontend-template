@@ -216,7 +216,7 @@ const InfoSections: React.FC = () => {
 							{order[0].label}
 						</h3>
 						<p
-							className="text-white whitespace-pre-line"
+							className="text-[#EEE5CD] whitespace-pre-line"
 							style={{
 								fontSize: "clamp(14px, 2vw, 18px)",
 							}}
@@ -244,7 +244,7 @@ const InfoSections: React.FC = () => {
 										{s.value}
 									</div>
 									<p
-										className="uppercase mt-[0.5vw] text-gray-600"
+										className="uppercase mt-[0.5vw] text-[#EEE5CD]"
 										style={{ fontSize: "clamp(10px, 1.5vw, 16px)" }}
 									>
 										{s.label}
@@ -337,9 +337,9 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 				/>
 			</svg>
 			<motion.span
-				className="relative z-10 font-bold text-center px-2 absolute inset-0 flex items-center justify-center"
+				className="relative z-10 font-bold text-center text-[#EEE5CD] px-2 absolute inset-0 flex items-center justify-center"
 				style={{
-					color: "#ffffffff",
+					color: "#EEE5CD",
 					fontSize: isSelected
 						? "clamp(14px, 2.5vw, 14px)"
 						: "clamp(13px, 2vw, 13px)",
