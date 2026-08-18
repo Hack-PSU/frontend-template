@@ -17,7 +17,7 @@ import posthog from "posthog-js";
 // Helper function to get auth service URL from environment
 function getAuthServiceURL(): string {
 	// Use environment variable if set, otherwise default to production
-	return process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "http://localhost:3000";
+	return process.env.NEXT_PUBLIC_AUTH_SERVICE_URL || "https://auth.hackpsu.org";
 }
 
 type FirebaseContextType = {
