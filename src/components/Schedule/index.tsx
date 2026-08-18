@@ -1078,6 +1078,18 @@ const Schedule: React.FC = () => {
 					<span style={{ color: "#EEE5CD" }}>Flight</span>{" "}
 					<span style={{ color: "#B6663C" }}>Schedule</span>{" "}
 				</h1>
+				<div
+						className="mb-12"
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						The official itinerary for our mission. Be sure to keep track of it vigilantly.
+					</div>
 
 				{/* Legend - Conditional rendering based on screen size */}
 				{isMobile ? (
@@ -1166,7 +1178,7 @@ const Schedule: React.FC = () => {
 				{/* Show selected count */}
 				<div className="text-center mb-4">
 					<span
-						className="text-sm text-[#ffa1fd] font-medium"
+						className="text-sm text-[#64A5C3] font-medium"
 						style={{ fontFamily: "Orbitron, monospace" }}
 					>
 						{selectedCategories.size === Object.keys(EventType).length

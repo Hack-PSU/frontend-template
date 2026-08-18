@@ -306,7 +306,7 @@ export default function Team() {
 	return (
 		<div
 			className="min-h-screen py-8 px-4"
-			style={{ backgroundColor: "#4d1170" }}
+			
 		>
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Team Header */}

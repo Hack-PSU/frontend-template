@@ -214,7 +214,7 @@ const Sponsors: React.FC = () => {
 	return (
 		<section
 			id="sponsors"
-			className="sponsors-bg relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
+			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
 			style={{}}
 		>
 			<motion.div

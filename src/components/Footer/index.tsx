@@ -118,7 +118,7 @@ const Footer = () => {
 	};
 
 	return (
-		<footer className="relative w-full overflow-hidden bg-[#1D243D]">
+		<footer className="relative w-full overflow-hidden bg-[#2C3449]">
 			{/* Social Links Section */}
 			<div className="relative z-20 flex flex-col items-center gap-4 pb-[12vw] md:pb-[8vw] pt-[4vw]">
 				<div className="relative w-full flex justify-center">
@@ -209,13 +209,13 @@ const Footer = () => {
 					style={{
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
-							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+							"'Orbitron', sans-serif, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
 						color: "#EEE5CD",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",
 					}}
 				>
-					{">"} privacy_policy
+					{">"} privacy policy
 				</a>
 
 				{/* Made with love text */}
@@ -224,7 +224,7 @@ const Footer = () => {
 					style={{
 						fontSize: `clamp(14px, 2vw, 18px)`,
 						fontFamily:
-							'"IBM Plex Mono", ui-monospace, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+							"'Orbitron', sans-serif, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'",
 						color: "#EEE5CD",
 						letterSpacing: "0.05em",
 						textShadow: "0 0 3px rgba(255,136,233,0.6)",

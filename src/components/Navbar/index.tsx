@@ -117,7 +117,7 @@ const MLHBanner: React.FC = () => (
 		transition={{ duration: 0.6, delay: 0.4 }}
 	>
 		<Image
-			src="/fa26/logo+assets/mlh-badge.svg"
+			src="/fa26/logo+assets/mlh-badge-custom.svg"
 			alt="Major League Hacking 2026 Hackathon Season"
 			width={120}
 			height={120}
@@ -214,11 +214,7 @@ const Navbar: React.FC = () => {
 		<>
 			{/* Main Navbar */}
 			<motion.nav
-				className={`w-full z-40 ${
-					isHome
-						? "absolute inset-x-0 top-0 bg-transparent backdrop-blur-none"
-						: "relative bg-[#180249] backdrop-blur-md"
-				}`}
+				className="w-full z-40 absolute inset-x-0 top-0 bg-transparent backdrop-blur-none"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -243,9 +239,9 @@ const Navbar: React.FC = () => {
 									<Image
 										src="/fa26/logo+assets/fa26-logo.png"
 										alt="HackPSU Logo"
-										width={100}
-										height={100}
-										className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+										width={150}
+										height={150}
+										className="w-18 h-18 md:w-20 md:h-28 md:w-28 drop-shadow-lg mt-4"
 										priority
 									/>
 								</motion.div>
@@ -341,7 +337,7 @@ const Navbar: React.FC = () => {
 
 						{/* Menu Content */}
 						<motion.div
-							className="absolute top-24 left-0 right-0 overflow-y-auto border-t border-[rgba(226,199,94,0.18)]"
+							className="absolute top-24 bottom-0 left-0 right-0 overflow-y-auto overscroll-contain touch-pan-y border-t border-[rgba(226,199,94,0.18)]"
 							style={{
 								background:
 									"linear-gradient(180deg, rgba(17,16,34,0.98) 0%, rgba(47,35,75,0.97) 100%)",

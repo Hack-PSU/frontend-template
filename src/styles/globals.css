@@ -94,94 +94,116 @@
 		position: relative;
 	}
 
+	.subpage-bg {
+		background-image: url("/fa26/bg/bg-rest3.jpg");
+		background-repeat: repeat-y;
+		background-size: 100% auto;
+		background-position: top center;
+	}
+
 	/* Section-specific backgrounds */
 	.hero-bg {
-		background-image: url("/fa26/bg/first-page-bg.png");
-		background-size: 100% auto;
-		background-position: center;
+		background-image:
+			url("/fa26/bg/first-page-bg2.jpg"), url("/fa26/bg/bg-rest3.jpg");
+		background-size:
+			100% auto,
+			100% auto;
+		background-position:
+			top center,
+			top center;
+		background-repeat: no-repeat, repeat-y;
 	}
 
 	@media (max-width: 767px) {
 		.hero-bg {
-			background-image: url("/fa26/bg/first-page-bg.png");
+			background-image:
+				url("/fa26/bg/first-page-bg2.jpg"), url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.info-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
 	@media (max-width: 767px) {
 		.info-bg {
-			background-image: url("/fa26/bg/bg-rest.png");
+			background-image: url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.prizes-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
 	@media (max-width: 767px) {
 		.prizes-bg {
-			background-image: url("/fa26/bg/bg-rest.png");
+			background-image: url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.schedule-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
-		background-position: center;
+		background-position: top center;
+		background-repeat: repeat-y;
 	}
 
 	@media (max-width: 767px) {
 		.schedule-bg {
-			background-image: url("/fa26/bg/bg-rest.png");
-			background-repeat: no-repeat;
+			background-image: url("/fa26/bg/bg-rest3.jpg");
+			background-repeat: repeat-y;
 		}
 	}
 
 	.faq-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
 	@media (max-width: 767px) {
 		.faq-bg {
-			background-image: url("/fa26/bg/bg-rest.png");
+			background-image: url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.gallery-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
 		background-position: center;
 	}
 
 	@media (max-width: 767px) {
 		.gallery-bg {
-			background-image: url("/fa26/bg/bg-rest.png");
+			background-image: url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.sponsors-bg {
-		background-image: url("/fa26/bg/last-page.png");
-		background-size: 100% auto;
-		background-position: bottom center;
+		background-image:
+			url("/fa26/bg/last-page2.jpg"), url("/fa26/bg/bg-rest3.jpg");
+		background-size:
+			100% auto,
+			100% auto;
+		background-position:
+			bottom center,
+			top center;
+		background-repeat: no-repeat, repeat-y;
 	}
 
 	@media (max-width: 1024px) {
 		.sponsors-bg {
-			background-image: url("/fa26/bg/last-page.png");
+			background-image:
+				url("/fa26/bg/last-page2.jpg"), url("/fa26/bg/bg-rest3.jpg");
 		}
 	}
 
 	.footer-bg {
-		background-image: url("/fa26/bg/bg-rest.png");
+		background-image: url("/fa26/bg/bg-rest3.jpg");
 		background-size: 100% auto;
 		background-position: center;
 	}
