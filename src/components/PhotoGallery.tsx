@@ -20,30 +20,32 @@ const PhotoGallery: React.FC<CarouselProps> = ({
 	const secondRow = images.slice(12, 24);
 
 	return (
-		<section
-			className={`w-full overflow-hidden py-8 md:py-16`}
-			style={{
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -8px 15px #ff88e9ff, 0 8px 15px #ff88e9ff, inset 0 -8px 8px rgba(255, 136, 233, 0.1), inset 0 8px 8px rgba(255, 136, 233, 0.1)",
-			}}
-		>
+		<section className={`w-full overflow-hidden py-8 md:py-16`} style={{}}>
 			{/* Header */}
 			<div className="text-center mb-8">
 				<h1
-					className={`text-4xl md:text-5xl font-bold mb-3 text-[#2f234bff] mx-auto`}
+					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 					style={{
-						fontFamily: "Orbitron, monospace",
-						backgroundColor: "#ffffff",
+						fontFamily: "Barlow Condensed",
 						borderRadius: "12px",
 						padding: "0.5rem 1rem",
-						width: "fit-content",
 					}}
 				>
-					Gallery
+					<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
+					<span style={{ color: "#E2C75E" }}>Memories</span>{" "}
 				</h1>
-				<div className={`w-16 h-1 rounded-full mx-auto`}></div>
+				<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Photographs taken during previous expeditions. Proof that something extraordinary happens there.
+					</div>
 			</div>
 
 			{/* First Row */}

@@ -1,0 +1,4 @@
+Gold: #E2C75E
+Orange: #B6663C
+Tan: #EEE5CD
+Aqua: #64A5C3

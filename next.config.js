@@ -28,6 +28,9 @@ const nextConfig = {
 				hostname: "s3.amazonaws.com",
 			},
 			{
+				hostname: "logged-assets.s3.amazonaws.com"
+			},
+			{
 				hostname: "avatars.githubusercontent.com",
 			},
 			{
