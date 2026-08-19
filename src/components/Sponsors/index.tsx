@@ -12,7 +12,7 @@ const TIER_CONFIG = {
 		priority: 1,
 		maxLogos: 1,
 		logoSize: "w-80 h-32 md:w-96 md:h-40 lg:w-[28rem] lg:h-48",
-		containerBg: "bg-white",
+		containerBg: "bg-[#EEE5CD]",
 		borderColor: "border-[#FFE4B5]",
 		shadowColor: "shadow-lg",
 	},
@@ -20,39 +20,39 @@ const TIER_CONFIG = {
 		priority: 2,
 		maxLogos: 2,
 		logoSize: "w-64 h-24 md:w-72 md:h-28 lg:w-80 lg:h-32",
-		containerBg: "bg-white",
-		borderColor: "border-[#E6E6FA]",
+		containerBg: "bg-[#EEE5CD]",
+		borderColor: "border-[#b3b3fc]",
 		shadowColor: "shadow-lg",
 	},
 	gold: {
 		priority: 3,
 		maxLogos: 3,
 		logoSize: "w-56 h-20 md:w-64 md:h-24 lg:w-72 lg:h-28",
-		containerBg: "bg-white",
-		borderColor: "border-[#FFE4B5]",
+		containerBg: "bg-[#EEE5CD]",
+		borderColor: "border-[#e3ae32]",
 		shadowColor: "shadow-lg",
 	},
 	silver: {
 		priority: 4,
 		maxLogos: 4,
 		logoSize: "w-48 h-16 md:w-56 md:h-20 lg:w-64 lg:h-24",
-		containerBg: "bg-white",
-		borderColor: "border-[#F0F0F0]",
+		containerBg: "bg-[#EEE5CD]",
+		borderColor: "border-[#a3a3a3]",
 		shadowColor: "shadow-lg",
 	},
 	bronze: {
 		priority: 5,
 		maxLogos: 6,
 		logoSize: "w-40 h-12 md:w-48 md:h-16 lg:w-56 lg:h-20",
-		containerBg: "bg-white",
-		borderColor: "border-[#FFEFD5]",
+		containerBg: "bg-[#EEE5CD]",
+		borderColor: "border-[#a16800]",
 		shadowColor: "shadow-lg",
 	},
 	partner: {
 		priority: 6,
 		maxLogos: 8,
 		logoSize: "w-32 h-10 md:w-40 md:h-12 lg:w-48 lg:h-16",
-		containerBg: "bg-white",
+		containerBg: "bg-[#EEE5CD]",
 		borderColor: "border-[#FFE4E6]",
 		shadowColor: "shadow-lg",
 	},
@@ -78,7 +78,7 @@ const SponsorCard: React.FC<SponsorCardProps> = ({
 	return (
 		<motion.div
 			className={`
-				relative p-6 rounded-2xl border-2 ${tierConfig.borderColor} ${tierConfig.containerBg} 
+				relative p-6 rounded-2xl border-4 ${tierConfig.borderColor} ${tierConfig.containerBg} 
 				${tierConfig.shadowColor} cursor-pointer transition-all duration-300
 				hover:shadow-xl hover:scale-105 active:scale-95
 			`}
@@ -98,7 +98,7 @@ const SponsorCard: React.FC<SponsorCardProps> = ({
 			whileTap={{ scale: 0.95 }}
 		>
 			{/* Logo container */}
-			<div className="flex items-center justify-center h-full">
+			<div className="flex items-center justify-center h-full bg-[#EEE5CD]">
 				<div
 					className={`relative ${tierConfig.logoSize} flex items-center justify-center`}
 				>
@@ -361,10 +361,10 @@ const Sponsors: React.FC = () => {
 						transition={{ duration: 0.8, delay: 0.5 }}
 					>
 						<motion.h2
-							className="text-2xl md:text-3xl font-bold text-[#2f234bff] text-center mb-8"
+							className="text-2xl md:text-4xl font-bold text-[#12122A] text-center mb-8"
 							style={{
-								fontFamily: "Orbitron, monospace",
-								backgroundColor: "#ffffff",
+								fontFamily: "DM Sans, sans-serif",
+								backgroundColor: "#EEE5CD",
 								borderRadius: "12px",
 								padding: "0.5rem 1rem",
 							}}
