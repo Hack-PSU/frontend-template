@@ -145,7 +145,7 @@ const InfoSections: React.FC = () => {
 			>
 			<a href="https://en.wikipedia.org/wiki/Artemis_II" title="The Dark Side of the Moon" target="_blank" rel="noopener noreferrer">
 				<Image
-					src="/fa26/logo+assets/pose_wave_floating.png"
+					src="/fa26/logo+assets/pose_wave_floating.PNG"
 					alt="Cyber Hacky"
 					width={200}
 					height={200}

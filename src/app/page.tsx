@@ -76,7 +76,7 @@ export default function Home() {
 			<main className="flex flex-col items-center w-full">
 				<section className="hero-bg relative w-full pt-24 md:pt-28 lg:pt-32">
 					<FloatingAsset
-						src="/fa26/logo+assets/satellite.PNG"
+						src="/fa26/logo+assets/satellite.png"
 						alt="Hop aboard!"
 						width={1024}
 						height={1024}
