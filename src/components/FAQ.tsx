@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
 
 interface FAQItem {
 	question: string;
@@ -55,7 +56,7 @@ const faqs: FAQItem[] = [
 	{
 		question: "What is Devpost?",
 		answer:
-			"Devpost is a project submission platform used by many hackathons and technology-focused events. You and/or your team will be asked to submit your project through our Fall 2026 Devpost. For those who have never used Devpost before or would like a refresher, head over to the info booth!",
+			"Devpost is a project submission platform used by many hackathons and technology-focused events. You and/or your team will be asked to submit your project through our {{hackathonName}} Devpost. For those who have never used Devpost before or would like a refresher, head over to the info booth!",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",
@@ -95,21 +96,21 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 }) => {
 	return (
 		<motion.div
-			className="border-b border-white/20 last:border-b-0"
+			className="rounded-2xl border border-white/20 bg-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl overflow-hidden"
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.3, delay: index * 0.1 }}
 		>
 			<motion.button
 				onClick={onToggle}
-				className="w-full py-6 px-6 text-left flex justify-between items-center hover:bg-white/5 transition-colors duration-200 group"
+				className="w-full py-4 px-5 text-left flex justify-between items-center hover:bg-white/10 transition-colors duration-200 group"
 				whileHover={{ x: 4 }}
 				transition={{ duration: 0.2 }}
 			>
 				<h3
-					className="text-white font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
+					className="text-[#EEE5CD] font-medium pr-4 group-hover:text-[#86CFFC] transition-colors duration-200"
 					style={{
-						fontSize: "clamp(16px, 2.5vw, 20px)",
+						fontSize: "clamp(15px, 2.2vw, 18px)",
 					}}
 				>
 					{faq.question}
@@ -132,14 +133,15 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 						transition={{ duration: 0.3, ease: "easeInOut" }}
 						className="overflow-hidden"
 					>
-						<div className="px-6 pb-6">
+						<div className="px-5 pb-4">
 							<motion.p
 								initial={{ y: -10, opacity: 0 }}
 								animate={{ y: 0, opacity: 1 }}
 								transition={{ duration: 0.2, delay: 0.1 }}
-								className="text-white/90 leading-relaxed mb-4"
+								className="text-[#EEE5CD] leading-relaxed mb-3"
 								style={{
-									fontSize: "clamp(14px, 2vw, 16px)",
+									fontFamily: "'DM Sans', sans-serif",
+									fontSize: "clamp(13px, 1.8vw, 15px)",
 								}}
 							>
 								{faq.answer}
@@ -151,7 +153,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 									rel="noopener noreferrer"
 									className="inline-block text-[#86CFFC] hover:text-white underline decoration-[#86CFFC] hover:decoration-white transition-colors duration-200"
 									style={{
-										fontSize: "clamp(14px, 2vw, 16px)",
+										fontSize: "clamp(13px, 1.8vw, 15px)",
 										fontFamily: "Orbitron, monospace",
 									}}
 									initial={{ y: -10, opacity: 0 }}
@@ -171,33 +173,30 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 };
 
 function playRobotSound() {
-	try {
-		const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-		const playBeep = (frequency: number, startTime: number, duration: number) => {
-			const osc = ctx.createOscillator();
-			const gain = ctx.createGain();
-			osc.connect(gain);
-			gain.connect(ctx.destination);
-			osc.type = "square";
-			osc.frequency.setValueAtTime(frequency, startTime);
-			osc.frequency.setValueAtTime(frequency * 0.5, startTime + duration * 0.6);
-			gain.gain.setValueAtTime(0.12, startTime);
-			gain.gain.exponentialRampToValueAtTime(0.01, startTime + duration);
-			osc.start(startTime);
-			osc.stop(startTime + duration);
-		};
-		playBeep(440, 0, 0.08);
-		playBeep(330, 0.12, 0.1);
-		playBeep(550, 0.26, 0.12);
-	} catch {
-		// ignore if audio not supported or blocked
-	}
+	const audio = new Audio("/fa26/ufo_beam_sound.mp3");
+
+	// Configurable parameters
+	audio.volume = 0.5; // 0.0 = silent, 1.0 = full volume
+	audio.loop = false; // Make sure the audio does not loop
+
+	// Start from the beginning every time the button is clicked
+	audio.currentTime = 0;
+
+	audio.play().catch(() => {
+		// Ignore if audio is blocked by the browser
+	});
 }
 
 const FAQ: React.FC = () => {
 	const [openItems, setOpenItems] = useState<Set<number>>(new Set());
+	const { data: activeHackathon } = useActiveHackathonForStatic();
 	const [fishClicked, setFishClicked] = useState(false);
 	const [robotDance, setRobotDance] = useState(false);
+	const hackathonName = activeHackathon?.name || "the current HackPSU";
+	const renderedFaqs = faqs.map((faq) => ({
+		...faq,
+		answer: faq.answer.replace("{{hackathonName}}", hackathonName),
+	}));
 
 	const handleRobotClick = () => {
 		playRobotSound();
@@ -222,35 +221,36 @@ const FAQ: React.FC = () => {
 	};
 
 	return (
-		<section
-			className="relative w-full"
-			id="faq"
-			style={{
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
-			}}
-		>
+		<section className="relative w-full" id="faq" style={{}}>
 			{/* Centered Header */}
-			<div className="w-full px-[4vw] pt-[8vw] pb-[4vw] text-center relative">
+			<div className="w-full px-[4vw] pt-[5vw] pb-[2vw] text-center relative">
 				<motion.div
 					initial={{ opacity: 0, y: -30 }}
 					animate={{ opacity: 1, y: 0 }}
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-5xl md:text-6xl font-bold text-[#2f234bff] mb-6 mx-auto"
+						className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 						style={{
-							fontFamily: "Orbitron, monospace",
-							backgroundColor: "#ffffff",
+							fontFamily: "Barlow Condensed",
 							borderRadius: "12px",
 							padding: "0.5rem 1rem",
-							width: "fit-content",
 						}}
 					>
-						FAQ
+						<span style={{ color: "#EEE5CD" }}>Space Station</span>{" "}
+						<span style={{ color: "#64A5C3" }}>FAQ</span>{" "}
 					</h1>
+					<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+					>
+						Mission control has answers to your most pressing questions.
+					</div>
 					<div className="w-20 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
@@ -291,7 +291,7 @@ const FAQ: React.FC = () => {
 						title="Click me!"
 					>
 						<Image
-							src="/sp26/robot.png"
+							src="/fa26/logo+assets/ufo_beams.png"
 							alt="FAQ Illustration"
 							fill
 							className="object-contain pointer-events-none"
@@ -301,15 +301,15 @@ const FAQ: React.FC = () => {
 				</div>
 
 				{/* FAQ Content - Right half on desktop, full width on mobile */}
-				<div className="w-full lg:w-1/2 px-[4vw] pb-[8vw] flex flex-col justify-center">
+				<div className="w-full lg:w-1/2 px-[4vw] pb-[5vw] flex flex-col justify-center">
 					{/* Accordion Container */}
 					<motion.div
-						className="bg-[#215172] rounded-2xl shadow-2xl overflow-hidden backdrop-blur-sm border border-white/10"
+						className="flex flex-col gap-3"
 						initial={{ opacity: 0, y: 50 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.8, delay: 0.2 }}
 					>
-						{faqs.map((faq, index) => (
+						{renderedFaqs.map((faq, index) => (
 							<AccordionItem
 								key={index}
 								faq={faq}

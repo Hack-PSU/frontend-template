@@ -24,13 +24,9 @@ const NavItem: React.FC<NavItemProps> = ({
 }) => {
 	const content = (
 		<motion.span
-			className="relative px-6 py-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold transition-all duration-300"
+			className="relative px-3 py-3 rounded-full bg-transparent hover:text-[#E2C75E] text-[#EEE5CD] font-bold transition-all duration-300"
 			style={{
 				fontFamily: "Orbitron, monospace",
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -3px 6px #ff88e9cc, 0 3px 6px #ff88e9cc, inset 0 -3px 3px rgba(255, 136, 233, 0.05), inset 0 3px 3px rgba(255, 136, 233, 0.05)",
 			}}
 			whileHover={{ scale: 1.08 }}
 			whileTap={{ scale: 0.92 }}
@@ -72,13 +68,9 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 }) => {
 	const content = (
 		<motion.div
-			className="w-full px-6 py-4 text-center bg-[#FFE4E6] hover:bg-[#FFB6D9] text-[#A20021] font-bold rounded-2xl mt-6"
+			className="w-full px-6 py-4 text-center bg-[rgba(17,16,34,0.72)] hover:bg-[rgba(182,102,60,0.18)] text-[#EEE5CD] font-bold rounded-2xl mt-6 border border-[rgba(226,199,94,0.18)] shadow-[0_8px_20px_rgba(0,0,0,0.18)]"
 			style={{
 				fontFamily: "Orbitron, monospace",
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -3px 6px #ff88e9cc, 0 3px 6px #ff88e9cc, inset 0 -3px 3px rgba(255, 136, 233, 0.05), inset 0 3px 3px rgba(255, 136, 233, 0.05)",
 			}}
 			whileHover={{ scale: 1.02 }}
 			whileTap={{ scale: 0.98 }}
@@ -114,10 +106,10 @@ const MobileNavItem: React.FC<NavItemProps> = ({
 
 const MLHBanner: React.FC = () => (
 	<motion.a
-		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
+		href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=blue"
 		target="_blank"
 		rel="noopener noreferrer"
-		className="focus:outline-none focus:ring-4 focus:ring-[#FFB6D9]/50 rounded-lg"
+		className="focus:outline-none focus:ring-4 focus:ring-[rgba(100,165,195,0.35)] rounded-lg"
 		whileHover={{ scale: 1.05 }}
 		whileTap={{ scale: 0.95 }}
 		initial={{ opacity: 0, x: 20 }}
@@ -125,7 +117,7 @@ const MLHBanner: React.FC = () => (
 		transition={{ duration: 0.6, delay: 0.4 }}
 	>
 		<Image
-			src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
+			src="/fa26/logo+assets/mlh-badge-custom.svg"
 			alt="Major League Hacking 2026 Hackathon Season"
 			width={120}
 			height={120}
@@ -222,12 +214,7 @@ const Navbar: React.FC = () => {
 		<>
 			{/* Main Navbar */}
 			<motion.nav
-				className="relative w-full bg-[#180249] backdrop-blur-md z-40"
-				style={{
-					borderBottom: "2px solid #ff88e9ff",
-					boxShadow:
-						"0 8px 15px #ff88e9ff, inset 0 8px 8px rgba(255, 136, 233, 0.1)",
-				}}
+				className="w-full z-40 absolute inset-x-0 top-0 bg-transparent backdrop-blur-none"
 				initial={{ opacity: 0, y: -20 }}
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 0.6 }}
@@ -250,11 +237,11 @@ const Navbar: React.FC = () => {
 									whileTap={{ scale: 0.95 }}
 								>
 									<Image
-										src="/logo.png"
+										src="/fa26/logo+assets/fa26-logo.png"
 										alt="HackPSU Logo"
-										width={100}
-										height={100}
-										className="w-16 h-16 md:w-20 md:h-20 drop-shadow-lg"
+										width={150}
+										height={150}
+										className="w-18 h-18 md:w-20 md:h-28 md:w-28 drop-shadow-lg mt-4"
 										priority
 									/>
 								</motion.div>
@@ -263,7 +250,7 @@ const Navbar: React.FC = () => {
 
 						{/* Desktop Navigation */}
 						<motion.div
-							className="hidden md:flex items-center space-x-6"
+							className="hidden md:flex items-center space-x-6 ml-14"
 							initial={{ opacity: 0, y: -20 }}
 							animate={{ opacity: 1, y: 0 }}
 							transition={{ duration: 0.6, delay: 0.2 }}
@@ -292,7 +279,7 @@ const Navbar: React.FC = () => {
 						{/* Mobile Menu Button */}
 						<motion.button
 							onClick={toggleMenu}
-							className="md:hidden p-3 rounded-full bg-[#FFE4E6] hover:bg-[#FFB6D9] border-2 border-[#FF91A4] text-[#A20021] shadow-lg focus:outline-none focus:ring-4 focus:ring-[#FFB6D9]/50"
+							className="md:hidden p-3 rounded-full bg-[rgba(17,16,34,0.78)] hover:bg-[rgba(182,102,60,0.22)] border border-[rgba(226,199,94,0.28)] text-[#EEE5CD] shadow-[0_10px_24px_rgba(0,0,0,0.25)] focus:outline-none focus:ring-4 focus:ring-[rgba(100,165,195,0.35)]"
 							whileHover={{ scale: 1.1 }}
 							whileTap={{ scale: 0.9 }}
 							initial={{ opacity: 0, x: 20 }}
@@ -307,6 +294,7 @@ const Navbar: React.FC = () => {
 										animate={{ rotate: 0, opacity: 1 }}
 										exit={{ rotate: 90, opacity: 0 }}
 										transition={{ duration: 0.2 }}
+										style={{ color: "#B6663C" }}
 									>
 										<X size={24} />
 									</motion.div>
@@ -317,6 +305,7 @@ const Navbar: React.FC = () => {
 										animate={{ rotate: 0, opacity: 1 }}
 										exit={{ rotate: -90, opacity: 0 }}
 										transition={{ duration: 0.2 }}
+										style={{ color: "#EEE5CD" }}
 									>
 										<Menu size={24} />
 									</motion.div>
@@ -339,7 +328,7 @@ const Navbar: React.FC = () => {
 					>
 						{/* Backdrop */}
 						<motion.div
-							className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+							className="absolute inset-0 bg-[#111022]/70 backdrop-blur-md"
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
 							exit={{ opacity: 0 }}
@@ -348,7 +337,12 @@ const Navbar: React.FC = () => {
 
 						{/* Menu Content */}
 						<motion.div
-							className="absolute top-24 left-0 right-0 bottom-0 bg-[#180249] border-t-4 border-[#FFB6D9] shadow-2xl overflow-y-auto"
+							className="absolute top-24 bottom-0 left-0 right-0 overflow-y-auto overscroll-contain touch-pan-y border-t border-[rgba(226,199,94,0.18)]"
+							style={{
+								background:
+									"linear-gradient(180deg, rgba(17,16,34,0.98) 0%, rgba(47,35,75,0.97) 100%)",
+								boxShadow: "0 24px 50px rgba(0,0,0,0.35)",
+							}}
 							initial={{ y: -20, opacity: 0 }}
 							animate={{ y: 0, opacity: 1 }}
 							exit={{ y: -20, opacity: 0 }}
@@ -383,7 +377,7 @@ const Navbar: React.FC = () => {
 
 								{/* Close instruction */}
 								<motion.p
-									className="text-center text-[#A20021]/70 text-sm pt-4"
+									className="text-center text-[#EEE5CD]/80 text-sm pt-4"
 									style={{ fontFamily: "Orbitron, monospace" }}
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1 }}

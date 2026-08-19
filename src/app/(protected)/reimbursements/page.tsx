@@ -447,7 +447,7 @@ export default function ReimbursementPage() {
 		return (
 			<div
 				className="min-h-screen flex items-center justify-center"
-				style={{ backgroundColor: "#4d1170" }}
+				
 			>
 				<Container maxWidth="md">
 					<Card className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -469,7 +469,7 @@ export default function ReimbursementPage() {
 	return (
 		<div
 			className="min-h-screen flex items-center justify-center"
-			style={{ backgroundColor: "#4d1170" }}
+			
 		>
 			<Container maxWidth="md">
 				<Card className="bg-white shadow-lg rounded-lg overflow-hidden">

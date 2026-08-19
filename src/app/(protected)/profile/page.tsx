@@ -77,6 +77,15 @@ const applicationStatusColorMap = new Map<string, string>([
 	["declined", "text-stone-500"],
 ]);
 
+const applicationStatusGlowColorMap = new Map<string, string>([
+	["pending", "#c084fc"],
+	["accepted", "#60a5fa"],
+	["rejected", "#dc2626"],
+	["waitlisted", "#fdba74"],
+	["confirmed", "#16a34a"],
+	["declined", "#78716c"],
+]);
+
 // Utility to get user role from token
 function getUserRole(token: string | undefined): number {
 	if (!token) return Role.NONE;
@@ -138,10 +147,8 @@ export default function Profile() {
 	>(null);
 
 	// Feature flag checks
-	const {
-		data: registrationsFlagData,
-		isLoading: isLoadingRegistrationsFlag,
-	} = useFlagState("Registrations");
+	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
+		useFlagState("Registrations");
 	const { data: helpDeskFlag } = useFlagState("HelpDesk");
 	const { data: roomReservationFlag } = useFlagState("RoomReservation");
 
@@ -419,18 +426,18 @@ export default function Profile() {
 		return null;
 	}
 
+	const applicationStatusGlowColor =
+		applicationStatusGlowColorMap.get(applicationStatus) || "#E2C75E";
+
 	return (
-		<div
-			className="min-h-screen py-8 px-4"
-			style={{ backgroundColor: "#4d1170" }}
-		>
+		<div className="min-h-screen py-8 px-4">
 			<div className="mx-auto max-w-4xl space-y-6">
 				{/* Profile Header */}
 				<Card
-					className="border-4 border-[#ff88e9ff] bg-gradient-to-r from-slate-900 to-slate-800 text-white"
+					className="border-4 bg-gradient-to-r from-slate-900 to-slate-800 text-white"
 					style={{
-						boxShadow:
-							"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)",
+						borderColor: applicationStatusGlowColor,
+						boxShadow: `0 -6px 10px ${applicationStatusGlowColor}, 0 6px 10px ${applicationStatusGlowColor}, inset 0 -10px 10px rgba(255, 136, 233, 0.1), inset 0 10px 10px rgba(255, 136, 233, 0.1)`,
 					}}
 				>
 					<CardHeader className="text-center">
@@ -453,9 +460,9 @@ export default function Profile() {
 								? `HackPSU ${getRoleName(userRole)}`
 								: showClosedRegistrationsState
 									? "HackPSU Account"
-								: isConfirmed
-									? "HackPSU Participant"
-									: "HackPSU Applicant"}
+									: isConfirmed
+										? "HackPSU Participant"
+										: "HackPSU Applicant"}
 						</CardDescription>
 					</CardHeader>
 					<CardContent className="space-y-4">

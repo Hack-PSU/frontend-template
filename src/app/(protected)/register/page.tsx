@@ -527,7 +527,7 @@ export default function RegistrationPage() {
 			<Toaster richColors />
 			<div
 				className="text-foreground min-h-screen"
-				style={{ backgroundColor: "#4d1170" }}
+				
 			>
 				<div className="flex">
 					{/* Sidebar - Hidden on mobile, floating and vertically centered */}
@@ -585,14 +585,14 @@ export default function RegistrationPage() {
 					<div className="flex-1 lg:ml-8 p-4 sm:p-6 lg:p-8">
 						<div className="max-w-3xl mx-auto">
 							<header className="text-center mb-8">
-								<h1 className="text-4xl font-bold tracking-tight text-primary text-white">
+								<h1 className="text-4xl font-bold tracking-tight text-primary text-[#E2C75E]">
 									Register for our {hackathon?.name} hackathon
 								</h1>
-								<p className="text-muted-foreground mt-2 text-[#c4c4c4]">
+								<p className="mt-2 text-[#EEE5CD]">
 									Feel free to reach out to us at{" "}
 									<a
 										href="mailto:technology@hackpsu.org"
-										className="text-primary underline text-[#d468d4]"
+										className="text-primary underline text-[#64A5C3]"
 									>
 										<span className="">technology@hackpsu.org</span>
 									</a>{" "}

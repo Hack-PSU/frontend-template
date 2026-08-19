@@ -214,13 +214,8 @@ const Sponsors: React.FC = () => {
 	return (
 		<section
 			id="sponsors"
-			className="sponsors-bg relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
-			style={{
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
-			}}
+			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
+			style={{}}
 		>
 			<motion.div
 				className="absolute top-1/2 transform -translate-y-1/2 z-10"
@@ -314,16 +309,28 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3"
+						className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
 						style={{
-							fontFamily: "Orbitron, monospace",
-							backgroundColor: "#ffffff",
+							fontFamily: "Barlow Condensed",
 							borderRadius: "12px",
 							padding: "0.5rem 1rem",
 						}}
 					>
-						Sponsors
+						<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
+						<span style={{ color: "#B6663C" }}>Partners</span>{" "}
 					</h1>
+					<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+					>
+						Our sponsors make the mission possible. Interested in supporting
+						HackPSU?
+					</div>
 					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
 			</div>
@@ -348,7 +355,7 @@ const Sponsors: React.FC = () => {
 				{/* Event Partners Section */}
 				{partners.length > 0 && (
 					<motion.div
-						className="mt-20 pt-12 border-t-2 border-[#ff88e9ff] w-full flex flex-col items-center"
+						className="mt-20 pt-12 border-t-2 border-[#B6663C] w-full flex flex-col items-center"
 						initial={{ opacity: 0, y: 30 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.8, delay: 0.5 }}
@@ -426,7 +433,7 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8, delay: 1 }}
 				>
 					<motion.button
-						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
+						className="relative px-8 py-4 bg-[#EEE5CD] border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
 						style={{
 							fontFamily: "Orbitron, monospace",
 							background: "",

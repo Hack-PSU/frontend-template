@@ -22,7 +22,7 @@ const SECTIONS: Section[] = [
 			"HackPSU is a bi-annual collegiate hackathon at Penn State with workshops, speakers, and a community of creators. Join us for an incredible weekend of building, learning, and connecting with fellow hackers from universities across the region!",
 		textColor: "#048A81",
 		color: "#FFE4B5",
-		glowColor: "#ff88e9ff",
+		glowColor: "#E2C75E",
 	},
 	{
 		id: "eligibility",
@@ -31,7 +31,7 @@ const SECTIONS: Section[] = [
 			"All participants must be at least 18 years old and a student of some university (or a recent PSU graduate within less than one year).\n\nTeams may be comprised of up to five members. A team may only submit one project, and no participant may be a member of multiple teams.\n\nAll participants must bring a valid form of identification.",
 		textColor: "#8B4513",
 		color: "#E6F3FF",
-		glowColor: "#ffffaaff",
+		glowColor: "#64A5C3",
 	},
 	{
 		id: "guidelines",
@@ -40,7 +40,7 @@ const SECTIONS: Section[] = [
 			"Projects should be original works created on site. Coming with an idea in mind is perfectly fine, working on an existing project is not.\n\nAll projects must be submitted through Devpost by 12PM on Sunday and can be edited until 1:45PM Sunday. All project code must be attached to the project's Devpost submission.\n\nAnything you create is your work - HackPSU and its partners have no claim over intellectual property produced at the event.",
 		textColor: "#2E8B57",
 		color: "#F0FFF0",
-		glowColor: "#8cfff9ff",
+		glowColor: "#B6663C",
 	},
 ];
 
@@ -97,10 +97,6 @@ const InfoSections: React.FC = () => {
 			className="relative flex flex-col items-center justify-center w-full px-[4vw] py-[8vw]"
 			style={{
 				minHeight: "60vw",
-				borderTop: "2px solid #ff88e9ff",
-				borderBottom: "2px solid #ff88e9ff",
-				boxShadow:
-					"0 -6px 10px #ff88e9cc, 0 6px 10px #ff88e9cc, inset 0 -6px 6px rgba(255, 136, 233, 0.05), inset 0 6px 6px rgba(255, 136, 233, 0.05)",
 			}}
 		>
 			{/* Header */}
@@ -112,37 +108,34 @@ const InfoSections: React.FC = () => {
 					className="text-center"
 				>
 					<h1
-						className="text-4xl md:text-5xl font-bold text-[#2f234bff] mb-3 "
+						className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3 "
 						style={{
-							fontFamily: "Orbitron, monospace",
-							backgroundColor: "#ffffff",
+							fontFamily: "Barlow Condensed, sans-serif",
 							borderRadius: "12px",
 							padding: "0.5rem 1rem",
 						}}
 					>
-						Info
+						<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
+						<span style={{ color: "#64A5C3" }}>Briefing</span>{" "}
 					</h1>
+					<div
+						className=""
+						style={{
+							fontFamily: "'DM Sans', sans-serif",
+							fontSize: "clamp(15px, 1.8vw, 20px)",
+							lineHeight: 1.5,
+							color: "#EEE5CD",
+						}}
+						
+					>
+						Every mission has its protocols. Study the manual carefully before departure.
+					</div>
 				</motion.div>
 			</div>
 
-			{/* Graffiti Image - Bottom Right (Desktop Only) */}
-			<div
-				ref={graffittiRef}
-				key={graffittiKey}
-				className="absolute bottom-[2vw] right-[40vw] hidden md:block z-5"
-			>
-				<Image
-					src="/sp26/graffiti_animated.png"
-					alt="Graffiti"
-					width={250}
-					height={250}
-					priority
-				/>
-			</div>
-
-			{/* Cyber Hacky Image - Bottom Left (Desktop Only) with Oscillation */}
+			{/* Astronaut - Bottom Left (Desktop Only) with Oscillation */}
 			<motion.div
-				className="absolute bottom-[2vw] left-[2vw] hidden md:block z-5"
+				className="absolute bottom-[2vw] left-[2vw] hidden lg:block z-5"
 				animate={{ y: [0, -30, 0] }}
 				transition={{
 					duration: 4,
@@ -150,13 +143,15 @@ const InfoSections: React.FC = () => {
 					repeat: Infinity,
 				}}
 			>
+			<a href="https://en.wikipedia.org/wiki/Artemis_II" title="The Dark Side of the Moon" target="_blank" rel="noopener noreferrer">
 				<Image
-					src="/sp26/cyber_hacky.png"
+					src="/fa26/logo+assets/pose_wave_floating.PNG"
 					alt="Cyber Hacky"
-					width={250}
-					height={250}
+					width={200}
+					height={200}
 					priority
 				/>
+			</a>
 			</motion.div>
 
 			{/* Main Content Container */}
@@ -198,7 +193,7 @@ const InfoSections: React.FC = () => {
 					{/* Info Panel */}
 					<div
 						key={order[0].id}
-						className="rounded-xl shadow-lg p-[3vw] bg-[#2f234bff] backdrop-blur-sm mt-12"
+						className="rounded-xl shadow-lg p-[3vw] backdrop-blur-sm mt-12"
 						style={{
 							width: "clamp(300px, 35vw, 450px)",
 							minHeight: "clamp(200px, 25vw, 320px)",
@@ -223,7 +218,7 @@ const InfoSections: React.FC = () => {
 							{order[0].label}
 						</h3>
 						<p
-							className="text-white whitespace-pre-line"
+							className="text-[#EEE5CD] whitespace-pre-line"
 							style={{
 								fontSize: "clamp(14px, 2vw, 18px)",
 							}}
@@ -251,7 +246,7 @@ const InfoSections: React.FC = () => {
 										{s.value}
 									</div>
 									<p
-										className="uppercase mt-[0.5vw] text-gray-600"
+										className="uppercase mt-[0.5vw] text-[#EEE5CD]"
 										style={{ fontSize: "clamp(10px, 1.5vw, 16px)" }}
 									>
 										{s.label}
@@ -337,16 +332,16 @@ function Hex({ section, slot, containerRotation, onClick }: HexProps) {
 			>
 				<path
 					d="M38,2 L82,2 A12,12 0 0,1 94,10 L112,44 A12,12 0 0,1 112,56 L94,90 A12,12 0 0,1 82,98 L38,98 A12,12 0 0,1 26,90 L8,56 A12,12 0 0,1 8,44 L26,10 A12,12 0 0,1 38,2"
-					fill="#2f234bff"
+					fill="transparent"
 					fillOpacity={1}
 					stroke={section.glowColor}
 					strokeWidth={7}
 				/>
 			</svg>
 			<motion.span
-				className="relative z-10 font-bold text-center px-2 absolute inset-0 flex items-center justify-center"
+				className="relative z-10 font-bold text-center text-[#EEE5CD] px-2 absolute inset-0 flex items-center justify-center"
 				style={{
-					color: "#ffffffff",
+					color: "#EEE5CD",
 					fontSize: isSelected
 						? "clamp(14px, 2.5vw, 14px)"
 						: "clamp(13px, 2vw, 13px)",

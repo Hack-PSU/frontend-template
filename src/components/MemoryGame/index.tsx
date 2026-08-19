@@ -33,7 +33,7 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 		"/sp26/GraffitiText.png",
 		"/sp26/laptop.png",
 		"/sp26/quartz.png",
-		"/sp26/robot.png",
+		"/fa26/logo+assets/ufo_beams.png",
 		"/sp26/sunglasses.png",
 		"/sp26/vhs.png",
 		"/sp26/walkie_talkie.png",
