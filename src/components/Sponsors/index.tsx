@@ -309,17 +309,17 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8 }}
 				>
 					<h1
-					className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
-					style={{
-						fontFamily: "Barlow Condensed",
-						borderRadius: "12px",
-						padding: "0.5rem 1rem",
-					}}
-				>
-					<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
-					<span style={{ color: "#B6663C" }}>Partners</span>{" "}
-				</h1>
-				<div
+						className="text-4xl md:text-8xl font-bold text-[#EEE5CD] mb-3"
+						style={{
+							fontFamily: "Barlow Condensed",
+							borderRadius: "12px",
+							padding: "0.5rem 1rem",
+						}}
+					>
+						<span style={{ color: "#EEE5CD" }}>Mission</span>{" "}
+						<span style={{ color: "#B6663C" }}>Partners</span>{" "}
+					</h1>
+					<div
 						className=""
 						style={{
 							fontFamily: "'DM Sans', sans-serif",
@@ -327,9 +327,9 @@ const Sponsors: React.FC = () => {
 							lineHeight: 1.5,
 							color: "#EEE5CD",
 						}}
-						
 					>
-						Our sponsors make the mission possible. Interested in supporting HackPSU?
+						Our sponsors make the mission possible. Interested in supporting
+						HackPSU?
 					</div>
 					<div className="w-16 h-1 rounded-full mx-auto"></div>
 				</motion.div>
@@ -355,7 +355,7 @@ const Sponsors: React.FC = () => {
 				{/* Event Partners Section */}
 				{partners.length > 0 && (
 					<motion.div
-						className="mt-20 pt-12 border-t-2 border-[#E2C75E] w-full flex flex-col items-center"
+						className="mt-20 pt-12 border-t-2 border-[#B6663C] w-full flex flex-col items-center"
 						initial={{ opacity: 0, y: 30 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.8, delay: 0.5 }}

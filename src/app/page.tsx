@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import InfoSections from "@/components/InfoSections";
 import PhotoGallery from "@/components/PhotoGallery";
 import MemoryGame from "@/components/MemoryGame";
+import FloatingAsset from "@/components/common/FloatingAsset";
 
 const KONAMI_SEQUENCE = [
 	"ArrowUp",
@@ -44,7 +45,10 @@ export default function Home() {
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			const target = e.target as HTMLElement;
-			if (target?.closest?.("input, textarea") || target?.getAttribute?.("contenteditable") === "true") {
+			if (
+				target?.closest?.("input, textarea") ||
+				target?.getAttribute?.("contenteditable") === "true"
+			) {
 				return;
 			}
 			const expected = KONAMI_SEQUENCE[konamiIndexRef.current];
@@ -70,22 +74,86 @@ export default function Home() {
 				onClose={() => setShowMemoryGame(false)}
 			/>
 			<main className="flex flex-col items-center w-full">
-				<section className="hero-bg w-full pt-24 md:pt-28 lg:pt-32">
+				<section className="hero-bg relative w-full pt-24 md:pt-28 lg:pt-32">
+					<FloatingAsset
+						src="/fa26/logo+assets/satellite.PNG"
+						alt="Hop aboard!"
+						width={1024}
+						height={1024}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/International_Space_Station"
+						className="left-[5%] top-[36%] w-24 sm:w-32 lg:right-[3%] lg:w-52"
+						duration={6}
+					/>
 					<Hero />
 				</section>
-				<section className="info-bg w-full">
+				<section className="info-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/robot.png"
+						alt="HackGPT"
+						width={225}
+						height={353}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/Artificial_intelligence"
+						className="right-[2%] top-[8%] w-16 sm:w-24 lg:right-[4%] lg:w-32"
+						delay={0.5}
+					/>
 					<InfoSections />
 				</section>
-				<section className="prizes-bg w-full">
+				<section className="prizes-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/hexagon.png"
+						alt="Get the inside scoop!"
+						width={287}
+						height={277}
+						isLink={true}
+						href="https://www.psucollegian.com/news/campus/a-great-opportunity-ahead-of-annual-hack-a-thon-students-highlight-its-impact-benefits/article_93035a7d-71e2-4d62-b277-e9a808a9d6c7.html"
+						className="right-[1%] top-[10%] w-16 sm:w-24 lg:right-[4%] lg:w-32"
+						delay={1}
+						duration={5.5}
+					/>
 					<PrizesChallenges />
 				</section>
-				<section className="schedule-bg w-full">
+				<section className="schedule-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/pose_rocket_wave.PNG"
+						alt="What's astrophage?"
+						width={625}
+						height={665}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/Project_Hail_Mary_(film)"
+						className="left-[4%] top-[38%] w-24 sm:w-36 lg:left-[2%] lg:w-56"
+						delay={0.75}
+						duration={6.5}
+					/>
 					<Schedule />
 				</section>
-				<section className="faq-bg w-full">
+				<section className="faq-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/hexagonal_storm.png"
+						alt="Saturn.exe"
+						width={512}
+						height={512}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/Saturn"
+						className="right-[1%] top-[12%] w-20 sm:w-28 lg:right-[5%] lg:w-40"
+						delay={1.25}
+						duration={5}
+					/>
 					<FAQ />
 				</section>
-				<section className="gallery-bg w-full">
+				<section className="gallery-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/astronaut_moon.PNG"
+						alt="Houston, we have a hackathon"
+						width={400}
+						height={200}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/Neil_Armstrong"
+						className="left-[1%] top-[5%] w-24 sm:w-36 lg:left-[4%] lg:w-52"
+						delay={0.25}
+						duration={5.75}
+					/>
 					<PhotoGallery
 						images={[
 							"/event/event_13.webp",
@@ -115,7 +183,18 @@ export default function Home() {
 						]}
 					/>
 				</section>
-				<section className="sponsors-bg w-full">
+				<section className="sponsors-bg relative w-full">
+					<FloatingAsset
+						src="/fa26/logo+assets/ufo.png"
+						alt="Are we alone?"
+						width={533}
+						height={343}
+						isLink={true}
+						href="https://en.wikipedia.org/wiki/Area_51"
+						className="right-[1%] top-[8%] w-24 sm:w-36 lg:right-[4%] lg:w-52"
+						delay={1.5}
+						duration={6}
+					/>
 					<Sponsors />
 				</section>
 				<section className="footer-bg w-full">

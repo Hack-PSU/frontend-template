@@ -135,7 +135,7 @@ const InfoSections: React.FC = () => {
 
 			{/* Astronaut - Bottom Left (Desktop Only) with Oscillation */}
 			<motion.div
-				className="absolute bottom-[2vw] left-[2vw] hidden md:block z-5"
+				className="absolute bottom-[2vw] left-[2vw] hidden lg:block z-5"
 				animate={{ y: [0, -30, 0] }}
 				transition={{
 					duration: 4,
@@ -143,6 +143,7 @@ const InfoSections: React.FC = () => {
 					repeat: Infinity,
 				}}
 			>
+			<a href="https://en.wikipedia.org/wiki/Artemis_II" title="The Dark Side of the Moon" target="_blank" rel="noopener noreferrer">
 				<Image
 					src="/fa26/logo+assets/pose_wave_floating.png"
 					alt="Cyber Hacky"
@@ -150,6 +151,7 @@ const InfoSections: React.FC = () => {
 					height={200}
 					priority
 				/>
+			</a>
 			</motion.div>
 
 			{/* Main Content Container */}

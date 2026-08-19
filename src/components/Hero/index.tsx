@@ -396,7 +396,7 @@ Happy hacking!
 						style={{ cursor: "pointer" }}
 					>
 						<motion.h1
-							className={`text-center font-bold hover:scale-105 transition-transform duration-200 ${glitchActive ? "hero-title-glitch" : ""}`}
+							className={`text-center font-extrabold hover:scale-105 transition-transform duration-200 ${glitchActive ? "hero-title-glitch" : ""}`}
 							style={{
 								fontSize: "clamp(56px, 10vw, 132px)",
 								fontFamily: "'Barlow Condensed', sans-serif",
@@ -410,10 +410,10 @@ Happy hacking!
 							whileHover={!glitchActive ? { scale: 1.05 } : undefined}
 							whileTap={!glitchActive ? { scale: 0.95 } : undefined}
 						>
-							<span className="block">HACK AT</span>
+							<span>HACK</span>
+							<span style={{ color: "#B6663C" }}>PSU</span>
 							<span className="block">
-								<span style={{ color: "#B6663C" }}>PENN</span>{" "}
-								<span style={{ color: "#EEE5CD" }}>STATE</span>
+								<span style={{ color: "#EEE5CD" }}>{hackathon?.name}</span>
 							</span>
 						</motion.h1>
 					</div>
@@ -427,8 +427,11 @@ Happy hacking!
 							color: "#EEE5CD",
 						}}
 					>
-						Your mission, should you choose to accept it: 24 hours to build
-						something that bends reality.
+						<a href="https://en.wikipedia.org/wiki/Mission:_Impossible_(film)" title="What could this be?" target="_blank" rel="noopener noreferrer" className="hover:text-[#B6663C] transition-colors duration-200">
+							Your mission, should you choose to accept it:&nbsp;
+						</a>
+						24 hours to build
+							something that bends reality.
 					</div>
 
 					{/* Countdown Timer */}
