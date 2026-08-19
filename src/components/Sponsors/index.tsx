@@ -433,7 +433,7 @@ const Sponsors: React.FC = () => {
 					transition={{ duration: 0.8, delay: 1 }}
 				>
 					<motion.button
-						className="relative px-8 py-4 bg-white border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
+						className="relative px-8 py-4 bg-[#EEE5CD] border-4 border-[#0066CC] hover:border-[#000080] text-[#000080] font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 transform-gpu"
 						style={{
 							fontFamily: "Orbitron, monospace",
 							background: "",
