@@ -225,10 +225,10 @@ const MemoryGame: React.FC<MemoryGameProps> = ({ isOpen, onClose }) => {
 											onClick={() => setDifficulty(pairs as 12 | 24 | 36 | 100)}
 											className={`p-4 rounded-xl font-bold transition-all duration-200 border-2 ${
 												difficulty === pairs
-															? "bg-[#E2C75E] text-[#111022] border-[#E2C75E] shadow-[0_0_12px_rgba(226,199,94,0.45)]"
-															: "bg-white/[0.06] text-[#EEE5CD] border-[#64A5C3]/60 hover:bg-[#64A5C3]/20 hover:border-[#64A5C3]"
+													? "bg-[#E2C75E] text-[#111022] border-[#E2C75E] shadow-[0_0_12px_rgba(226,199,94,0.45)]"
+													: "bg-white/[0.06] text-[#EEE5CD] border-[#64A5C3]/60 hover:bg-[#64A5C3]/20 hover:border-[#64A5C3]"
 											}`}
-													style={{ fontFamily: "'DM Sans', sans-serif" }}
+											style={{ fontFamily: "'DM Sans', sans-serif" }}
 										>
 											{label}
 										</button>
