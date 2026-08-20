@@ -2456,19 +2456,12 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@posthog/cli@~0.7.21":
-  version "0.7.34"
-  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.7.34.tgz#1511a87af68f0fc09d8b38770be05e89b0bb689d"
-  integrity sha512-wrRwj0FhbypW01TLpFRo1HkPBrwZHKP2tFE9xI4NTb84yMKZnXy49ibBdbImktJ5NbW7ndeWidOCZx+2Lkk7/Q==
+"@posthog/cli@~0.13.0":
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/@posthog/cli/-/cli-0.13.0.tgz#38024af34e651748cf70f8a780c2016a178453a3"
+  integrity sha512-ZP7ZLmFyjLakGjkDzm3/Eu5XvonY4pFD1SOtMc5TjkwYS6TmihuuLp0iDp+X7Pd9xFI0eLtBpfV/G9HI/XRZbg==
   dependencies:
     detect-libc "^2.1.2"
-
-"@posthog/core@^1.37.3":
-  version "1.40.0"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.40.0.tgz#1be0e217d0a265bf4f9884723b36d4581db64037"
-  integrity sha512-oGDbIwlTquNwdHbEL5ZLEkuW4UFkkEanfx3QAxDgyVbISv+OAA6YGQwrvo0JD3MUJEbJZvyh8XsX+WYDGw9XHw==
-  dependencies:
-    "@posthog/types" "^1.393.0"
 
 "@posthog/core@^1.40.1", "@posthog/core@^1.40.2":
   version "1.40.2"
@@ -2477,20 +2470,27 @@
   dependencies:
     "@posthog/types" "^1.393.0"
 
-"@posthog/nextjs-config@1.9.68":
-  version "1.9.68"
-  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.9.68.tgz#5644a112d4e7eb136cb39c94facef28ffa85c5f8"
-  integrity sha512-MmzSrompIThnnrDArCKIOBZuD/b3RErH48ZJyzAuX+WfJTiHBjjTMvGWzr+qlIn8jCyJoglSygAwYVG8lJXybg==
+"@posthog/core@^1.48.3":
+  version "1.48.5"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.5.tgz#874bfcfbeafb85d888498e4c3e2ed62ad7a618d4"
+  integrity sha512-ZE27PmVyPmw9wZOVVyn64uaTdqhopuwQfX7PzBpyCvsezuvNmrUHAMpJKkqOvaHxu7HeJt1jTQtjtTuwy+S7Og==
   dependencies:
-    "@posthog/cli" "~0.7.21"
-    "@posthog/plugin-utils" "^1.1.2"
-    "@posthog/webpack-plugin" "^1.5.24"
-    semver "^7.7.2"
+    "@posthog/types" "^1.405.0"
 
-"@posthog/plugin-utils@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@posthog/plugin-utils/-/plugin-utils-1.1.2.tgz#37d026c3c7986e818f466cb1159774782271f45d"
-  integrity sha512-CS/14cMmny9NN/LHAb4QZdW3TfxhbKzsfyVYMCjsRdE0IKMTrXMr0cPRZxwczsN6VnWvVoy2Dd5wcG6RrIjlYA==
+"@posthog/nextjs-config@1.9.70":
+  version "1.9.70"
+  resolved "https://registry.yarnpkg.com/@posthog/nextjs-config/-/nextjs-config-1.9.70.tgz#7528321097d304a75a47087ec553b0886ca1b0be"
+  integrity sha512-1xE0A+Y/iMnlk1wY2gg89WIsQz0NrfnEXvn/BGj82kOQvkNtB3LDWTej61ipIZrRxrVRKsR1ZE8LyDLWO75SFw==
+  dependencies:
+    "@posthog/cli" "~0.13.0"
+    "@posthog/plugin-utils" "^1.2.0"
+    "@posthog/webpack-plugin" "^1.5.28"
+    semver "^7.8.5"
+
+"@posthog/plugin-utils@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@posthog/plugin-utils/-/plugin-utils-1.2.0.tgz#aa81860d120ea632e6764576d1fef3c58e422fb3"
+  integrity sha512-SXG2oVxPnliYKmixyIYqPv1CA4UYPZy9fQL5H+mvN/OQpKioRTawp8I2ofQmf6SfiYpnf+KAzLiRUlK7S3rOCw==
   dependencies:
     cross-spawn "^7.0.6"
 
@@ -2499,14 +2499,19 @@
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.393.0.tgz#60b8330d6a0b09f87a610ab7a14f4bac0444ab4a"
   integrity sha512-vzWeEJZ7ERQhFRoQYaP5jzN1JvIu46UJyHXsuv+dTGW2r3sMgREOhNxXLZjmFHwZ8/FOHQoyqqQmXTCXZSfMSg==
 
-"@posthog/webpack-plugin@^1.5.24":
-  version "1.5.26"
-  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.5.26.tgz#d2bfd3b7658bede7300b8f5c31c78d1f8bb1b2d0"
-  integrity sha512-NAsTb81f8QQai7Uzd3IT2Kjt7o9lPxccVfWqD30HyACCEL3NVMTXed5hRYdtY5DkrdCejxhcA80ldXGiUsiGrQ==
+"@posthog/types@^1.405.0":
+  version "1.405.0"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.405.0.tgz#8b29988122663efd1ba3b44b3a8fc928fb7e4a9f"
+  integrity sha512-4rZ/taVXKQxs9Jrf7ZjlCRgrOSL69oKAgIWJQa5kRNJ6wll1UANbrJTSY+Su1e88LIG4zZVjKKKjyQHCkHdHcw==
+
+"@posthog/webpack-plugin@^1.5.28":
+  version "1.5.28"
+  resolved "https://registry.yarnpkg.com/@posthog/webpack-plugin/-/webpack-plugin-1.5.28.tgz#f4a747f880b6ab9c1444db51e6280ae33ac5774d"
+  integrity sha512-1ZUpT/uX5KMUhQO2HTQcMqyXr/KuBs2TX3jjBcPOx+5YmJnOHIBf3Zfx4QuMnk5AwYlQE7TrQ8nqeJJHjrUgUQ==
   dependencies:
-    "@posthog/cli" "~0.7.21"
-    "@posthog/core" "^1.37.3"
-    "@posthog/plugin-utils" "^1.1.2"
+    "@posthog/cli" "~0.13.0"
+    "@posthog/core" "^1.48.3"
+    "@posthog/plugin-utils" "^1.2.0"
 
 "@protobufjs/aspromise@^1.1.1", "@protobufjs/aspromise@^1.1.2":
   version "1.1.2"
@@ -6501,11 +6506,6 @@ semver@^7.6.0, semver@^7.6.3:
   version "7.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
   integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
-
-semver@^7.7.2:
-  version "7.7.4"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.4.tgz#28464e36060e991fa7a11d0279d2d3f3b57a7e8a"
-  integrity sha512-vFKC2IEtQnVhpT78h1Yp8wzwrf8CM+MzKMHGJZfBtzhZNycRFnXsHk6E5TxIkkMsgNS7mdX3AGB7x2QM2di4lA==
 
 semver@^7.7.3:
   version "7.7.3"
