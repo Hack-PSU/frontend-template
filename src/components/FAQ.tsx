@@ -104,7 +104,6 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 			<motion.button
 				onClick={onToggle}
 				className="w-full py-4 px-5 text-left flex justify-between items-center hover:bg-white/10 transition-colors duration-200 group"
-				whileHover={{ x: 4 }}
 				transition={{ duration: 0.2 }}
 			>
 				<h3
