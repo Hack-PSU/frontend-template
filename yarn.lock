@@ -2471,13 +2471,6 @@
   dependencies:
     detect-libc "^2.1.2"
 
-"@posthog/core@^1.40.2":
-  version "1.40.2"
-  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.40.2.tgz#8da481552458582c1d93ae132575ce8cf82484f7"
-  integrity sha512-H12j7O9iHGvpK9t2ko8W4pvfbV1pBDxrsWC1LA6yp2RhzwvC4T3sWhu+AekDQJSRSrJEWlB0t/Ueq9QhPSq7FQ==
-  dependencies:
-    "@posthog/types" "^1.393.0"
-
 "@posthog/core@^1.47.0", "@posthog/core@^1.48.6":
   version "1.48.6"
   resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.6.tgz#9c5dfe00b241d3709018e19c293923dfd51e206b"
@@ -2491,6 +2484,13 @@
   integrity sha512-ZE27PmVyPmw9wZOVVyn64uaTdqhopuwQfX7PzBpyCvsezuvNmrUHAMpJKkqOvaHxu7HeJt1jTQtjtTuwy+S7Og==
   dependencies:
     "@posthog/types" "^1.405.0"
+
+"@posthog/core@^1.48.8":
+  version "1.48.8"
+  resolved "https://registry.yarnpkg.com/@posthog/core/-/core-1.48.8.tgz#4f29f9513a860c5e43094320c27cf54a096a7084"
+  integrity sha512-LAOBOjMQrQmgcbZxnubl74l2GQd5OWqxCJJ8mzcWdZRWbfO6Y/A6E3fqWjDtm68hY4LxC/bbopG60cxZW8cfWw==
+  dependencies:
+    "@posthog/types" "^1.405.1"
 
 "@posthog/nextjs-config@1.9.70":
   version "1.9.70"
@@ -2509,15 +2509,15 @@
   dependencies:
     cross-spawn "^7.0.6"
 
-"@posthog/types@^1.393.0":
-  version "1.393.0"
-  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.393.0.tgz#60b8330d6a0b09f87a610ab7a14f4bac0444ab4a"
-  integrity sha512-vzWeEJZ7ERQhFRoQYaP5jzN1JvIu46UJyHXsuv+dTGW2r3sMgREOhNxXLZjmFHwZ8/FOHQoyqqQmXTCXZSfMSg==
-
 "@posthog/types@^1.402.2", "@posthog/types@^1.405.0":
   version "1.405.0"
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.405.0.tgz#8b29988122663efd1ba3b44b3a8fc928fb7e4a9f"
   integrity sha512-4rZ/taVXKQxs9Jrf7ZjlCRgrOSL69oKAgIWJQa5kRNJ6wll1UANbrJTSY+Su1e88LIG4zZVjKKKjyQHCkHdHcw==
+
+"@posthog/types@^1.405.1":
+  version "1.405.1"
+  resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.405.1.tgz#9a37c4c9c5c36aa6bd6116eb56786889e61f4b71"
+  integrity sha512-JvaR4ChUKUk7qSTG58vKN2Br6es9riFF5mvlu7YGcwbB476vfyTO0o/TBh+zE88QhsfxnE5Tr/jKxI+e1v3Q5A==
 
 "@posthog/webpack-plugin@^1.5.28":
   version "1.5.28"
@@ -6105,11 +6105,11 @@ posthog-js@^1.257.0:
     web-vitals-soft-navs "npm:web-vitals@6.0.0"
 
 posthog-node@^5.5.1:
-  version "5.41.0"
-  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.41.0.tgz#af9621fd13b243ad27ac9611173d98c2453cafe9"
-  integrity sha512-jOkX6THOr5WD+FGUEaTxekas8c7NOC3TqJ2Byfe2KMimQdL/F/osz17uSbkNzR4V9WFZoe8YaGP3Xp0EUpPKGg==
+  version "5.50.0"
+  resolved "https://registry.yarnpkg.com/posthog-node/-/posthog-node-5.50.0.tgz#1b3fa87242545e3a54d4748e270d8785c930b729"
+  integrity sha512-7trcTN4EcPBiYAI1nnD1rk+VB+OcjgN0Mdnp7kOK09PTCSW0LCAUVAYj3FD7u8Ne5zYCnW/ESv6k3VU7sOsL5w==
   dependencies:
-    "@posthog/core" "^1.40.2"
+    "@posthog/core" "^1.48.8"
 
 preact@^10.29.3:
   version "10.29.8"
