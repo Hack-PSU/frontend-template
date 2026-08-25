@@ -150,14 +150,14 @@ const PrizesChallenges: React.FC = () => {
 		{
 			id: 1,
 			title: "HackPSU Grand Prize",
-			displayAmount: "$500",
+			displayAmount: "$3000",
 			planetIcon: "/fa26/003/4.png",
 			description:
 				"The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally.",
 			prizes: [
-				{ place: "1st Place", amount: "$500 in cash" },
-				{ place: "2nd Place", amount: "$300 in cash" },
-				{ place: "3rd Place", amount: "$200 in cash" },
+				{ place: "1st Place", amount: "$1500 in cash" },
+				{ place: "2nd Place", amount: "$1000 in cash" },
+				{ place: "3rd Place", amount: "$500 in cash" },
 			],
 		},
 		{
