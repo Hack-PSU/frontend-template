@@ -117,7 +117,7 @@ const MLHBanner: React.FC = () => (
 		transition={{ duration: 0.6, delay: 0.4 }}
 	>
 		<Image
-			src="/fa26/logo+assets/mlh-badge-custom.svg"
+			src="/fa26/logo+assets/mlh-badge-custom1.svg"
 			alt="Major League Hacking 2026 Hackathon Season"
 			width={120}
 			height={120}
