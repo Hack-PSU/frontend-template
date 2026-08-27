@@ -1222,7 +1222,7 @@ export default function RegistrationPage() {
 															<p className="text-sm text-muted-foreground">
 																I have read and agree to the{" "}
 																<a
-																	href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+																	href="https://github.com/MLH/mlh-policies/blob/main/code-of-conduct.md"
 																	target="_blank"
 																	rel="noopener noreferrer"
 																	className="underline"
@@ -1245,10 +1245,34 @@ export default function RegistrationPage() {
 														<div className="space-y-1.5 pr-4">
 															<Label>MLH Data Sharing</Label>
 															<p className="text-sm text-muted-foreground">
-																I authorize MLH to share my registration
-																information with event sponsors as per the{" "}
+																I authorize you to share my
+																application/registration information
+																with Major League Hacking for event
+																administration, ranking, and
+																administration (including the creation
+																of linked accounts on MLH and DEV
+																(dev.to)) in line with the{" "}
 																<a
-																	href="https://mlh.io/privacy"
+																	href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+																	target="_blank"
+																	rel="noopener noreferrer"
+																	className="underline"
+																>
+																	MLH Privacy Policy
+																</a>
+																. I further agree to the terms of both
+																the{" "}
+																<a
+																	href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+																	target="_blank"
+																	rel="noopener noreferrer"
+																	className="underline"
+																>
+																	MLH Contest Terms and Conditions
+																</a>{" "}
+																and the{" "}
+																<a
+																	href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
 																	target="_blank"
 																	rel="noopener noreferrer"
 																	className="underline"
@@ -1271,8 +1295,7 @@ export default function RegistrationPage() {
 														<div className="space-y-1.5 pr-4">
 															<Label>MLH Communications (Optional)</Label>
 															<p className="text-sm text-muted-foreground">
-																I authorize MLH to send me occasional emails
-																about relevant events and opportunities.
+																I authorize MLH + DEV to send me occasional emails about relevant events, career opportunities, and community announcements.
 															</p>
 														</div>
 														<Switch
