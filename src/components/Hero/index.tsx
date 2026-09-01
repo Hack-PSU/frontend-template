@@ -679,6 +679,37 @@ Happy hacking!
 				</motion.button>
 			</motion.div>
 
+			{/* Organizer Applications Button */}
+			<motion.div
+				className="flex items-center justify-center mt-4"
+				initial={{ opacity: 0, y: 50 }}
+				animate={{ opacity: 1, y: 0 }}
+				transition={{ duration: 1, delay: 0.7 }}
+			>
+				<motion.button
+					onClick={() => router.push("/organizer-application")}
+					className="relative overflow-hidden rounded-lg hover:scale-105 transition-transform duration-300 flex items-center justify-center px-10 py-4 shadow-lg"
+					style={{
+						minWidth: "clamp(220px, 24vw, 260px)",
+						backgroundColor: "transparent",
+						border: "1px solid rgba(238, 229, 205, 0.28)",
+					}}
+					whileHover={{ scale: 1.05 }}
+					whileTap={{ scale: 0.95 }}
+				>
+					<div
+						className="flex items-center justify-center text-center font-black z-10"
+						style={{
+							fontSize: "clamp(14px, 2vw, 18px)",
+							color: "#EEE5CD",
+							fontFamily: "Orbitron, monospace",
+						}}
+					>
+						ORGANIZER APPLICATIONS
+					</div>
+				</motion.button>
+			</motion.div>
+
 			{/* Memory Game Modal */}
 			<MemoryGame
 				isOpen={showMemoryGame}
