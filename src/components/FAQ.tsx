@@ -97,6 +97,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
 	return (
 		<motion.div
 			className="rounded-2xl border border-white/20 bg-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.22),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl overflow-hidden"
+			style={{ fontFamily: "'DM Sans', sans-serif" }}
 			initial={{ opacity: 0, y: 20 }}
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ duration: 0.3, delay: index * 0.1 }}
