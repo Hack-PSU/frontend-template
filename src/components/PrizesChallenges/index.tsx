@@ -262,7 +262,10 @@ const PrizesChallenges: React.FC = () => {
 								>
 									Coming Soon!
 								</h3>
-								<p className="text-sm text-[#EEE5CD]">
+								<p 
+									className="text-sm text-[#EEE5CD]"
+									style={{ fontFamily: "'DM Sans', sans-serif" }}
+								>
 									Prizes & challenges will be announced soon. Stay tuned!
 								</p>
 							</div>
