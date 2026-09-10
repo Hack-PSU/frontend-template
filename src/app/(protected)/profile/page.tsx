@@ -501,6 +501,33 @@ export default function Profile() {
 					</CardContent>
 				</Card>
 
+				{!isOrganizer &&
+					userData?.registration &&
+					applicationStatus === "pending" && (
+						<Card>
+							<CardHeader>
+								<CardTitle className="flex items-center space-x-2">
+									<Upload className="h-6 w-6" />
+									<span>Update Resume</span>
+								</CardTitle>
+								<CardDescription>
+									Replace the PDF on file for your application (max 5MB)
+								</CardDescription>
+							</CardHeader>
+							<CardContent>
+								<Button
+									onClick={() => setShowResumeModal(true)}
+									className="w-full"
+									variant="default"
+									size="lg"
+								>
+									<Upload className="mr-2 h-4 w-4" />
+									Upload New Resume
+								</Button>
+							</CardContent>
+						</Card>
+					)}
+
 				{/* RSVP Section - only when accepted and not organizer */}
 				{showRsvp && !isOrganizer && (
 					<Card>
@@ -897,9 +924,9 @@ export default function Profile() {
 				<Dialog open={showResumeModal} onOpenChange={setShowResumeModal}>
 					<DialogContent className="sm:max-w-md">
 						<DialogHeader>
-							<DialogTitle>Upload Resume</DialogTitle>
+							<DialogTitle>Update Resume</DialogTitle>
 							<DialogDescription>
-								Upload your resume in PDF format (max 5MB)
+								Replace your current resume (PDF, max 5MB)
 							</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4 py-4">
