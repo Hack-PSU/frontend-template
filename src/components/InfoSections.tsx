@@ -220,6 +220,8 @@ const InfoSections: React.FC = () => {
 						<p
 							className="text-[#EEE5CD] whitespace-pre-line"
 							style={{
+								fontFamily: "'DM Sans', sans-serif",
+								lineHeight: 1.5,
 								fontSize: "clamp(14px, 2vw, 18px)",
 							}}
 						>
