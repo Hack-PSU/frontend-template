@@ -428,7 +428,7 @@ export default function OrganizerApplicationPage() {
 				<div className="flex-1 p-4 sm:p-6 lg:p-8">
 					<div className="max-w-3xl mx-auto">
 						<header className="text-center mb-8 mt-8">
-							<h1 className="text-4xl font-bold tracking-tight text-primary mb-4">
+							<h1 className="text-4xl text-white font-bold tracking-tight text-primary mb-4">
 								HackPSU Organizer Team Application
 							</h1>
 
