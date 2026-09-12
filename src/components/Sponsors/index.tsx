@@ -1,10 +1,12 @@
 "use client";
 
+import {
+  SponsorEntity,
+  useSponsorGetAll,
+} from "@hackpsu/react-sdk";
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useAllSponsors } from "@/lib/api/sponsor/hook";
-import { SponsorEntity } from "@/lib/api/sponsor/entity";
 
 // Define sponsor tier levels and their visual properties
 const TIER_CONFIG = {
@@ -169,7 +171,7 @@ const SponsorTier: React.FC<SponsorTierProps> = ({
 };
 
 const Sponsors: React.FC = () => {
-	const { data: sponsors, isLoading, error } = useAllSponsors();
+	const { data: sponsors, isLoading, error } = useSponsorGetAll();
 
 	// Group sponsors by tier level, filtering out partners
 	const sponsorsByTier = useMemo(() => {

@@ -1,7 +1,9 @@
 "use client";
 
+import {
+  useProjectGetAll,
+} from "@hackpsu/react-sdk";
 import { useState, useMemo } from "react";
-import { useAllProjects } from "@/lib/api/judging";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,7 +23,7 @@ import Devpost from "../../../../public/devpost.svg";
 import { m } from "framer-motion";
 
 export default function ExpoPage() {
-	const { data: projects, isLoading, error } = useAllProjects();
+	const { data: projects, isLoading, error } = useProjectGetAll();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [selectedCategory, setSelectedCategory] = useState<string>("all");
 

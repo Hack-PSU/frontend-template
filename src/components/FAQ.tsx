@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
+import { useHackathonGetForStatic } from "@hackpsu/react-sdk";
 
 interface FAQItem {
 	question: string;
@@ -189,7 +189,7 @@ function playRobotSound() {
 
 const FAQ: React.FC = () => {
 	const [openItems, setOpenItems] = useState<Set<number>>(new Set());
-	const { data: activeHackathon } = useActiveHackathonForStatic();
+	const { data: activeHackathon } = useHackathonGetForStatic();
 	const [fishClicked, setFishClicked] = useState(false);
 	const [robotDance, setRobotDance] = useState(false);
 	const hackathonName = activeHackathon?.name || "the current HackPSU";

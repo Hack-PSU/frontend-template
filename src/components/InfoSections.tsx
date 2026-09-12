@@ -1,9 +1,11 @@
 "use client";
 
+import {
+  useFlagGetOne,
+} from "@hackpsu/react-sdk";
 import React, { useState, useEffect, useRef } from "react";
 import { m, motion } from "framer-motion";
 import Image from "next/image";
-import { useFlagState } from "@/lib/api/flag/hook";
 
 type Section = {
 	id: string;
@@ -55,7 +57,7 @@ const InfoSections: React.FC = () => {
 	const [order, setOrder] = useState(SECTIONS);
 	const [graffittiKey, setGraffittiKey] = useState(0);
 	const graffittiRef = useRef<HTMLDivElement>(null);
-	const { data: statsSectionFlag } = useFlagState("StatsSectionEnabled");
+	const { data: statsSectionFlag } = useFlagGetOne("StatsSectionEnabled");
 
 	useEffect(() => {
 		const observer = new IntersectionObserver(
