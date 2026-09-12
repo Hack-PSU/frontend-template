@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  Status,
+  SubmitterType,
+  useFinanceCreateFinance,
+  useFirebase,
+  useFlagGetOne,
+} from "@hackpsu/react-sdk";
+import { UsersCategory } from "@/lib/constants";
 import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
@@ -23,14 +31,6 @@ import {
 import { CloudUpload, Lock, Schedule } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { z } from "zod";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import {
-	Status,
-	SubmitterType,
-	useCreateFinance,
-	UsersCategory,
-} from "@/lib/api/finance";
-import { useFlagState } from "@/lib/api/flag/hook";
 
 // Custom styled component for visually hiding the file input
 const VisuallyHiddenInput = styled("input")({
@@ -340,11 +340,11 @@ export default function ReimbursementPage() {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const { user } = useFirebase();
-	const createFinance = useCreateFinance();
+	const createFinance = useFinanceCreateFinance();
 
 	// Feature flag check
 	const { data: participantReimbursementFlag, isLoading: flagLoading } =
-		useFlagState("ParticipantReimbursement");
+		useFlagGetOne("ParticipantReimbursement");
 
 	const {
 		handleSubmit,
@@ -392,19 +392,21 @@ export default function ReimbursementPage() {
 			setIsSubmitting(true);
 			setSubmitError(null);
 
-			// Build FormData for file upload and other fields
-			const formData = new FormData();
-			formData.append("receipt", data.receipt);
-			Object.entries(data).forEach(([key, value]) => {
-				if (key !== "receipt") {
-					formData.append(key, String(value));
-				}
-			});
-			formData.append("submitterType", SubmitterType.USER);
-			formData.append("submitterId", user.uid);
-			formData.append("status", Status.PENDING);
+			// The generated client serialises this into multipart/form-data itself,
+			// receipt included, so the call site passes a plain object.
+			const { receipt, ...fields } = data;
 
-			await createFinance.mutateAsync(formData);
+			await createFinance.mutateAsync({
+				data: {
+					...fields,
+					amount: Number(fields.amount),
+					submitterType: SubmitterType.USER,
+					submitterId: user.uid,
+					status: Status.PENDING,
+					reminderSent: false,
+					receipt,
+				},
+			});
 			setSubmitSuccess(true);
 			reset();
 			setActiveStep(0);

@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  useFirebase,
+  useHackathonGetForStatic,
+  useLocationGetAll,
+  useReservationCancelReservation,
+  useReservationCreateReservation,
+  useReservationGetReservations,
+  useTeamGetAll,
+} from "@hackpsu/react-sdk";
 import React, { useState, useMemo } from "react";
 import {
 	ChevronLeft,
@@ -11,15 +20,6 @@ import {
 	MapPin,
 	X,
 } from "lucide-react";
-import {
-	useReservations,
-	useLocations,
-	useCreateReservation,
-	useCancelReservation,
-} from "@/lib/api/reservation/hook";
-import { useAllTeams } from "@/lib/api/team/hook";
-import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { toast } from "sonner";
 import {
 	Dialog,
@@ -42,7 +42,7 @@ const ReservationSystem: React.FC = () => {
 	const { user } = useFirebase();
 
 	// Get user's team first to determine hackathon ID
-	const { data: teams } = useAllTeams();
+	const { data: teams } = useTeamGetAll();
 
 	const userTeam = useMemo(() => {
 		if (!teams || !user) return null;
@@ -59,7 +59,7 @@ const ReservationSystem: React.FC = () => {
 
 	// Fetch hackathon data to get timeframe - using the active hackathon endpoint
 	const { data: activeHackathon, isLoading: hackathonLoading } =
-		useActiveHackathonForStatic();
+		useHackathonGetForStatic();
 
 	// Extract the hackathon data from the active hackathon response
 	const hackathon = useMemo(() => {
@@ -102,16 +102,16 @@ const ReservationSystem: React.FC = () => {
 		data: reservations,
 		isLoading: reservationsLoading,
 		error: reservationsError,
-	} = useReservations(hackathon?.id || "");
+	} = useReservationGetReservations();
 	const {
 		data: locations,
 		isLoading: locationsLoading,
 		error: locationsError,
-	} = useLocations();
+	} = useLocationGetAll();
 	const { mutateAsync: createReservation, isPending: isCreating } =
-		useCreateReservation();
+		useReservationCreateReservation();
 	const { mutateAsync: cancelReservation, isPending: isCanceling } =
-		useCancelReservation(hackathon?.id || "");
+		useReservationCancelReservation();
 
 	const [selectedSlots, setSelectedSlots] = useState<{
 		roomId: number;
@@ -423,13 +423,13 @@ const ReservationSystem: React.FC = () => {
 					);
 				}
 
-				return createReservation({
+				return createReservation({ data: {
 					locationId: selectedSlots.roomId,
 					teamId: userTeam.id,
 					startTime: startTimeMs, // ms
 					endTime: endTimeMs, // ms
 					hackathonId: hackathon.id,
-				});
+				} });
 			});
 
 			await Promise.all(reservationPromises);
@@ -449,7 +449,7 @@ const ReservationSystem: React.FC = () => {
 		if (!reservationToCancel) return;
 
 		try {
-			await cancelReservation(reservationToCancel);
+			await cancelReservation({ id: reservationToCancel });
 			toast.success("Reservation canceled successfully!");
 			setReservationToCancel(null);
 			setSelectedSlots(null);
@@ -539,9 +539,14 @@ const ReservationSystem: React.FC = () => {
 						Error Loading Data
 					</div>
 					<div className="text-gray-600 text-sm">
-						{reservationsError && (
-							<div>Reservations Error: {String(reservationsError)}</div>
-						)}
+						{reservationsError ? (
+							<div>
+								Reservations Error:{" "}
+								{reservationsError instanceof Error
+									? reservationsError.message
+									: "Unknown error"}
+							</div>
+						) : null}
 						{locationsError && (
 							<div>Locations Error: {String(locationsError)}</div>
 						)}

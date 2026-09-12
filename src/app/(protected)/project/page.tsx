@@ -1,18 +1,17 @@
 "use client";
 
+import {
+  useFirebase,
+  useFlagGetOne,
+  useProjectCreateOne,
+  useProjectGetProjectsByTeam,
+  useProjectPatchOne,
+  useTeamGetAll,
+  useUserGetMyInfo,
+} from "@hackpsu/react-sdk";
+import { PROJECT_CATEGORIES, ProjectCategory } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe } from "@/lib/api/user/hook";
-import { useAllTeams } from "@/lib/api/team";
-import {
-	useProjectsByTeamId,
-	useCreateProject,
-	usePatchProject,
-	PROJECT_CATEGORIES,
-	ProjectCategory,
-} from "@/lib/api/judging";
-import { useFlagState } from "@/lib/api/flag/hook";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -39,8 +38,8 @@ import {
 export default function Project() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
-	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams, error: teamsError } = useAllTeams();
+	const { isLoading: isUserLoading, data: userData } = useUserGetMyInfo();
+	const { data: teams, error: teamsError } = useTeamGetAll();
 
 	const [projectName, setProjectName] = useState("");
 	const [githubLink, setGithubLink] = useState("");
@@ -64,20 +63,20 @@ export default function Project() {
 		data: teamProjects,
 		isLoading: isProjectsLoading,
 		error: projectsError,
-	} = useProjectsByTeamId(userTeam?.id || "");
+	} = useProjectGetProjectsByTeam(userTeam?.id || "");
 	const existingProject = teamProjects?.[0]; // Teams can only have one project
 
 	const { mutateAsync: createProject, isPending: isCreating } =
-		useCreateProject();
+		useProjectCreateOne();
 	const { mutateAsync: patchProject, isPending: isUpdating } =
-		usePatchProject();
+		useProjectPatchOne();
 
 	// Feature flag check - use same flag as reimbursement for now
 	const {
 		data: projectSubmissionFlag,
 		isLoading: flagLoading,
 		error: flagError,
-	} = useFlagState("ProjectSubmission");
+	} = useFlagGetOne("ProjectSubmission");
 
 	useEffect(() => {
 		if (isUserLoading) return;
@@ -193,7 +192,7 @@ export default function Project() {
 				});
 				toast.success("Project updated successfully!");
 			} else {
-				await createProject(projectData);
+				await createProject({ data: projectData });
 				toast.success("Project submitted successfully!");
 			}
 		} catch (error) {
