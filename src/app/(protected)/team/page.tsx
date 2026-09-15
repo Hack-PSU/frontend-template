@@ -1,17 +1,18 @@
 "use client";
 
+import {
+  TeamEntity,
+  useFirebase,
+  useProjectGetProjectsByTeam,
+  useTeamAddUserByEmail,
+  useTeamCreateOne,
+  useTeamGetAll,
+  useTeamPatchOne,
+  useUserGetMyInfo,
+  useUserGetOne,
+} from "@hackpsu/react-sdk";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe, useUser } from "@/lib/api/user/hook";
-import {
-	useAllTeams,
-	useCreateTeam,
-	useUpdateTeam,
-	useAddUserToTeamByEmail,
-	TeamEntity,
-} from "@/lib/api/team";
-import { useProjectsByTeamId } from "@/lib/api/judging";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -45,13 +46,13 @@ import {
 export default function Team() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
-	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams, error: teamsError } = useAllTeams();
+	const { isLoading: isUserLoading, data: userData } = useUserGetMyInfo();
+	const { data: teams, error: teamsError } = useTeamGetAll();
 
-	const { mutateAsync: createTeam, isPending: isCreating } = useCreateTeam();
-	const { mutateAsync: updateTeam, isPending: isUpdating } = useUpdateTeam();
+	const { mutateAsync: createTeam, isPending: isCreating } = useTeamCreateOne();
+	const { mutateAsync: updateTeam, isPending: isUpdating } = useTeamPatchOne();
 	const { mutateAsync: addUserByEmail, isPending: isAddingUser } =
-		useAddUserToTeamByEmail();
+		useTeamAddUserByEmail();
 
 	const [showCreateDialog, setShowCreateDialog] = useState(false);
 	const [showEditDialog, setShowEditDialog] = useState(false);
@@ -71,7 +72,7 @@ export default function Team() {
 	);
 
 	// Check if team has submitted a project (which locks the team)
-	const { data: teamProjects, error: projectsError } = useProjectsByTeamId(
+	const { data: teamProjects, error: projectsError } = useProjectGetProjectsByTeam(
 		userTeam?.id || ""
 	);
 	const hasSubmittedProject = teamProjects && teamProjects.length > 0;
@@ -103,10 +104,10 @@ export default function Team() {
 		}
 
 		try {
-			await createTeam({
+			await createTeam({ data: {
 				name: teamName,
 				member1: userData?.id,
-			});
+			} });
 			toast.success("Team created successfully!");
 			setShowCreateDialog(false);
 			setTeamName("");
@@ -245,7 +246,7 @@ export default function Team() {
 	}: {
 		member: { id: string; field: keyof TeamEntity; isCurrentUser: boolean };
 	}) => {
-		const { data: memberData, isLoading } = useUser(member.id);
+		const { data: memberData, isLoading } = useUserGetOne(member.id);
 
 		if (isLoading) {
 			return (

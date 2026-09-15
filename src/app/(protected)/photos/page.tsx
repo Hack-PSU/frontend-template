@@ -1,17 +1,19 @@
 "use client";
 
+import {
+  useFirebase,
+  usePhotoGetAllPhotos,
+} from "@hackpsu/react-sdk";
 import React, { useState } from "react";
 import PhotoUpload from "@/components/PhotoUpload";
-import { usePhotos } from "@/lib/api/photo";
 import { Toaster } from "sonner";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Camera, X, ChevronLeft, ChevronRight, Lock } from "lucide-react";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function PhotosPage() {
-	const { data: photos, isLoading, refetch } = usePhotos();
+	const { data: photos, isLoading, refetch } = usePhotoGetAllPhotos();
 	const { user } = useFirebase();
 	const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
 		null

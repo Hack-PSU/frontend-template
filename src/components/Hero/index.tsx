@@ -1,27 +1,29 @@
 "use client";
 
+import {
+  useFirebase,
+  useFlagGetOne,
+  useHackathonGetForStatic,
+} from "@hackpsu/react-sdk";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useAnimation } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useActiveHackathonForStatic } from "@/lib/api/hackathon/hook";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import settings from "@/lib/config/settings.json";
 import MemoryGame from "@/components/MemoryGame";
-import { useFlagState } from "@/lib/api/flag/hook";
 
 const Hero = () => {
 	const { isAuthenticated, isLoading } = useFirebase();
 	const router = useRouter();
 	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
-		useFlagState("Registrations");
+		useFlagGetOne("Registrations");
 
 	// Use React Query to fetch the active hackathon data.
 	const {
 		data: hackathon,
 		isLoading: hackathonLoading,
 		error: hackathonError,
-	} = useActiveHackathonForStatic();
+	} = useHackathonGetForStatic();
 
 	// Local state for the countdown values and display configuration.
 	const [days, setDays] = useState<number>(Infinity);

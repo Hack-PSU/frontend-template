@@ -1,4 +1,11 @@
 "use client";
+import {
+  EventEntityResponse,
+  EventType,
+  useEventGetAll,
+  useFlagGetOne,
+  useHackathonGetAll,
+} from "@hackpsu/react-sdk";
 import React, { useMemo, useState, useEffect, useRef } from "react";
 import { createEvents, EventAttributes } from "ics";
 import {
@@ -9,10 +16,6 @@ import {
 	useMotionValue,
 } from "framer-motion";
 import Image from "next/image";
-import { useAllEvents } from "@/lib/api/event/hook";
-import { EventEntityResponse, EventType } from "@/lib/api/event/entity";
-import { useFlagState } from "@/lib/api/flag/hook";
-import { useAllHackathons } from "@/lib/api/hackathon/hook";
 
 // Event type color mapping with jellyfish assets
 const eventTypeColors = {
@@ -669,12 +672,12 @@ const PreHackathonList: React.FC<{
 
 const Schedule: React.FC = () => {
 	// Feature flag checks
-	const { data: twoHourFlag } = useFlagState("TwoHourIncrement");
-	const { data: sampleScheduleFlag } = useFlagState("SampleSchedule");
+	const { data: twoHourFlag } = useFlagGetOne("TwoHourIncrement");
+	const { data: sampleScheduleFlag } = useFlagGetOne("SampleSchedule");
 
 	// Fetch all hackathons to find the previous one when sample schedule flag is enabled
 	const { data: allHackathons, isLoading: isLoadingHackathons } =
-		useAllHackathons();
+		useHackathonGetAll();
 
 	// Find the previous hackathon (most recent inactive hackathon)
 	const previousHackathonId = useMemo(() => {
@@ -694,9 +697,11 @@ const Schedule: React.FC = () => {
 		data: fetchedEvents,
 		isLoading: isLoadingEvents,
 		error,
-	} = useAllEvents(
-		sampleScheduleFlag?.isEnabled ? previousHackathonId : undefined
-	);
+	} = useEventGetAll({
+		hackathonId: sampleScheduleFlag?.isEnabled
+			? previousHackathonId
+			: undefined,
+	});
 
 	// Use fetched events directly; default to empty array while loading
 	const events = fetchedEvents ?? [];

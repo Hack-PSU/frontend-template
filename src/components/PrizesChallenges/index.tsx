@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Divider from "../common/Divider";
-import { useFlagState } from "../../lib/api/flag/hook";
+import { useFlagGetOne } from "@hackpsu/react-sdk";
 import {
 	Dialog,
 	DialogContent,
@@ -142,7 +142,7 @@ const TerminalModal: React.FC<{
 };
 
 const PrizesChallenges: React.FC = () => {
-	const { data: prizesAndChallengesFlag } = useFlagState("PrizesEnabled");
+	const { data: prizesAndChallengesFlag } = useFlagGetOne("PrizesEnabled");
 	const [selectedAward, setSelectedAward] = useState<AwardData | null>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 

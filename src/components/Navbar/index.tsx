@@ -1,13 +1,15 @@
 "use client";
 
+import {
+  useFirebase,
+  useFlagGetOne,
+} from "@hackpsu/react-sdk";
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
 import { Menu, X } from "lucide-react";
-import { useFlagState } from "@/lib/api/flag/hook";
 
 interface NavItemProps {
 	href: string;
@@ -130,7 +132,7 @@ const Navbar: React.FC = () => {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const { isAuthenticated, isLoading } = useFirebase();
 	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
-		useFlagState("Registrations");
+		useFlagGetOne("Registrations");
 	const pathname = usePathname();
 	const router = useRouter();
 	const isHome = pathname === "/";

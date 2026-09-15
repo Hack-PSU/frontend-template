@@ -1,5 +1,16 @@
 "use client";
 
+import {
+  CreateUserRegistrationEntity,
+  RegistrationEntity,
+  UserEntity,
+  useFirebase,
+  useFlagGetOne,
+  useHackathonGetForStatic,
+  useUserGetMyInfo,
+  useUserRegisterUser,
+  useUserReplaceOne,
+} from "@hackpsu/react-sdk";
 import type * as React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -41,17 +52,7 @@ import countries from "@/components/common/Autocomplete/assets/countries.json";
 import universities from "@/components/common/Autocomplete/assets/schools.json";
 import majors from "@/components/common/Autocomplete/assets/majors.json";
 import referrals from "@/components/common/Autocomplete/assets/referrals.json";
-import type { UserEntity } from "@/lib/api/user/entity";
-import type {
-	RegistrationEntity,
-	RegistrationCreateEntity,
-} from "@/lib/api/registration/entity";
-import { useReplaceUser, useUserInfoMe } from "@/lib/api/user/hook";
-import { useCreateRegistration } from "@/lib/api/registration/hook";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useActiveHackathonForStatic } from "@/lib/api/hackathon";
 import { track } from "@vercel/analytics";
-import { useFlagState } from "@/lib/api/flag";
 
 type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 	Omit<
@@ -84,14 +85,14 @@ interface Section {
 export default function RegistrationPage() {
 	const router = useRouter();
 	const { user } = useFirebase();
-	const { data: userInfo, isLoading: isUserInfoLoading } = useUserInfoMe();
-	const replaceUserMutation = useReplaceUser();
-	const createRegistrationMutation = useCreateRegistration();
-	const { data: hackathon } = useActiveHackathonForStatic();
+	const { data: userInfo, isLoading: isUserInfoLoading } = useUserGetMyInfo();
+	const replaceUserMutation = useUserReplaceOne();
+	const createRegistrationMutation = useUserRegisterUser();
+	const { data: hackathon } = useHackathonGetForStatic();
 	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
-		useFlagState("Registrations");
+		useFlagGetOne("Registrations");
 	const { data: psuRegisterFlagData, isLoading: isLoadingPSURegisterFlag } =
-		useFlagState("PSURegister");
+		useFlagGetOne("PSURegister");
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
@@ -115,7 +116,7 @@ export default function RegistrationPage() {
 	const trackPageView = () => {
 		if (user) {
 			track("registration_page_view", {
-				userId: user.uid,
+				id: user.uid,
 			});
 		}
 	};
@@ -463,7 +464,7 @@ export default function RegistrationPage() {
 			userData.resume = formData.resume;
 		}
 
-		const registrationData: RegistrationCreateEntity & { time: number } = {
+		const registrationData: CreateUserRegistrationEntity & { time: number } = {
 			age: formData.age,
 			educationalInstitutionType: formData.educationalInstitutionType,
 			academicYear: formData.academicYear,
@@ -492,7 +493,7 @@ export default function RegistrationPage() {
 					data: userData,
 				});
 				await createRegistrationMutation.mutateAsync({
-					userId: user?.uid,
+					id: user?.uid,
 					data: registrationData,
 				});
 			},
@@ -652,7 +653,7 @@ export default function RegistrationPage() {
 													<Input
 														id="firstName"
 														name="firstName"
-														value={formData.firstName}
+														value={formData.firstName ?? ""}
 														onChange={handleChange}
 														required
 													/>
@@ -662,7 +663,7 @@ export default function RegistrationPage() {
 													<Input
 														id="lastName"
 														name="lastName"
-														value={formData.lastName}
+														value={formData.lastName ?? ""}
 														onChange={handleChange}
 														required
 													/>
@@ -673,7 +674,7 @@ export default function RegistrationPage() {
 												<Label>Gender</Label>
 												<RadioGroup
 													name="gender"
-													value={formData.gender}
+													value={formData.gender ?? ""}
 													onValueChange={(value) =>
 														handleSelectChange("gender", value)
 													}
@@ -720,7 +721,7 @@ export default function RegistrationPage() {
 												<PhoneInput
 													id="phone"
 													name="phone"
-													value={formData.phone}
+													value={formData.phone ?? ""}
 													onChange={handleChange}
 													required
 												/>
@@ -772,7 +773,7 @@ export default function RegistrationPage() {
 												<Label>Are you a veteran?</Label>
 												<RadioGroup
 													name="veteran"
-													value={formData.veteran}
+													value={formData.veteran ?? ""}
 													onValueChange={(value) =>
 														handleSelectChange("veteran", value)
 													}
@@ -839,7 +840,7 @@ export default function RegistrationPage() {
 														</Label>
 														<Select
 															name="shirtSize"
-															value={formData.shirtSize}
+															value={formData.shirtSize ?? ""}
 															onValueChange={(value) =>
 																handleSelectChange("shirtSize", value)
 															}
@@ -866,7 +867,7 @@ export default function RegistrationPage() {
 														</Label>
 														<Autocomplete
 															data={Object.keys(countries)}
-															value={formData.country}
+															value={formData.country ?? ""}
 															placeholder="Select your country"
 															onSelectionChange={(value) =>
 																handleSelectChange("country", value)
@@ -894,7 +895,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="travelReimbursement"
-															checked={formData.travelReimbursement}
+															checked={formData.travelReimbursement ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange(
 																	"travelReimbursement",
@@ -910,7 +911,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="firstHackathon"
-															checked={formData.firstHackathon}
+															checked={formData.firstHackathon ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange("firstHackathon", checked)
 															}
@@ -938,7 +939,7 @@ export default function RegistrationPage() {
 																id="zipCode"
 																name="zipCode"
 																placeholder="e.g., 10001"
-																value={formData.zipCode}
+																value={formData.zipCode ?? ""}
 																onChange={handleChange}
 																inputMode="numeric"
 																maxLength={5}
@@ -957,7 +958,7 @@ export default function RegistrationPage() {
 																min="0"
 																step="1"
 																placeholder="e.g., 200"
-																value={formData.travelCost}
+																value={formData.travelCost ?? ""}
 																onChange={handleChange}
 																required
 															/>
@@ -969,7 +970,7 @@ export default function RegistrationPage() {
 															</Label>
 															<Select
 																name="travelMethod"
-																value={formData.travelMethod}
+																value={formData.travelMethod ?? ""}
 																onValueChange={(value) =>
 																	handleSelectChange("travelMethod", value)
 																}
@@ -1003,7 +1004,7 @@ export default function RegistrationPage() {
 																id="travelAdditional"
 																name="travelAdditional"
 																placeholder="e.g., Layovers, special accommodations"
-																value={formData.travelAdditional}
+																value={formData.travelAdditional ?? ""}
 																onChange={handleChange}
 															/>
 														</div>
@@ -1028,7 +1029,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="hasDietaryRestrictions"
-															checked={formData.hasDietaryRestrictions}
+															checked={formData.hasDietaryRestrictions ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange(
 																	"hasDietaryRestrictions",
@@ -1048,7 +1049,7 @@ export default function RegistrationPage() {
 																	id="dietaryRestriction"
 																	name="dietaryRestriction"
 																	placeholder="e.g., Vegetarian, Gluten-Free"
-																	value={formData.dietaryRestriction}
+																	value={formData.dietaryRestriction ?? ""}
 																	onChange={handleChange}
 																/>
 															</div>
@@ -1058,7 +1059,7 @@ export default function RegistrationPage() {
 																	id="allergies"
 																	name="allergies"
 																	placeholder="e.g., Peanuts, Shellfish"
-																	value={formData.allergies}
+																	value={formData.allergies ?? ""}
 																	onChange={handleChange}
 																/>
 															</div>
@@ -1087,7 +1088,7 @@ export default function RegistrationPage() {
 																		]
 																	: Object.keys(universities)
 															}
-															value={formData.university}
+															value={formData.university ?? ""}
 															placeholder="Select your school"
 															onSelectionChange={(value) =>
 																handleSelectChange("university", value)
@@ -1099,7 +1100,7 @@ export default function RegistrationPage() {
 														<Label htmlFor="major">Major</Label>
 														<Autocomplete
 															data={Object.keys(majors)}
-															value={formData.major}
+															value={formData.major ?? ""}
 															placeholder="Select your major"
 															onSelectionChange={(value) =>
 																handleSelectChange("major", value)
@@ -1111,7 +1112,7 @@ export default function RegistrationPage() {
 														<Label>Academic Year</Label>
 														<RadioGroup
 															name="academicYear"
-															value={formData.academicYear}
+															value={formData.academicYear ?? ""}
 															onValueChange={(value) =>
 																handleSelectChange("academicYear", value)
 															}
@@ -1143,7 +1144,7 @@ export default function RegistrationPage() {
 														<Label>Educational Institution Type</Label>
 														<Select
 															name="educationalInstitutionType"
-															value={formData.educationalInstitutionType}
+															value={formData.educationalInstitutionType ?? ""}
 															onValueChange={(value) =>
 																handleSelectChange(
 																	"educationalInstitutionType",
@@ -1234,7 +1235,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="mlhCoc"
-															checked={formData.mlhCoc}
+															checked={formData.mlhCoc ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange("mlhCoc", checked)
 															}
@@ -1284,7 +1285,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="mlhDcp"
-															checked={formData.mlhDcp}
+															checked={formData.mlhDcp ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange("mlhDcp", checked)
 															}
@@ -1300,7 +1301,7 @@ export default function RegistrationPage() {
 														</div>
 														<Switch
 															name="shareEmailMlh"
-															checked={formData.shareEmailMlh}
+															checked={formData.shareEmailMlh ?? false}
 															onCheckedChange={(checked) =>
 																handleSwitchChange("shareEmailMlh", checked)
 															}
@@ -1322,7 +1323,7 @@ export default function RegistrationPage() {
 															<Label>Level of coding experience?</Label>
 															<RadioGroup
 																name="codingExperience"
-																value={formData.codingExperience}
+																value={formData.codingExperience ?? ""}
 																onValueChange={(value) =>
 																	handleSelectChange("codingExperience", value)
 																}
@@ -1368,7 +1369,7 @@ export default function RegistrationPage() {
 															</Label>
 															<Autocomplete
 																data={Object.keys(referrals)}
-																value={formData.referral}
+																value={formData.referral ?? ""}
 																placeholder="Select a source"
 																onSelectionChange={(value) =>
 																	handleSelectChange("referral", value)
@@ -1385,7 +1386,7 @@ export default function RegistrationPage() {
 																id="project"
 																name="project"
 																placeholder="Describe a project and your role in it..."
-																value={formData.project}
+																value={formData.project ?? ""}
 																onChange={handleChange}
 															/>
 														</div>
@@ -1399,7 +1400,7 @@ export default function RegistrationPage() {
 																id="expectations"
 																name="expectations"
 																placeholder="e.g., Learn a new skill, meet new people, build something cool..."
-																value={formData.expectations}
+																value={formData.expectations ?? ""}
 																onChange={handleChange}
 															/>
 														</div>
@@ -1413,7 +1414,7 @@ export default function RegistrationPage() {
 																id="excitement"
 																name="excitement"
 																placeholder="e.g., Meeting new people, building a cool project, learning new skills..."
-																value={formData.excitement}
+																value={formData.excitement ?? ""}
 																onChange={handleChange}
 															/>
 														</div>
@@ -1426,7 +1427,7 @@ export default function RegistrationPage() {
 																name="linkedinUrl"
 																type="url"
 																placeholder="https://linkedin.com/in/yourprofile"
-																value={formData.linkedinUrl}
+																value={formData.linkedinUrl ?? ""}
 																onChange={handleChange}
 															/>
 															<p className="text-sm text-muted-foreground">

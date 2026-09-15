@@ -1,7 +1,9 @@
 "use client";
 
+import {
+  usePhotoUploadPhoto,
+} from "@hackpsu/react-sdk";
 import React, { useRef, useState } from "react";
-import { useUploadPhoto } from "@/lib/api/photo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Upload, X, Camera, Loader2, Lock, Globe } from "lucide-react";
@@ -30,7 +32,7 @@ export default function PhotoUpload({
 		total: number;
 	}>({ current: 0, total: 0 });
 
-	const upload = useUploadPhoto();
+	const upload = usePhotoUploadPhoto();
 
 	const validateFile = (f: File): boolean => {
 		// Validate file type
@@ -121,7 +123,9 @@ export default function PhotoUpload({
 
 		for (let i = 0; i < files.length; i++) {
 			try {
-				await upload.mutateAsync({ file: files[i].file, fileType });
+				await upload.mutateAsync({
+					data: { photo: files[i].file, fileType },
+				});
 				successCount++;
 				setUploadProgress({ current: i + 1, total: files.length });
 			} catch (err: any) {

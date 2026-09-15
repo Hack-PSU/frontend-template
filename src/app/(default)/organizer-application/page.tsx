@@ -1,5 +1,12 @@
 "use client";
 
+import {
+  OrganizerApplicationCreateEntity,
+  OrganizerTeam,
+  YearStanding,
+  useFlagGetOne,
+  useOrganizerApplicationCreate,
+} from "@hackpsu/react-sdk";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from "sonner";
@@ -24,13 +31,6 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle, Mail, Home, Lock } from "lucide-react";
-import {
-	YearStanding,
-	OrganizerTeam,
-	type OrganizerApplicationCreateEntity,
-} from "@/lib/api/organizer-application/entity";
-import { useSubmitOrganizerApplication } from "@/lib/api/organizer-application/hook";
-import { useFlagState } from "@/lib/api/flag/hook";
 
 interface FormData {
 	name: string;
@@ -47,12 +47,12 @@ interface FormData {
 
 export default function OrganizerApplicationPage() {
 	const router = useRouter();
-	const submitApplicationMutation = useSubmitOrganizerApplication();
+	const submitApplicationMutation = useOrganizerApplicationCreate();
 	const [isSubmitted, setIsSubmitted] = useState(false);
 
 	// Feature flag check
 	const { data: organizerApplicationsFlag, isLoading: flagLoading } =
-		useFlagState("OrganizerApplications");
+		useFlagGetOne("OrganizerApplications");
 
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
@@ -144,7 +144,7 @@ export default function OrganizerApplicationPage() {
 			resume: formData.resume,
 		};
 
-		toast.promise(submitApplicationMutation.mutateAsync(applicationData), {
+		toast.promise(submitApplicationMutation.mutateAsync({ data: applicationData }), {
 			loading: "Submitting your application...",
 			success: () => {
 				setIsSubmitted(true);

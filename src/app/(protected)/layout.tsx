@@ -1,4 +1,4 @@
-import { AuthGuard, Role } from "@/lib/providers/AuthGuard";
+import { AuthGuard, Role } from "@hackpsu/react-sdk";
 import { Toaster } from "sonner";
 
 export default function DashboardLayout({
@@ -9,7 +9,7 @@ export default function DashboardLayout({
 	return (
 		<div className="subpage-bg min-h-screen pt-24 md:pt-28 lg:pt-32">
 			<Toaster richColors />
-			<AuthGuard config={{ minimumRole: Role.NONE }}>{children}</AuthGuard>
+			<AuthGuard minimumRole={Role.NONE}>{children}</AuthGuard>
 			<Toaster />
 		</div>
 	);

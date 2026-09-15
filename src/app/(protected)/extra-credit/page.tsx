@@ -1,15 +1,15 @@
 "use client";
 
+import {
+  useExtraCreditClassGetAll,
+  useFirebase,
+  useUserAssignClassToUser,
+  useUserClassesByUser,
+  useUserGetMyInfo,
+  useUserUnassignUserFromClass,
+} from "@hackpsu/react-sdk";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe } from "@/lib/api/user/hook";
-import { useAllExtraCreditClasses } from "@/lib/api/extra-credit/hook";
-import {
-	useUserExtraCreditClasses,
-	useAssignExtraCreditClass,
-	useUnassignExtraCreditClass,
-} from "@/lib/api/user/hook";
 import {
 	Card,
 	CardContent,
@@ -32,16 +32,16 @@ import {
 export default function ExtraCredit() {
 	const { user, isAuthenticated, isLoading: authLoading } = useFirebase();
 	const router = useRouter();
-	const { data: userInfo, isLoading: userInfoLoading } = useUserInfoMe();
+	const { data: userInfo, isLoading: userInfoLoading } = useUserGetMyInfo();
 	const { data: allClasses, isLoading: allClassesLoading } =
-		useAllExtraCreditClasses();
+		useExtraCreditClassGetAll();
 	const { data: assignedClasses, isLoading: assignedClassesLoading } =
-		useUserExtraCreditClasses(user?.uid || "");
+		useUserClassesByUser(user?.uid || "");
 
 	const { mutateAsync: assignClass, isPending: isAssigning } =
-		useAssignExtraCreditClass();
+		useUserAssignClassToUser();
 	const { mutateAsync: unassignClass, isPending: isUnassigning } =
-		useUnassignExtraCreditClass();
+		useUserUnassignUserFromClass();
 
 	const [processingClassId, setProcessingClassId] = useState<number | null>(
 		null
@@ -63,10 +63,10 @@ export default function ExtraCredit() {
 		setProcessingClassId(classId);
 		try {
 			if (isCurrentlyAssigned) {
-				await unassignClass({ userId: user.uid, classId });
+				await unassignClass({ id: user.uid, classId });
 				toast.success("Extra credit class removed");
 			} else {
-				await assignClass({ userId: user.uid, classId });
+				await assignClass({ id: user.uid, classId });
 				toast.success("Extra credit class assigned");
 			}
 		} catch (error: any) {

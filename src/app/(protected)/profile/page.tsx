@@ -1,15 +1,19 @@
 "use client";
 
+import {
+  RegistrationEntity,
+  useAppleWalletCreatePass,
+  useFirebase,
+  useFlagGetOne,
+  useRegistrationUpdateApplicationStatus,
+  useTeamGetAll,
+  useUserGetMyInfo,
+  useUserGetOne,
+  useUserPatchOne,
+  useWalletCreatePass,
+} from "@hackpsu/react-sdk";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useFirebase } from "@/lib/providers/FirebaseProvider";
-import { useUserInfoMe, useUser } from "@/lib/api/user/hook";
-import {
-	useCreateWalletPass,
-	useCreateAppleWalletPass,
-} from "@/lib/api/wallet/hook";
-import { useAllTeams } from "@/lib/api/team";
-import { useFlagState } from "@/lib/api/flag/hook";
 import Image from "next/image";
 import QRCode from "react-qr-code";
 import { Button } from "@/components/ui/button";
@@ -43,7 +47,6 @@ import {
 	Shield,
 	Upload,
 } from "lucide-react";
-import { useUpdateUser } from "@/lib/api/user/hook";
 import { Roofing, Room } from "@mui/icons-material";
 import { jwtDecode } from "jwt-decode";
 import {
@@ -54,8 +57,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { usePatchApplicationStatus } from "@/lib/api/registration/hook";
-import type { RegistrationEntity } from "@/lib/api/registration/entity";
 
 // Role definitions matching AuthGuard
 enum Role {
@@ -117,26 +118,26 @@ function getRoleName(role: number): string {
 export default function Profile() {
 	const { isAuthenticated, user, logout, isLoading, token } = useFirebase();
 	const router = useRouter();
-	const { isLoading: isUserLoading, data: userData } = useUserInfoMe();
-	const { data: teams } = useAllTeams();
+	const { isLoading: isUserLoading, data: userData } = useUserGetMyInfo();
+	const { data: teams } = useTeamGetAll();
 	const [now, setNow] = useState(() => Date.now());
 
 	// Mutations for wallet integration
 	const { mutateAsync: createWalletPass, isPending: isCreatingGoogleWallet } =
-		useCreateWalletPass();
+		useWalletCreatePass();
 	const {
 		mutateAsync: createAppleWalletPass,
 		isPending: isCreatingAppleWallet,
-	} = useCreateAppleWalletPass();
+	} = useAppleWalletCreatePass();
 
 	// Mutation for resume upload
 	const { mutateAsync: uploadResume, isPending: isUploadingResume } =
-		useUpdateUser();
+		useUserPatchOne();
 
 	const {
 		mutateAsync: patchApplicationStatus,
 		isPending: isPatchingApplicationStatus,
-	} = usePatchApplicationStatus();
+	} = useRegistrationUpdateApplicationStatus();
 
 	const [showQRCode, setShowQRCode] = useState(false);
 	const [showResumeModal, setShowResumeModal] = useState(false);
@@ -148,9 +149,9 @@ export default function Profile() {
 
 	// Feature flag checks
 	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
-		useFlagState("Registrations");
-	const { data: helpDeskFlag } = useFlagState("HelpDesk");
-	const { data: roomReservationFlag } = useFlagState("RoomReservation");
+		useFlagGetOne("Registrations");
+	const { data: helpDeskFlag } = useFlagGetOne("HelpDesk");
+	const { data: roomReservationFlag } = useFlagGetOne("RoomReservation");
 
 	// Check if user is an organizer (role > 0)
 	const userRole = getUserRole(token);
@@ -204,7 +205,7 @@ export default function Profile() {
 				return;
 			}
 
-			const response = await createWalletPass(user.uid);
+			const response = await createWalletPass({ id: user.uid });
 			if (response?.walletLink) {
 				window.open(response.walletLink, "_blank");
 				toast.success("Google Wallet pass created successfully!");
@@ -225,7 +226,7 @@ export default function Profile() {
 				return;
 			}
 
-			const response = await createAppleWalletPass(user.uid);
+			const response = await createAppleWalletPass({ id: user.uid });
 			const blobUrl = URL.createObjectURL(response);
 			const link = document.createElement("a");
 			link.href = blobUrl;
@@ -306,7 +307,7 @@ export default function Profile() {
 	};
 
 	const TeamMemberDisplay = ({ memberId }: { memberId: string }) => {
-		const { data: memberData, isLoading } = useUser(memberId);
+		const { data: memberData, isLoading } = useUserGetOne(memberId);
 
 		if (isLoading) {
 			return <span className="text-sm text-gray-600">Loading...</span>;
@@ -385,7 +386,7 @@ export default function Profile() {
 		try {
 			await patchApplicationStatus({
 				userId: userData.id,
-				status: rsvpPendingStatus,
+				data: { status: rsvpPendingStatus },
 			});
 			toast.success(
 				rsvpPendingStatus === "confirmed"
@@ -491,9 +492,11 @@ export default function Profile() {
 								<p className={`text-2xl text-slate-200 text-center`}>
 									Application Status:{" "}
 									<span
-										className={`font-bold ${applicationStatusColorMap.get(userData.registration.applicationStatus)}`}
+										className={`font-bold ${applicationStatusColorMap.get(
+											userData.registration.applicationStatus ?? "",
+										)}`}
 									>
-										{userData.registration.applicationStatus.toUpperCase()}
+										{userData.registration.applicationStatus?.toUpperCase()}
 									</span>
 								</p>
 							</div>
