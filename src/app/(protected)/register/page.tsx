@@ -586,14 +586,14 @@ export default function RegistrationPage() {
 					<div className="flex-1 lg:ml-8 p-4 sm:p-6 lg:p-8">
 						<div className="max-w-3xl mx-auto">
 							<header className="text-center mb-8">
-								<h1 className="text-4xl font-bold tracking-tight text-primary text-[#E2C75E]">
+								<h1 className="text-4xl text-white font-bold tracking-tight text-primary">
 									Register for our {hackathon?.name} hackathon
 								</h1>
-								<p className="mt-2 text-[#EEE5CD]">
+								<p className="mt-2 text-white">
 									Feel free to reach out to us at{" "}
 									<a
 										href="mailto:technology@hackpsu.org"
-										className="text-primary underline text-[#64A5C3]"
+										className="text-primary underline text-white"
 									>
 										<span className="">technology@hackpsu.org</span>
 									</a>{" "}
