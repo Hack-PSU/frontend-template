@@ -1,14 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Divider from "../common/Divider";
 import { useFlagGetOne } from "@hackpsu/react-sdk";
-import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogClose,
-} from "../ui/dialog";
 
 interface Prize {
 	place: string;
@@ -25,15 +18,34 @@ interface AwardData {
 	extra?: string;
 }
 
-const PrizeCard: React.FC<{
-	award: AwardData;
-	onClick: (award: AwardData) => void;
-}> = ({ award, onClick }) => {
+const ComingSoonCard: React.FC = () => {
 	return (
-		<button
-			onClick={() => onClick(award)}
-			className="w-full rounded-2xl bg-[#1a1734]/80 border border-white/5 p-6 md:p-7 flex flex-col items-center text-center transition-transform duration-200 hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.3)]"
-		>
+		<div className="w-full rounded-2xl bg-[#1a1734]/80 border border-white/5 p-6 md:p-7 flex flex-col items-center justify-center text-center h-full">
+			<h2
+				className="text-3xl md:text-4xl leading-none"
+				style={{
+					fontFamily: "'Barlow Condensed', sans-serif",
+					color: "#EEE5CD",
+				}}
+			>
+				Coming Soon
+			</h2>
+			<p
+				className="mt-5 text-base md:text-lg leading-relaxed"
+				style={{
+					fontFamily: "'DM Sans', sans-serif",
+					color: "#EEE5CD",
+				}}
+			>
+				This challenge hasn&apos;t been announced yet. Stay tuned!
+			</p>
+		</div>
+	);
+};
+
+const PrizeCard: React.FC<{ award: AwardData }> = ({ award }) => {
+	return (
+		<div className="w-full h-full rounded-2xl bg-[#1a1734]/80 border border-white/5 p-6 md:p-7 flex flex-col items-center text-center">
 			<div className="relative h-28 w-28 md:h-36 md:w-36 mb-5">
 				<Image
 					src={award.planetIcon}
@@ -69,93 +81,65 @@ const PrizeCard: React.FC<{
 			>
 				{award.description}
 			</p>
-		</button>
-	);
-};
 
-const TerminalModal: React.FC<{
-	award: AwardData | null;
-	isOpen: boolean;
-	onClose: () => void;
-}> = ({ award, isOpen, onClose }) => {
-	if (!award) return null;
-
-	return (
-		<Dialog open={isOpen} onOpenChange={onClose}>
-			<DialogContent className="bg-black border-2 border-[#00ff00] max-w-2xl">
-				<DialogHeader className="border-b-2 border-[#00ff00] pb-2">
-					<div className="flex items-center justify-between w-full">
-						<DialogTitle
-							className="text-[#00ff00] font-mono text-lg"
-							style={{ fontFamily: "Courier New, monospace" }}
+			{award.prizes && award.prizes.length > 0 && (
+				<div className="w-full mt-6 pt-5 border-t border-white/10 space-y-2.5">
+					{award.prizes.map((prize, index) => (
+						<div
+							key={index}
+							className="flex items-center justify-between gap-4 text-left"
 						>
-							&gt; {award.title.toUpperCase()}
-						</DialogTitle>
-						<DialogClose
-							className="relative h-6 w-6 opacity-100 hover:opacity-100 hover:bg-transparent p-0 text-[#00ff00] hover:text-[#ff0000] transition-colors"
-							asChild
-						>
-							<button className="text-2xl font-bold leading-none">×</button>
-						</DialogClose>
-					</div>
-				</DialogHeader>
-
-				<div
-					className="space-y-4 font-mono text-[#00ff00]"
-					style={{ fontFamily: "Courier New, monospace" }}
-				>
-					{award.description && (
-						<div className="text-sm leading-relaxed">
-							<span className="text-[#ffff00]">&gt; Description:</span>
-							<p className="ml-4 mt-1">{award.description}</p>
+							<span
+								className="text-sm md:text-base shrink-0"
+								style={{
+									fontFamily: "'Barlow Condensed', sans-serif",
+									color: "#E2C75E",
+								}}
+							>
+								{prize.place}
+							</span>
+							<span
+								className="text-sm md:text-base leading-snug"
+								style={{
+									fontFamily: "'DM Sans', sans-serif",
+									color: "#EEE5CD",
+								}}
+							>
+								{prize.amount}
+							</span>
 						</div>
-					)}
-
-					{award.prizes && award.prizes.length > 0 && (
-						<div className="text-sm">
-							<span className="text-[#ffff00]">&gt; Prize Breakdown:</span>
-							<div className="ml-4 mt-1 space-y-1">
-								{award.prizes.map((prize, index) => (
-									<div key={index} className="flex justify-between">
-										<span>{prize.place}:</span>
-										<span className="text-[#ff30f8]">{prize.amount}</span>
-									</div>
-								))}
-							</div>
-						</div>
-					)}
-
-					{award.extra && (
-						<div className="text-sm">
-							<span className="text-[#ffff00]">&gt; Additional Info:</span>
-							<p className="ml-4 mt-1">{award.extra}</p>
-						</div>
-					)}
-
-					<div className="pt-4 border-t-2 border-[#00ff00] text-xs">
-						<span className="text-[#00ff00]">&gt; _</span>
-					</div>
+					))}
 				</div>
-			</DialogContent>
-		</Dialog>
+			)}
+
+			{award.extra && (
+				<p
+					className="w-full mt-4 pt-4 border-t border-white/10 text-sm leading-relaxed"
+					style={{
+						fontFamily: "'DM Sans', sans-serif",
+						color: "#EEE5CD",
+					}}
+				>
+					{award.extra}
+				</p>
+			)}
+		</div>
 	);
 };
 
 const PrizesChallenges: React.FC = () => {
 	const { data: prizesAndChallengesFlag } = useFlagGetOne("PrizesEnabled");
-	const [selectedAward, setSelectedAward] = useState<AwardData | null>(null);
-	const [isModalOpen, setIsModalOpen] = useState(false);
 
 	const awards: AwardData[] = [
 		{
 			id: 1,
 			title: "HackPSU Grand Prize",
-			displayAmount: "$3000",
+			displayAmount: "$3500",
 			planetIcon: "/fa26/003/4.png",
 			description:
 				"The standard HackPSU experience: work together alone or in a team to build something awesome! All monetary prizes will be split among the winning team members equally.",
 			prizes: [
-				{ place: "1st Place", amount: "$1500 in cash" },
+				{ place: "1st Place", amount: "$2000 in cash" },
 				{ place: "2nd Place", amount: "$1000 in cash" },
 				{ place: "3rd Place", amount: "$500 in cash" },
 			],
@@ -199,11 +183,6 @@ const PrizesChallenges: React.FC = () => {
 		},
 	];
 
-	const handleAwardClick = (award: AwardData) => {
-		setSelectedAward(award);
-		setIsModalOpen(true);
-	};
-
 	return (
 		<section
 			id="prizes"
@@ -242,14 +221,10 @@ const PrizesChallenges: React.FC = () => {
 			</div>
 			<div className="w-full max-w-7xl flex flex-col items-center">
 				{prizesAndChallengesFlag?.isEnabled ? (
-					<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-						{awards.slice(0, 3).map((award) => (
-							<PrizeCard
-								key={award.id}
-								award={award}
-								onClick={handleAwardClick}
-							/>
-						))}
+					<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+						<PrizeCard key={awards[0].id} award={awards[0]} />
+						<ComingSoonCard />
+						<ComingSoonCard />
 					</div>
 				) : (
 					<div className="w-full">
@@ -273,12 +248,6 @@ const PrizesChallenges: React.FC = () => {
 					</div>
 				)}
 			</div>
-
-			<TerminalModal
-				award={selectedAward}
-				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-			/>
 		</section>
 	);
 };
