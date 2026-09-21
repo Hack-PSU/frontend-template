@@ -108,8 +108,10 @@
 		background-size:
 			100% auto,
 			100% auto;
+		/* Pin the hero art to the bottom so it always shows its bottom edge and
+		   extends upward; bg-rest3 fills any space above it. */
 		background-position:
-			top center,
+			bottom center,
 			top center;
 		background-repeat: no-repeat, repeat-y;
 	}

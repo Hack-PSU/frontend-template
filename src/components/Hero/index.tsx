@@ -17,6 +17,8 @@ const Hero = () => {
 	const router = useRouter();
 	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
 		useFlagGetOne("Registrations");
+	const { data: organizerApplicationsFlagData, isLoading: isLoadingOrganizerApplicationsData } =
+		useFlagGetOne("OrganizerApplications");
 
 	// Use React Query to fetch the active hackathon data.
 	const {
@@ -682,11 +684,12 @@ Happy hacking!
 			</motion.div>
 
 			{/* Organizer Applications Button */}
-			<motion.div
-				className="flex items-center justify-center mt-4"
-				initial={{ opacity: 0, y: 50 }}
-				animate={{ opacity: 1, y: 0 }}
-				transition={{ duration: 1, delay: 0.7 }}
+			{organizerApplicationsFlagData?.isEnabled && (
+				<motion.div
+					className="flex items-center justify-center mt-4"
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ duration: 1, delay: 0.7 }}
 			>
 				<motion.button
 					onClick={() => router.push("/organizer-application")}
@@ -711,7 +714,7 @@ Happy hacking!
 					</div>
 				</motion.button>
 			</motion.div>
-
+			)}
 			{/* Memory Game Modal */}
 			<MemoryGame
 				isOpen={showMemoryGame}
