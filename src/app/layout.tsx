@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 
 import Navbar from "@/components/Navbar";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 import { HackPSUProvider } from "@hackpsu/react-sdk";
 import "@/styles/globals.css";
 import { Analytics } from "@vercel/analytics/next";
@@ -102,6 +103,7 @@ export default function RootLayout({
 				>
 					<Navbar />
 					{children}
+					<ScrollToTopButton />
 				</HackPSUProvider>
 				<Analytics />
 				<SpeedInsights />
