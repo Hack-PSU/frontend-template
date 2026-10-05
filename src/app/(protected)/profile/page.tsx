@@ -443,6 +443,11 @@ export default function Profile() {
 							<Mail className="h-5 w-5" />
 							<span className="text-sm md:text-base">{user.email}</span>
 						</div>
+						<div className="flex items-center justify-center space-x-2">
+							<span className="text-sm md:text-base text-slate-200">
+								User ID: <span className="font-mono font-bold">{user?.uid?.slice(-4)}</span>
+							</span>
+						</div>
 						{isOrganizer && (
 							<div className="bg-slate-700/50 rounded-lg p-3 mt-4">
 								<p className="text-sm text-slate-200 text-center">

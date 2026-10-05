@@ -58,6 +58,7 @@ export default function Team() {
 	const [showAddUserDialog, setShowAddUserDialog] = useState(false);
 	const [teamName, setTeamName] = useState("");
 	const [userEmail, setUserEmail] = useState("");
+	const [userIdSuffix, setUserIdSuffix] = useState("");
 
 	// Find user's team
 	const userTeam = teams?.find((team) =>
@@ -137,8 +138,15 @@ export default function Team() {
 	};
 
 	const handleAddUser = async () => {
-		if (!userTeam || !userEmail.trim()) {
-			toast.error("Please enter a valid email");
+		// Check for e-mail & user ID fields
+		if (!userTeam || !userEmail.trim() || !userIdSuffix.trim()) {
+			toast.error("Please enter the user's email and last 4 ID characters");
+			return;
+		}
+
+		// Basic user ID validation
+		if (userIdSuffix.trim().length !== 4) {
+			toast.error("Please enter exactly the last 4 characters of the user's ID");
 			return;
 		}
 
@@ -159,11 +167,15 @@ export default function Team() {
 		try {
 			await addUserByEmail({
 				id: userTeam.id,
-				data: { email: userEmail },
+				data: { 
+					email: userEmail, 
+					userIdSuffix: userIdSuffix.trim(), 
+				}
 			});
 			toast.success("User added to team successfully!");
 			setShowAddUserDialog(false);
 			setUserEmail("");
+			setUserIdSuffix("");
 		} catch (error: any) {
 			console.error("Error adding user:", error);
 			toast.error("Failed to add user. Please check the email and try again.");
@@ -568,12 +580,25 @@ export default function Team() {
 									onKeyDown={(e) => e.key === "Enter" && handleAddUser()}
 								/>
 							</div>
+							<div>
+								<Label htmlFor="user-id-suffix">User ID</Label>
+								<Input
+									id="user-id-suffix"
+									type="text"
+									maxLength={4}
+									placeholder="Enter user's ID"
+									value={userIdSuffix}
+									onChange={(e) => setUserIdSuffix(e.target.value)}
+									onKeyDown={(e) => e.key === "Enter" && handleAddUser()}
+								/>
+							</div>
 							<div className="flex justify-end space-x-2">
 								<Button
 									variant="outline"
 									onClick={() => {
 										setShowAddUserDialog(false);
 										setUserEmail("");
+										setUserIdSuffix("");
 									}}
 								>
 									Cancel
