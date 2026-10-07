@@ -146,40 +146,39 @@ const PrizesChallenges: React.FC = () => {
 		},
 		{
 			id: 2,
-			title: "Base44 Challenge",
-			displayAmount: "$50",
+			title: "Research Track",
+			displayAmount: "$1500",
 			planetIcon: "/fa26/003/2.png",
 			description:
-				"Social media connects billions of people, but it also faces issues like misinformation, mental health impacts, privacy concerns, and lack of meaningful engagement. How can technology improve social media experiences for users while addressing these challenges?",
-			prizes: [
-				{
-					place: "Prize",
-					amount:
-						"Ketone-IQ Prize Bundle: 1 of Each Variant of the Energy Shots, Towel, Water Bottle, Performance Hat, $50 Target Gift Card",
-				},
-			],
+				"Build a tool that makes scientific research faster. Research is full of avoidable delays: cleaning and reformatting data, digging through papers by hand, re-running the same analysis over and over, or waiting on a workflow that should be automated. Pick one bottleneck and build a tool that removes it.",
+			prizes: [{ place: "Winning Team", amount: "$1500" }],
 		},
 		{
 			id: 3,
-			title: "College of IST Challenge",
-			displayAmount: "Top 3 Teams",
+			title: "AI Strategy Case Challenge",
+			displayAmount: "$500",
 			planetIcon: "/fa26/003/13.png",
 			description:
-				"Build the future with Open Claw at this HackPSU challenge. Create innovative AI-powered tools, applications, and experiments using the OpenClaw platform. Explore bold ideas, collaborate with fellow hackers, and turn prototypes into real projects. Whether you're learning or pushing boundaries, this is your chance to shape what comes next with OpenClaw.",
+				"Business & Marketing Strategy: At the opening ceremony, your team receives a realistic business case: a company, its situation, and a decision it needs to make. Use AI throughout your process, whether for research, scenario modeling, or stress-testing your own thinking. Partway through, expect a curveball. New information will change the picture, and your strategy needs to adapt, not restart.",
 			prizes: [
 				{
-					place: "1st Place",
-					amount: "1 shared 3 month Claude Pro subscription for the team",
+					place: "Deliverable",
+					amount:
+						"A short slide deck and a 5-minute pitch to a panel of Smeal College of Business faculty. Include how you used AI and where you pushed back on it.",
 				},
-				{
-					place: "2nd Place",
-					amount: "1 shared 2 month Claude Pro subscription for the team",
-				},
-				{
-					place: "3rd Place",
-					amount: "1 shared 1 month Claude Pro subscription for the team",
-				},
+				{ place: "Winning Team", amount: "$500" },
 			],
+			extra:
+				"No code allowed and none required. No business background needed. Open to every major. Bring judgment, and a recommendation you can defend. Case track teams compete only in this track and are not eligible for the Grand Prize.",
+		},
+		{
+			id: 4,
+			title: "General Track: The Mystery Stack",
+			displayAmount: "$1500",
+			planetIcon: "/fa26/003/3.png",
+			description:
+				"Not every great project starts with a plan. Some start with a surprise. The General Track is a mystery, and it stays that way until the event begins. Bring your curiosity, your adaptability, and your best improvisation. Want to know what you're working with? Be at opening ceremony. That's where the mystery gets revealed.",
+			prizes: [{ place: "Winning Team", amount: "$1500" }],
 		},
 	];
 
@@ -221,10 +220,10 @@ const PrizesChallenges: React.FC = () => {
 			</div>
 			<div className="w-full max-w-7xl flex flex-col items-center">
 				{prizesAndChallengesFlag?.isEnabled ? (
-					<div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
-						<PrizeCard key={awards[0].id} award={awards[0]} />
-						<ComingSoonCard />
-						<ComingSoonCard />
+					<div className="w-full grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 items-stretch">
+						{awards.map((award) => (
+							<PrizeCard key={award.id} award={award} />
+						))}
 					</div>
 				) : (
 					<div className="w-full">
