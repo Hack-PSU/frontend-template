@@ -11,10 +11,10 @@
 		"knip": "knip"
 	},
 	"dependencies": {
-		"@hackpsu/react-sdk": "^1.0.10",
 		"@emotion/react": "^11.14.0",
 		"@emotion/styled": "^11.14.0",
 		"@fireworks-js/react": "^2.10.8",
+		"@hackpsu/react-sdk": "^1.0.13",
 		"@headlessui/react": "^2.2.0",
 		"@heroicons/react": "^2.0.18",
 		"@mui/icons-material": "^6.0.0",
