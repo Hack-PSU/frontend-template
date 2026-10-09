@@ -59,6 +59,10 @@ export default function Team() {
 	const [showAddUserDialog, setShowAddUserDialog] = useState(false);
 	const [teamName, setTeamName] = useState("");
 	const [userEmail, setUserEmail] = useState("");
+	const [userIdSuffix, setUserIdSuffix] = useState("");
+
+	// Shared with teammates so they can confirm they're adding the right person
+	const myIdSuffix = userData?.id?.slice(-4).toUpperCase();
 
 	// Find user's team
 	const userTeam = teams?.find((team) =>
@@ -150,6 +154,11 @@ export default function Team() {
 			return;
 		}
 
+		if (userIdSuffix.trim().length !== 4) {
+			toast.error("Please enter the last 4 characters of the user's ID");
+			return;
+		}
+
 		// Check team capacity
 		const currentMembers = getTeamMembers(userTeam).length;
 		if (currentMembers >= 5) {
@@ -160,14 +169,21 @@ export default function Team() {
 		try {
 			await addUserByEmail({
 				id: userTeam.id,
-				data: { email: userEmail },
+				// TODO: drop the cast once @hackpsu/react-sdk is republished with userIdSuffix
+				data: {
+					email: userEmail,
+					userIdSuffix: userIdSuffix.trim(),
+				} as Parameters<typeof addUserByEmail>[0]["data"],
 			});
 			toast.success("User added to team successfully!");
 			setShowAddUserDialog(false);
 			setUserEmail("");
+			setUserIdSuffix("");
 		} catch (error: any) {
 			console.error("Error adding user:", error);
-			toast.error("Failed to add user. Please check the email and try again.");
+			toast.error(
+				"Failed to add user. Please check the email and user ID and try again."
+			);
 		}
 	};
 
@@ -447,7 +463,18 @@ export default function Team() {
 								You&apos;re not part of any team yet. Create one to get started.
 							</CardDescription>
 						</CardHeader>
-						<CardContent>
+						<CardContent className="space-y-4">
+							{myIdSuffix && (
+								<div className="p-4 border rounded-lg text-center">
+									<p className="text-sm text-gray-500">
+										Joining someone else&apos;s team? Give them your email and
+										this code:
+									</p>
+									<p className="mt-1 font-mono text-2xl font-bold tracking-widest">
+										{myIdSuffix}
+									</p>
+								</div>
+							)}
 							<Button
 								onClick={() => setShowCreateDialog(true)}
 								className="w-full"
@@ -554,7 +581,8 @@ export default function Team() {
 							<DialogTitle>Add Team Member</DialogTitle>
 							<DialogDescription>
 								Enter the email address of the user you want to add to your
-								team.
+								team, along with the 4-character code shown on their team
+								page.
 							</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4">
@@ -569,12 +597,26 @@ export default function Team() {
 									onKeyDown={(e) => e.key === "Enter" && handleAddUser()}
 								/>
 							</div>
+							<div>
+								<Label htmlFor="user-id-suffix">User Code</Label>
+								<Input
+									id="user-id-suffix"
+									placeholder="Last 4 characters of their user ID"
+									maxLength={4}
+									autoComplete="off"
+									className="font-mono uppercase"
+									value={userIdSuffix}
+									onChange={(e) => setUserIdSuffix(e.target.value)}
+									onKeyDown={(e) => e.key === "Enter" && handleAddUser()}
+								/>
+							</div>
 							<div className="flex justify-end space-x-2">
 								<Button
 									variant="outline"
 									onClick={() => {
 										setShowAddUserDialog(false);
 										setUserEmail("");
+										setUserIdSuffix("");
 									}}
 								>
 									Cancel
