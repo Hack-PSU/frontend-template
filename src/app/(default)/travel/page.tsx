@@ -5,6 +5,7 @@ import {
 	DollarSign,
 	Bus,
 	Plane,
+	TrainFront,
 	Car,
 	Fuel,
 	Receipt,
@@ -25,6 +26,11 @@ const TravelReimbursementPolicy = () => {
 			icon: <Plane className="w-5 h-5 text-sky-600" />,
 			method: "Plane",
 			description: "Commercial airline flights",
+		},
+		{
+			icon: <TrainFront className="w-5 h-5 text-red-600" />,
+			method: "Train",
+			description: "Amtrak and other passenger rail services",
 		},
 		{
 			icon: <Car className="w-5 h-5 text-green-600" />,
