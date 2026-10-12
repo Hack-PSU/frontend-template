@@ -169,11 +169,10 @@ export default function Team() {
 		try {
 			await addUserByEmail({
 				id: userTeam.id,
-				// TODO: drop the cast once @hackpsu/react-sdk is republished with userIdSuffix
 				data: {
-					email: userEmail,
+					email: userEmail.trim(),
 					userIdSuffix: userIdSuffix.trim(),
-				} as Parameters<typeof addUserByEmail>[0]["data"],
+				},
 			});
 			toast.success("User added to team successfully!");
 			setShowAddUserDialog(false);
@@ -181,8 +180,11 @@ export default function Team() {
 			setUserIdSuffix("");
 		} catch (error: any) {
 			console.error("Error adding user:", error);
+			// Surface the API's reason (e.g. no matching user, already on a team)
+			const apiMessage = error?.body?.message;
 			toast.error(
-				"Failed to add user. Please check the email and user ID and try again."
+				(Array.isArray(apiMessage) ? apiMessage.join(", ") : apiMessage) ||
+					"Failed to add user. Please check the email and user ID and try again."
 			);
 		}
 	};
