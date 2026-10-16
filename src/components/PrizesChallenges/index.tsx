@@ -180,6 +180,31 @@ const PrizesChallenges: React.FC = () => {
 				"Not every great project starts with a plan. Some start with a surprise. The General Track is a mystery, and it stays that way until the event begins. Bring your curiosity, your adaptability, and your best improvisation. Want to know what you're working with? Be at opening ceremony. That's where the mystery gets revealed.",
 			prizes: [{ place: "Winning Team", amount: "$1500" }],
 		},
+		{
+			id: 5,
+			title: "Nittany AI Challenge",
+			displayAmount: "$870",
+			planetIcon: "/fa26/003/1.png",
+			description:
+				"Build something that makes life better. Use artificial intelligence to solve a real problem, improve an experience, help people, or simply make something work better. Your project can be serious, practical, creative, or unexpected: think everyday frustrations, campus life, accessibility, education, sustainability, productivity, community needs, or an idea we haven't thought of yet.",
+			prizes: [
+				{ place: "1st Place", amount: "$99 Visa gift card per member" },
+				{ place: "2nd Place", amount: "$50 Visa gift card per member" },
+				{ place: "3rd Place", amount: "$25 Visa gift card per member" },
+			],
+			extra:
+				"Gift cards are awarded to up to 5 members per team. Judges are looking for a clear problem, need, or opportunity; a meaningful use of AI; a creative or innovative approach; a working prototype or compelling demo; and a project that could have a positive impact, big or small.",
+		},
+		{
+			id: 6,
+			title: "FNB Challenge: Trust, Decisions & Financial Confidence",
+			displayAmount: "TBA",
+			planetIcon: "/fa26/003/2.png",
+			description:
+				"How can technology help people make smarter financial decisions at the moments that matter most? People have unprecedented access to information, advice, and AI-generated recommendations, yet many still struggle to know what to trust and what action to take next when making financial decisions, both big and small. Design a solution that helps people turn information into understanding, understanding into confidence, and confidence into action.",
+			extra:
+				"Use AI, personalized insights, predictive planning, automation, trusted-source validation, behavioral science, or entirely new digital experiences to turn information and capability into clarity, confidence, and action.",
+		},
 	];
 
 	return (
