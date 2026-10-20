@@ -6,13 +6,23 @@
 
 /** The single expense category a non-organizer may submit against. */
 export enum UsersCategory {
-  TravelTransportation = "Travel - Transportation",
+	TravelTransportation = "Travel - Transportation",
 }
 
 /** Prize tracks shown on the project submission form. */
 export const PROJECT_CATEGORIES = [
-  "Base 44 Challenge",
-  "College of IST Challenge",
+	"Research Track",
+	"The Mystery Stack",
+	"AI Strategy Case Challenge",
+	"Nittany AI Challenge",
+	"First National Bank Challenge",
 ] as const;
 
 export type ProjectCategory = (typeof PROJECT_CATEGORIES)[number];
+
+/**
+ * Judged separately from the rest of the hackathon, so a project entered in
+ * this track cannot be entered in any other.
+ */
+export const EXCLUSIVE_PROJECT_CATEGORY: ProjectCategory =
+	"AI Strategy Case Challenge";
