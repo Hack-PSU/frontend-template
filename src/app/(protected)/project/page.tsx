@@ -1,15 +1,19 @@
 "use client";
 
 import {
-  useFirebase,
-  useFlagGetOne,
-  useProjectCreateOne,
-  useProjectGetProjectsByTeam,
-  useProjectPatchOne,
-  useTeamGetAll,
-  useUserGetMyInfo,
+	useFirebase,
+	useFlagGetOne,
+	useProjectCreateOne,
+	useProjectGetProjectsByTeam,
+	useProjectPatchOne,
+	useTeamGetAll,
+	useUserGetMyInfo,
 } from "@hackpsu/react-sdk";
-import { PROJECT_CATEGORIES, ProjectCategory } from "@/lib/constants";
+import {
+	EXCLUSIVE_PROJECT_CATEGORY,
+	PROJECT_CATEGORIES,
+	ProjectCategory,
+} from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -114,8 +118,11 @@ export default function Project() {
 				const categories = existingProject.categories
 					.split(",")
 					.map((c) => c.trim()) as ProjectCategory[];
+				const valid = categories.filter((c) => PROJECT_CATEGORIES.includes(c));
 				setSelectedCategories(
-					categories.filter((c) => PROJECT_CATEGORIES.includes(c))
+					valid.includes(EXCLUSIVE_PROJECT_CATEGORY)
+						? [EXCLUSIVE_PROJECT_CATEGORY]
+						: valid
 				);
 			}
 		}
@@ -126,7 +133,11 @@ export default function Project() {
 		checked: boolean
 	) => {
 		if (checked) {
-			setSelectedCategories((prev) => [...prev, category]);
+			setSelectedCategories((prev) =>
+				category === EXCLUSIVE_PROJECT_CATEGORY
+					? [category]
+					: [...prev.filter((c) => c !== EXCLUSIVE_PROJECT_CATEGORY), category]
+			);
 		} else {
 			setSelectedCategories((prev) => prev.filter((c) => c !== category));
 		}
@@ -248,10 +259,7 @@ export default function Project() {
 
 	if (!userTeam) {
 		return (
-			<div
-				className="min-h-screen py-8 px-4"
-				
-			>
+			<div className="min-h-screen py-8 px-4">
 				<div className="mx-auto max-w-4xl space-y-6">
 					<Card className="border-2 border-red-500 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
 						<CardHeader className="text-center">
@@ -281,10 +289,7 @@ export default function Project() {
 	}
 
 	return (
-		<div
-			className="min-h-screen py-8 px-4"
-			
-		>
+		<div className="min-h-screen py-8 px-4">
 			<div className="mx-auto max-w-4xl space-y-6">
 				<Button
 					variant="ghost"
@@ -395,6 +400,10 @@ export default function Project() {
 								{/* Categories */}
 								<div className="space-y-4">
 									<Label>Categories (Optional - Select if applicable)</Label>
+									<p className="text-sm text-gray-600">
+										The {EXCLUSIVE_PROJECT_CATEGORY} is judged separately and
+										can&apos;t be combined with other categories.
+									</p>
 									<div className="space-y-3">
 										{PROJECT_CATEGORIES.map((category) => (
 											<div
@@ -407,7 +416,13 @@ export default function Project() {
 													onCheckedChange={(checked) =>
 														handleCategoryChange(category, checked as boolean)
 													}
-													disabled={!canUpdateProject}
+													disabled={
+														!canUpdateProject ||
+														(category !== EXCLUSIVE_PROJECT_CATEGORY &&
+															selectedCategories.includes(
+																EXCLUSIVE_PROJECT_CATEGORY
+															))
+													}
 												/>
 												<Label
 													htmlFor={category}
