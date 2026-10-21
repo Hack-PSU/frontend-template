@@ -198,11 +198,12 @@ const PrizesChallenges: React.FC = () => {
 		{
 			id: 6,
 			title: "FNB Challenge: Trust, Decisions & Financial Confidence",
-			displayAmount: "TBA",
+			displayAmount: "$1500",
 			planetIcon: "/fa26/003/2.png",
 			description:
 				"How can technology help people make smarter financial decisions at the moments that matter most? People have unprecedented access to information, advice, and AI-generated recommendations, yet many still struggle to know what to trust and what action to take next when making financial decisions, both big and small. Design a solution that helps people turn information into understanding, understanding into confidence, and confidence into action.",
-			extra:
+			prizes: [{ place: "Winning Team", amount: "$1500 + FNB bookbag for each winning member" }],
+				extra:
 				"Use AI, personalized insights, predictive planning, automation, trusted-source validation, behavioral science, or entirely new digital experiences to turn information and capability into clarity, confidence, and action.",
 		},
 	];
