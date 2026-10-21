@@ -28,12 +28,12 @@ const faqs: FAQItem[] = [
 	{
 		question: "Can I sleep at the hackathon?",
 		answer:
-			"Yes! We have air mattresses for checkout at the registration table starting at 10pm. All we ask is that you treat them nicely and please return them when you're done!",
+			"Yes! We have air mattresses for checkout on the 1st floor from 10 PM to midnight. All we ask is that you treat them nicely and please return them on the 1st floor on Sunday between 10 AM and 12 PM!",
 	},
 	{
 		question: "Can I be reimbursed for travel?",
 		answer:
-			"Travel reimbursements will be handled at the registration table Saturday after 3pm and Sunday from 11am-1pm. Please submit your reimbursements via the profile page on the website. For more information, please refer to our Travel Reimbursement Policy.",
+			"Travel reimbursements will be handled at the Info Booth from Saturday 11 AM to Sunday 12 PM. Please submit your reimbursements via the profile page on the website. For more information, please refer to our Travel Reimbursement Policy.",
 		link: {
 			target: "/travel",
 			text: "Travel Reimbursement Policy",
@@ -47,7 +47,7 @@ const faqs: FAQItem[] = [
 	{
 		question: "How should I submit a project?",
 		answer:
-			"All projects will be submitted through the HackPSU Devpost AND through the HackPSU main website. To submit on the main website, go to the profile page and select Submit Project. We will then have a judging expo in the building main area. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
+			"All projects will be submitted through the HackPSU Devpost AND through the HackPSU main website. To submit on the main website, go to the profile page and select Submit Project. We will then have a judging expo on the ECoRE 2nd floor. Do NOT submit your project via email, Discord, DM, messenger pigeon, drone, etc. Both hardware and software projects are allowed. Only one Devpost submission per team is needed.",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",
@@ -65,7 +65,7 @@ const faqs: FAQItem[] = [
 	{
 		question: "When are project submissions due?",
 		answer:
-			"You must have a Devpost submission created by Sunday 12pm (even if not completed) on our Devpost page. However, you can continue editing the submission until hacking ends on Sunday at 1:45pm.",
+			"You must have a Devpost submission created by Saturday at midnight (even if not completed) on our Devpost page. However, you can continue editing the submission until hacking ends on Sunday at 1:45pm.",
 		link: {
 			target: "http://devpost.hackpsu.org/",
 			text: "devpost.hackpsu.org",
