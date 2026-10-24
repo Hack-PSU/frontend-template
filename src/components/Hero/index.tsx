@@ -633,10 +633,14 @@ Happy hacking!
 				animate={{ opacity: 1, y: 0 }}
 				transition={{ duration: 1, delay: 0.6 }}
 			>
-				{/* Register Button */}
-				{registrationsFlagData?.isEnabled && (
+				{/* Register Button (Live Website when registrations are closed) */}
+				{!isLoadingRegistrationsFlag && (
 					<motion.button
-						onClick={() => router.push("/profile")}
+						onClick={() =>
+							registrationsFlagData?.isEnabled
+								? router.push("/profile")
+								: (window.location.href = "https://live.hackpsu.org")
+						}
 						className="relative overflow-hidden rounded-lg hover:scale-105 transition-transform duration-300 flex items-center justify-center px-10 py-4 shadow-lg"
 						style={{
 							minWidth: "clamp(220px, 24vw, 260px)",
@@ -654,7 +658,7 @@ Happy hacking!
 								fontFamily: "Orbitron, monospace",
 							}}
 						>
-							REGISTER
+							{registrationsFlagData?.isEnabled ? "REGISTER" : "LIVE WEBSITE"}
 						</div>
 					</motion.button>
 				)}
