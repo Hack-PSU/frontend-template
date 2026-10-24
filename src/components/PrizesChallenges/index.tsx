@@ -16,6 +16,7 @@ interface AwardData {
 	planetIcon: string;
 	prizes?: Prize[];
 	extra?: string;
+	link?: { label: string; href: string };
 }
 
 const ComingSoonCard: React.FC = () => {
@@ -123,6 +124,21 @@ const PrizeCard: React.FC<{ award: AwardData }> = ({ award }) => {
 					{award.extra}
 				</p>
 			)}
+
+			{award.link && (
+				<a
+					href={award.link.href}
+					target="_blank"
+					rel="noopener noreferrer"
+					className="mt-4 text-sm md:text-base underline underline-offset-4 hover:opacity-80 transition-opacity"
+					style={{
+						fontFamily: "'DM Sans', sans-serif",
+						color: "#E2C75E",
+					}}
+				>
+					{award.link.label}
+				</a>
+			)}
 		</div>
 	);
 };
@@ -170,6 +186,10 @@ const PrizesChallenges: React.FC = () => {
 			],
 			extra:
 				"No code allowed and none required. No business background needed. Open to every major. Bring judgment, and a recommendation you can defend. Case track teams compete only in this track and are not eligible for the Grand Prize.",
+			link: {
+				label: "Read the full case challenge (PDF)",
+				href: "https://go.hackpsu.org/business-track",
+			},
 		},
 		{
 			id: 4,
@@ -177,8 +197,24 @@ const PrizesChallenges: React.FC = () => {
 			displayAmount: "$1500",
 			planetIcon: "/fa26/003/3.png",
 			description:
-				"Not every great project starts with a plan. Some start with a surprise. The General Track is a mystery, and it stays that way until the event begins. Bring your curiosity, your adaptability, and your best improvisation. Want to know what you're working with? Be at opening ceremony. That's where the mystery gets revealed.",
-			prizes: [{ place: "Winning Team", amount: "$1500" }],
+				"The mystery is revealed: build something people play together, using their phones, with friendly competition at its heart. Your project must hit all three parts of the stack below.",
+			prizes: [
+				{
+					place: "Phone Motion",
+					amount:
+						"Tilting, shaking, or moving the phone must be a core way to interact, not just a bonus feature.",
+				},
+				{
+					place: "Rivalry",
+					amount:
+						"Pit people against each other. Friendly competition and bragging rights are the point.",
+				},
+				{
+					place: "Group Play",
+					amount: "Must work for a group of 4 or more people.",
+				},
+				{ place: "Winning Team", amount: "$1500" },
+			],
 		},
 		{
 			id: 5,
