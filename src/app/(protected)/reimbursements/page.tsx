@@ -31,6 +31,7 @@ import {
 import { CloudUpload, Lock, Schedule } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { z } from "zod";
+import { PDFDocument } from "pdf-lib";
 
 // Custom styled component for visually hiding the file input
 const VisuallyHiddenInput = styled("input")({
@@ -90,9 +91,31 @@ const reimbursementSchema = z.object({
 	receipt: z
 		.any()
 		.refine((file) => file instanceof File, "Receipt is required"),
+	bankStatement: z
+		.any()
+		.refine((file) => file instanceof File, "Bank statement is required"),
 });
 
 type ReimbursementFormData = z.infer<typeof reimbursementSchema>;
+
+// Combines the receipt and bank statement into a single PDF, receipt first.
+const mergePdfs = async (files: File[], fileName: string): Promise<File> => {
+	const merged = await PDFDocument.create();
+	for (const file of files) {
+		let doc: PDFDocument;
+		try {
+			doc = await PDFDocument.load(await file.arrayBuffer());
+		} catch {
+			throw new Error(
+				`Could not read "${file.name}". Make sure it is a valid, non-password-protected PDF.`
+			);
+		}
+		const pages = await merged.copyPages(doc, doc.getPageIndices());
+		pages.forEach((page) => merged.addPage(page));
+	}
+	const bytes = await merged.save();
+	return new File([new Uint8Array(bytes)], fileName, { type: "application/pdf" });
+};
 
 // ----- 2) Step Components -----
 const BasicInfoStep = ({
@@ -241,19 +264,29 @@ const AddressStep = ({ control, errors }: { control: any; errors: any }) => (
 	</Grid>
 );
 
-const ReceiptStep = ({ control, errors }: { control: any; errors: any }) => (
+const PdfUploadField = ({
+	control,
+	errors,
+	name,
+	label,
+}: {
+	control: any;
+	errors: any;
+	name: "receipt" | "bankStatement";
+	label: string;
+}) => (
 	<Controller
-		name="receipt"
+		name={name}
 		control={control}
 		render={({ field }) => (
-			<Box className="text-center py-6">
+			<Box className="text-center">
 				<Button
 					component="label"
 					variant="contained"
 					startIcon={<CloudUpload />}
 					className="bg-blue-600 hover:bg-blue-700"
 				>
-					Upload Receipt
+					{label}
 					<VisuallyHiddenInput
 						type="file"
 						accept=".pdf"
@@ -268,14 +301,35 @@ const ReceiptStep = ({ control, errors }: { control: any; errors: any }) => (
 						Selected file: {field.value.name}
 					</Typography>
 				)}
-				{errors.receipt && (
+				{errors[name] && (
 					<Typography variant="body2" color="error" className="mt-2">
-						{errors.receipt.message as string}
+						{errors[name].message as string}
 					</Typography>
 				)}
 			</Box>
 		)}
 	/>
+);
+
+const ReceiptStep = ({ control, errors }: { control: any; errors: any }) => (
+	<Box className="py-6 flex flex-col gap-6">
+		<Typography variant="body2" color="text.secondary" className="text-center">
+			Upload both your receipt and a bank statement showing the purchase, as
+			PDFs. They will be combined into a single document when you submit.
+		</Typography>
+		<PdfUploadField
+			control={control}
+			errors={errors}
+			name="receipt"
+			label="Upload Receipt"
+		/>
+		<PdfUploadField
+			control={control}
+			errors={errors}
+			name="bankStatement"
+			label="Upload Bank Statement"
+		/>
+	</Box>
 );
 
 const NavigationButtons = ({
@@ -378,6 +432,7 @@ export default function ReimbursementPage() {
 			state: "",
 			postalCode: "",
 			receipt: undefined,
+			bankStatement: undefined,
 		},
 		mode: "onChange",
 	});
@@ -394,7 +449,11 @@ export default function ReimbursementPage() {
 
 			// The generated client serialises this into multipart/form-data itself,
 			// receipt included, so the call site passes a plain object.
-			const { receipt, ...fields } = data;
+			const { receipt: receiptFile, bankStatement, ...fields } = data;
+			const receipt = await mergePdfs(
+				[receiptFile, bankStatement],
+				receiptFile.name
+			);
 
 			await createFinance.mutateAsync({
 				data: {
