@@ -1,6 +1,7 @@
 "use client";
 
 import {
+	getProjectGetProjectsByTeamQueryKey,
 	useFirebase,
 	useFlagGetOne,
 	useProjectCreateOne,
@@ -15,6 +16,7 @@ import {
 	ProjectCategory,
 } from "@/lib/constants";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -42,6 +44,7 @@ import {
 export default function Project() {
 	const { isAuthenticated, user, isLoading } = useFirebase();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	const { isLoading: isUserLoading, data: userData } = useUserGetMyInfo();
 	const { data: teams, error: teamsError } = useTeamGetAll();
 
@@ -206,6 +209,11 @@ export default function Project() {
 				await createProject({ data: projectData });
 				toast.success("Project submitted successfully!");
 			}
+
+			// Refetch so the page switches to update mode instead of creating duplicates
+			await queryClient.invalidateQueries({
+				queryKey: getProjectGetProjectsByTeamQueryKey(userTeam.id),
+			});
 		} catch (error) {
 			console.error("Error submitting project:", error);
 			toast.error("Failed to submit project. Please try again.");
