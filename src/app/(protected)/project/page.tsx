@@ -373,7 +373,7 @@ export default function Project() {
 
 								{/* Github Link */}
 								<div className="space-y-2">
-									<Label htmlFor="github-link">Github Link * &lpar;If you are doing the business track and don't have a GitHub, put "https://github.com"&rpar;</Label>
+									<Label htmlFor="github-link">Github Link * (If you are doing the business track and don't have a GitHub, put "https://github.com")</Label>
 									<Input
 										id="github-link"
 										type="url"
