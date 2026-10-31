@@ -84,6 +84,6 @@
 		]
 	},
 	"devDependencies": {
-		"knip": "^5.62.0"
+		"knip": "^6.0.0"
 	}
 }
