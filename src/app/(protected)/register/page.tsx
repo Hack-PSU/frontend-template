@@ -73,6 +73,7 @@ type FormData = Omit<UserEntity, "id" | "email" | "resume"> &
 		resume: File | null;
 		hasDietaryRestrictions: boolean;
 		linkedinUrl: string;
+		textOptIn: boolean;
 	};
 
 interface Section {
@@ -89,19 +90,14 @@ export default function RegistrationPage() {
 	const replaceUserMutation = useUserReplaceOne();
 	const createRegistrationMutation = useUserRegisterUser();
 	const { data: hackathon } = useHackathonGetForStatic();
-	const { data: registrationsFlagData, isLoading: isLoadingRegistrationsFlag } =
-		useFlagGetOne("Registrations");
 	const { data: psuRegisterFlagData, isLoading: isLoadingPSURegisterFlag } =
 		useFlagGetOne("PSURegister");
 
 	useEffect(() => {
 		// if user data is still loading, do not redirect
 		if (isUserInfoLoading) return;
-		if (!registrationsFlagData?.isEnabled) {
-			router.push("/");
-		}
 		if (userInfo && userInfo.registration) router.push("/profile");
-	}, [userInfo, router]);
+	}, [userInfo, isUserInfoLoading, router]);
 
 	// Refs for sections
 	const personalInfoRef = useRef<HTMLDivElement>(null);
@@ -158,6 +154,7 @@ export default function RegistrationPage() {
 		travelMethod: "",
 		travelAdditional: "",
 		linkedinUrl: "",
+		textOptIn: false,
 	});
 
 	const [races, setRaces] = useState<string[]>([]);
@@ -464,7 +461,10 @@ export default function RegistrationPage() {
 			userData.resume = formData.resume;
 		}
 
-		const registrationData: CreateUserRegistrationEntity & { time: number } = {
+		const registrationData: CreateUserRegistrationEntity & {
+			time: number;
+			textOptIn: boolean;
+		} = {
 			age: formData.age,
 			educationalInstitutionType: formData.educationalInstitutionType,
 			academicYear: formData.academicYear,
@@ -477,6 +477,7 @@ export default function RegistrationPage() {
 			project: formData.project,
 			referral: formData.referral,
 			shareEmailMlh: formData.shareEmailMlh,
+			textOptIn: formData.textOptIn,
 			veteran: formData.veteran,
 			excitement: formData.excitement,
 			zipCode: formData.zipCode,
@@ -1202,6 +1203,37 @@ export default function RegistrationPage() {
 														<p className="text-sm text-muted-foreground">
 															Your resume will be shared with our sponsors.
 														</p>
+													</div>
+												</CardContent>
+											</Card>
+										</div>
+
+										{/* Text Opt-In */}
+										<div>
+											<Card>
+												<CardHeader>
+													<CardTitle>Text Updates (Optional)</CardTitle>
+													<CardDescription>
+														Choose whether to receive text messages about the event.
+													</CardDescription>
+												</CardHeader>
+												<CardContent className="space-y-6">
+													<div className="flex items-start justify-between rounded-lg border p-4">
+														<div className="space-y-1.5 pr-4">
+															<Label htmlFor="textOptIn">Text Opt-In (Optional)</Label>
+															<p id="textOptIn-description" className="text-sm text-muted-foreground">
+																I agree to receive text messages from HackPSU about event updates and announcements.
+															</p>
+														</div>
+														<Checkbox
+															id="textOptIn"
+															name="textOptIn"
+															aria-describedby="textOptIn-description"
+															checked={formData.textOptIn}
+															onCheckedChange={(checked) =>
+																handleSwitchChange("textOptIn", checked === true)
+															}
+														/>
 													</div>
 												</CardContent>
 											</Card>
